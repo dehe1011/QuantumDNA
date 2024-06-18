@@ -1,5 +1,6 @@
 # Ignore the 'archive' folder
 archive/
+sotred_data/my_params
 
 # Ignore all .svg files in all folders
 *.svg
@@ -9,3 +10,5 @@ archive/
 
 # Ignore Python cache files
 __pycache__/
+
+# new comment
