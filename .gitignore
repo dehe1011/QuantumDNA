@@ -22,5 +22,7 @@ doc/tutorials/.ipynb_checkpoints/
 doc/tutorials/__pycache__/
 doc/.ipynb_checkpoints/
 doc/__pycache__/
+utils/.ipynb_checkpoints/
+utils/__pycache__/
 tests/test_model/.ipynb_checkpoints/
 tests/test_model/__pycache__/
