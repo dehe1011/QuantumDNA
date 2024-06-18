@@ -1,14 +1,26 @@
-# Ignore the 'archive' folder
 archive/
-sotred_data/my_params
+stored_data/my_params
+Untitled.ipynb
+test_script.py
 
 # Ignore all .svg files in all folders
 *.svg
 
-# Ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints/
-
-# Ignore Python cache files
 __pycache__/
-
-# new comment 4
+DNA/dynamics/.ipynb_checkpoints/
+DNA/dynamics/__pycache__/
+DNA/environment/.ipynb_checkpoints/
+DNA/environment/__pycache__/
+DNA/model/.ipynb_checkpoints/
+DNA/model/__pycache__/
+DNA/observables/.ipynb_checkpoints/
+DNA/observables/__pycache__/
+DNA/plotting/.ipynb_checkpoints/
+DNA/plotting/__pycache__/
+doc/tutorials/.ipynb_checkpoints/
+doc/tutorials/__pycache__/
+doc/.ipynb_checkpoints/
+doc/__pycache__/
+tests/test_model/.ipynb_checkpoints/
+tests/test_model/__pycache__/
