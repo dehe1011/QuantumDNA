@@ -1,0 +1,12 @@
+# Ignore the 'archive' folder
+archive/
+
+# Ignore all .svg files in all folders
+*.svg
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python cache files
+__pycache__/
+
