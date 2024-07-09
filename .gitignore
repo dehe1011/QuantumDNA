@@ -2,6 +2,7 @@ archive/
 stored_data/my_params
 Untitled.ipynb
 test_script.py
+info.txt
 
 # Ignore all .svg files in all folders
 *.svg

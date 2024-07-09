@@ -1,62 +1,82 @@
-from DNA.model import TBHamType, fourier_analysis_1P, fourier_analysis_2P, PARTICLES
-from utils import get_conversion
-from typing import Any
-from DNA.dynamics import MESolverType
 import numpy as np
+from typing import Any, List
+import seaborn as sns
 
-def plot_fourier_1P(ax, tb_ham: TBHamType, init_state: Any, end_state: Any, x_axis: str):
+from utils import get_conversion, get_config
+from DNA.model import TBHamType
+from DNA.dynamics import MESolverType
+
+DNA_BASES = get_config()['DNA_BASES']
+COLORS_DNA_BASES = dict(zip( DNA_BASES, sns.color_palette('colorblind', n_colors=len(DNA_BASES) )))
+
+# -----------------------------------------------------------------------------------------------------
+
+def plot_fourier(ax, tb_ham: TBHamType, init_state: Any, end_state: Any, x_axis: str):
     get_frame_fourier(ax, x_axis)
-    average_pop, amplitudes, frequencies = fourier_analysis_1P(tb_ham, init_state, end_state) 
-    frequencies = np.array(frequencies) * get_conversion(tb_ham.unit, 'rad/ps')
+    amplitudes_dict = tb_ham.get_amplitudes(init_state, end_state) 
+    frequencies_dict = tb_ham.get_frequencies(init_state, end_state) 
+    for particle in tb_ham.particles: 
+        amplitudes = amplitudes_dict[particle] 
+        frequencies = np.array(frequencies_dict[particle]) * get_conversion(tb_ham.unit, 'rad/ps')
     if x_axis.lower() == 'frequency':
-        ax.plot(amplitudes, frequencies, '.', markersize=12)
+        ax.plot(frequencies, amplitudes, '.', markersize=12)
     if x_axis.lower() == 'period':
-        periods = 2*np.pi/frequencies
-        ax.plot(amplitudes, periods, '.', markersize=12)
-
-def plot_fourier_2P(ax, tb_ham: TBHamType, init_state: Any, end_state: Any):
-    get_frame_fourier(ax, x_axis)
-    for particle in PARTICLES:
-        average_pop, amplitudes, frequencies = fourier_analysis_2P(tb_ham, init_state, end_state, particle)
-        frequencies = np.array(frequencies) * get_conversion(tb_ham.unit, 'rad/ps')
-        if x_axis.lower() == 'frequency':
-            ax.plot(amplitudes, frequencies, '.', markersize=12, label = particle)
-        if x_axis.lower() == 'period':
-            periods = 2*np.pi/frequencies
-            ax.plot(amplitudes, periods, '.', markersize=12)
-    ax.legend()
+        periods = 1e3/frequencies
+        ax.plot(periods, amplitudes, '.', markersize=12)
 
 def get_frame_fourier(ax, x_axis: str):
     if x_axis.lower() == 'frequency':
         ax.set_xlabel(f"Frequency in rad/ps")
     if x_axis.lower() == 'period':
-        ax.set_xlabel(f"Frequency in ps")
+        ax.set_xlabel(f"Period in fs")
     ax.set_ylabel("Amplitude")
-
 
 # ---------------------------------------------------------------------------------------------------------
 
-def get_frame(ax, dna_sequence):
+def get_cumulative_average_pop(tb_ham: TBHamType, J_list: List): 
+    """
+    Returns:
+        cumulative_average_pop[dna_base_idx][J_idx][particle_idx]
+    """
+    assert tb_ham.description == '2P', "this analysis is only available in the 2P description" 
+    init_state = (get_config()['me_kwargs_default'].get('init_e_state'), get_config()['me_kwargs_default'].get('init_h_state') )
+    num_sites = len(tb_ham.tb_basis)
+    
+    pop_list = np.zeros( (len(tb_ham.particles), len(J_list), num_sites ))
+    for particle_idx, particle in enumerate(tb_ham.particles):
+        for J_idx, J in enumerate(J_list):
+            tb_ham.interaction_param = J
+            for tb_site_idx, tb_site in enumerate(tb_ham.tb_basis):
+                pop_list[particle_idx][J_idx][tb_site_idx] = tb_ham.get_average_pop(init_state, tb_site)[particle]
+    cumulative_pop_list = [0] * ( num_sites+1 )
+    running_pop_list = np.zeros( (len(tb_ham.particles), len(J_list)) )
+    cumulative_pop_list[-1] = np.array(running_pop_list)
+    for tb_basis_idx in range(num_sites):
+        running_pop_list += pop_list[:,:,tb_basis_idx]
+        cumulative_pop_list[tb_basis_idx] = np.array(running_pop_list)
+    return np.array(cumulative_pop_list)
+
+def get_frame_average_pop(ax, dna_seq, J_list, J_unit):
     ax[0].set_ylabel(r'$P_k^{(\mathrm{acc})}$', fontsize=20)
+    PARTICLES = get_config()['PARTICLES']
     for particle_idx, particle in enumerate(PARTICLES):
         ax[particle_idx].plot(J_list, [0]*len(J_list), color='k') # plot the bottom line
-        ax[particle_idx].set_xlabel(r'$J\,(\mathrm{meV})$')
+        ax[particle_idx].set_xlabel('J in '+J_unit)
         ax[particle_idx].set_title(particle, fontsize=20)
         ax[particle_idx].tick_params(axis='both', which='both')
         ax[particle_idx].set_ylim(0, 1.05)
     
-    for dna_base_idx, dna_base in enumerate(dna_sequence):
-        ax[0].text(0, dna_base_idx/len(dna_sequence), dna_base, fontsize=25, color=COLORS_DNA_BASES[dna_base], alpha=0.6)
+    for dna_base_idx, dna_base in enumerate(dna_seq):
+        ax[0].text(0, dna_base_idx/len(dna_seq), dna_base, fontsize=25, color=COLORS_DNA_BASES[dna_base], alpha=0.6)
 
-# --------------------------------------------------------------------------------------------------
-
-def test_fourier(tb_site: str, me_solver: MESolverType):
-    compare = []
-    end_state = tb_site
-    tb_site = basis_converter(tb_site, me_solver.tb_model.tb_basis)
-    for particle in PARTICLES:
-        average_pop, amplitudes, frequencies = fourier_analysis_2P(me_solver.tb_ham, me_solver.init_state, end_state, particle)
-        pop_fourier = [get_pop_fourier(t, average_pop, amplitudes, frequencies) for t in me_solver.times]
-        pop_me_solver = [dm[tb_site, tb_site].real for dm in me_solver.get_result_particle(particle)]
-        compare.append( np.allclose(pop_me_solver, pop_fourier, atol = 1e-6) )
-    return compare
+def plot_average_pop(ax, tb_ham: TBHamType, J_list, J_unit):
+    J_list *= get_conversion(J_unit, tb_ham.unit)
+    J_unit = tb_ham.unit
+    dna_seq = tb_ham.tb_sites_flattened
+    cumulative_average_pop = get_cumulative_average_pop(tb_ham, J_list)
+    PARTICLES = get_config()['PARTICLES']
+    for particle_idx, particle in enumerate(PARTICLES):
+        for dna_base_idx, dna_base in enumerate(dna_seq):
+            ax[particle_idx].plot( J_list, cumulative_average_pop[dna_base_idx][:][particle_idx], color='k')
+            ax[particle_idx].fill_between(J_list, cumulative_average_pop[dna_base_idx-1][:][particle_idx], cumulative_average_pop[dna_base_idx][:][particle_idx], color=COLORS_DNA_BASES[dna_base], alpha=0.15)
+    get_frame_average_pop(ax, dna_seq, J_list, J_unit)

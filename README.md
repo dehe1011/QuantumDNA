@@ -6,9 +6,12 @@ Release date: hopefully in 2024
 
 ## To Do
 
-* Upload on Github and add a .gitignore file
-* Write tests, add data types, add docstrings with examples
-* create tutorials 
+* Update GitHub repository
+* Add more tests
+* Add tutorials
+* Add docstrings (with examples) and comments
+* Improve README file
+* Publish package on PyPI?
 
 ## What's new
 
@@ -35,13 +38,19 @@ Optional: check if the virtual environment was successfully installed:\
 `` python -m ipykernel install --name qDNA --display-name "Python (qDNA)" ``
 6. Run all the tests to make sure that everything works:\
 `` .\run_tests.ps1 ``
-7. Open a new Jupyter notebook and select the kernel to "Python (qDNA)":
+If all tests worked you have successfully installed the package. Now there you have two possibilities:
+
+1. Open the user interface:
+`` python user_interface.py ``
+2. Open a new Jupyter notebook and select the kernel to "Python (qDNA)":
 `` jupyter notebook ``
 
 To remove the virtual environment use `` conda remove --name qDNA --all ``
 
 ### Shortcuts
- 
+
+The following shortcuts are frequently used in the code: 
+
 * ham: hamiltonian
 * dm: density matrix
 * tb: tight-binding
@@ -69,8 +78,7 @@ In the ``quantum_DNA_1.0/doc/tutorials/`` directory, there exists the following 
 
 ## Notes
 
-Create a link from the Python environment's site-packages directory (where packages like numpy or matplotlib are saved) to the /path/to/my_package. You can edit the package's source code (indicated by -e):
-`` pip install -e path/to/package ``
+* If there occur any unexpected errors or problems please contact the author via dennis.herb@uni-ulm.de
 
 
 

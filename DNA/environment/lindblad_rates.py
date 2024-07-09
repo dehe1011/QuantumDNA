@@ -1,7 +1,9 @@
 import numpy as np
 import scipy.constants as c
+from utils import get_config
 
-__all__ = ['debye_spectral_density', 'ohmic_spectral_density', 'bose_einstein_distrib', 'rate_constant_redfield', 'dephasing_rate' ]
+SPECTRAL_DENSITIES = get_config()['SPECTRAL_DENSITIES']
+
 
 # --------------------------- bath spectral densities --------------------------------------
 

@@ -3,6 +3,13 @@ from typing import Union, List, Tuple, Any
 from itertools import product
 from ast import literal_eval
 
+# Shortcuts
+# tb: tight-binding 
+# dim: dimension
+# eh: electron-hole
+
+# __all__ = ['get_tb_basis', 'get_eh_basis', 'get_eh_distance', 'get_particle_eh_states', 'basis_change', 'local_to_global', 'global_to_local']
+
 # -------------------------------------------- Tight-binding basis ----------------------------------------------
 
 def get_tb_basis(tb_dims: Tuple[int, int]) -> List[str]:
@@ -41,71 +48,19 @@ def str_to_int(tb_dims: Tuple[int, int], tb_basis_str: str) -> int:
     return tuple_to_int(tb_dims, str_to_tuple(tb_basis_str))
 
 def int_to_str(tb_dims: Tuple[int, int], tb_basis_int: int) -> str:
-    """
-    Converts an integer representation of a site index to a string representation.
-
-    Args:
-        tb_dims: A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.
-        tb_basis_num: Integer representation of the site index.
-
-    Returns:
-        String representation of the site index.
-
-    Example:
-        >>> int_to_str( (1,3), 2 )
-        '(0, 2)'
-    """
     return tuple_to_str(int_to_tuple(tb_dims, tb_basis_int))
 
 def str_to_tuple(tb_basis_str: str) -> Tuple[int, int]:
-    """
-    Converts a string representation of a site index to a tuple index.
-
-    Args:
-        tb_basis_str: String representation of the site index.
-
-    Returns:
-        Tuple representation of the site index.
-    """
     return literal_eval(tb_basis_str)
 
 def tuple_to_str(tb_basis_tuple: Tuple[int, int]) -> str:
-    """
-    Converts a tuple representation of a site index to a string representation.
-
-    Args:
-        tb_basis_idx: Tuple representation of the site index.
-
-    Returns:
-        String representation of the site index.
-    """
     return str(tb_basis_tuple)
 
 def int_to_tuple(tb_dims: Tuple[int, int], tb_basis_int: int) -> Tuple[int, int]:
-    """
-    Converts an integer representation of a site index to a tuple index.
-
-    Args:
-        tb_dims: A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.
-        tb_basis_num: Integer representation of the site index.
-
-    Returns:
-        Tuple representation of the site index.
-    """
     num_strands, num_sites_per_strand = tb_dims
     return (tb_basis_int // num_sites_per_strand, tb_basis_int % num_sites_per_strand)
 
 def tuple_to_int(tb_dims: Tuple[int, int], tb_basis_tuple: Tuple[int, int]) -> int:
-    """
-    Converts a tuple representation of a site index to an integer representation.
-
-    Args:
-        tb_dims: A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.
-        tb_basis_idx: Tuple representation of the site index.
-
-    Returns:
-        Integer representation of the site index.
-    """
     num_strands, num_sites_per_strand = tb_dims
     strand_num, site_in_strand_num = tb_basis_tuple
     return strand_num * num_sites_per_strand + site_in_strand_num
@@ -132,6 +87,28 @@ def get_eh_basis(tb_dims: Tuple[int, int]) -> List[Tuple[str, str]]:
     tb_basis = get_tb_basis(tb_dims)
     eh_basis = list(product(tb_basis, tb_basis))
     return eh_basis
+
+def get_eh_distance(eh_basis: List[Tuple[str, str]]) -> np.ndarray:
+    """
+    Calculates the distance between electron and hole for each state in the basis.
+
+    Args:
+        eh_basis (List[Tuple[str, str]]): List of electron and hole positions as tuples of strings.
+
+    Returns:
+        np.ndarray: Array of distances between electron and hole for each state.
+
+    Example:
+        >>> get_distance([('(0, 0)', '(1, 1)'), ('(1, 0)', '(0, 0)')])
+        array([1.41421356, 1.        ])
+    """
+    distance_list = []
+    for position_electron, position_hole in eh_basis:
+        position_electron = literal_eval(position_electron)
+        position_hole = literal_eval(position_hole)
+        distance = np.sqrt(sum( (idx_electron - idx_hole) ** 2 for idx_electron, idx_hole in zip(position_electron, position_hole)))
+        distance_list.append(distance)
+    return np.array(distance_list)
 
 def get_particle_eh_states(particle: str, tb_basis_element: str, tb_basis: List[str]) -> List[Tuple[str, str]]:
     """
@@ -161,66 +138,6 @@ def get_particle_eh_states(particle: str, tb_basis_element: str, tb_basis: List[
     else:
         raise ValueError(f"Invalid particle type: {particle}")
 
-# --------------------------------------- Basis conversion -----------------------------------------
-
-def basis_converter(basis_element: Any, basis: List[Any]) -> Any:
-    """
-    Converts between basis index representations (integer to string or vice versa).
-
-    Args:
-        basis_element: The basis element to convert (can be an integer, string, or tuple).
-        basis: The list of basis elements for reference.
-
-    Returns:
-        Corresponding basis element in the other representation.
-
-    Example: 
-        >>> basis_converter( 'e2', ['e1', 'e2', 'e3'])
-        1
-    """
-    if isinstance(basis_element, int):
-        return basis[basis_element]
-    else:
-        return basis.index(basis_element)
-
-def tb_basis_converter(tb_dims: Tuple[int, int], tb_basis_element: Union[str, int]) -> Union[int, str]:
-    """
-    Converts between site basis index representations.
-
-    Args:
-        tb_dims: A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.
-        tb_basis_element: The basis element to convert (can be an integer or string).
-
-    Returns:
-        Corresponding basis element in the other representation.
-
-    Examples:
-        >>> tb_basis_converter((2, 3), '(1, 2)')
-        5
-        >>> tb_basis_converter((2, 3), 5)
-        '(1, 2)'
-    """
-    return basis_converter(tb_basis_element, get_tb_basis(tb_dims))
-
-def eh_basis_converter(tb_dims: Tuple[int, int], eh_basis_element: Union[int, Tuple[str, str]]) -> Union[Tuple[str, str], int]:
-    """
-    Converts between electron-hole basis index representations.
-
-    Args:
-        tb_dims: A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.
-        eh_basis_element: The basis element to convert (can be an integer or tuple of strings).
-
-    Returns:
-        Corresponding basis element in the other representation.
-
-    Examples:
-        >>> eh_basis_converter((2, 3), ('(0, 2)', '(1, 1)'))
-        16
-        >>> eh_basis_converter((2, 3), 16)
-        ('(0, 2)', '(1, 1)')
-    """
-    return basis_converter(eh_basis_element, get_eh_basis(tb_dims))
-
 # -------------------------- Basis change from local to global basis (eigenbasis) -------------------------------
 
 def basis_change(
@@ -238,8 +155,8 @@ def basis_change(
         Matrix in the new basis.
     """
     if liouville:
-        states = np.kron(states, states.conjugate())
-    return np.matmul(states, np.matmul(matrix, states.conjugate().T))
+        states = np.kron(states, np.conj(states))
+    return np.matmul(states, np.matmul(matrix, np.conj(states).T))
 
 def global_to_local(
     matrix: np.ndarray, eigs: np.ndarray, liouville: bool = False
@@ -271,4 +188,4 @@ def local_to_global(
     Returns:
         Matrix in the eigenbasis.
     """
-    return basis_change(matrix, eigs.conjugate().T, liouville=liouville)
+    return basis_change(matrix, np.conj(eigs).T, liouville=liouville)

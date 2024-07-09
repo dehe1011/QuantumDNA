@@ -2,18 +2,12 @@ from utils import my_save, my_load
 from typing import Dict, Optional
 from copy import deepcopy
 
-__all__ = [
-    "save_tb_params",
-    "load_tb_params",
-    "wrap_save_tb_params",
-    "wrap_load_tb_params",
-]
-
+__all__ = ["save_tb_params", "load_tb_params", "wrap_save_tb_params", "wrap_load_tb_params"]
 
 def save_tb_params(
     tb_param_dict: Dict,
     info_dict: Dict[str, str],
-    directory: str = "stored_data/tb_params",
+    directory: str = "stored_data\\tb_params",
     notes: Optional[str] = None,
 ) -> None:
     """
@@ -37,12 +31,12 @@ def save_tb_params(
     info_dict_notes = deepcopy(info_dict)
     if notes:
         info_dict_notes["notes"] = notes
-    my_save(tb_param_dict, info_dict_notes, filename, directory=directory, save_excel=False)
+    my_save(tb_param_dict, info_dict_notes, filename, directory=directory, save_excel=False, version_index=False)
 
 
 def load_tb_params(
     info_dict: Dict[str, str],
-    directory: str = "stored_data/tb_params",
+    directory: str = "stored_data\\tb_params",
     load_metadata: bool = False,
 ) -> Dict:
     """
@@ -72,7 +66,8 @@ def wrap_save_tb_params(
     source: str,
     particle: str,
     tb_model_name: str,
-    directory: str = "stored_data/tb_params",
+    unit: str,
+    directory: str = "stored_data\\tb_params",
     notes: Optional[str] = None,
 ) -> None:
     """
@@ -86,7 +81,7 @@ def wrap_save_tb_params(
         directory (str, optional): Directory to save the file. Defaults to 'stored_data/tb_params'.
         notes (str, optional): Additional notes to include in the info_dict. Defaults to None.
     """
-    info_dict = {"source": source, "particle": particle, "tb_model_name": tb_model_name}
+    info_dict = {"source": source, "particle": particle, "tb_model_name": tb_model_name, "unit": unit}
     save_tb_params(tb_param_dict, info_dict, directory=directory, notes=notes)
 
 
@@ -94,7 +89,7 @@ def wrap_load_tb_params(
     source: str,
     particle: str,
     tb_model_name: str,
-    directory: str = "stored_data/tb_params",
+    directory: str = "stored_data\\tb_params",
     load_metadata: bool = False,
 ) -> Dict:
     """

@@ -1,11 +1,10 @@
 from typing import Dict, Any
 import numpy as np
 from itertools import permutations
+from utils import get_config
 import scipy.constants as c
 
-__all__ = ['UNITS', 'get_conversion', 'get_all_conversions', 'get_conversion_dict']
-
-UNITS = ['eV', '100meV', 'rad/ps', 'rad/fs', '1/cm', 'K', 'J', '1/fs', '1/ps']
+UNITS = get_config()["UNITS"]
 
 def get_conversion(start_unit: str, end_unit: str) -> float:
     """
@@ -26,6 +25,7 @@ def get_conversion(start_unit: str, end_unit: str) -> float:
     convert_to_Joule = {
         'J': 1,
         'eV': c.e,
+        'meV': 1e-3 * c.e,
         '100meV': 100 * 1e-3 * c.e,
         'rad/fs': 1 / 1e-15 * c.hbar,
         'rad/ps': 1 / 1e-12 * c.hbar,

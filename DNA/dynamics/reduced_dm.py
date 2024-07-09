@@ -1,8 +1,9 @@
 import numpy as np
 from itertools import product
 from typing import List
-from DNA.model import delete_basis_dimension, TBHamType
-from DNA.observables import get_eh_observable, get_tb_observable
+
+from DNA.model import delete_groundstate, TBHamType
+from DNA.environment import get_eh_observable, get_tb_observable
 
 def get_reduced_dm(dm: np.ndarray, particle: str, tb_basis: List[str]) -> np.ndarray:
     """
@@ -27,7 +28,7 @@ def get_reduced_dm(dm: np.ndarray, particle: str, tb_basis: List[str]) -> np.nda
     """
     num_sites = len(tb_basis)
     if dm.shape[0] != num_sites**2:
-        dm = delete_basis_dimension(dm)
+        dm = delete_groundstate(dm)
     reduced_dm = np.zeros((num_sites, num_sites), dtype=np.complex128)
     for start_state, end_state in product(tb_basis, repeat=2):
         value = np.trace( get_eh_observable( tb_basis, particle, start_state, end_state ) @ dm )
@@ -46,6 +47,7 @@ def get_reduced_dm_eigs(tb_ham: TBHamType, particle: str, eigenstate_idx: int) -
         np.ndarray: The reduced density matrix.
         
     """
-    dm = np.outer(tb_ham.eigs[:, eigenstate_idx], tb_ham.eigs[:, eigenstate_idx].conj())
+    _, eigs = tb_ham.get_eigensystem()
+    dm = np.outer(eigs[:, eigenstate_idx], eigs[:, eigenstate_idx].conj())
     return get_reduced_dm(dm, particle, tb_ham.tb_basis)
 
