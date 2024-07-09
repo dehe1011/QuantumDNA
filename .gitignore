@@ -3,6 +3,7 @@ stored_data/my_params
 Untitled.ipynb
 test_script.py
 info.txt
+doc/LCAO.ipynb
 
 # Ignore all .svg files in all folders
 *.svg
@@ -27,3 +28,5 @@ utils/.ipynb_checkpoints/
 utils/__pycache__/
 tests/test_model/.ipynb_checkpoints/
 tests/test_model/__pycache__/
+user_interface/.ipynb_checkpoints/
+user_interface/__pycache__/

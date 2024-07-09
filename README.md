@@ -6,16 +6,17 @@ Release date: hopefully in 2024
 
 ## To Do
 
-* Update GitHub repository
 * Add more tests
-* Add tutorials
-* Add docstrings (with examples) and comments
+* Improve tutorials and docstrings
 * Improve README file
 * Publish package on PyPI?
+* Implement disorder and correlations (Mirko)
+* Include conductance
+* Reproduce plots from other papers
 
 ## What's new
 
-* This is where I want to keep track of major changes to the project. 
+* 09.07.: Added a user interface to the package such that it is easier accessible for users that are less familiar with computer science.
 
 ## Getting started 
 
@@ -28,20 +29,16 @@ Copy the following ``commands`` into Anaconda Power Shell
 1. Clone the Github repository (downloads all files and folders from the Github project):\
 `` git clone https://github.com/dehe1011/quantum_DNA.git ``\
 `` cd quantum_DNA ``
-3. Create a virtual environment from a ``.yml`` file that contains name, channels and dependencies:\
-`` conda env create -f environment.yml ``
-4. Activate the virtual environment that you just created:\
-`` conda activate qDNA ``\
-Optional: check if the virtual environment was successfully installed:\
-`` conda info --envs ``
-5. Create a new kernel that can be selected inside Jupyter notebooks:\
-`` python -m ipykernel install --name qDNA --display-name "Python (qDNA)" ``
-6. Run all the tests to make sure that everything works:\
-`` .\run_tests.ps1 ``
-If all tests worked you have successfully installed the package. Now there you have two possibilities:
 
-1. Open the user interface:
-`` python user_interface.py ``
+2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
+`` .\activate.ps1 ``
+
+If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
+
+After you have already installed the package, there are two possibilities to access the code:
+
+1. Reopen the user interface: navigate to the directory of the package and use the following command:
+`` .\activate.ps1 ``
 2. Open a new Jupyter notebook and select the kernel to "Python (qDNA)":
 `` jupyter notebook ``
 
@@ -63,13 +60,21 @@ The following shortcuts are frequently used in the code:
 * glob: global
 * deph: dephasing
 * therm: thermalizing
+* seq: sequence
+* calc: calculate
 
 ### Tutorials
 
 In the ``quantum_DNA_1.0/doc/tutorials/`` directory, there exists the following tutorials:
 
-* **0_TB_Model.ipynb**: tutorials on predefined and custom tiught-binding models
+* **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
+* **1_Plotting_Routines**: tutorial on the predefined plotting routines.
+* **2_Open_System**: tutorial on different ways to treat DNA relaxation the DNA environment.
+* **Exploration_Notebook**: if you are interested how single functions behave, this is the place where you can test the functionality isolated from the rest of the code. 
 
+In the ``quantum_DNA_1.0/doc/`` directory you can find:
+* **Paper**: Notebook to reproduce all the plots contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+* **Produce_Data**: In this notebook longer simulations are performed to obtain data (e.g., the lifetimes and average charge separation of up to seven base pairs)
 
 ## References
 
