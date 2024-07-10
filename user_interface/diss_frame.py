@@ -2,10 +2,10 @@ import customtkinter as ctk
 from utils import get_config
 
 class DissFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, configs, **kwargs):
+        super().__init__(master)
         self.pack(fill="both", expand=True)
-        self.configs = get_config()
+        self.configs = configs
         self.diss_kwargs_default = self.configs['diss_kwargs_default']
         
         self.diss_loc_deph_rate_label = ctk.CTkLabel(self, text="Local Dephasing Rate:")

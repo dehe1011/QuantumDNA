@@ -2,10 +2,10 @@ import customtkinter as ctk
 from utils import get_config
 
 class DynamicsFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, configs, **kwargs):
+        super().__init__(master)
         self.pack(fill="both", expand=True)
-        self.configs = get_config()
+        self.configs = configs
         self.me_kwargs_default = self.configs['me_kwargs_default']
 
         self.me_t_steps_label = ctk.CTkLabel(self, text="Time Steps:")

@@ -56,7 +56,7 @@ def plot_pops(me_solver: MESolverType):
     fig, axes = plt.subplots(num_strands, num_sites_per_strand, figsize=(5*num_sites_per_strand, 5*num_strands) )
     for i, (ax, tb_site) in enumerate( zip(axes.flatten(), tb_basis) ):
         plot_pop(ax, tb_site, me_solver, add_legend = (i==0))
-    # return fig, axes
+    return fig, axes
     
 def plot_coh(ax, me_solver: MESolverType):
     """

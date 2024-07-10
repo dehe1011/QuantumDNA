@@ -2,12 +2,10 @@ import customtkinter as ctk
 import webbrowser
 from DNA import wrap_save_tb_params
 
-# ctk.CTkToplevel
 class CustomFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
-        padx = 20
-        self.configs = master.configs
+    def __init__(self, master, configs):
+        super().__init__(master)
+        self.configs = configs
         
         self.tb_params_label = ctk.CTkLabel(self, text="TB parameters:")
         self.tb_params_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
@@ -50,14 +48,13 @@ class CustomFrame(ctk.CTkFrame):
         self.cancel_button.grid(row=11, column=1, padx=10, pady=10)
 
 class CustomWindow(ctk.CTkToplevel):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
-        padx = 20
-        self.configs = master.configs
+    def __init__(self, master, configs):
+        super().__init__(master)
+        self.configs = configs
         self.title("Customize")
         
-        self.custom_frame = CustomFrame(master=self)
-        self.custom_frame.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="nsew")
+        self.custom_frame = CustomFrame(self, configs)
+        self.custom_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
     def save(self):
         tb_param_dict = self.custom_frame.tb_params_entry.get()

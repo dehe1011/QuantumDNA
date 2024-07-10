@@ -2,7 +2,7 @@ import customtkinter as ctk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
-from DNA import plot_pop
+from DNA import plot_pop, plot_pops, plot_coh, plot_fourier
 from utils import save_fig
 
 class PlottingFrame(ctk.CTkFrame):
@@ -30,12 +30,49 @@ class PlottingWindow(ctk.CTkToplevel):
         
         self.plotting_frame = PlottingFrame(master=self)
         self.plotting_frame.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="nsew")
-        self.plot_pop(master)
-
-    def plot_pop(self, master):
-        self.fig, self.ax = plt.subplots()
-        plot_pop(self.ax, master.plotting_kwargs["init_tb_site"], master.me_solver)
+        
+        self.plot_options_kwargs = master.plot_options_kwargs
+        self.plot_option = self.plot_options_kwargs['plot_option']
+        self.me_solver = master.me_solver
+        self.tb_ham = master.tb_ham
+        
+        if self.plot_option == 'Population':
+            self.init_tb_site = self.plot_options_kwargs["init_tb_site"]
+            if self.init_tb_site == 'All':
+                self.plot_pops()
+            else:
+                self.plot_pop()
+                
+        if self.plot_option == 'Coherence':
+            self.plot_coh()
+            
+        if self.plot_option == 'Fourier':
+            self.plot_fourier()
+            if master.plot_options_frame.plotting_options_tab.fourier_frame.average_pop_var.get():
+                self.average_pop()
         self.plotting(self.fig)
+
+    def average_pop(self):
+        average_pop = self.tb_ham.get_average_pop(self.plot_options_kwargs['init_state'], self.plot_options_kwargs['end_state']  )
+        print(f"Average population: {average_pop}")
+
+    def plot_pop(self):
+        self.fig, self.ax = plt.subplots()
+        plot_pop(self.ax, self.init_tb_site, self.me_solver)
+        
+    def plot_pops(self):
+        self.fig, self.axes = plot_pops(self.me_solver)
+        
+    def plot_coh(self):
+        self.fig, self.ax = plt.subplots()
+        plot_coh(self.ax, self.me_solver)
+                 
+    def plot_fourier(self):
+        self.fig, self.ax = plt.subplots()
+        init_state = self.plot_options_kwargs["init_state"]
+        end_state = self.plot_options_kwargs["end_state"]
+        x_axis = self.plot_options_kwargs["x_axis"]
+        plot_fourier(self.ax, self.tb_ham, init_state, end_state, x_axis)
 
     def save(self):
         self.filename = self.plotting_frame.filename_entry.get()

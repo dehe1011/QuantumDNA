@@ -3,10 +3,10 @@ from DNA import wrap_save_tb_params
 from utils import get_config
 
 class HamFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, configs, **kwargs):
+        super().__init__(master)
         self.pack(fill="both", expand=True)
-        self.configs = get_config()
+        self.configs = configs
         self.ham_kwargs_default = self.configs['ham_kwargs_default']
 
         self.ham_source_label = ctk.CTkLabel(self, text="Source:")

@@ -8,6 +8,8 @@ from DNA.dynamics import MESolverType
 
 DNA_BASES = get_config()['DNA_BASES']
 COLORS_DNA_BASES = dict(zip( DNA_BASES, sns.color_palette('colorblind', n_colors=len(DNA_BASES) )))
+PARTICLES = get_config()['PARTICLES']
+COLORS_PARTICLES = dict( zip(PARTICLES, sns.color_palette()[:3]) ) 
 
 # -----------------------------------------------------------------------------------------------------
 
@@ -18,11 +20,12 @@ def plot_fourier(ax, tb_ham: TBHamType, init_state: Any, end_state: Any, x_axis:
     for particle in tb_ham.particles: 
         amplitudes = amplitudes_dict[particle] 
         frequencies = np.array(frequencies_dict[particle]) * get_conversion(tb_ham.unit, 'rad/ps')
-    if x_axis.lower() == 'frequency':
-        ax.plot(frequencies, amplitudes, '.', markersize=12)
-    if x_axis.lower() == 'period':
-        periods = 1e3/frequencies
-        ax.plot(periods, amplitudes, '.', markersize=12)
+        if x_axis.lower() == 'frequency':
+            ax.plot(frequencies, amplitudes, '.',label=particle, color=COLORS_PARTICLES[particle], markersize=12)
+        if x_axis.lower() == 'period':
+            periods = 1e3/frequencies
+            ax.plot(periods, amplitudes, '.', label=particle, color=COLORS_PARTICLES[particle], markersize=12)
+    ax.legend()
 
 def get_frame_fourier(ax, x_axis: str):
     if x_axis.lower() == 'frequency':
