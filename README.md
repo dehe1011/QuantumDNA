@@ -31,14 +31,14 @@ Copy the following ``commands`` into Anaconda Power Shell
 `` cd quantum_DNA ``
 
 2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
-`` .\activate.ps1 ``
+`` powershell -ExecutionPolicy Bypass -File ./activate.ps1 ``
 
 If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
 
 After you have already installed the package, there are two possibilities to access the code:
 
 1. Reopen the user interface: navigate to the directory of the package and use the following command:
-`` .\activate.ps1 ``
+`` powershell -ExecutionPolicy Bypass -File ./activate.ps1 ``
 2. Open a new Jupyter notebook and select the kernel to "Python (qDNA)":
 `` jupyter notebook ``
 
@@ -65,7 +65,7 @@ The following shortcuts are frequently used in the code:
 
 ### Tutorials
 
-In the ``quantum_DNA_1.0/doc/tutorials/`` directory, there exists the following tutorials:
+In the ``quantum_DNA_1.0/doc/tutorials/`` directory, there exist the following tutorials:
 
 * **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
 * **1_Plotting_Routines**: tutorial on the predefined plotting routines.

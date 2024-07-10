@@ -16,7 +16,7 @@ if ($envExists) {
     # Create a new kernel that can be selected inside Jupyter notebooks:
     python -m ipykernel install --name qDNA --display-name "Python (qDNA)"
     # Run all the tests to make sure that everything works:
-    .\run_tests.ps1
+    powershell -ExecutionPolicy Bypass -File ./run_tests.ps1
 }
 
 # Open the user interface

@@ -1,6 +1,9 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+ROOT_DIR = __file__[:__file__.rfind('QuantumDNA')]+ 'QuantumDNA'
+if ROOT_DIR not in sys.path:
+    del sys.path[0]
+    sys.path.insert(0, ROOT_DIR)
 
 import customtkinter as ctk
 from utils import get_config

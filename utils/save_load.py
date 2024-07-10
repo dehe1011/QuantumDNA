@@ -5,7 +5,7 @@ import os
 import sys
 import logging
 
-ROOT_DIR = __file__[:__file__.rfind('Quantum_DNA_1.0')]+ 'Quantum_DNA_1.0'
+ROOT_DIR = __file__[:__file__.rfind('QuantumDNA')]+ 'QuantumDNA'
 if ROOT_DIR not in sys.path:
     del sys.path[0]
     sys.path.insert(0, ROOT_DIR)
