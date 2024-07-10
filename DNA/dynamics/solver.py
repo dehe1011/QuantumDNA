@@ -33,18 +33,17 @@ class ME_Solver:
         if self.verbose: 
             print("Successfully checked all inputs for the ME_Solver instance.")
         
-        self.tb_ham = tb_ham
-        self.tb_model = self.tb_ham.tb_model 
-        self.lindblad_diss = lindblad_diss
-        
         self._t_steps = int( self.me_kwargs.get('t_steps') )
         self._t_end = int( self.me_kwargs.get('t_end') )
         self.times = np.linspace(0, self.t_end, self.t_steps ) 
         self.t_unit = self.me_kwargs.get('t_unit')
         assert self.t_steps/self.t_end > 1/2, f"t_end {self.t_end} cannot be sufficiently resolved by t_steps {self.t_steps}. Pleare increase the number of steps or reduce the timespan. Alternative: change the unit of time from fs to ps (the mesolver does not know about the unit, but you do ;) )"
-        # if self.t_unit == 'fs':
-        #     self.times *= 1e-3 # converts times back from fs to ps
+
+        self.tb_ham = tb_ham
         self.tb_ham.unit = 'rad/'+self.t_unit
+        self.tb_model = self.tb_ham.tb_model 
+        self.lindblad_diss = lindblad_diss
+        self.lindblad_diss.unit = 'rad/'+self.t_unit
 
         if self.tb_ham.description == '2P':
             self.init_state = (self.me_kwargs.get('init_e_state'), self.me_kwargs.get('init_h_state') )

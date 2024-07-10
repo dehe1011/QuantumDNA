@@ -16,6 +16,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     encoding='utf-8', 
                     level=logging.INFO)
 
+verbose = False
+
 # ------------------------------------------------- save and load data --------------------------------------------
 
 def my_save(data, metadata, filename, directory = 'stored_data', save_excel = False, version_index: bool = True):
@@ -38,7 +40,8 @@ def my_save(data, metadata, filename, directory = 'stored_data', save_excel = Fa
 
     short_filepath = filepath[filepath.rfind(directory):]
     logger.info(f"Data saved as {short_filepath}")
-    print(f"Data saved as {short_filepath}")
+    if verbose: 
+        print(f"Data saved as {short_filepath}")
     
     data = (data, metadata)
     with open(filepath, 'w') as f:
@@ -59,7 +62,8 @@ def my_load(filename, load_metadata = False, directory = 'stored_data'):
 
     short_filepath = filepath[filepath.rfind(directory):]
     logger.info(f"Data loaded from {short_filepath}")
-    print(f"Data loaded from {short_filepath}")
+    if verbose:
+        print(f"Data loaded from {short_filepath}")
 
     with open(filepath, 'r') as f: 
         data = json.load(f)
@@ -108,4 +112,5 @@ def save_fig(fig, filename: str, directory: str = 'stored_data\plots', format: s
     fig.savefig(filepath)
     short_filepath = filepath[filepath.rfind(directory):]
     logger.info(f"Figure saved as {short_filepath}")
-    print(f"Figure saved as {short_filepath}")
+    if verbose: 
+        print(f"Figure saved as {short_filepath}")

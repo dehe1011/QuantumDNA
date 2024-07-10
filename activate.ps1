@@ -1,6 +1,6 @@
 # Use the following two commands on the Anaconda Power Shell
-# Set-Location -Path "C:\Users\Dennis Herb\OneDrive\Dokumente\2. Uni\Doktor\Python Scripts\Quantum_DNA_1.0"
-# .\activate.ps1
+# Set-Location -Path "C:\Users\Dennis Herb\OneDrive\Dokumente\2. Uni\Doktor\Python Scripts\QuantumDNA"
+# powershell -ExecutionPolicy Bypass -File .\activate.ps1
 
 # Check if the conda environment 'qDNA' exists
 $envExists = conda info --envs | Select-String -Pattern "qDNA"

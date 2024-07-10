@@ -59,14 +59,16 @@ class Lindblad_Diss:
         self.spectral_density = self.diss_kwargs.get('spectral_density')
         self.exponent = self.diss_kwargs.get('exponent')
 
-        self.relax_ops = self._get_relax_ops()
-        self.deph_ops = self._get_deph_ops()
-        self.therm_ops = self._get_therm_ops()
-        self.c_ops = self.relax_ops + self.deph_ops + self.therm_ops
+        self._relax_ops = self._get_relax_ops()
+        self._deph_ops = self._get_deph_ops()
+        self._therm_ops = self._get_therm_ops()
+        self._c_ops = self._relax_ops + self._deph_ops + self._therm_ops
         self.num_c_ops = len(self.c_ops)
         if tb_ham.description == "2P":
             self.e_ops = self._get_e_ops()
             self.pop_ops, self.coh_ops, self.groundstate_pop_ops = self.e_ops
+
+        self._unit = self.tb_ham.unit
 
         if self.verbose:
             print("Successfully initialized the Lindblad_Diss instance.")
@@ -79,6 +81,33 @@ class Lindblad_Diss:
         
     def __eq__(self, other):
         return self.__repr__() == other.__repr__()
+
+    # --------------------------------------------------------------------
+    
+    @property
+    def c_ops(self):
+        return self._c_ops
+
+    @c_ops.setter
+    def c_ops(self, new_c_ops):
+        assert isinstance(new_c_ops, list), "new_c_ops must be of type list"
+        old_c_ops = self._c_ops
+        self._c_ops = new_c_ops 
+        if new_c_ops != old_c_ops:
+            self.num_c_ops = len(self.c_ops)
+
+    @property
+    def unit(self):
+        return self._unit
+
+    @unit.setter
+    def unit(self, new_unit):
+        assert isinstance(new_unit, str), "new_unit must be of type str"
+        assert new_unit in get_config()['UNITS'], f"new_unit must be in {config['UNITS']}"
+        old_unit = self._unit
+        self._unit = new_unit  
+        if new_unit != old_unit:
+            self.c_ops = [c_op * np.sqrt(get_conversion(old_unit, new_unit)) for c_op in self.c_ops ]
 
     # -------------------------------------------------------------------
 

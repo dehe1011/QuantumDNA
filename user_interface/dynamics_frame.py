@@ -15,7 +15,7 @@ class DynamicsFrame(ctk.CTkFrame):
         self.me_t_steps_entry.insert(0, str(self.me_kwargs_default['t_steps']))
         self.me_t_steps_entry.grid(row=0, column=1, padx=10, pady=10)
     
-        self.me_t_end_label = ctk.CTkLabel(self, text="Time End (ps):")
+        self.me_t_end_label = ctk.CTkLabel(self, text="Time End:")
         self.me_t_end_label.grid(row=1, column=0, padx=10, pady=10)
         
         self.me_t_end_entry = ctk.CTkEntry(self)
