@@ -21,8 +21,6 @@
 
 **Author: Dennis Herb**
 
-Release date: hopefully in 2024 
-
 This Python package can be cited as:
 
 > *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
