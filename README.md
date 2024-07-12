@@ -71,16 +71,16 @@ If all tests worked you have successfully installed the package and the user int
 
 After you have already installed the package, you can either access the code via the user interface or in a Jupyter Notebook. Open the Anconda Powershell Prompt again and use the following ``` commands ```:
 
-1. Open the user interface: \
+1. Open the user interface: 
 
     (i) Navigate to the directory of the package (insert the location of the package): 
     ``` Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA ``` \
     (ii) ``` powershell -ExecutionPolicy Bypass -File ./activate.ps1 ```
 
-2. Open a new Jupyter notebook: \
+2. Open a new Jupyter notebook: 
 
     (i) ``` jupyter notebook ``` \
-    (ii) select the kernel to "Python (qDNA)"
+    (ii) Select the kernel to "Python (qDNA)"
 
 To remove the virtual environment use ``` conda remove --name qDNA --all ```
 
@@ -149,11 +149,11 @@ In the ```quantum_DNA_1.0/doc/tutorials/ ``` folder, there exist the following t
 The usage of the graphical user interface is demonstrated in the following images. Many functionalities of the code can be accessed in a very user friendly manner from the menu window:
 
 ![](stored_data/doc_images/user_interface_doc/menu_1.png)
-| _ Screenshot of the menu of the user interface._
+| _Screenshot of the menu of the user interface._
 ![](stored_data/doc_images/user_interface_doc/plot_1.png)
-| _ Plot obtained after pressing the submit button on the menu (see image above)._
+| _Plot obtained after pressing the submit button on the menu (see image above)._
 ![](stored_data/doc_images/user_interface_doc/menu3.png)
-| _ Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
+| _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
 
 
 ## References
