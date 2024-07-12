@@ -3,11 +3,18 @@ from utils import get_config
 
 class DissFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):
+        """
+        Notes: 
+            This frame is located in the options tab. This means that the options tab is its master. 
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master)
         self.pack(fill="both", expand=True)
         self.configs = configs
         self.diss_kwargs_default = self.configs['diss_kwargs_default']
         
+        # widgets
         self.diss_loc_deph_rate_label = ctk.CTkLabel(self, text="Local Dephasing Rate:")
         self.diss_loc_deph_rate_label.grid(row=0, column=0, padx=10, pady=10)
         
@@ -104,6 +111,10 @@ class DissFrame(ctk.CTkFrame):
             self.diss_relax_rates_entry.configure(state='normal')
 
     def get_diss_kwargs(self):
+        """
+        Returns the values of widgets with get() method in dictionary format. 
+        """
+        
         diss_kwargs = {
             "loc_deph_rate": float(self.diss_loc_deph_rate_entry.get()),
             "glob_deph_rate": float(self.diss_glob_deph_rate_entry.get()),

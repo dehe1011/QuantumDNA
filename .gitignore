@@ -1,9 +1,11 @@
 archive/
-stored_data/my_params
+stored_data/test_params
+stored_data/test_plots
 Untitled.ipynb
 test_script.py
 info.txt
 doc/LCAO.ipynb
+stored_data/plots/important_plots/
 
 # Ignore all .svg files in all folders
 *.svg

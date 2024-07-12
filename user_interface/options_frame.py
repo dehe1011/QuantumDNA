@@ -6,12 +6,19 @@ from .user_interface_utils import change_state_all_widgets
 
 class OptionsTab(ctk.CTkTabview):
     def __init__(self, master, configs, **kwargs):
+        """
+        Notes: 
+            This tab is located in the options frame. This means that the options frame is its master. 
+            The tab itself is the master for three further frames.
+        """
+        
+        # initialization of the ctk.CTkTabview class
         super().__init__(master)
        
         self.ham_tab = self.add("Hamiltonian")
         self.diss_tab = self.add("Dissipator")
         self.dynamics_tab = self.add("Dynamics")
-        self.set("Hamiltonian")
+        # self.set("Hamiltonian")
 
         self.ham_frame = HamFrame(self.ham_tab, configs, **kwargs)
         self.diss_frame = DissFrame(self.diss_tab, configs, **kwargs)
@@ -19,6 +26,14 @@ class OptionsTab(ctk.CTkTabview):
 
 class OptionsFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):
+        """
+        Notes: 
+            This frame is located in the main window. This means that the main window is its master. 
+            The frame itself is the master for the tab options_tab.
+            The frame uses the press_second_confirm(), enable_initial_frame() from the master.
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master)
         
         self.label = ctk.CTkLabel(self, text="Options", font=ctk.CTkFont(size=20, weight="bold"))
@@ -34,6 +49,9 @@ class OptionsFrame(ctk.CTkFrame):
         self.second_confirm_button.grid(row=2, column=1, pady=10, padx=10)
 
     def change_state(self, state):
+        """
+        Changes the state of certain widgets (between 'normal' and 'disabled').
+        """
         change_state_all_widgets(self.options_tab.ham_frame, state=state)
         change_state_all_widgets(self.options_tab.diss_frame, state=state)
         change_state_all_widgets(self.options_tab.dynamics_frame, state=state)

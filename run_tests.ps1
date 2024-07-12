@@ -1,8 +1,10 @@
-# Use the following two commands on the Anaconda Power Shell
-# Set-Location -Path "C:\Users\Dennis Herb\OneDrive\Dokumente\2. Uni\Doktor\Python Scripts\QuantumDNA"
-# powershell -ExecutionPolicy Bypass -File .\run_tests.ps1
+# Use the following two commands on the Anaconda Powershell Prompt to run this file:
 
-# -------------------------------------------------------
+# 1. Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
+# For example: Set-Location -Path "C:\Users\Dennis Herb\OneDrive\Dokumente\2. Uni\Doktor\Python Scripts\QuantumDNA"
+# 2. powershell -ExecutionPolicy Bypass -File .\run_tests.ps1
+
+# -----------------------------------------------------------
 
 echo "Running tests"
 # -m: module, -s: start of search, -v: verbose 
@@ -20,11 +22,16 @@ $paths = @(
 )
 
 foreach ($path in $paths) {
+
     if (Test-Path -Path $path) {
+    
         Remove-Item -Path $path -Recurse -Force
         Write-Output "Removed $path"
+        
     } else {
+    
         Write-Output "$path does not exist"
+        
     }
 }
 

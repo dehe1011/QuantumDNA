@@ -2,10 +2,19 @@ import customtkinter as ctk
 
 class InitialFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
+        """
+        Notes: 
+            This frame is located in the main/ menu window. This means that the main window is its master. 
+            The frame uses the commands press_first_confirm() from the master.
+            
+        Widgets with get() method:
+            upper_strand_entry, tb_model_combo
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master)
 
-        self.grid_rowconfigure( (6,7), weight=1)
-        
+        # widgets
         self.logo_label = ctk.CTkLabel(self, text="QuantumDNA", font=ctk.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, pady=10, padx=10)
 
@@ -27,6 +36,9 @@ class InitialFrame(ctk.CTkFrame):
         self.first_confirm_button.grid(row=5, column=0, pady=10, padx=10)
     
     def change_state(self, state):
+        """
+        Changes the state of certain widgets (between 'normal' and 'disabled').
+        """
         self.upper_strand_entry.configure(state=state)
         self.tb_model_combo.configure(state=state)
         self.first_confirm_button.configure(state=state)

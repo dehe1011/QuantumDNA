@@ -3,11 +3,18 @@ from utils import get_config
 
 class DynamicsFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):
+        """
+        Notes: 
+            This frame is located in the options tab. This means that the options tab is its master. 
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master)
         self.pack(fill="both", expand=True)
         self.configs = configs
         self.me_kwargs_default = self.configs['me_kwargs_default']
 
+        # widgets
         self.me_t_steps_label = ctk.CTkLabel(self, text="Time Steps:")
         self.me_t_steps_label.grid(row=0, column=0, padx=10, pady=10)
         
@@ -44,6 +51,10 @@ class DynamicsFrame(ctk.CTkFrame):
         self.me_init_h_state_combo.set(self.me_kwargs_default['init_h_state'])
 
     def get_me_kwargs(self):
+        """
+        Returns the values of widgets with get() method in dictionary format. 
+        """
+            
         me_kwargs = {
             "t_steps": float(self.me_t_steps_entry.get()),
             "t_end": float(self.me_t_end_entry.get()),

@@ -4,11 +4,18 @@ from utils import get_config
 
 class HamFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):
+        """
+        Notes: 
+            This frame is located in the options tab. This means that the options tab is its master. 
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master)
         self.pack(fill="both", expand=True)
         self.configs = configs
         self.ham_kwargs_default = self.configs['ham_kwargs_default']
 
+        # widgets
         self.ham_source_label = ctk.CTkLabel(self, text="Source:")
         self.ham_source_label.grid(row=0, column=0, padx=10, pady=10)
         
@@ -55,6 +62,10 @@ class HamFrame(ctk.CTkFrame):
         self.ham_nn_cutoff_check.grid(row=13, column=0, padx=10, pady=10, columnspan=2)
 
     def get_ham_kwargs(self):
+        """
+        Returns the values of widgets with get() method in dictionary format. 
+        """
+        
         ham_kwargs = {
             "source": self.ham_source_combo.get(),
             "description": self.ham_description_combo.get(),

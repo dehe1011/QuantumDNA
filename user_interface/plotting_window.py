@@ -7,7 +7,19 @@ from utils import save_fig
 
 class PlottingFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
+        """
+        Notes: 
+            This frame is located in the plotting_window. This means that the plotting_window is its master. 
+            The frame uses the commands save() and cancel() from the master 
+        
+        Widgets with get() method:
+            filename_entry
+        """
+        
+        # initialization of the ctk.CTkFrame class
         super().__init__(master, **kwargs)
+        
+        # widgets
         self.filename_label = ctk.CTkLabel(self, text="Filename:")
         self.filename_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
     
@@ -25,6 +37,14 @@ class PlottingFrame(ctk.CTkFrame):
 
 class PlottingWindow(ctk.CTkToplevel):
     def __init__(self, master, **kwargs):
+        """
+        Notes: 
+            This window is a toplevel window of the main window. This means that the main window is its master. 
+            This window itself is the master for plotting_frame.
+            The frame uses the command plot_options_kwargs, me_solver and tb_ham from the master 
+        """
+        
+        # initialization of the ctk.CTkToplevel class
         super().__init__(master, **kwargs)
         self.title("Plotting")
         
@@ -48,7 +68,7 @@ class PlottingWindow(ctk.CTkToplevel):
             
         if self.plot_option == 'Fourier':
             self.plot_fourier()
-            if master.plot_options_frame.plotting_options_tab.fourier_frame.average_pop_var.get():
+            if master.plot_options_frame.plot_options_tab.fourier_frame.average_pop_var.get():
                 self.average_pop()
         self.plotting(self.fig)
 
