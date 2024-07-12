@@ -5,11 +5,14 @@
 </p>
 
 <div align="center">
-
-<!--   ![PyPI](https://img.shields.io/pypi/v/customtkinter) -->
-  ![PyPI - License](https://img.shields.io/badge/license-MIT-blue)
-<!--   [![DOI](https://zenodo.org/badge/222657390.svg)](https://zenodo.org/badge/latestdoi/222657390) -->
-
+  <span>
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="PyPI - License">
+  </span>
+  <span>
+    <a href="https://doi.org/10.5281/zenodo.12734027">
+      <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg" alt="DOI">
+    </a>
+  </span>
 </div>
 
 ---
@@ -19,6 +22,10 @@
 **Author: Dennis Herb**
 
 Release date: hopefully in 2024 
+
+This Python package can be cited as:
+
+> *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
 
 
 ## To Do
@@ -149,11 +156,13 @@ In the ```quantum_DNA_1.0/doc/tutorials/ ``` folder, there exist the following t
 The usage of the graphical user interface is demonstrated in the following images. Many functionalities of the code can be accessed in a very user friendly manner from the menu window:
 
 ![](stored_data/doc_images/user_interface_doc/menu_1.png)
-| _Screenshot of the menu of the user interface._
+> _Screenshot of the menu of the user interface._
+
 ![](stored_data/doc_images/user_interface_doc/plot_1.png)
-| _Plot obtained after pressing the submit button on the menu (see image above)._
+> _Plot obtained after pressing the submit button on the menu (see image above)._
+
 ![](stored_data/doc_images/user_interface_doc/menu3.png)
-| _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
+> _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
 
 
 ## References
