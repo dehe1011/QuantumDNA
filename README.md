@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img src="stored_data/doc_images/qDNA_logo.png">
+    <img src="docs/figures/qDNA_logo.png">
   </picture>
 </p>
 
@@ -139,9 +139,9 @@ print(f"Average charge separation {dipole} A")
 
 The code contains some tutorials and demostrations to better understand and explore the functionalities. 
 
-In the ```quantum_DNA_1.0/doc/``` folder you can find the notebook **Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+In the ```/docs/tutorials/``` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
-In the ```quantum_DNA_1.0/doc/tutorials/ ``` folder, there exist the following tutorials:
+In the ```/docs/tutorials/ ``` folder, there exist the following tutorials:
 
 * **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
 * **1_Plotting_Routines.ipynb**: tutorial on the predefined plotting routines.
@@ -153,13 +153,13 @@ In the ```quantum_DNA_1.0/doc/tutorials/ ``` folder, there exist the following t
 
 The usage of the graphical user interface is demonstrated in the following images. Many functionalities of the code can be accessed in a very user friendly manner from the menu window:
 
-![](stored_data/doc_images/user_interface_doc/menu_1.png)
+![](docs/figures/user_interface_figures/menu_1.png)
 > _Screenshot of the menu of the user interface._
 
-![](stored_data/doc_images/user_interface_doc/plot_1.png)
+![](docs/figures/user_interface_figures/plot_1.png)
 > _Plot obtained after pressing the submit button on the menu (see image above)._
 
-![](stored_data/doc_images/user_interface_doc/menu3.png)
+![](docs/figures/user_interface_figures/menu3.png)
 > _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
 
 

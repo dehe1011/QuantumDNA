@@ -1,7 +1,11 @@
-archive/
-doc/LCAO.ipynb
+# check which files are ignored: git status --ignored
 
-Untitled.ipynb
+archive/
+docs/my_notebooks/
+docs/figures/my_figures/
+
+development.ipynb
+environment_long.yml
 test_script.py
 info.txt
 
@@ -11,27 +15,5 @@ stored_data/results/
 stored_data/images/
 stored_data/geometries/
 
-# ignore .ipynb_checkpoints and __pycache__ folders
-
 .ipynb_checkpoints/
 __pycache__/
-DNA/dynamics/.ipynb_checkpoints/
-DNA/dynamics/__pycache__/
-DNA/environment/.ipynb_checkpoints/
-DNA/environment/__pycache__/
-DNA/model/.ipynb_checkpoints/
-DNA/model/__pycache__/
-DNA/observables/.ipynb_checkpoints/
-DNA/observables/__pycache__/
-DNA/plotting/.ipynb_checkpoints/
-DNA/plotting/__pycache__/
-doc/tutorials/.ipynb_checkpoints/
-doc/tutorials/__pycache__/
-doc/.ipynb_checkpoints/
-doc/__pycache__/
-utils/.ipynb_checkpoints/
-utils/__pycache__/
-tests/test_model/.ipynb_checkpoints/
-tests/test_model/__pycache__/
-user_interface/.ipynb_checkpoints/
-user_interface/__pycache__/

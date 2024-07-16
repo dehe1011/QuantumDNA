@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functions &mdash; QuantumDNA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Utilities" href="utils.html" />
+    <link rel="prev" title="Classes" href="classes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            QuantumDNA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="classes.html">Classes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.model">Tight-binding basis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-configuration">Tight-binding configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-and-load-tight-binding-parameters">Save and load tight-binding parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.dynamics">Reduced density matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#master-equation-solver">Master equation solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.evaluation">Exciton Lifetime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#average-charge-separation">Average charge separation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#equilibrium-states">Equilibrium states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA">DNA sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.environment">Observables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lindblad-rates">Lindblad rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lindblad-operators">Lindblad operators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">QuantumDNA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="apidoc.html">API documentation</a></li>
+      <li class="breadcrumb-item active">Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h1>
+<p>This is based on <span id="id1">[<a class="reference internal" href="../biblio.html#id2" title="Dennis Herb, Mirko Rossini, and Joachim Ankerhold. Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence. Phys. Rev. E, 109:064413, 2024. doi:10.1103/PhysRevE.109.064413.">HRA24</a>]</span> .</p>
+<section id="module-qDNA.model">
+<span id="tight-binding-basis"></span><h2>Tight-binding basis<a class="headerlink" href="#module-qDNA.model" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.basis_change">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">basis_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#basis_change"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.basis_change" title="Permalink to this definition"></a></dt>
+<dd><p>Performs a basis change of the given matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> – The matrix to change basis.</p></li>
+<li><p><strong>states</strong> – The old basis expressed as a vector in the new basis.</p></li>
+<li><p><strong>liouville</strong> – Set to True for an open quantum system. The matrix must have dimension N**2</p></li>
+<li><p><strong>N.</strong> (<em>instead of</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix in the new basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.get_eh_basis">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_eh_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_eh_basis" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a symbolic string representation of electron-hole basis indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_dims</strong> – A tuple (num_strands, num_sites_per_strand) representing the tight-binding</p></li>
+<li><p><strong>dimensions.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tuples representing electron-hole basis indices.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_eh_basis</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">[(&#39;(0, 0)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 0)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 0)&#39;, &#39;(1, 0)&#39;), (&#39;(0, 0)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="go"> (&#39;(0, 1)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 1)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 1)&#39;, &#39;(1, 0)&#39;), (&#39;(0, 1)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="go"> (&#39;(1, 0)&#39;, &#39;(0, 0)&#39;), (&#39;(1, 0)&#39;, &#39;(0, 1)&#39;), (&#39;(1, 0)&#39;, &#39;(1, 0)&#39;), (&#39;(1, 0)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="go"> (&#39;(1, 1)&#39;, &#39;(0, 0)&#39;), (&#39;(1, 1)&#39;, &#39;(0, 1)&#39;), (&#39;(1, 1)&#39;, &#39;(1, 0)&#39;), (&#39;(1, 1)&#39;, &#39;(1, 1)&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.get_eh_distance">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_eh_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_eh_distance" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the distance between electron and hole for each state in the basis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>eh_basis</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of electron and hole positions as tuples of strings.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of distances between electron and hole for each state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_distance</span><span class="p">([(</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 1)&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;(1, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">)])</span>
+<span class="go">array([1.41421356, 1.        ])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.get_particle_eh_states">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_particle_eh_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_particle_eh_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_particle_eh_states" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a list of electron-hole states for a given particle and site basis element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle</strong> – The type of particle (‘electron’, ‘hole’, or ‘exciton’).</p></li>
+<li><p><strong>tb_basis_element</strong> – The site basis element for which to generate the states.</p></li>
+<li><p><strong>tb_basis</strong> – The list of all site basis elements.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tuples representing the electron-hole states.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_particle_eh_states</span><span class="p">(</span><span class="s1">&#39;electron&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 2)&#39;</span><span class="p">,</span> <span class="n">get_tb_basis</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+<span class="go">[(&#39;(0, 2)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 2)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 2)&#39;, &#39;(0, 2)&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.get_tb_basis">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_tb_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_tb_basis" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a symbolic string representation of the indices ‘(i, j)’ where i indicates the strand
+number and j the site number inside the strand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_dims</strong> – A tuple (num_strands, num_sites_per_strand) representing the tight-binding</p></li>
+<li><p><strong>dimensions.</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of string representations of site indices.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_tb_basis</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">[&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(1, 0)&#39;, &#39;(1, 1)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.global_to_local">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">global_to_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#global_to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.global_to_local" title="Permalink to this definition"></a></dt>
+<dd><p>Performs a basis change from the eigenbasis to the site basis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> – The matrix to change basis.</p></li>
+<li><p><strong>eigs</strong> – The eigenbasis (old) expressed in the site basis (new).</p></li>
+<li><p><strong>liouville</strong> – Set to True for an open quantum system. The matrix must have dimension N**2</p></li>
+<li><p><strong>N.</strong> (<em>instead of</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix in the site basis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.model.local_to_global">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">local_to_global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#local_to_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.local_to_global" title="Permalink to this definition"></a></dt>
+<dd><p>Performs a basis change from the site basis to the eigenbasis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> – The matrix to change basis.</p></li>
+<li><p><strong>eigs</strong> – The site basis (old) expressed in the eigenbasis (new).</p></li>
+<li><p><strong>liouville</strong> – Set to True for an open quantum system. The matrix must have dimension N**2</p></li>
+<li><p><strong>N.</strong> (<em>instead of</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix in the eigenbasis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="tight-binding-configuration">
+<h2>Tight-binding configuration<a class="headerlink" href="#tight-binding-configuration" title="Permalink to this heading"></a></h2>
+</section>
+<section id="tight-binding-hamiltonian">
+<h2>Tight-binding Hamiltonian<a class="headerlink" href="#tight-binding-hamiltonian" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#add_groundstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Adds a dimension to the matrix to include the ground state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>np.ndarray</em>) – Input matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix with an additional dimension for the ground state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add_groundstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]))</span>
+<span class="go">array([[0., 0., 0.],</span>
+<span class="go">       [0., 1., 2.],</span>
+<span class="go">       [0., 3., 4.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#add_interaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Adds interaction terms to the Hamiltonian based on the distance between electron and hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Hamiltonian</strong> (<em>np.ndarray</em>) – The initial Hamiltonian matrix.</p></li>
+<li><p><strong>eh_basis</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – List of electron and hole positions as tuples of strings.</p></li>
+<li><p><strong>interaction_param</strong> (<em>float</em>) – The interaction parameter.</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – Unit of the interaction parameter.</p></li>
+<li><p><strong>nearest_neighbor_cutoff</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, only nearest neighbor interactions are considered.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Hamiltonian matrix with interaction terms added.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This works only for a hamiltonian without the additional basis element accounting for relaxation. Therefore the interaction
+should always be added before the relaxation.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Hamiltonian</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eh_basis</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 1)&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;(1, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add_interaction</span><span class="p">(</span><span class="n">Hamiltonian</span><span class="p">,</span> <span class="n">eh_basis</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;100meV&#39;</span><span class="p">)</span>
+<span class="go">array([[0.        , 1.17639077],</span>
+<span class="go">       [1.17639077, 0.        ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">delete_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#delete_groundstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Removes the ground state dimension from the matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>np.ndarray</em>) – Input matrix with ground state dimension.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix without the ground state dimension.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">delete_groundstate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">]]))</span>
+<span class="go">array([[1., 2.],</span>
+<span class="go">       [3., 4.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">set_matrix_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#set_matrix_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> (<em>np.ndarray</em>) – The Hamiltonian matrix.</p></li>
+<li><p><strong>tb_value</strong> (<em>float</em>) – The tight-binding value to set.</p></li>
+<li><p><strong>new_state</strong> (<em>str</em>) – The new state in the basis.</p></li>
+<li><p><strong>old_state</strong> (<em>str</em>) – The old state in the basis.</p></li>
+<li><p><strong>basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of basis states.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated Hamiltonian matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">set_matrix_element</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">])</span>
+<span class="go">array([[0., 1.],</span>
+<span class="go">       [1., 0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_1P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Model</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#tb_ham_1P"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Constructs the particle tight-binding Hamiltonian matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_sites</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of tight-binding sites.</p></li>
+<li><p><strong>tb_param_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>) – Dictionary of tight-binding parameters.</p></li>
+<li><p><strong>tb_config</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Tight-binding configuration.</p></li>
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Basis for the tight-binding sites.</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – Unit of the tight-binding parameter.</p></li>
+<li><p><strong>num_strands</strong> (<em>int</em>) – Number of strands in the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The tight-binding Hamiltonian matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_2P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Model</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_electron</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_hole</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#tb_ham_2P"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Constructs the electron-hole tight-binding Hamiltonian matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_sites</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of tight-binding sites.</p></li>
+<li><p><strong>tb_param_dict_electron</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>) – Electron tight-binding parameters.</p></li>
+<li><p><strong>tb_param_dict_hole</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>float</em><em>]</em>) – Hole tight-binding parameters.</p></li>
+<li><p><strong>tb_config</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Tight-binding configuration.</p></li>
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Basis for the tight-binding sites.</p></li>
+<li><p><strong>unit</strong> (<em>str</em>) – Unit of the tight-binding parameter.</p></li>
+<li><p><strong>num_strands</strong> (<em>int</em>) – Number of strands in the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The electron-hole tight-binding Hamiltonian matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tb_params_electron</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;E_G&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;C_GC&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tb_params_hole</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;E_G&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;C_GC&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tb_config</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tb_ham_2P</span><span class="p">([</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="s1">&#39;C&#39;</span><span class="p">],</span> <span class="n">tb_params_electron</span><span class="p">,</span> <span class="n">tb_params_hole</span><span class="p">,</span> <span class="n">tb_config</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">],</span> <span class="s1">&#39;100meV&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[0.5, 1.0, 0.4, 0.8],</span>
+<span class="go">       [1.0, 0.5, 0.8, 0.4],</span>
+<span class="go">       [0.4, 0.8, 0.5, 1.0],</span>
+<span class="go">       [0.8, 0.4, 1.0, 0.5]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="save-and-load-tight-binding-parameters">
+<h2>Save and load tight-binding parameters<a class="headerlink" href="#save-and-load-tight-binding-parameters" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#load_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Load tight-binding parameters from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info_dict</strong> (<em>dict</em>) – Dictionary with metadaata, e.g., ‘source’, ‘particle’, and ‘tb_model_name’.</p></li>
+<li><p><strong>directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Directory to load the file from. Defaults to ‘stored_data/tb_params’.</p></li>
+<li><p><strong>load_metadata</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to load metadata along with the parameters. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loaded tight-binding parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_tb_params</span><span class="p">(</span>
+<span class="go">        {&#39;source&#39;: &#39;author2024&#39;, &#39;particle&#39;: &#39;particle&#39;, &#39;tb_model_name&#39;: &#39;WM&#39;},</span>
+<span class="go">        directory=&#39;stored_data/my_params&#39;,</span>
+<span class="go">        load_metadata=True</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#save_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Save tight-binding parameters to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_param_dict</strong> (<em>dict</em>) – Dictionary containing the tight-binding parameters.</p></li>
+<li><p><strong>info_dict</strong> (<em>dict</em>) – Dictionary with metadaata, e.g., ‘source’, ‘particle’, and ‘tb_model_name’.</p></li>
+<li><p><strong>directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Directory to save the file. Defaults to ‘stored_data/tb_params’.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Additional notes to include in the info_dict. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">save_tb_params</span><span class="p">(</span>
+<span class="go">        {&#39;couple&#39;: 5, &#39;bff&#39;: 3, &#39;enemies&#39;: -2, &#39;very_cool&#39;: 3.5},</span>
+<span class="go">        {&#39;source&#39;: &#39;author2024&#39;, &#39;particle&#39;: &#39;particle&#39;, &#39;tb_model_name&#39;: &#39;WM&#39;},</span>
+<span class="go">        directory=&#39;stored_data/my_params&#39;,</span>
+<span class="go">        notes=&#39;here you can add some notes.&#39;</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#wrap_load_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Wrapper function for load_tb_params().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – Source of the parameters, e.g., ‘Hawke2010’.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – Type of particle, e.g., ‘electron’, ‘hole’, ‘exciton’.</p></li>
+<li><p><strong>tb_model_name</strong> (<em>str</em>) – Name of the tight-binding model.</p></li>
+<li><p><strong>directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Directory to load the file from. Defaults to ‘stored_data/tb_params’.</p></li>
+<li><p><strong>load_metadata</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to load metadata along with the parameters. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loaded tight-binding parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#wrap_save_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Wrapper function for save_tb_params().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_param_dict</strong> (<em>dict</em>) – Dictionary containing the tight-binding parameters.</p></li>
+<li><p><strong>source</strong> (<em>str</em>) – Source of the parameters, e.g., ‘Hawke2010’.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – Type of particle, e.g., ‘electron’, ‘hole’, ‘exciton’.</p></li>
+<li><p><strong>tb_model_name</strong> (<em>str</em>) – Name of the tight-binding model.</p></li>
+<li><p><strong>directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Directory to save the file. Defaults to ‘stored_data/tb_params’.</p></li>
+<li><p><strong>notes</strong> (<em>str</em><em>, </em><em>optional</em>) – Additional notes to include in the info_dict. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-qDNA.dynamics">
+<span id="reduced-density-matrix"></span><h2>Reduced density matrix<a class="headerlink" href="#module-qDNA.dynamics" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.dynamics.get_reduced_dm">
+<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/dynamics/reduced_dm.html#get_reduced_dm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm" title="Permalink to this definition"></a></dt>
+<dd><p>Reduces the density matrix for a specific particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dm</strong> (<em>np.ndarray</em>) – The initial density matrix.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – The type of particle (‘electron’ or ‘hole’).</p></li>
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of tight-binding site basis states.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced density matrix for the specified particle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the particle type is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_reduced_dm_particle</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="s1">&#39;electron&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">])</span>
+<span class="go">array([[2., 0.],</span>
+<span class="go">       [0., 2.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.dynamics.get_reduced_dm_eigs">
+<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Ham</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/dynamics/reduced_dm.html#get_reduced_dm_eigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm_eigs" title="Permalink to this definition"></a></dt>
+<dd><p>Reduces the density matrix using the eigenstates of the Hamiltonian for a specific particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hamiltonian</strong> (<em>Hamiltonian</em>) – The Hamiltonian object containing the matrix and site basis.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – The type of particle (‘electron’ or ‘hole’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reduced density matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="master-equation-solver">
+<h2>Master equation solver<a class="headerlink" href="#master-equation-solver" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-qDNA.evaluation">
+<span id="exciton-lifetime"></span><h2>Exciton Lifetime<a class="headerlink" href="#module-qDNA.evaluation" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.evaluation.calc_lifetime">
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_lifetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/qDNA/evaluation/lifetime.html#calc_lifetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.evaluation.calc_lifetime" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates lifetime in fs.</p>
+</dd></dl>
+
+</section>
+<section id="average-charge-separation">
+<h2>Average charge separation<a class="headerlink" href="#average-charge-separation" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/qDNA/evaluation/dipole.html#calc_dipole"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates the average charge separation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifetime_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/qDNA/evaluation/dipole.html#calc_dipole_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates the average charge separation in the exciton lifetime.</p>
+</dd></dl>
+
+</section>
+<section id="equilibrium-states">
+<h2>Equilibrium states<a class="headerlink" href="#equilibrium-states" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_deph_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/evaluation/eq_states.html#get_deph_eq_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Computes the dephasing equilibrium state.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_therm_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/evaluation/eq_states.html#get_therm_eq_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Computes the thermal equilibrium state.</p>
+</dd></dl>
+
+</section>
+<section id="module-qDNA">
+<span id="dna-sequences"></span><h2>DNA sequences<a class="headerlink" href="#module-qDNA" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.create_upper_strands">
+<span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">create_upper_strands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_dna_bases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dna_bases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/qDNA/dna_seq.html#create_upper_strands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.create_upper_strands" title="Permalink to this definition"></a></dt>
+<dd><p>Creates all possible permutations of the given</p>
+</dd></dl>
+
+</section>
+<section id="module-qDNA.environment">
+<span id="observables"></span><h2>Observables<a class="headerlink" href="#module-qDNA.environment" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.environment.get_coh_particle">
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_coh_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_coh_particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_coh_particle" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the coherence density matrix for a specific particle and pair of states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of tight-binding site basis states.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – The type of particle (‘electron’, ‘hole’, or ‘exciton’).</p></li>
+<li><p><strong>state1</strong> (<em>str</em>) – The first state.</p></li>
+<li><p><strong>state2</strong> (<em>str</em>) – The second state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The coherence density matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_coh_particle</span><span class="p">([</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">],</span> <span class="s1">&#39;electron&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">)</span>
+<span class="go">array([[0., 0., 1., 0.],</span>
+<span class="go">       [0., 0., 0., 1.],</span>
+<span class="go">       [0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.environment.get_eh_observable">
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_eh_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_eh_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_eh_observable" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs the electron-hole density matrix for the given particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of tight-binding site basis states.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – The type of particle (‘electron’, ‘hole’, or ‘exciton’).</p></li>
+<li><p><strong>start_state</strong> (<em>str</em>) – The starting state.</p></li>
+<li><p><strong>end_state</strong> (<em>str</em>) – The ending state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The electron-hole density matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the particle type is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_eh_density_matrix</span><span class="p">([</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">],</span> <span class="s1">&#39;electron&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">)</span>
+<span class="go">array([[0., 0., 1., 0.],</span>
+<span class="go">       [0., 0., 0., 1.],</span>
+<span class="go">       [0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.environment.get_pop_particle">
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_pop_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_pop_particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_pop_particle" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the population density matrix for a specific particle and state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of tight-binding site basis states.</p></li>
+<li><p><strong>particle</strong> (<em>str</em>) – The type of particle (‘electron’, ‘hole’, or ‘exciton’).</p></li>
+<li><p><strong>state</strong> (<em>str</em>) – The state of the particle.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The population density matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_pop_particle</span><span class="p">([</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(1, 0)&#39;</span><span class="p">],</span> <span class="s1">&#39;electron&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 0)&#39;</span><span class="p">)</span>
+<span class="go">array([[1., 0., 0., 0.],</span>
+<span class="go">       [0., 1., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.environment.get_tb_observable">
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_tb_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_tb_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_tb_observable" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper function to get the density matrix for tight-binding sites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tb_site_basis</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of tight-binding site basis states.</p></li>
+<li><p><strong>start_state</strong> (<em>str</em>) – The starting state.</p></li>
+<li><p><strong>end_state</strong> (<em>str</em>) – The ending state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The density matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_density_matrix</span><span class="p">([</span><span class="s1">&#39;(0, 0)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 1)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 2)&#39;</span><span class="p">],</span> <span class="s1">&#39;(0, 1)&#39;</span><span class="p">,</span> <span class="s1">&#39;(0, 2)&#39;</span><span class="p">)</span>
+<span class="go">array([[0., 0., 0.],</span>
+<span class="go">       [0., 0., 1.],</span>
+<span class="go">       [0., 0., 0.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="lindblad-rates">
+<h2>Lindblad rates<a class="headerlink" href="#lindblad-rates" title="Permalink to this heading"></a></h2>
+</section>
+<section id="lindblad-operators">
+<h2>Lindblad operators<a class="headerlink" href="#lindblad-operators" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_relax_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_relax_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Annihilation operator of an exciton on a given tight-binding site. Relaxation of the DNA to its ground state.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classes.html" class="btn btn-neutral float-left" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../copyright.html">Copyright</a> 2024, Dennis Herb.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
