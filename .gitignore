@@ -9,11 +9,11 @@ environment_long.yml
 test_script.py
 info.txt
 
-stored_data/test_params/
-stored_data/test_plots/
-stored_data/results/
-stored_data/images/
-stored_data/geometries/
+data/raw/geometries
+data/raw/test_params
+data/processed/
+data/figures/
+data/logging.log
 
 .ipynb_checkpoints/
 __pycache__/

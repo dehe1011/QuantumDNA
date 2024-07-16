@@ -42,7 +42,7 @@ This Python package can be cited as:
 **July 2024**
 
 * Added a graphical user interface (GUI) to the package such that it is easier accessible for users that are less familiar with computer science. The user interface is based on the 
-* Added a Jupyter Notebook ```quantum_DNA_1.0/doc/Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
+* Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
 
 
 ## Introduction
@@ -67,10 +67,10 @@ Open the Anconda Powershell Prompt. Copy and execute the following ```commands``
 
 1. Clone the Github repository (downloads all files and folders from the Github project):\
 ``` git clone https://github.com/dehe1011/quantum_DNA.git```\
-```cd quantum_DNA ```
+```cd QuantumDNA ```
 
 2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
-``` powershell -ExecutionPolicy Bypass -File ./activate.ps1 ```
+``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
 
 If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
 
@@ -80,7 +80,7 @@ After you have already installed the package, you can either access the code via
 
     (i) Navigate to the directory of the package (insert the location of the package): 
     ``` Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA ``` \
-    (ii) ``` powershell -ExecutionPolicy Bypass -File ./activate.ps1 ```
+    (ii) ``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
 
 2. Open a new Jupyter notebook: 
 
@@ -118,7 +118,7 @@ To test QuantumDNA you can run the following simple example where the exciton li
 
 ```python
 
-from DNA import calc_lifetime, calc_dipole
+from qDNA import calc_lifetime, calc_dipole
 
 # input
 upper_strand = 'GCG'
@@ -139,9 +139,9 @@ print(f"Average charge separation {dipole} A")
 
 The code contains some tutorials and demostrations to better understand and explore the functionalities. 
 
-In the ```/docs/tutorials/``` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+In the ```QuantumDNA/docs/tutorials``` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
-In the ```/docs/tutorials/ ``` folder, there exist the following tutorials:
+In the ```QuantumDNA/docs/tutorials``` folder, there exist the following tutorials:
 
 * **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
 * **1_Plotting_Routines.ipynb**: tutorial on the predefined plotting routines.
