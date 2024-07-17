@@ -1,7 +1,7 @@
 import os
 import sys
 import pathlib
-ROOT_DIR = pathlib.Path(__file__).absolute().parent.parent
+ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent)
 if ROOT_DIR not in sys.path:
     del sys.path[0]
     sys.path.insert(0, ROOT_DIR)

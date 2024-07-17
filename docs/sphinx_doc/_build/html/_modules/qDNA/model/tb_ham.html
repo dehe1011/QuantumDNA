@@ -76,56 +76,144 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.model.tb_ham</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides the TB_Ham class for constructing and manipulating tight-binding Hamiltonians</span>
+<span class="sd">for DNA sequences, as well as utility functions for working with these Hamiltonians.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.tb_basis</span> <span class="kn">import</span> <span class="n">get_eh_basis</span><span class="p">,</span> <span class="n">get_particle_eh_states</span><span class="p">,</span> <span class="n">get_eh_distance</span>
-<span class="kn">from</span> <span class="nn">.tb_model</span> <span class="kn">import</span> <span class="n">TBModelType</span><span class="p">,</span> <span class="n">TB_Model</span>
-<span class="kn">from</span> <span class="nn">.tb_params</span> <span class="kn">import</span> <span class="n">wrap_load_tb_params</span>
 <span class="kn">from</span> <span class="nn">qDNA</span> <span class="kn">import</span> <span class="n">DNA_Seq</span>
-<span class="kn">from</span> <span class="nn">qDNA.utils</span> <span class="kn">import</span> <span class="n">calc_amplitudes</span><span class="p">,</span> <span class="n">calc_average_pop</span><span class="p">,</span> <span class="n">calc_frequencies</span><span class="p">,</span> <span class="n">get_conversion_dict</span><span class="p">,</span> <span class="n">get_conversion</span>
+<span class="kn">from</span> <span class="nn">qDNA.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">calc_amplitudes</span><span class="p">,</span>
+    <span class="n">calc_average_pop</span><span class="p">,</span>
+    <span class="n">calc_frequencies</span><span class="p">,</span>
+    <span class="n">get_conversion_dict</span><span class="p">,</span>
+    <span class="n">get_conversion</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">check_ham_kwargs</span>
+<span class="kn">from</span> <span class="nn">.tb_basis</span> <span class="kn">import</span> <span class="n">get_eh_basis</span><span class="p">,</span> <span class="n">get_particle_eh_states</span><span class="p">,</span> <span class="n">get_eh_distance</span>
+<span class="kn">from</span> <span class="nn">.tb_model</span> <span class="kn">import</span> <span class="n">TB_Model</span>
+<span class="kn">from</span> <span class="nn">.tb_params</span> <span class="kn">import</span> <span class="n">wrap_load_tb_params</span>
 
 <span class="c1"># Shortcuts:</span>
 <span class="c1"># tb: tight-binding</span>
 <span class="c1"># nn: nearest-neighbor</span>
-<span class="c1"># ham: hamiltonian </span>
+<span class="c1"># ham: hamiltonian</span>
 <span class="c1"># param: parameter</span>
 <span class="c1"># dim: dimension</span>
 
-<span class="n">PARTICLES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;PARTICLES&#39;</span><span class="p">]</span>
-<span class="n">DESCRIPTIONS</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;DESCRIPTIONS&#39;</span><span class="p">]</span>
+<span class="n">PARTICLES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;PARTICLES&quot;</span><span class="p">]</span>
+<span class="n">DESCRIPTIONS</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;DESCRIPTIONS&quot;</span><span class="p">]</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TB_Ham&#39;</span><span class="p">,</span> <span class="s1">&#39;TBHamType&#39;</span><span class="p">,</span> <span class="s1">&#39;set_matrix_element&#39;</span><span class="p">,</span> <span class="s1">&#39;tb_ham_1P&#39;</span><span class="p">,</span> <span class="s1">&#39;tb_ham_2P&#39;</span><span class="p">,</span> <span class="s1">&#39;add_groundstate&#39;</span><span class="p">,</span> <span class="s1">&#39;delete_groundstate&#39;</span><span class="p">,</span> <span class="s1">&#39;add_interaction&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;TB_Ham&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;set_matrix_element&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tb_ham_1P&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tb_ham_2P&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;add_groundstate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;delete_groundstate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;add_interaction&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
 
-<div class="viewcode-block" id="TB_Ham"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham">[docs]</a><span class="k">class</span> <span class="nc">TB_Ham</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dna_seq</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">DNA_Seq</span><span class="p">],</span> <span class="o">**</span><span class="n">ham_kwargs</span><span class="p">):</span>
-        <span class="c1"># check the inputs</span>
+<div class="viewcode-block" id="TB_Ham"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham">[docs]</a><span class="k">class</span> <span class="nc">TB_Ham</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to represent the tight-binding Hamiltonian for DNA sequences.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dna_seq : DNA_Seq</span>
+<span class="sd">        The DNA sequence object containing the sequence and model information.</span>
+<span class="sd">    ham_kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for the Hamiltonian construction.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dna_seq : DNA_Seq</span>
+<span class="sd">        The DNA sequence object containing the sequence and model information.</span>
+<span class="sd">    tb_model : TB_Model</span>
+<span class="sd">        The tight-binding model associated with the DNA sequence.</span>
+<span class="sd">    tb_basis : list</span>
+<span class="sd">        The tight-binding basis states.</span>
+<span class="sd">    tb_sites_flattened : list</span>
+<span class="sd">        The flattened list of tight-binding sites.</span>
+<span class="sd">    tb_basis_sites_dict : dict</span>
+<span class="sd">        Dictionary mapping the TB basis to the TB sites.</span>
+<span class="sd">    tb_sites : np.ndarray</span>
+<span class="sd">        The array of TB sites.</span>
+<span class="sd">    description : str</span>
+<span class="sd">        Description of the Hamiltonian (e.g., &#39;1P&#39; or &#39;2P&#39;).</span>
+<span class="sd">    _particles : list</span>
+<span class="sd">        List of particles considered (e.g., &#39;electron&#39;, &#39;hole&#39;).</span>
+<span class="sd">    _source : str</span>
+<span class="sd">        Source of the tight-binding parameters.</span>
+<span class="sd">    _unit : str</span>
+<span class="sd">        Unit of the Hamiltonian parameters.</span>
+<span class="sd">    tb_params_electron : dict</span>
+<span class="sd">        Tight-binding parameters for electrons.</span>
+<span class="sd">    tb_params_hole : dict</span>
+<span class="sd">        Tight-binding parameters for holes.</span>
+<span class="sd">    _relaxation : bool</span>
+<span class="sd">        Flag indicating if relaxation is considered.</span>
+<span class="sd">    _interaction_param : float</span>
+<span class="sd">        Interaction parameter for the Hamiltonian.</span>
+<span class="sd">    eh_basis : list</span>
+<span class="sd">        Electron-hole basis states.</span>
+<span class="sd">    _nn_cutoff : float</span>
+<span class="sd">        Nearest-neighbor cutoff for interactions.</span>
+<span class="sd">    matrix : np.ndarray</span>
+<span class="sd">        The Hamiltonian matrix.</span>
+<span class="sd">    matrix_dim : int</span>
+<span class="sd">        Dimension of the Hamiltonian matrix.</span>
+<span class="sd">    backbone : bool</span>
+<span class="sd">        Flag indicating if the model has a backbone.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_param_dicts()</span>
+<span class="sd">        Retrieves the tight-binding parameters for electrons and holes.</span>
+<span class="sd">    get_eigensystem()</span>
+<span class="sd">        Computes and returns the eigenvalues and eigenvectors of the Hamiltonian.</span>
+<span class="sd">    get_matrix()</span>
+<span class="sd">        Computes and returns the Hamiltonian matrix.</span>
+<span class="sd">    get_fourier(init_state, end_state, quantities)</span>
+<span class="sd">        Computes Fourier components of the Hamiltonian for given states.</span>
+<span class="sd">    get_amplitudes(init_state, end_state)</span>
+<span class="sd">        Computes and returns the amplitudes for given states.</span>
+<span class="sd">    get_frequencies(init_state, end_state)</span>
+<span class="sd">        Computes and returns the frequencies for given states.</span>
+<span class="sd">    get_average_pop(init_state, end_state)</span>
+<span class="sd">        Computes and returns the average population for given states.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dna_seq</span><span class="p">,</span> <span class="o">**</span><span class="n">ham_kwargs</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dna_seq</span><span class="p">,</span> <span class="n">DNA_Seq</span><span class="p">),</span> <span class="s2">&quot;dna_seq must be an instance of DNA_Seq&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;ham_kwargs_default&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;ham_kwargs_default&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ham_kwargs</span><span class="p">)</span>
         <span class="n">check_ham_kwargs</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully checked all inputs for the TB_Ham instance.&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span> <span class="o">=</span> <span class="n">dna_seq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span> <span class="o">=</span> <span class="n">TB_Model</span><span class="p">(</span> <span class="n">dna_seq</span><span class="o">.</span><span class="n">tb_model_name</span><span class="p">,</span> <span class="n">dna_seq</span><span class="o">.</span><span class="n">tb_dims</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span> <span class="o">=</span> <span class="n">TB_Model</span><span class="p">(</span><span class="n">dna_seq</span><span class="o">.</span><span class="n">tb_model_name</span><span class="p">,</span> <span class="n">dna_seq</span><span class="o">.</span><span class="n">tb_dims</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">tb_basis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span><span class="o">.</span><span class="n">dna_seq</span><span class="p">)</span> <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="nb">zip</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span><span class="p">)</span> <span class="p">)</span> <span class="c1"># this dictionary allocates the TB basis to the given TB sites</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_strands</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites_per_strand</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span><span class="o">.</span><span class="n">dna_seq</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_sites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_sites_flattened</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_strands</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites_per_strand</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;particles&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;particles&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;unit&quot;</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;unit&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param_dicts</span><span class="p">()</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_relaxation</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interaction_param&quot;</span><span class="p">)</span>
@@ -135,21 +223,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matrix_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_strands</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
-            
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully initialized the TB_Ham instance.&quot;</span><span class="p">)</span>
-        
+
     <span class="k">def</span> <span class="nf">__vars__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the instance variables as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;TB_Ham(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="si">}</span><span class="s1">)&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the TB_Ham instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;TB_Ham(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ham_kwargs</span><span class="si">}</span><span class="s2">)&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares two TB_Ham instances for equality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
-    
+
     <span class="c1"># ------------------------------------------------------------------------</span>
-    
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">particles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span>
@@ -157,17 +254,20 @@
     <span class="nd">@particles</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_particles</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_particles</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;new_particles must be of type list&quot;</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">new_particle</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">new_particle</span> <span class="ow">in</span> <span class="n">new_particles</span><span class="p">]),</span> <span class="s2">&quot;elements of new_particles must be of type str&quot;</span>
-        <span class="n">old_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">new_particles</span>  
-    
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">new_particle</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">new_particle</span> <span class="ow">in</span> <span class="n">new_particles</span><span class="p">]</span>
+        <span class="p">),</span> <span class="s2">&quot;elements of new_particles must be of type str&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="n">new_particles</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">interaction_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_param</span>
 
     <span class="nd">@interaction_param</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">interaction_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_interaction_param</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_interaction_param</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="s2">&quot;interaction_param must be of type float&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">new_interaction_param</span><span class="p">,</span> <span class="nb">float</span>
+        <span class="p">),</span> <span class="s2">&quot;interaction_param must be of type float&quot;</span>
         <span class="n">old_interaction_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_param</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_param</span> <span class="o">=</span> <span class="n">new_interaction_param</span>
         <span class="k">if</span> <span class="n">old_interaction_param</span> <span class="o">!=</span> <span class="n">new_interaction_param</span><span class="p">:</span>
@@ -178,7 +278,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relaxation</span>
 
     <span class="nd">@relaxation</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">relaxation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_relaxation</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">relaxation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_relaxation</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_relaxation</span><span class="p">,</span> <span class="nb">bool</span><span class="p">),</span> <span class="s2">&quot;new_relaxation must be of type bool&quot;</span>
         <span class="n">old_relaxation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relaxation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_relaxation</span> <span class="o">=</span> <span class="n">new_relaxation</span>
@@ -195,9 +295,9 @@
 
     <span class="nd">@nn_cutoff</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">nn_cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_nearest_neighbor_cutoff</span><span class="p">):</span>
-        <span class="n">old_nn_cutoff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nn_cutoff</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nn_cutoff</span>  <span class="o">=</span> <span class="n">new_nn_cutoff</span>
-        <span class="k">if</span> <span class="n">old_nn_cutoff</span> <span class="o">!=</span> <span class="n">new_nn_cutoff</span><span class="p">:</span>
+        <span class="n">old_nn_cutoff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nn_cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nn_cutoff</span> <span class="o">=</span> <span class="n">new_nearest_neighbor_cutoff</span>
+        <span class="k">if</span> <span class="n">old_nn_cutoff</span> <span class="o">!=</span> <span class="n">new_nearest_neighbor_cutoff</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
 
     <span class="nd">@property</span>
@@ -207,9 +307,11 @@
     <span class="nd">@unit</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_unit</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;new_unit must be of type str&quot;</span>
-        <span class="k">assert</span> <span class="n">new_unit</span> <span class="ow">in</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;UNITS&#39;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;new_unit must be in </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;UNITS&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">new_unit</span> <span class="ow">in</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">]</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;new_unit must be in </span><span class="si">{</span><span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;UNITS&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">old_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="n">new_unit</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="n">new_unit</span>
         <span class="k">if</span> <span class="n">new_unit</span> <span class="o">!=</span> <span class="n">old_unit</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">*=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="n">old_unit</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param_dicts</span><span class="p">()</span>
@@ -221,122 +323,182 @@
     <span class="nd">@source</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_source</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_source</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;new_source must be of type str&quot;</span>
-        <span class="k">assert</span> <span class="n">new_source</span> <span class="ow">in</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;SOURCES&#39;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;new_source must be in </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SOURCES&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">new_source</span> <span class="ow">in</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;SOURCES&quot;</span><span class="p">]</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;new_source must be in </span><span class="si">{</span><span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;SOURCES&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">old_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">new_source</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">new_source</span>
         <span class="k">if</span> <span class="n">new_source</span> <span class="o">!=</span> <span class="n">old_source</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param_dicts</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
 
     <span class="c1"># ---------------------------------------------------------------</span>
-            
+
     <span class="k">def</span> <span class="nf">get_param_dicts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">tb_model_name</span>
         <span class="n">tb_params_electron</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">wrap_load_tb_params</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;electron&quot;</span><span class="p">,</span> <span class="n">model_name</span> <span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;electron&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="n">tb_params_hole</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">wrap_load_tb_params</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;hole&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">!=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]:</span>
-            <span class="n">tb_params_electron</span> <span class="o">=</span> <span class="n">get_conversion_dict</span><span class="p">(</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
-            <span class="n">tb_params_hole</span> <span class="o">=</span> <span class="n">get_conversion_dict</span><span class="p">(</span><span class="n">tb_params_hole</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
+            <span class="n">tb_params_electron</span> <span class="o">=</span> <span class="n">get_conversion_dict</span><span class="p">(</span>
+                <span class="n">tb_params_electron</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span>
+            <span class="p">)</span>
+            <span class="n">tb_params_hole</span> <span class="o">=</span> <span class="n">get_conversion_dict</span><span class="p">(</span>
+                <span class="n">tb_params_hole</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">tb_params_electron</span><span class="p">,</span> <span class="n">tb_params_hole</span>
 
-    <span class="k">def</span> <span class="nf">get_eigensystem</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_eigensystem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;2P&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">relaxation</span><span class="p">:</span>
                 <span class="n">matrix</span> <span class="o">=</span> <span class="n">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TB_Ham.get_matrix"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham.get_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="TB_Ham.get_matrix"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham.get_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes and returns the Hamiltonian matrix.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: Hamiltonian matrix.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Hamiltonian matrix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
-            <span class="n">matrix</span> <span class="o">=</span> <span class="n">tb_ham_2P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span><span class="p">)</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">tb_ham_2P</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interaction_param</span><span class="p">:</span>
-                <span class="n">matrix</span> <span class="o">=</span> <span class="n">add_interaction</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interaction_param</span><span class="p">,</span> <span class="n">nn_cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nn_cutoff</span><span class="p">)</span>
+                <span class="n">matrix</span> <span class="o">=</span> <span class="n">add_interaction</span><span class="p">(</span>
+                    <span class="n">matrix</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">interaction_param</span><span class="p">,</span>
+                    <span class="n">nn_cutoff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nn_cutoff</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relaxation</span><span class="p">:</span>
                 <span class="n">matrix</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">matrix</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;1P&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;electron&#39;</span><span class="p">]:</span>
-                <span class="k">return</span> <span class="n">tb_ham_1P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;hole&quot;</span> <span class="p">]:</span>
-                <span class="k">return</span> <span class="n">tb_ham_1P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;electron&quot;</span><span class="p">]:</span>
+                <span class="n">matrix</span> <span class="o">=</span> <span class="n">tb_ham_1P</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_electron</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;hole&quot;</span><span class="p">]:</span>
+                <span class="n">matrix</span> <span class="o">=</span> <span class="n">tb_ham_1P</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">matrix</span></div>
 
-    <span class="k">def</span> <span class="nf">get_fourier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quantities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_fourier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="n">quantities</span><span class="p">):</span>
         <span class="n">eigv</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">end_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;end_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;2P&#39;</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">init_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;init_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">end_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;end_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">init_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;init_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">init_state_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;1P&#39;</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">init_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;init_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">init_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;init_state must be in tb_basis </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">init_state_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">init_state</span><span class="p">)</span>
             <span class="n">end_state_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_state</span><span class="p">)</span>
-        
+
         <span class="n">amplitudes_dict</span><span class="p">,</span> <span class="n">frequencies_dict</span><span class="p">,</span> <span class="n">average_pop_dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span> 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;2P&#39;</span><span class="p">:</span>
-                <span class="n">end_states_idx</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_state</span><span class="p">)</span> <span class="k">for</span> <span class="n">end_state</span> <span class="ow">in</span> <span class="n">get_particle_eh_states</span><span class="p">(</span><span class="n">particle</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">)]</span>
-                <span class="k">if</span> <span class="s1">&#39;amplitude&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
-                    <span class="n">amplitudes_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">([</span><span class="n">calc_amplitudes</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span> <span class="k">for</span> <span class="n">es</span> <span class="ow">in</span> <span class="n">end_states_idx</span><span class="p">]))</span>
-                <span class="k">if</span> <span class="s1">&#39;frequency&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
-                    <span class="n">frequencies_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">calc_frequencies</span><span class="p">(</span><span class="n">eigv</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_states_idx</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s1">&#39;average_pop&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
-                    <span class="n">average_pop_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">calc_average_pop</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span> <span class="k">for</span> <span class="n">es</span> <span class="ow">in</span> <span class="n">end_states_idx</span><span class="p">])</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;1P&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;amplitude&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
-                    <span class="n">amplitudes_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_amplitudes</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">end_state_idx</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s1">&#39;frequency&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+                <span class="n">end_states_idx</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">eh_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_state</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">end_state</span> <span class="ow">in</span> <span class="n">get_particle_eh_states</span><span class="p">(</span>
+                        <span class="n">particle</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;amplitude&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="n">amplitudes_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                        <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">calc_amplitudes</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">es</span> <span class="ow">in</span> <span class="n">end_states_idx</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="n">frequencies_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">calc_frequencies</span><span class="p">(</span><span class="n">eigv</span><span class="p">))</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span>
+                        <span class="n">end_states_idx</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;average_pop&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="n">average_pop_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">calc_average_pop</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">es</span> <span class="ow">in</span> <span class="n">end_states_idx</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;amplitude&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="n">amplitudes_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_amplitudes</span><span class="p">(</span>
+                        <span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">end_state_idx</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
                     <span class="n">frequencies_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_frequencies</span><span class="p">(</span><span class="n">eigv</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s1">&#39;average_pop&#39;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span> 
-                    <span class="n">average_pop_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span>  <span class="o">=</span> <span class="n">calc_average_pop</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">end_state_idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;average_pop&quot;</span> <span class="ow">in</span> <span class="n">quantities</span><span class="p">:</span>
+                    <span class="n">average_pop_dict</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_average_pop</span><span class="p">(</span>
+                        <span class="n">eigs</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">,</span> <span class="n">end_state_idx</span>
+                    <span class="p">)</span>
         <span class="k">return</span> <span class="n">amplitudes_dict</span><span class="p">,</span> <span class="n">frequencies_dict</span><span class="p">,</span> <span class="n">average_pop_dict</span>
 
-    <span class="k">def</span> <span class="nf">get_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;amplitude&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">get_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;amplitude&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">get_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">get_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">get_average_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;average_pop&#39;</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span></div>
+    <span class="k">def</span> <span class="nf">get_average_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;average_pop&quot;</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span></div>
 
-<span class="n">TBHamType</span> <span class="o">=</span> <span class="n">Type</span><span class="p">[</span><span class="n">TB_Ham</span><span class="p">]</span>
 
 <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
 
+
 <div class="viewcode-block" id="set_matrix_element"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.set_matrix_element">[docs]</a><span class="k">def</span> <span class="nf">set_matrix_element</span><span class="p">(</span>
-    <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">tb_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">new_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">old_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">matrix</span><span class="p">,</span>
+    <span class="n">tb_value</span><span class="p">,</span>
+    <span class="n">new_state</span><span class="p">,</span>
+    <span class="n">old_state</span><span class="p">,</span>
+    <span class="n">basis</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        matrix (np.ndarray): The Hamiltonian matrix.</span>
-<span class="sd">        tb_value (float): The tight-binding value to set.</span>
-<span class="sd">        new_state (str): The new state in the basis.</span>
-<span class="sd">        old_state (str): The old state in the basis.</span>
-<span class="sd">        basis (List[str]): The list of basis states.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : np.ndarray</span>
+<span class="sd">        The Hamiltonian matrix.</span>
+<span class="sd">    tb_value : float</span>
+<span class="sd">        The tight-binding value to set.</span>
+<span class="sd">    new_state : str</span>
+<span class="sd">        The new state in the basis.</span>
+<span class="sd">    old_state : str</span>
+<span class="sd">        The old state in the basis.</span>
+<span class="sd">    basis : List[str]</span>
+<span class="sd">        The list of basis states.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The updated Hamiltonian matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The updated Hamiltonian matrix.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; set_matrix_element(np.zeros((2, 2)), 1, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;, [&#39;(0, 0)&#39;, &#39;(1, 0)&#39;])</span>
-<span class="sd">        array([[0., 1.],</span>
-<span class="sd">               [1., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; set_matrix_element(np.zeros((2, 2)), 1, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;, [&#39;(0, 0)&#39;, &#39;(1, 0)&#39;])</span>
+<span class="sd">    array([[0., 1.],</span>
+<span class="sd">           [1., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">old_state_idx</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">old_state</span><span class="p">)</span>
     <span class="n">new_state_idx</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">new_state</span><span class="p">)</span>
@@ -347,24 +509,35 @@
 
 
 <div class="viewcode-block" id="tb_ham_1P"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_1P">[docs]</a><span class="k">def</span> <span class="nf">tb_ham_1P</span><span class="p">(</span>
-    <span class="n">tb_model</span><span class="p">:</span> <span class="n">TBModelType</span><span class="p">,</span>
-    <span class="n">tb_param_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
-    <span class="n">tb_basis_sites_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tb_model</span><span class="p">,</span>
+    <span class="n">tb_param_dict</span><span class="p">,</span>
+    <span class="n">tb_basis_sites_dict</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs the particle tight-binding Hamiltonian matrix.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_sites (List[str]): List of tight-binding sites.</span>
-<span class="sd">        tb_param_dict (Dict[str, float]): Dictionary of tight-binding parameters.</span>
-<span class="sd">        tb_config (List[Tuple[str, str, str]]): Tight-binding configuration.</span>
-<span class="sd">        tb_site_basis (List[str]): Basis for the tight-binding sites.</span>
-<span class="sd">        unit (str): Unit of the tight-binding parameter.</span>
-<span class="sd">        num_strands (int): Number of strands in the system.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_model : TBModelType</span>
+<span class="sd">        The tight-binding model.</span>
+<span class="sd">    tb_param_dict : Dict[str, float]</span>
+<span class="sd">        Dictionary of tight-binding parameters.</span>
+<span class="sd">    tb_basis_sites_dict : Dict[str, str]</span>
+<span class="sd">        Dictionary mapping the TB basis to the TB sites.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The tight-binding Hamiltonian matrix.</span>
-<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The tight-binding Hamiltonian matrix.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; tb_model = TB_Model(&#39;model_name&#39;, (2, 2))</span>
+<span class="sd">    &gt;&gt;&gt; tb_param_dict = {&#39;E_G&#39;: 1.0, &#39;C_GC&#39;: 0.5}</span>
+<span class="sd">    &gt;&gt;&gt; tb_basis_sites_dict = {&#39;(0, 0)&#39;: &#39;G&#39;, &#39;(1, 0)&#39;: &#39;C&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; tb_ham_1P(tb_model, tb_param_dict, tb_basis_sites_dict)</span>
+<span class="sd">    array([[1. , 0.5],</span>
+<span class="sd">           [0.5, 1. ]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">))</span>
 
@@ -375,68 +548,87 @@
             <span class="n">tb_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb_str</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">tb_basis_sites_dict</span><span class="p">[</span><span class="n">old_state</span><span class="p">]</span><span class="si">}{</span><span class="n">tb_basis_sites_dict</span><span class="p">[</span><span class="n">new_state</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="n">tb_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;h&quot;</span> <span class="ow">and</span> <span class="n">tb_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tb_param_dict</span><span class="p">:</span>
             <span class="n">tb_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tb_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">tb_basis_sites_dict</span><span class="p">[</span><span class="n">new_state</span><span class="p">]</span><span class="si">}{</span><span class="n">tb_basis_sites_dict</span><span class="p">[</span><span class="n">old_state</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-                
+
         <span class="k">if</span> <span class="n">tb_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tb_param_dict</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tight-binding parameter &#39;</span><span class="si">{</span><span class="n">tb_str</span><span class="si">}</span><span class="s2">&#39; not found in the parameter dictionary.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Tight-binding parameter &#39;</span><span class="si">{</span><span class="n">tb_str</span><span class="si">}</span><span class="s2">&#39; not found in the parameter dictionary.&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">tb_val</span> <span class="o">=</span> <span class="n">tb_param_dict</span><span class="p">[</span><span class="n">tb_str</span><span class="p">]</span>
-        <span class="n">matrix</span> <span class="o">=</span> <span class="n">set_matrix_element</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">tb_val</span><span class="p">,</span> <span class="n">new_state</span><span class="p">,</span> <span class="n">old_state</span><span class="p">,</span> <span class="n">tb_model</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">set_matrix_element</span><span class="p">(</span>
+            <span class="n">matrix</span><span class="p">,</span> <span class="n">tb_val</span><span class="p">,</span> <span class="n">new_state</span><span class="p">,</span> <span class="n">old_state</span><span class="p">,</span> <span class="n">tb_model</span><span class="o">.</span><span class="n">tb_basis</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
 <div class="viewcode-block" id="tb_ham_2P"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_2P">[docs]</a><span class="k">def</span> <span class="nf">tb_ham_2P</span><span class="p">(</span>
-    <span class="n">tb_model</span><span class="p">:</span> <span class="n">TBModelType</span><span class="p">,</span>
-    <span class="n">tb_param_dict_electron</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
-    <span class="n">tb_param_dict_hole</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
-    <span class="n">tb_basis_sites_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tb_model</span><span class="p">,</span>
+    <span class="n">tb_param_dict_electron</span><span class="p">,</span>
+    <span class="n">tb_param_dict_hole</span><span class="p">,</span>
+    <span class="n">tb_basis_sites_dict</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs the electron-hole tight-binding Hamiltonian matrix.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_sites (List[str]): List of tight-binding sites.</span>
-<span class="sd">        tb_param_dict_electron (Dict[str, float]): Electron tight-binding parameters.</span>
-<span class="sd">        tb_param_dict_hole (Dict[str, float]): Hole tight-binding parameters.</span>
-<span class="sd">        tb_config (List[Tuple[str, str, str]]): Tight-binding configuration.</span>
-<span class="sd">        tb_site_basis (List[str]): Basis for the tight-binding sites.</span>
-<span class="sd">        unit (str): Unit of the tight-binding parameter.</span>
-<span class="sd">        num_strands (int): Number of strands in the system.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_model : TBModelType</span>
+<span class="sd">        The tight-binding model.</span>
+<span class="sd">    tb_param_dict_electron : Dict[str, float]</span>
+<span class="sd">        Electron tight-binding parameters.</span>
+<span class="sd">    tb_param_dict_hole : Dict[str, float]</span>
+<span class="sd">        Hole tight-binding parameters.</span>
+<span class="sd">    tb_basis_sites_dict : Dict[str, str]</span>
+<span class="sd">        Dictionary mapping the TB basis to the TB sites.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The electron-hole tight-binding Hamiltonian matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The electron-hole tight-binding Hamiltonian matrix.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; tb_params_electron = {&#39;E_G&#39;: 1.0, &#39;C_GC&#39;: 0.5}</span>
-<span class="sd">        &gt;&gt;&gt; tb_params_hole = {&#39;E_G&#39;: 0.8, &#39;C_GC&#39;: 0.4}</span>
-<span class="sd">        &gt;&gt;&gt; tb_config = [(&#39;E&#39;, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;), (&#39;C&#39;, &#39;(1, 0)&#39;, &#39;(0, 0)&#39;)]</span>
-<span class="sd">        &gt;&gt;&gt; tb_ham_2P([&#39;G&#39;,&#39;C&#39;], tb_params_electron, tb_params_hole, tb_config, [&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;100meV&#39;, 1)</span>
-<span class="sd">        array([[0.5, 1.0, 0.4, 0.8],</span>
-<span class="sd">               [1.0, 0.5, 0.8, 0.4],</span>
-<span class="sd">               [0.4, 0.8, 0.5, 1.0],</span>
-<span class="sd">               [0.8, 0.4, 1.0, 0.5]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; tb_model = TB_Model(&#39;model_name&#39;, (2, 2))</span>
+<span class="sd">    &gt;&gt;&gt; tb_param_dict_electron = {&#39;E_G&#39;: 1.0, &#39;C_GC&#39;: 0.5}</span>
+<span class="sd">    &gt;&gt;&gt; tb_param_dict_hole = {&#39;E_G&#39;: 0.8, &#39;C_GC&#39;: 0.4}</span>
+<span class="sd">    &gt;&gt;&gt; tb_basis_sites_dict = {&#39;(0, 0)&#39;: &#39;G&#39;, &#39;(1, 0)&#39;: &#39;C&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; tb_ham_2P(tb_model, tb_param_dict_electron, tb_param_dict_hole, tb_basis_sites_dict)</span>
+<span class="sd">    array([[1.5, 0.5, 0.4, 0. ],</span>
+<span class="sd">           [0.5, 1. , 0. , 0. ],</span>
+<span class="sd">           [0.4, 0. , 1.3, 0.5],</span>
+<span class="sd">           [0. , 0. , 0.5, 0.8]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matrix_electron</span> <span class="o">=</span> <span class="n">tb_ham_1P</span><span class="p">(</span><span class="n">tb_model</span><span class="p">,</span> <span class="n">tb_param_dict_electron</span><span class="p">,</span> <span class="n">tb_basis_sites_dict</span><span class="p">)</span>
     <span class="n">matrix_hole</span> <span class="o">=</span> <span class="n">tb_ham_1P</span><span class="p">(</span><span class="n">tb_model</span><span class="p">,</span> <span class="n">tb_param_dict_hole</span><span class="p">,</span> <span class="n">tb_basis_sites_dict</span><span class="p">)</span>
-    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">),</span> <span class="n">matrix_hole</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">matrix_electron</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">))</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">),</span> <span class="n">matrix_hole</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+        <span class="n">matrix_electron</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">matrix</span></div>
+
 
 <span class="c1"># ------------------------------------------------------------------------------------------</span>
 
-<div class="viewcode-block" id="add_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_groundstate">[docs]</a><span class="k">def</span> <span class="nf">add_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="add_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_groundstate">[docs]</a><span class="k">def</span> <span class="nf">add_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds a dimension to the matrix to include the ground state.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        matrix (np.ndarray): Input matrix.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : np.ndarray</span>
+<span class="sd">        Input matrix.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: Matrix with an additional dimension for the ground state.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Matrix with an additional dimension for the ground state.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; add_groundstate(np.array([[1, 2], [3, 4]]))</span>
-<span class="sd">        array([[0., 0., 0.],</span>
-<span class="sd">               [0., 1., 2.],</span>
-<span class="sd">               [0., 3., 4.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; add_groundstate(np.array([[1, 2], [3, 4]]))</span>
+<span class="sd">    array([[0., 0., 0.],</span>
+<span class="sd">           [0., 1., 2.],</span>
+<span class="sd">           [0., 3., 4.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)),</span> <span class="n">matrix</span><span class="p">]</span>
@@ -444,65 +636,83 @@
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
-<div class="viewcode-block" id="delete_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.delete_groundstate">[docs]</a><span class="k">def</span> <span class="nf">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="delete_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.delete_groundstate">[docs]</a><span class="k">def</span> <span class="nf">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes the ground state dimension from the matrix.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        matrix (np.ndarray): Input matrix with ground state dimension.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : np.ndarray</span>
+<span class="sd">        Input matrix with ground state dimension.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: Matrix without the ground state dimension.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Matrix without the ground state dimension.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; delete_groundstate(np.array([[0., 0., 0.], [0., 1., 2.], [0., 3., 4.]]))</span>
-<span class="sd">        array([[1., 2.],</span>
-<span class="sd">               [3., 4.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; delete_groundstate(np.array([[0., 0., 0.], [0., 1., 2.], [0., 3., 4.]]))</span>
+<span class="sd">    array([[1., 2.],</span>
+<span class="sd">           [3., 4.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span></div>
 
+
 <span class="c1"># --------------------------------------------------------------------------------------------</span>
 
+
 <div class="viewcode-block" id="add_interaction"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_interaction">[docs]</a><span class="k">def</span> <span class="nf">add_interaction</span><span class="p">(</span>
-    <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">eh_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
-    <span class="n">interaction_param</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">nn_cutoff</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">matrix</span><span class="p">,</span>
+    <span class="n">eh_basis</span><span class="p">,</span>
+    <span class="n">interaction_param</span><span class="p">,</span>
+    <span class="n">nn_cutoff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds interaction terms to the Hamiltonian based on the distance between electron and hole.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        Hamiltonian (np.ndarray): The initial Hamiltonian matrix.</span>
-<span class="sd">        eh_basis (List[Tuple[str, str]]): List of electron and hole positions as tuples of strings.</span>
-<span class="sd">        interaction_param (float): The interaction parameter.</span>
-<span class="sd">        unit (str): Unit of the interaction parameter.</span>
-<span class="sd">        nearest_neighbor_cutoff (bool, optional): If True, only nearest neighbor interactions are considered.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix : np.ndarray</span>
+<span class="sd">        The initial Hamiltonian matrix.</span>
+<span class="sd">    eh_basis : List[Tuple[str, str]]</span>
+<span class="sd">        List of electron and hole positions as tuples of strings.</span>
+<span class="sd">    interaction_param : float</span>
+<span class="sd">        The interaction parameter.</span>
+<span class="sd">    nn_cutoff : bool, optional</span>
+<span class="sd">        If True, only nearest neighbor interactions are considered.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: Hamiltonian matrix with interaction terms added.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Hamiltonian matrix with interaction terms added.</span>
 
-<span class="sd">    Note: </span>
-<span class="sd">        This works only for a hamiltonian without the additional basis element accounting for relaxation. Therefore the interaction</span>
-<span class="sd">        should always be added before the relaxation. </span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    This works only for a Hamiltonian without the additional basis element accounting for relaxation.</span>
+<span class="sd">    Therefore the interaction should always be added before the relaxation.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; Hamiltonian = np.array([[0, 1], [1, 0]])</span>
-<span class="sd">        &gt;&gt;&gt; eh_basis = [(&#39;(0, 0)&#39;, &#39;(1, 1)&#39;), (&#39;(1, 0)&#39;, &#39;(0, 0)&#39;)]</span>
-<span class="sd">        &gt;&gt;&gt; add_interaction(Hamiltonian, eh_basis, 1.0, &#39;100meV&#39;)</span>
-<span class="sd">        array([[0.        , 1.17639077],</span>
-<span class="sd">               [1.17639077, 0.        ]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; Hamiltonian = np.array([[0, 1], [1, 0]])</span>
+<span class="sd">    &gt;&gt;&gt; eh_basis = [(&#39;(0, 0)&#39;, &#39;(1, 1)&#39;), (&#39;(1, 0)&#39;, &#39;(0, 0)&#39;)]</span>
+<span class="sd">    &gt;&gt;&gt; add_interaction(Hamiltonian, eh_basis, 1.0, True)</span>
+<span class="sd">    array([[0.        , 1.17639077],</span>
+<span class="sd">           [1.17639077, 0.        ]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">distance_list</span> <span class="o">=</span> <span class="n">get_eh_distance</span><span class="p">(</span><span class="n">eh_basis</span><span class="p">)</span> 
-    <span class="n">interaction_strength_list</span> <span class="o">=</span> <span class="p">(</span><span class="n">interaction_param</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">3.4</span> <span class="o">*</span> <span class="n">distance_list</span><span class="p">))</span>
+    <span class="n">distance_list</span> <span class="o">=</span> <span class="n">get_eh_distance</span><span class="p">(</span><span class="n">eh_basis</span><span class="p">)</span>
+    <span class="n">interaction_strength_list</span> <span class="o">=</span> <span class="n">interaction_param</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">3.4</span> <span class="o">*</span> <span class="n">distance_list</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nn_cutoff</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distance_list</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">interaction_strength_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">for</span> <span class="n">eh_basis_state_idx</span><span class="p">,</span> <span class="n">interaction_strength</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">interaction_strength_list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">eh_basis_state_idx</span><span class="p">,</span> <span class="n">interaction_strength</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+        <span class="n">interaction_strength_list</span>
+    <span class="p">):</span>
         <span class="n">eh_basis_state</span> <span class="o">=</span> <span class="n">eh_basis</span><span class="p">[</span><span class="n">eh_basis_state_idx</span><span class="p">]</span>
-        <span class="n">matrix</span> <span class="o">=</span> <span class="n">set_matrix_element</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">interaction_strength</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">set_matrix_element</span><span class="p">(</span>
+            <span class="n">matrix</span><span class="p">,</span> <span class="n">interaction_strength</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">matrix</span></div>
 </pre></div>
 

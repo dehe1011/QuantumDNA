@@ -76,54 +76,86 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.plotting.plot_eigenspectrum</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides functions to plot eigenenergies and eigenstates for quantum DNA models.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span>
-<span class="kn">from</span> <span class="nn">qDNA</span> <span class="kn">import</span> <span class="n">get_reduced_dm_eigs</span><span class="p">,</span> <span class="n">TBHamType</span><span class="p">,</span> <span class="n">get_conversion</span>
+<span class="kn">from</span> <span class="nn">qDNA</span> <span class="kn">import</span> <span class="n">get_reduced_dm_eigs</span><span class="p">,</span> <span class="n">get_conversion</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PARTICLES&#39;</span><span class="p">,</span> <span class="s1">&#39;COLORS_PARTICLES&#39;</span><span class="p">,</span> <span class="s1">&#39;plot_eigv&#39;</span><span class="p">,</span> <span class="s1">&#39;plot_eigs&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PARTICLES&quot;</span><span class="p">,</span> <span class="s2">&quot;COLORS_PARTICLES&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_eigv&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_eigs&quot;</span><span class="p">]</span>
 
-<span class="n">PARTICLES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;PARTICLES&#39;</span><span class="p">]</span>
-<span class="n">COLORS_PARTICLES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="nb">zip</span><span class="p">(</span><span class="n">PARTICLES</span><span class="p">,</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span> <span class="p">)</span> 
+<span class="n">PARTICLES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;PARTICLES&quot;</span><span class="p">]</span>
+<span class="n">COLORS_PARTICLES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">PARTICLES</span><span class="p">,</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]))</span>
 
 <span class="c1"># -------------------------------------------------------------------------------------</span>
-    
-<div class="viewcode-block" id="plot_eigv"><a class="viewcode-back" href="../../../apidoc/plotting.html#qDNA.plotting.plot_eigv">[docs]</a><span class="k">def</span> <span class="nf">plot_eigv</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">:</span> <span class="n">TBHamType</span><span class="p">,</span> <span class="n">energy_unit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;100meV&#39;</span><span class="p">):</span>
+
+
+<div class="viewcode-block" id="plot_eigv"><a class="viewcode-back" href="../../../apidoc/plotting.html#qDNA.plotting.plot_eigv">[docs]</a><span class="k">def</span> <span class="nf">plot_eigv</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">,</span> <span class="n">energy_unit</span><span class="o">=</span><span class="s2">&quot;100meV&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the eigenenergies.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axes to plot on.</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    energy_unit : str, optional</span>
+<span class="sd">        The unit of energy to plot, by default &#39;100meV&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">eigv</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
     <span class="n">eigv</span> <span class="o">*=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="n">energy_unit</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Eigenvalues&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eigv</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Energy in &#39;</span> <span class="o">+</span> <span class="n">energy_unit</span> <span class="p">)</span></div>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eigv</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Energy in &quot;</span> <span class="o">+</span> <span class="n">energy_unit</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="plot_eigs"><a class="viewcode-back" href="../../../apidoc/plotting.html#qDNA.plotting.plot_eigs">[docs]</a><span class="k">def</span> <span class="nf">plot_eigs</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">:</span> <span class="n">TBHamType</span><span class="p">,</span> <span class="n">eigenstate_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_eigs"><a class="viewcode-back" href="../../../apidoc/plotting.html#qDNA.plotting.plot_eigs">[docs]</a><span class="k">def</span> <span class="nf">plot_eigs</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">,</span> <span class="n">eigenstate_idx</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots the distribution of eigenstates over tight-binding sites. </span>
+<span class="sd">    Plots the distribution of eigenstates over tight-binding sites.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        The axes to plot on.</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    eigenstate_idx : int</span>
+<span class="sd">        The index of the eigenstate to plot.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;2P&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
             <span class="n">reduced_dm_eigs</span> <span class="o">=</span> <span class="n">get_reduced_dm_eigs</span><span class="p">(</span><span class="n">tb_ham</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">eigenstate_idx</span><span class="p">)</span>
-            <span class="n">eigs_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span> <span class="n">reduced_dm_eigs</span> <span class="p">)</span>
-            <span class="n">eigs_prob_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span> <span class="n">eigs_distribution</span><span class="p">,</span> <span class="n">eigs_distribution</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="p">)</span><span class="o">.</span><span class="n">real</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">eigs_prob_distribution</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">particle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS_PARTICLES</span><span class="p">[</span><span class="n">particle</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s1">&#39;1P&#39;</span><span class="p">:</span>
+            <span class="n">eigs_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">reduced_dm_eigs</span><span class="p">)</span>
+            <span class="n">eigs_prob_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                <span class="n">eigs_distribution</span><span class="p">,</span> <span class="n">eigs_distribution</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">real</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span>
+                <span class="n">eigs_prob_distribution</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">particle</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">COLORS_PARTICLES</span><span class="p">[</span><span class="n">particle</span><span class="p">],</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
-            <span class="n">particle</span> <span class="o">=</span> <span class="n">description</span>
-            <span class="n">eigs_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span> <span class="n">eigs</span> <span class="p">)</span>
-            <span class="n">eigs_prob_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span> <span class="n">eigs_distribution</span><span class="p">,</span> <span class="n">eigs_distribution</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="p">)</span><span class="o">.</span><span class="n">real</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">eigs_prob_distribution</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">particle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">COLORS_PARTICLES</span><span class="p">[</span><span class="n">particle</span><span class="p">])</span>
+            <span class="n">eigs_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eigs</span><span class="p">)</span>
+            <span class="n">eigs_prob_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                <span class="n">eigs_distribution</span><span class="p">,</span> <span class="n">eigs_distribution</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">real</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span>
+                <span class="n">eigs_prob_distribution</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">particle</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">COLORS_PARTICLES</span><span class="p">[</span><span class="n">particle</span><span class="p">],</span>
+            <span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Distribution of Eigenstate </span><span class="si">{</span><span class="n">eigenstate_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span></div>
-    
-    
-    
-    
 </pre></div>
 
            </div>

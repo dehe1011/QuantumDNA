@@ -76,61 +76,82 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.dynamics.reduced_dm</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for reducing density matrices to the electron, hole or exciton subspace.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">qDNA.model</span> <span class="kn">import</span> <span class="n">delete_groundstate</span><span class="p">,</span> <span class="n">TBHamType</span>
+<span class="kn">from</span> <span class="nn">qDNA.model</span> <span class="kn">import</span> <span class="n">delete_groundstate</span>
 <span class="kn">from</span> <span class="nn">qDNA.environment</span> <span class="kn">import</span> <span class="n">get_eh_observable</span><span class="p">,</span> <span class="n">get_tb_observable</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;get_reduced_dm&#39;</span><span class="p">,</span> <span class="s1">&#39;get_reduced_dm_eigs&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_reduced_dm&quot;</span><span class="p">,</span> <span class="s2">&quot;get_reduced_dm_eigs&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="get_reduced_dm"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.dynamics.get_reduced_dm">[docs]</a><span class="k">def</span> <span class="nf">get_reduced_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">particle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tb_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_reduced_dm"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.dynamics.get_reduced_dm">[docs]</a><span class="k">def</span> <span class="nf">get_reduced_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">tb_basis</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduces the density matrix for a specific particle type.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        dm (np.ndarray): The initial density matrix.</span>
-<span class="sd">        particle (str): The type of particle (&#39;electron&#39; or &#39;hole&#39;).</span>
-<span class="sd">        tb_site_basis (List[str]): The list of tight-binding site basis states.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm : np.ndarray</span>
+<span class="sd">        The initial density matrix.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        The type of particle (&#39;electron&#39; or &#39;hole&#39;).</span>
+<span class="sd">    tb_basis : List[str]</span>
+<span class="sd">        The list of tight-binding site basis states.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The reduced density matrix for the specified particle.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The reduced density matrix for the specified particle.</span>
 
-<span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the particle type is not recognized.</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the particle type is not recognized.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; dm = np.eye(4)</span>
-<span class="sd">        &gt;&gt;&gt; get_reduced_dm_particle(dm, &#39;electron&#39;, [&#39;(0, 0)&#39;, &#39;(1, 0)&#39;])</span>
-<span class="sd">        array([[2., 0.],</span>
-<span class="sd">               [0., 2.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; dm = np.eye(4)</span>
+<span class="sd">    &gt;&gt;&gt; get_reduced_dm(dm, &#39;electron&#39;, [&#39;(0, 0)&#39;, &#39;(1, 0)&#39;])</span>
+<span class="sd">    array([[2., 0.],</span>
+<span class="sd">           [0., 2.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">num_sites</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>
         <span class="n">dm</span> <span class="o">=</span> <span class="n">delete_groundstate</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span>
     <span class="n">reduced_dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">num_sites</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span> <span class="n">get_eh_observable</span><span class="p">(</span> <span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span> <span class="p">)</span> <span class="o">@</span> <span class="n">dm</span> <span class="p">)</span>
-        <span class="n">reduced_dm</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="n">get_tb_observable</span><span class="p">(</span> <span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+            <span class="n">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span> <span class="o">@</span> <span class="n">dm</span>
+        <span class="p">)</span>
+        <span class="n">reduced_dm</span> <span class="o">+=</span> <span class="n">value</span> <span class="o">*</span> <span class="n">get_tb_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
     <span class="k">return</span> <span class="n">reduced_dm</span></div>
 
-<div class="viewcode-block" id="get_reduced_dm_eigs"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.dynamics.get_reduced_dm_eigs">[docs]</a><span class="k">def</span> <span class="nf">get_reduced_dm_eigs</span><span class="p">(</span><span class="n">tb_ham</span><span class="p">:</span> <span class="n">TBHamType</span><span class="p">,</span> <span class="n">particle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">eigenstate_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_reduced_dm_eigs"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.dynamics.get_reduced_dm_eigs">[docs]</a><span class="k">def</span> <span class="nf">get_reduced_dm_eigs</span><span class="p">(</span><span class="n">tb_ham</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">eigenstate_idx</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduces the density matrix using the eigenstates of the Hamiltonian for a specific particle type.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        hamiltonian (Hamiltonian): The Hamiltonian object containing the matrix and site basis.</span>
-<span class="sd">        particle (str): The type of particle (&#39;electron&#39; or &#39;hole&#39;).</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The Hamiltonian object containing the matrix and site basis.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        The type of particle (&#39;electron&#39; or &#39;hole&#39;).</span>
+<span class="sd">    eigenstate_idx : int</span>
+<span class="sd">        The index of the eigenstate.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The reduced density matrix.</span>
-<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The reduced density matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
     <span class="n">dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">eigs</span><span class="p">[:,</span> <span class="n">eigenstate_idx</span><span class="p">],</span> <span class="n">eigs</span><span class="p">[:,</span> <span class="n">eigenstate_idx</span><span class="p">]</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">get_reduced_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">)</span></div>
-
 </pre></div>
 
            </div>

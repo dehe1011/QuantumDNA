@@ -76,7 +76,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.utils.ham_analysis</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">product</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for calculating properties of the Hamiltonian.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Shortcuts:</span>
@@ -88,71 +92,139 @@
 <span class="c1"># dims: dimensions</span>
 <span class="c1"># init: initial</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;calc_average_pop&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_amplitudes&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_frequencies&#39;</span><span class="p">,</span> <span class="s1">&#39;get_pop_fourier&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_ipr_hamiltonian&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;calc_average_pop&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;calc_amplitudes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;calc_frequencies&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_pop_fourier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;calc_ipr_hamiltonian&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
-<div class="viewcode-block" id="calc_average_pop"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_average_pop">[docs]</a><span class="k">def</span> <span class="nf">calc_average_pop</span><span class="p">(</span><span class="n">eigs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_average_pop"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_average_pop">[docs]</a><span class="k">def</span> <span class="nf">calc_average_pop</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the time-averaged/ static population of the end state when initially in the initial state.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        eigs: Eigenvector matrix.</span>
-<span class="sd">        init_state: Initial state in the basis.</span>
-<span class="sd">        end_state: End state in the basis.</span>
-<span class="sd">        basis: The list of basis elements.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigenvector matrix.</span>
+<span class="sd">    init_state : int</span>
+<span class="sd">        Initial state in the basis.</span>
+<span class="sd">    end_state : int</span>
+<span class="sd">        End state in the basis.</span>
 
-<span class="sd">    Returns:</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
 <span class="sd">        The static population of the end state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">average_pop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">eigs</span><span class="p">[</span><span class="n">end_state</span><span class="p">,</span> <span class="p">:]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">init_state</span><span class="p">,</span> <span class="p">:]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">average_pop</span></div>
 
-<div class="viewcode-block" id="calc_amplitudes"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_amplitudes">[docs]</a><span class="k">def</span> <span class="nf">calc_amplitudes</span><span class="p">(</span><span class="n">eigs</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">init_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_amplitudes"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_amplitudes">[docs]</a><span class="k">def</span> <span class="nf">calc_amplitudes</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the amplitudes for transitions between states.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        eigs: Eigenvector matrix.</span>
-<span class="sd">        init_state: Initial state in the basis.</span>
-<span class="sd">        end_state: End state in the basis.</span>
-<span class="sd">        basis: The list of basis elements.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigenvector matrix.</span>
+<span class="sd">    init_state : int</span>
+<span class="sd">        Initial state in the basis.</span>
+<span class="sd">    end_state : int</span>
+<span class="sd">        End state in the basis.</span>
 
-<span class="sd">    Returns:</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
 <span class="sd">        A list of amplitudes for transitions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matrix_dimension</span> <span class="o">=</span> <span class="n">eigs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">amplitudes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">end_state</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">init_state</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">end_state</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">init_state</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
-                  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dimension</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">amplitudes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">2</span>
+        <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">end_state</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">init_state</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">end_state</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="o">*</span> <span class="n">eigs</span><span class="p">[</span><span class="n">init_state</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dimension</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span>
+    <span class="p">]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="calc_frequencies"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_frequencies">[docs]</a><span class="k">def</span> <span class="nf">calc_frequencies</span><span class="p">(</span><span class="n">eigv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_frequencies"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_frequencies">[docs]</a><span class="k">def</span> <span class="nf">calc_frequencies</span><span class="p">(</span><span class="n">eigv</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the frequencies corresponding to energy level differences.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        eigv: Eigenvalue vector.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigv : np.ndarray</span>
+<span class="sd">        Eigenvalue vector.</span>
 
-<span class="sd">    Returns:</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
 <span class="sd">        A list of frequencies.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matrix_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigv</span><span class="p">)</span>
-    <span class="n">frequencies</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">eigv</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">real</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dimension</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">]</span>
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">eigv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">eigv</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">real</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dimension</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span>
+    <span class="p">]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frequencies</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">get_pop_fourier</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">average_pop</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">average_pop</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">[</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">)]</span> <span class="p">)</span>
+
+<div class="viewcode-block" id="get_pop_fourier"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_pop_fourier">[docs]</a><span class="k">def</span> <span class="nf">get_pop_fourier</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">average_pop</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the population using Fourier series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    t : float</span>
+<span class="sd">        Time variable.</span>
+<span class="sd">    average_pop : float</span>
+<span class="sd">        Average population.</span>
+<span class="sd">    amplitudes : np.ndarray</span>
+<span class="sd">        Amplitudes for transitions.</span>
+<span class="sd">    frequencies : np.ndarray</span>
+<span class="sd">        Frequencies corresponding to energy level differences.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The population at time t.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">average_pop</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="n">amplitude</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">amplitudes</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="calc_ipr_hamiltonian"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_ipr_hamiltonian">[docs]</a><span class="k">def</span> <span class="nf">calc_ipr_hamiltonian</span><span class="p">(</span><span class="n">eigs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.</span>
+
 <span class="sd">    1 (localized eigenstate/ exciton state) &lt; IPR &lt; N (delocalized eigenstate/ exciton state)</span>
-<span class="sd">    calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigenvector matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of float</span>
+<span class="sd">        The IPR values for each eigenstate.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="n">eigs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ratios</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dims</span><span class="p">):</span>
-        <span class="n">ipr_val</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">([</span><span class="n">coeff</span><span class="o">**</span><span class="mi">4</span> <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">eigs</span><span class="p">[:,</span><span class="n">idx</span><span class="p">]</span> <span class="p">])</span>
-        <span class="n">ratios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">ipr_val</span> <span class="p">)</span>
+        <span class="n">ipr_val</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coeff</span><span class="o">**</span><span class="mi">4</span> <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">eigs</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">])</span>
+        <span class="n">ratios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ipr_val</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ratios</span></div>
-    
 </pre></div>
 
            </div>

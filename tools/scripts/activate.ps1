@@ -1,7 +1,7 @@
 # Use the following two commands on the Anaconda Powershell Prompt to run this file:
 
 # 1. Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
-# For example: Set-Location -Path "C:\Users\Dennis Herb\OneDrive\Dokumente\2. Uni\Doktor\Python Scripts\QuantumDNA"
+# For example: Set-Location -Path "C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA"
 # 2. powershell -ExecutionPolicy Bypass -File tools\scripts\activate.ps1
 
 # -----------------------------------------------------------

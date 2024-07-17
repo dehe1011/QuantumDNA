@@ -76,58 +76,126 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.evaluation.dipole</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides functions to calculate the average charge separation (dipole moment) for quantum DNA models.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span> 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">my_save</span><span class="p">,</span> <span class="n">my_load</span><span class="p">,</span> <span class="n">get_config</span>
+<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">my_save</span><span class="p">,</span> <span class="n">my_load</span>
 <span class="kn">from</span> <span class="nn">qDNA.model</span> <span class="kn">import</span> <span class="n">get_eh_distance</span>
 <span class="kn">from</span> <span class="nn">qDNA.dynamics</span> <span class="kn">import</span> <span class="n">get_me_solver</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;calc_dipole&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_dipole_wrapper&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_dipole_dict&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;calc_dipole&quot;</span><span class="p">,</span> <span class="s2">&quot;calc_dipole_wrapper&quot;</span><span class="p">,</span> <span class="s2">&quot;calc_dipole_dict&quot;</span><span class="p">]</span>
 
-<span class="c1"># -------------------------------- average charge separation/ dipole moment ------------------------------------------</span>
-    
-<div class="viewcode-block" id="calc_dipole"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.calc_dipole">[docs]</a><span class="k">def</span> <span class="nf">calc_dipole</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="c1"># -------------------------------- Average Charge Separation/ Dipole Moment ------------------------------------------</span>
+
+
+<div class="viewcode-block" id="calc_dipole"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.calc_dipole">[docs]</a><span class="k">def</span> <span class="nf">calc_dipole</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the average charge separation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    upper_strand : str</span>
+<span class="sd">        The upper strand of DNA sequence.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for the master equation solver.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The average charge separation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;relax_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;relax_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">me_solver</span> <span class="o">=</span> <span class="n">get_me_solver</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">distance_list</span> <span class="o">=</span> <span class="mf">3.4</span> <span class="o">*</span> <span class="n">get_eh_distance</span><span class="p">(</span><span class="n">me_solver</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">eh_basis</span><span class="p">)</span>
     <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="n">distance_list</span> <span class="o">@</span> <span class="n">dm</span><span class="o">.</span><span class="n">diag</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="n">me_solver</span><span class="o">.</span><span class="n">get_result</span><span class="p">()]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span><span class="o">.</span><span class="n">real</span></div>
 
-<div class="viewcode-block" id="calc_dipole_wrapper"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.calc_dipole_wrapper">[docs]</a><span class="k">def</span> <span class="nf">calc_dipole_wrapper</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lifetime_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_dipole_wrapper"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.calc_dipole_wrapper">[docs]</a><span class="k">def</span> <span class="nf">calc_dipole_wrapper</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="n">lifetime_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the average charge separation in the exciton lifetime.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    upper_strand : str</span>
+<span class="sd">        The upper strand of DNA sequence.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    lifetime_dict : Dict[str, float]</span>
+<span class="sd">        Dictionary containing lifetimes for each upper strand.</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for the master equation solver.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The average charge separation during the exciton lifetime.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lifetime_dict</span><span class="p">[</span><span class="n">upper_strand</span><span class="p">]</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_steps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_end&#39;</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span>
-    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t_unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;fs&#39;</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lifetime_dict</span><span class="p">[</span><span class="n">upper_strand</span><span class="p">]</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t_steps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t_end&quot;</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;t_unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fs&quot;</span>
     <span class="k">return</span> <span class="n">calc_dipole</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">calc_dipole_dict</span><span class="p">(</span><span class="n">tb_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_cpu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="calc_dipole_dict"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.calc_dipole_dict">[docs]</a><span class="k">def</span> <span class="nf">calc_dipole_dict</span><span class="p">(</span><span class="n">tb_model_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">num_cpu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the average charge separation for multiple upper strands using multiprocessing.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The filename to load the lifetime dictionary from.</span>
+<span class="sd">    num_cpu : int, optional</span>
+<span class="sd">        The number of CPU cores to use. Defaults to the total number of CPUs minus one.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, float]</span>
+<span class="sd">        Dictionary containing the average charge separation for each upper strand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">lifetime_dict</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">my_load</span><span class="p">(</span><span class="s1">&#39;lifetime_&#39;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;_version_0&#39;</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="s1">&#39;stored_data\stored_results&#39;</span><span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">lifetime_dict</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">my_load</span><span class="p">(</span>
+            <span class="s2">&quot;lifetime_&quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_version_0&quot;</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;stored_data/stored_results&quot;</span><span class="p">,</span>
+            <span class="n">load_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;could not load lifetime_dict from stored_data\stored_results\lifetime_&#39;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;_version_0.json&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not load lifetime_dict&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">num_cpu</span><span class="p">:</span>
         <span class="n">num_cpu</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="n">upper_strands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lifetime_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">partial_calc_dipole</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">calc_dipole_wrapper</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="o">=</span><span class="n">tb_model_name</span><span class="p">,</span> <span class="n">lifetime_dict</span> <span class="o">=</span> <span class="n">lifetime_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">partial_calc_dipole</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">calc_dipole_wrapper</span><span class="p">,</span>
+        <span class="n">tb_model_name</span><span class="o">=</span><span class="n">tb_model_name</span><span class="p">,</span>
+        <span class="n">lifetime_dict</span><span class="o">=</span><span class="n">lifetime_dict</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">num_cpu</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-        <span class="n">dipole_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">partial_calc_dipole</span><span class="p">,</span> <span class="n">upper_strands</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">upper_strands</span><span class="p">)))</span>
-        
+        <span class="n">dipole_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">tqdm</span><span class="p">(</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">partial_calc_dipole</span><span class="p">,</span> <span class="n">upper_strands</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">upper_strands</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
     <span class="n">dipole_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">upper_strands</span><span class="p">,</span> <span class="n">dipole_list</span><span class="p">))</span>
-    <span class="n">my_save</span><span class="p">(</span><span class="n">dipole_dict</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="s1">&#39;dipole_&#39;</span><span class="o">+</span><span class="n">filename</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="s1">&#39;stored_data\stored_results&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved result at stored_data\stored_results\dipole_&quot;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s1">&#39;.json&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">dipole_dict</span>
+    <span class="n">my_save</span><span class="p">(</span>
+        <span class="n">dipole_dict</span><span class="p">,</span>
+        <span class="n">kwargs</span><span class="p">,</span>
+        <span class="s2">&quot;dipole_&quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">,</span>
+        <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;stored_data/stored_results&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">dipole_dict</span></div>
 </pre></div>
 
            </div>

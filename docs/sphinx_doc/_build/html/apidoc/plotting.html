@@ -95,55 +95,205 @@
 <h1>Plotting<a class="headerlink" href="#plotting" title="Permalink to this heading"></a></h1>
 <section id="module-qDNA.plotting">
 <span id="plot-dna-base-frequency"></span><h2>Plot DNA base frequency<a class="headerlink" href="#module-qDNA.plotting" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.plotting.plot_dna_base_frequency">
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_dna_base_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lifetime_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_dna_base_frequency.html#plot_dna_base_frequency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.plotting.plot_dna_base_frequency" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the frequency of A-T and G-C base pairs against the exciton lifetime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lifetime_dict</strong><span class="classifier">Dict[str, float]</span></dt><dd><p>Dictionary where keys are DNA sequences and values are lifetimes in femtoseconds.</p>
+</dd>
+<dt><strong>cutoff_num</strong><span class="classifier">int, optional</span></dt><dd><p>The number of initial sequences to exclude from the plot, by default 10.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="plot-eigenspectrum">
 <h2>Plot eigenspectrum<a class="headerlink" href="#plot-eigenspectrum" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Ham</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_eigenspectrum.html#plot_eigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_eigenspectrum.html#plot_eigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Plots the distribution of eigenstates over tight-binding sites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+</dd>
+<dt><strong>eigenstate_idx</strong><span class="classifier">int</span></dt><dd><p>The index of the eigenstate to plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_eigv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Ham</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'100meV'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_eigenspectrum.html#plot_eigv"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_eigv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100meV'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_eigenspectrum.html#plot_eigv"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Plots the eigenenergies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+</dd>
+<dt><strong>energy_unit</strong><span class="classifier">str, optional</span></dt><dd><p>The unit of energy to plot, by default ‘100meV’.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
 <section id="plot-fourier-analysis">
 <h2>Plot Fourier analysis<a class="headerlink" href="#plot-fourier-analysis" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_average_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_fourier.html#plot_average_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots the average population for each interaction parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">list of matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+</dd>
+<dt><strong>J_list</strong><span class="classifier">list</span></dt><dd><p>List of interaction parameters.</p>
+</dd>
+<dt><strong>J_unit</strong><span class="classifier">str</span></dt><dd><p>The unit of the interaction parameters.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_fourier.html#plot_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots the Fourier transform of the transition amplitudes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+</dd>
+<dt><strong>init_state</strong><span class="classifier">Any</span></dt><dd><p>The initial state.</p>
+</dd>
+<dt><strong>end_state</strong><span class="classifier">Any</span></dt><dd><p>The end state.</p>
+</dd>
+<dt><strong>x_axis</strong><span class="classifier">str</span></dt><dd><p>The x-axis type (‘frequency’ or ‘period’).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="plot-poulations-and-coherences">
 <h2>Plot poulations and coherences<a class="headerlink" href="#plot-poulations-and-coherences" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_coh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_coh"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Plots a measure of coherence as the sum of absolute values of the off-diagonal elements</p>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_coh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_coh"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots a measure of coherence as the sum of absolute values of the off-diagonal elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>me_solver</strong><span class="classifier">MESolverType</span></dt><dd><p>The master equation solver instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_legend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Plots population of one base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_site</strong><span class="classifier">str</span></dt><dd><p>The tight-binding site.</p>
+</dd>
+<dt><strong>me_solver</strong><span class="classifier">MESolverType</span></dt><dd><p>The master equation solver instance.</p>
+</dd>
+<dt><strong>add_legend</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to add a legend, by default True.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pop_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TB_Ham</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pop_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pop_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pop_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Plots population using the Fourier decomposition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+</dd>
+<dt><strong>init_state</strong><span class="classifier">str</span></dt><dd><p>The initial state.</p>
+</dd>
+<dt><strong>end_state</strong><span class="classifier">str</span></dt><dd><p>The end state.</p>
+</dd>
+<dt><strong>times</strong><span class="classifier">list of float</span></dt><dd><p>The time points for plotting.</p>
+</dd>
+<dt><strong>t_unit</strong><span class="classifier">str</span></dt><dd><p>The unit of time.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_pops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_pops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Plots populations of all bases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>me_solver</strong><span class="classifier">MESolverType</span></dt><dd><p>The master equation solver instance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing the figure and axes.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_test_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ME_Solver</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_test_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Plots a comparision of the result obtained by Fourier decomposition and the result obtained solving the Schrödinger equation with the qutip mesolver.</p>
+<span class="sig-prename descclassname"><span class="pre">qDNA.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_test_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/plotting/plot_pop.html#plot_test_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots a comparison of the result obtained by Fourier decomposition and the result obtained solving the Schrödinger equation with the qutip mesolver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The axes to plot on.</p>
+</dd>
+<dt><strong>tb_site</strong><span class="classifier">str</span></dt><dd><p>The tight-binding site.</p>
+</dd>
+<dt><strong>me_solver</strong><span class="classifier">MESolverType</span></dt><dd><p>The master equation solver instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

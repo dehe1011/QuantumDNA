@@ -76,132 +76,193 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.environment.observables</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module calculates observables. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="k">def</span> <span class="nf">get_observable</span><span class="p">(</span><span class="n">basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">start_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;get_tb_observable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_eh_observable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_pop_particle&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_coh_particle&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_observable</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a density matrix for the given start and end states in the provided basis.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        basis (List[str]): The list of basis states.</span>
-<span class="sd">        start_state (str): The starting state.</span>
-<span class="sd">        end_state (str): The ending state.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    basis : List[str]</span>
+<span class="sd">        The list of basis states.</span>
+<span class="sd">    start_state : str</span>
+<span class="sd">        The starting state.</span>
+<span class="sd">    end_state : str</span>
+<span class="sd">        The ending state.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The density matrix.</span>
 
-<span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the start or end state is not found in the basis list.</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the start or end state is not found in the basis list.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; get_density_matrix([&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(0, 2)&#39;], &#39;(0, 1)&#39;, &#39;(0, 2)&#39;)</span>
-<span class="sd">        array([[0., 0., 0.],</span>
-<span class="sd">               [0., 0., 1.],</span>
-<span class="sd">               [0., 0., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_observable([&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(0, 2)&#39;], &#39;(0, 1)&#39;, &#39;(0, 2)&#39;)</span>
+<span class="sd">    array([[0., 0., 0.],</span>
+<span class="sd">           [0., 0., 1.],</span>
+<span class="sd">           [0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start_state_idx</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">start_state</span><span class="p">)</span>
     <span class="n">end_state_idx</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_state</span><span class="p">)</span>
+
     <span class="n">num_basis</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span>
     <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_basis</span><span class="p">,</span> <span class="n">num_basis</span><span class="p">))</span>
     <span class="n">matrix</span><span class="p">[</span><span class="n">start_state_idx</span><span class="p">,</span> <span class="n">end_state_idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">matrix</span>
 
-<div class="viewcode-block" id="get_tb_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_tb_observable">[docs]</a><span class="k">def</span> <span class="nf">get_tb_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">start_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_tb_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_tb_observable">[docs]</a><span class="k">def</span> <span class="nf">get_tb_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper function to get the density matrix for tight-binding sites.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_site_basis (List[str]): The list of tight-binding site basis states.</span>
-<span class="sd">        start_state (str): The starting state.</span>
-<span class="sd">        end_state (str): The ending state.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : List[str]</span>
+<span class="sd">        The list of tight-binding site basis states.</span>
+<span class="sd">    start_state : str</span>
+<span class="sd">        The starting state.</span>
+<span class="sd">    end_state : str</span>
+<span class="sd">        The ending state.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The density matrix.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; get_density_matrix([&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(0, 2)&#39;], &#39;(0, 1)&#39;, &#39;(0, 2)&#39;)</span>
-<span class="sd">        array([[0., 0., 0.],</span>
-<span class="sd">               [0., 0., 1.],</span>
-<span class="sd">               [0., 0., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_tb_observable([&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(0, 2)&#39;], &#39;(0, 1)&#39;, &#39;(0, 2)&#39;)</span>
+<span class="sd">    array([[0., 0., 0.],</span>
+<span class="sd">           [0., 0., 1.],</span>
+<span class="sd">           [0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="get_eh_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_eh_observable">[docs]</a><span class="k">def</span> <span class="nf">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">particle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_eh_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_eh_observable">[docs]</a><span class="k">def</span> <span class="nf">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs the electron-hole density matrix for the given particle type.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_site_basis (List[str]): The list of tight-binding site basis states.</span>
-<span class="sd">        particle (str): The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
-<span class="sd">        start_state (str): The starting state.</span>
-<span class="sd">        end_state (str): The ending state.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : List[str]</span>
+<span class="sd">        The list of tight-binding site basis states.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
+<span class="sd">    start_state : str</span>
+<span class="sd">        The starting state.</span>
+<span class="sd">    end_state : str</span>
+<span class="sd">        The ending state.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The electron-hole density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The electron-hole density matrix.</span>
 
-<span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the particle type is not recognized.</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the particle type is not recognized.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; get_eh_density_matrix([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;)</span>
-<span class="sd">        array([[0., 0., 1., 0.],</span>
-<span class="sd">               [0., 0., 0., 1.],</span>
-<span class="sd">               [0., 0., 0., 0.],</span>
-<span class="sd">               [0., 0., 0., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_eh_observable([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;)</span>
+<span class="sd">    array([[0., 0., 1., 0.],</span>
+<span class="sd">           [0., 0., 0., 1.],</span>
+<span class="sd">           [0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">num_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s1">&#39;electron&#39;</span><span class="p">:</span> 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_sites</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">particle</span> <span class="o">==</span> <span class="s1">&#39;hole&#39;</span><span class="p">:</span> 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_sites</span><span class="p">),</span> <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="n">particle</span> <span class="o">==</span> <span class="s1">&#39;exciton&#39;</span><span class="p">:</span> 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">),</span> <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Particle type &#39;</span><span class="si">{</span><span class="n">particle</span><span class="si">}</span><span class="s2">&#39; is not recognized. Must be &#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;.&quot;</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;electron&quot;</span><span class="p">:</span>
+        <span class="n">eh_observable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+            <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_sites</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;hole&quot;</span><span class="p">:</span>
+        <span class="n">eh_observable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_sites</span><span class="p">),</span> <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;exciton&quot;</span><span class="p">:</span>
+        <span class="n">eh_observable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+            <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">),</span>
+            <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">eh_observable</span></div>
 
-<span class="c1"># -----------------------------------------------------------------------------------------------------------</span>
 
-<div class="viewcode-block" id="get_pop_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_pop_particle">[docs]</a><span class="k">def</span> <span class="nf">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">particle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="get_pop_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_pop_particle">[docs]</a><span class="k">def</span> <span class="nf">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the population density matrix for a specific particle and state.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_site_basis (List[str]): The list of tight-binding site basis states.</span>
-<span class="sd">        particle (str): The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
-<span class="sd">        state (str): The state of the particle.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : List[str]</span>
+<span class="sd">        The list of tight-binding site basis states.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
+<span class="sd">    state : str</span>
+<span class="sd">        The state of the particle.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The population density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The population density matrix.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; get_pop_particle([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;)</span>
-<span class="sd">        array([[1., 0., 0., 0.],</span>
-<span class="sd">               [0., 1., 0., 0.],</span>
-<span class="sd">               [0., 0., 0., 0.],</span>
-<span class="sd">               [0., 0., 0., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_pop_particle([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;)</span>
+<span class="sd">    array([[1., 0., 0., 0.],</span>
+<span class="sd">           [0., 1., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="get_coh_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_coh_particle">[docs]</a><span class="k">def</span> <span class="nf">get_coh_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">particle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">state2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_coh_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_coh_particle">[docs]</a><span class="k">def</span> <span class="nf">get_coh_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the coherence density matrix for a specific particle and pair of states.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        tb_site_basis (List[str]): The list of tight-binding site basis states.</span>
-<span class="sd">        particle (str): The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
-<span class="sd">        state1 (str): The first state.</span>
-<span class="sd">        state2 (str): The second state.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : List[str]</span>
+<span class="sd">        The list of tight-binding site basis states.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
+<span class="sd">    state1 : str</span>
+<span class="sd">        The first state.</span>
+<span class="sd">    state2 : str</span>
+<span class="sd">        The second state.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        np.ndarray: The coherence density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        The coherence density matrix.</span>
 
-<span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; get_coh_particle([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;)</span>
-<span class="sd">        array([[0., 0., 1., 0.],</span>
-<span class="sd">               [0., 0., 0., 1.],</span>
-<span class="sd">               [0., 0., 0., 0.],</span>
-<span class="sd">               [0., 0., 0., 0.]])</span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_coh_particle([&#39;(0, 0)&#39;, &#39;(1, 0)&#39;], &#39;electron&#39;, &#39;(0, 0)&#39;, &#39;(1, 0)&#39;)</span>
+<span class="sd">    array([[0., 0., 1., 0.],</span>
+<span class="sd">           [0., 0., 0., 1.],</span>
+<span class="sd">           [0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">)</span></div>
 </pre></div>

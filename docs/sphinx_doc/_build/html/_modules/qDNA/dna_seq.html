@@ -76,7 +76,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.dna_seq</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for generating DNA sequences. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
@@ -91,123 +94,196 @@
 <span class="c1"># T: thymine</span>
 <span class="c1"># c: 5&#39;-methylcytosine</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;DNA_Seq&#39;</span><span class="p">,</span> <span class="s1">&#39;DNASeqType&#39;</span><span class="p">,</span> <span class="s1">&#39;create_upper_strands&#39;</span><span class="p">,</span> <span class="s1">&#39;TB_MODELS_PROPS&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DNA_Seq&quot;</span><span class="p">,</span> <span class="s2">&quot;create_upper_strands&quot;</span><span class="p">,</span> <span class="s2">&quot;TB_MODELS_PROPS&quot;</span><span class="p">]</span>
 
 <span class="n">TB_MODELS_PROPS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;WM&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;LM&#39;</span><span class="p">:</span> <span class="p">{</span> 
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;ELM&#39;</span><span class="p">:</span> <span class="p">{</span> 
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;FWM&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;FLM&#39;</span><span class="p">:</span> <span class="p">{</span> 
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;FELM&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="s1">&#39;FC&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;backbone&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;double_stranded&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;num_strands&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-        <span class="s1">&#39;diagonal_hopping&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">},</span>
+    <span class="s2">&quot;WM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;LM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ELM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;FWM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;FLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;FELM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;FC&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;backbone&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;double_stranded&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;num_strands&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;diagonal_hopping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">},</span>
 <span class="p">}</span>
 
-<span class="c1"># -------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="DNA_Seq"><a class="viewcode-back" href="../../apidoc/classes.html#qDNA.DNA_Seq">[docs]</a><span class="k">class</span> <span class="nc">DNA_Seq</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    docstring  </span>
+<span class="sd">    A class representing a DNA sequence with optional methylation and backbone properties.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    upper_strand : str</span>
+<span class="sd">        The sequence of the upper strand of the DNA.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    methylated : bool, optional</span>
+<span class="sd">        Whether the DNA sequence is methylated (default is True).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    upper_strand : str</span>
+<span class="sd">        The sequence of the upper strand of the DNA.</span>
+<span class="sd">    lower_strand : str</span>
+<span class="sd">        The sequence of the lower strand of the DNA.</span>
+<span class="sd">    methylated : bool</span>
+<span class="sd">        Indicates if the DNA is methylated.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    tb_model_props : dict</span>
+<span class="sd">        Properties of the tight-binding model.</span>
+<span class="sd">    backbone : bool</span>
+<span class="sd">        Indicates if the model includes a backbone.</span>
+<span class="sd">    double_stranded : bool</span>
+<span class="sd">        Indicates if the DNA is double-stranded.</span>
+<span class="sd">    num_strands : int</span>
+<span class="sd">        Number of strands in the model.</span>
+<span class="sd">    num_sites_per_strand : int</span>
+<span class="sd">        Number of sites per strand.</span>
+<span class="sd">    tb_dims : Tuple[int, int]</span>
+<span class="sd">        Dimensions of the tight-binding model.</span>
+<span class="sd">    complementary_base_dict : dict</span>
+<span class="sd">        Mapping of bases to their complements.</span>
+<span class="sd">    dna_seq : Tuple[str]</span>
+<span class="sd">        The generated DNA sequence including backbone if applicable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper_strand</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methylated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        docstring</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="n">methylated</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span> <span class="o">=</span> <span class="n">upper_strand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">methylated</span> <span class="o">=</span> <span class="n">methylated</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_name</span> <span class="o">=</span> <span class="n">tb_model_name</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span> <span class="o">=</span> <span class="n">TB_MODELS_PROPS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model_name</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s1">&#39;backbone&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s1">&#39;double_stranded&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_strands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s1">&#39;num_strands&#39;</span><span class="p">]</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s2">&quot;backbone&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s2">&quot;double_stranded&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_strands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model_props</span><span class="p">[</span><span class="s2">&quot;num_strands&quot;</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">num_sites_per_strand</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tb_dims</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_strands</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sites_per_strand</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">complementary_base_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">complementary_base_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dna_seq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dna_seq</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__vars__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the instance variables as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;DNA_Seq(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model_name</span><span class="si">}</span><span class="s2">, methylated = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">methylated</span><span class="si">}</span><span class="s2">)&quot;</span>
-        
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the DNA_Seq instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;DNA_Seq(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model_name</span><span class="si">}</span><span class="s2">, methylated=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">methylated</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares two DNA_Seq instances for equality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 
-    <span class="c1"># ------------------------------------------------------------------</span>
-    
-    <span class="k">def</span> <span class="nf">_create_dna_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_create_dna_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the DNA sequence based on the properties of the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">complementary_base_dict</span><span class="p">[</span><span class="n">dna_base</span><span class="p">]</span> <span class="k">for</span> <span class="n">dna_base</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">complementary_base_dict</span><span class="p">[</span><span class="n">dna_base</span><span class="p">]</span> <span class="k">for</span> <span class="n">dna_base</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">methylated</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_add_methylation</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone_strand</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_stranded</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,</span> <span class="p">)</span>
-            
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">,)</span>
+
     <span class="k">def</span> <span class="nf">_add_methylation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s1">&#39;cG&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">)]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds methylation to the DNA sequence where &#39;cG&#39; is found in the upper strand.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="s2">&quot;cG&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_strand</span><span class="p">)]</span>
         <span class="n">lower_strand_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
-            <span class="n">lower_strand_list</span><span class="p">[</span><span class="n">match</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lower_strand_list</span><span class="p">)</span></div>
+            <span class="n">lower_strand_list</span><span class="p">[</span><span class="n">match</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_strand</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lower_strand_list</span><span class="p">)</span></div>
 
-<span class="n">DNASeqType</span> <span class="o">=</span> <span class="n">Type</span><span class="p">[</span><span class="n">DNA_Seq</span><span class="p">]</span>
 
-<span class="c1"># -----------------------------------------------------------------------------</span>
-
-<div class="viewcode-block" id="create_upper_strands"><a class="viewcode-back" href="../../apidoc/functions.html#qDNA.create_upper_strands">[docs]</a><span class="k">def</span> <span class="nf">create_upper_strands</span><span class="p">(</span><span class="n">num_dna_bases</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dna_bases</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="create_upper_strands"><a class="viewcode-back" href="../../apidoc/functions.html#qDNA.create_upper_strands">[docs]</a><span class="k">def</span> <span class="nf">create_upper_strands</span><span class="p">(</span><span class="n">num_dna_bases</span><span class="p">,</span> <span class="n">dna_bases</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates all possible permutations of the given </span>
+<span class="sd">    Creates all possible permutations of the given DNA bases for the specified length.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_dna_bases : int</span>
+<span class="sd">        The number of bases in the DNA strand.</span>
+<span class="sd">    dna_bases : List[str]</span>
+<span class="sd">        The list of DNA bases to use for permutations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[str]</span>
+<span class="sd">        A list of all possible permutations of the given DNA bases.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">DNA_BASES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;DNA_BASES&#39;</span><span class="p">]</span>
-    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">dna_base</span> <span class="ow">in</span> <span class="n">DNA_BASES</span> <span class="k">for</span> <span class="n">dna_base</span> <span class="ow">in</span> <span class="n">dna_bases</span><span class="p">]),</span> <span class="sa">f</span><span class="s2">&quot;elements of dna_bases must be in </span><span class="si">{</span><span class="n">DNA_BASES</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">)</span> <span class="k">for</span> <span class="n">upper_strand</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">dna_bases</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">num_dna_bases</span><span class="p">))</span></div>
+    <span class="n">DNA_BASES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;DNA_BASES&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">dna_base</span> <span class="ow">in</span> <span class="n">DNA_BASES</span> <span class="k">for</span> <span class="n">dna_base</span> <span class="ow">in</span> <span class="n">dna_bases</span><span class="p">]</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Elements of dna_bases must be in </span><span class="si">{</span><span class="n">DNA_BASES</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">upper_strand</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">dna_bases</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">num_dna_bases</span><span class="p">)</span>
+    <span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -76,102 +76,100 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.utils.unit_converter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for unit conversion utilities.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">c</span>
 
 <span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;UNITS&#39;</span><span class="p">,</span> <span class="s1">&#39;get_conversion&#39;</span><span class="p">,</span> <span class="s1">&#39;get_all_conversions&#39;</span><span class="p">,</span> <span class="s1">&#39;get_conversion_dict&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">,</span> <span class="s2">&quot;get_conversion&quot;</span><span class="p">,</span> <span class="s2">&quot;get_all_conversions&quot;</span><span class="p">,</span> <span class="s2">&quot;get_conversion_dict&quot;</span><span class="p">]</span>
 
 <span class="n">UNITS</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="get_conversion"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion">[docs]</a><span class="k">def</span> <span class="nf">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_conversion"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion">[docs]</a><span class="k">def</span> <span class="nf">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a value from the start_unit to the end_unit.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    start_unit: str</span>
+<span class="sd">    start_unit : str</span>
 <span class="sd">        The unit to convert from.</span>
 <span class="sd">    end_unit : str</span>
 <span class="sd">        The unit to convert to.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    get_conversion : float</span>
+<span class="sd">    float</span>
 <span class="sd">        The conversion factor between the two units.</span>
 
-<span class="sd">    Note:</span>
+<span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    DNA parameters are saved in 100 meV. We mainly use the conversion &#39;100meV_to_rad/fs&#39;.</span>
 <span class="sd">    Example: real_units = 1 / get_conversion(&#39;100meV&#39;, &#39;rad/fs&#39;).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
     <span class="n">convert_to_Joule</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;J&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s1">&#39;eV&#39;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
-        <span class="s1">&#39;meV&#39;</span><span class="p">:</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
-        <span class="s1">&#39;100meV&#39;</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
-        <span class="s1">&#39;rad/fs&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">1e-15</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
-        <span class="s1">&#39;rad/ps&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">1e-12</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
-        <span class="s1">&#39;1/cm&#39;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="mf">1e-2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
-        <span class="s1">&#39;K&#39;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
-        <span class="s1">&#39;1/fs&#39;</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">1e-15</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
-        <span class="s1">&#39;1/ps&#39;</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">1e-12</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span>
+        <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;eV&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+        <span class="s2">&quot;meV&quot;</span><span class="p">:</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+        <span class="s2">&quot;100meV&quot;</span><span class="p">:</span> <span class="mi">100</span> <span class="o">*</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>
+        <span class="s2">&quot;rad/fs&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">1e-15</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
+        <span class="s2">&quot;rad/ps&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">1e-12</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
+        <span class="s2">&quot;1/cm&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="mf">1e-2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+        <span class="s2">&quot;1/fs&quot;</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">1e-15</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
+        <span class="s2">&quot;1/ps&quot;</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">1e-12</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">hbar</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="n">start_unit</span> <span class="ow">in</span> <span class="n">UNITS</span> <span class="ow">and</span> <span class="n">end_unit</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">start_unit</span><span class="p">]</span> <span class="o">/</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">end_unit</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">start_unit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown unit: </span><span class="si">{</span><span class="n">start_unit</span><span class="si">}</span><span class="s1">. Defined units: </span><span class="si">{</span><span class="n">UNITS</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">end_unit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown unit: </span><span class="si">{</span><span class="n">end_unit</span><span class="si">}</span><span class="s1">. Defined units: </span><span class="si">{</span><span class="n">UNITS</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">start_unit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown unit: </span><span class="si">{</span><span class="n">start_unit</span><span class="si">}</span><span class="s2">. Defined units: </span><span class="si">{</span><span class="n">UNITS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">end_unit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNITS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown unit: </span><span class="si">{</span><span class="n">end_unit</span><span class="si">}</span><span class="s2">. Defined units: </span><span class="si">{</span><span class="n">UNITS</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">start_unit</span><span class="p">]</span> <span class="o">/</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">end_unit</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="get_all_conversions"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_all_conversions">[docs]</a><span class="k">def</span> <span class="nf">get_all_conversions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="get_all_conversions"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_all_conversions">[docs]</a><span class="k">def</span> <span class="nf">get_all_conversions</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a dictionary with all possible conversions between units.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        Dict[str, float]: A dictionary where the keys are conversion descriptions (e.g., &#39;100meV_to_rad/fs&#39;)</span>
-<span class="sd">                          and the values are the conversion factors.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, float]</span>
+<span class="sd">        A dictionary where the keys are conversion descriptions (e.g., &#39;100meV_to_rad/fs&#39;)</span>
+<span class="sd">        and the values are the conversion factors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">conversion_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="n">UNITS</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-        <span class="n">conversion</span> <span class="o">=</span> <span class="n">start_unit</span> <span class="o">+</span> <span class="s1">&#39;_to_&#39;</span> <span class="o">+</span> <span class="n">end_unit</span>
+        <span class="n">conversion</span> <span class="o">=</span> <span class="n">start_unit</span> <span class="o">+</span> <span class="s2">&quot;_to_&quot;</span> <span class="o">+</span> <span class="n">end_unit</span>
         <span class="n">conversion_val</span> <span class="o">=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">)</span>
         <span class="n">conversion_dict</span><span class="p">[</span><span class="n">conversion</span><span class="p">]</span> <span class="o">=</span> <span class="n">conversion_val</span>
     <span class="k">return</span> <span class="n">conversion_dict</span></div>
 
-<div class="viewcode-block" id="get_conversion_dict"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion_dict">[docs]</a><span class="k">def</span> <span class="nf">get_conversion_dict</span><span class="p">(</span><span class="n">param_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">start_unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="get_conversion_dict"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion_dict">[docs]</a><span class="k">def</span> <span class="nf">get_conversion_dict</span><span class="p">(</span><span class="n">param_dict</span><span class="p">,</span> <span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts the values in param_dict from start_unit to end_unit.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        param_dict (Dict[Any, float]): Dictionary containing parameters to convert.</span>
-<span class="sd">        start_unit (str): The unit to convert from.</span>
-<span class="sd">        end_unit (str): The unit to convert to.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    param_dict : Dict[Any, float]</span>
+<span class="sd">        Dictionary containing parameters to convert.</span>
+<span class="sd">    start_unit : str</span>
+<span class="sd">        The unit to convert from.</span>
+<span class="sd">    end_unit : str</span>
+<span class="sd">        The unit to convert to.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        Dict[Any, float]: The parameter dictionary with converted values.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[Any, float]</span>
+<span class="sd">        The parameter dictionary with converted values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">conversion_val</span> <span class="o">=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">)</span>
     <span class="n">converted_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="o">*</span> <span class="n">conversion_val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">param_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">return</span> <span class="n">converted_dict</span></div>
-
-
-<span class="c1"># ------------------------------------ conversions between quantities (when using natural units --------------------------------</span>
-    
-<span class="c1"># collection_of_quantities = [&#39;energy&#39;, &#39;angular_frequency&#39;, &#39;wavevector&#39;, &#39;frequency&#39;, &#39;reciprocal_wavelength&#39;, &#39;temperature&#39; ]</span>
-<span class="c1"># convert_to_energy = {&#39;energy&#39;: 1, &#39;angular_frequency&#39;: c.hbar, &#39;frequency&#39;: 2*np.pi*c.hbar, </span>
-<span class="c1"># &#39;wavevector&#39;: c.hbar*c.c, &#39;reciprocal_wavelength&#39;: c.h*c.c, &#39;temperature&#39;: c.k}</span>
-
-<span class="c1"># conversion_dict = {}</span>
-<span class="c1"># for start_unit, end_unit in permutations(collection_of_quantities, 2):</span>
-<span class="c1">#     conversion = start_unit + &#39;_to_&#39; + end_unit</span>
-<span class="c1">#     conversion_val = convert_to_energy[ start_unit ] / convert_to_energy[ end_unit ]</span>
-<span class="c1">#     conversion_dict[ conversion ] = conversion_val</span>
-<span class="c1"># conversion_dict</span>
 </pre></div>
 
            </div>

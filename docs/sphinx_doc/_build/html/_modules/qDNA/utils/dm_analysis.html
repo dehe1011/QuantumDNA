@@ -76,22 +76,32 @@
            <div itemprop="articleBody">
              
   <h1>Source code for qDNA.utils.dm_analysis</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for calculating properties of density matrices (quantum states).</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;calc_trace_distance&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_purity&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_coherence&#39;</span><span class="p">,</span> <span class="s1">&#39;calc_ipr_dm&#39;</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;calc_trace_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;calc_purity&quot;</span><span class="p">,</span> <span class="s2">&quot;calc_coherence&quot;</span><span class="p">,</span> <span class="s2">&quot;calc_ipr_dm&quot;</span><span class="p">]</span>
 
 <span class="c1"># ----------------------- properties of density matrices (quantum states) ----------------------------</span>
 
-<div class="viewcode-block" id="calc_trace_distance"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_trace_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_trace_distance</span><span class="p">(</span><span class="n">dm_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">dm_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_trace_distance"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_trace_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_trace_distance</span><span class="p">(</span><span class="n">dm_1</span><span class="p">,</span> <span class="n">dm_2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the trace distance of two density matrices.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        density_matrix_1 (np.ndarray): First density matrix.</span>
-<span class="sd">        density_matrix_2 (np.ndarray): Second density matrix.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm_1 : np.ndarray</span>
+<span class="sd">        First density matrix.</span>
+<span class="sd">    dm_2 : np.ndarray</span>
+<span class="sd">        Second density matrix.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float: The trace distance between the two density matrices.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The trace distance between the two density matrices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dm_1</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">dm_2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Density matrices must have the same shape.&quot;</span><span class="p">)</span>
@@ -99,51 +109,64 @@
     <span class="n">diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">eigenvals</span><span class="p">))</span>
     <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="calc_purity"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_purity">[docs]</a><span class="k">def</span> <span class="nf">calc_purity</span><span class="p">(</span><span class="n">dm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_purity"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_purity">[docs]</a><span class="k">def</span> <span class="nf">calc_purity</span><span class="p">(</span><span class="n">dm</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the purity of a density matrix.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        density_matrix (np.ndarray): Density matrix.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm : np.ndarray</span>
+<span class="sd">        Density matrix.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float: The purity of the density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The purity of the density matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">dm</span><span class="p">)))</span></div>
 
-<div class="viewcode-block" id="calc_coherence"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_coherence">[docs]</a><span class="k">def</span> <span class="nf">calc_coherence</span><span class="p">(</span><span class="n">dm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_coherence"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_coherence">[docs]</a><span class="k">def</span> <span class="nf">calc_coherence</span><span class="p">(</span><span class="n">dm</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the coherence (absolute sum of the off-diagonals) of a density matrix.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        density_matrix (np.ndarray): Density matrix.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm : np.ndarray</span>
+<span class="sd">        Density matrix.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float: The coherence of the density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The coherence of the density matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">coherence</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">flatten</span><span class="p">()]</span> <span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">dm</span><span class="p">))</span>
+    <span class="n">coherence</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">dm</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">coherence</span><span class="o">.</span><span class="n">real</span></div>
 
-<div class="viewcode-block" id="calc_ipr_dm"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_ipr_dm">[docs]</a><span class="k">def</span> <span class="nf">calc_ipr_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="calc_ipr_dm"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.calc_ipr_dm">[docs]</a><span class="k">def</span> <span class="nf">calc_ipr_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the inverse participation ratio (IPR) of a density matrix.</span>
 
-<span class="sd">    IPR = :math:´( \sum_{i,j} \rho_{i,j} )^2 /( N \sum_{i,j} \rho_{i,j}^2 )´.</span>
+<span class="sd">    IPR = :math:`( \sum_{i,j} \rho_{i,j} )^2 / ( N \sum_{i,j} \rho_{i,j}^2 )` .</span>
 <span class="sd">    Localized state: IPR = 1/N</span>
 <span class="sd">    Delocalized coherent state: IPR = N</span>
 <span class="sd">    Maximally mixed state (1/N on diagonal, no off-diagonal elements): IPR = 1</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        density_matrix (np.ndarray): Density matrix.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dm : np.ndarray</span>
+<span class="sd">        Density matrix.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        float: The inverse participation ratio of the density matrix.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The inverse participation ratio of the density matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">numerator</span><span class="p">,</span> <span class="n">denominator</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
-            <span class="n">numerator</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-            <span class="n">denominator</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">numerator</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">numerator</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">dims</span> <span class="o">*</span> <span class="n">denominator</span><span class="p">)</span></div>
 </pre></div>
 
