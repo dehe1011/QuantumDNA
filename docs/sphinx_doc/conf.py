@@ -32,7 +32,7 @@ release = '0.1.0'
 # ones.
 extensions = [
     'sphinx.ext.mathjax',
-    'matplotlib.sphinxext.plot_directive',
+    #'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.doctest',
