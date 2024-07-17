@@ -37,7 +37,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.doctest',
     'sphinx.ext.autosummary',
-    'numpydoc',
+    #'numpydoc',
     'sphinx.ext.extlinks',
     'sphinx.ext.viewcode',
     'sphinx.ext.ifconfig',
