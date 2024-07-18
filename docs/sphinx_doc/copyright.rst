@@ -19,4 +19,4 @@ It is reproduced here for convenience.
 License Terms for Source Code of QuTiP and Code Samples
 =======================================================
 
-.. include:: ../LICENSE.txt
+.. include:: ../../LICENSE.txt
