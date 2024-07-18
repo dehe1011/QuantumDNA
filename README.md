@@ -25,7 +25,7 @@ This Python package can be cited as:
 
 ## To Do
 
-* Add more tests
+* Add more tests 
 * Improve tutorials and docstrings
 * Improve README file
 * Publish package on PyPI?
