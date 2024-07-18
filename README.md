@@ -4,13 +4,25 @@
   </picture>
 </p>
 
-<div align="center">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badges</title>
+</head>
+<body>
+    <div align="center">
+        <a href="https://opensource.org/licenses/MIT">
+            <img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT">
+        </a>
+        <a href="https://doi.org/10.5281/zenodo.12734027">
+            <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg" alt="DOI">
+        </a>
+        <a href="https://quantumdna.readthedocs.io/en/latest/?badge=latest">
+            <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest" alt="Documentation Status">
+        </a>
+    </div>
+</body>
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg)](https://doi.org/10.5281/zenodo.12734027)
-[![Documentation Status](https://readthedocs.org/projects/quantumdna/badge/?version=latest)](https://quantumdna.readthedocs.io/en/latest/?badge=latest)
-
-</div>
 
 ---
 
