@@ -3,6 +3,7 @@
 archive/
 docs/my_notebooks/
 docs/figures/my_figures/
+.vscode/
 
 development.ipynb
 environment_long.yml
