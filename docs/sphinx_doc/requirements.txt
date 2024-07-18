@@ -8,7 +8,7 @@ numpy == 1.26.3
 pandas == 2.1.4
 qutip == 4.7.5
 scipy == 1.11.4
-setuptools == 68.0.0
+setuptools == 70.0.0
 seaborn == 0.12.2
 tqdm == 4.66.4
 customtkinter == 5.2.2
