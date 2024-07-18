@@ -4,15 +4,19 @@
   </picture>
 </p>
 
+<div align="center">
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg)](https://doi.org/10.5281/zenodo.12734027)
+[![Documentation Status](https://readthedocs.org/projects/quantumdna/badge/?version=latest)](https://quantumdna.readthedocs.io/en/latest/?badge=latest)
+
+</div>
+
 ---
 
 # QuantumDNA
 
 **Author: [Dennis Herb](https://github.com/dehe1011)**
-
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg)](https://doi.org/10.5281/zenodo.12734027)
-[![Documentation Status](https://readthedocs.org/projects/quantumdna/badge/?version=latest)](https://quantumdna.readthedocs.io/en/latest/?badge=latest)
 
 This Python package can be cited as:
 
@@ -34,8 +38,9 @@ This Python package can be cited as:
 
 **July 2024**
 
-* Added a graphical user interface (GUI) to the package such that it is easier accessible for users that are less familiar with computer science. The user interface is based on the 
+* Added a graphical user interface (GUI) to the package such that it is easier accessible for users that are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
 * Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
+* Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
 
 
 ## Introduction
@@ -60,7 +65,7 @@ After photoexcitation of DNA, the excited electron (in the LUMO) and the remaini
 Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
 
 1. Clone the Github repository (downloads all files and folders from the Github project):\
-``` git clone https://github.com/dehe1011/quantum_DNA.git```\
+```git clone https://github.com/dehe1011/quantum_DNA.git```\
 ```cd QuantumDNA ```
 
 2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
