@@ -1,5 +1,5 @@
 import pytest
-from DNA.model import save_tb_params, load_tb_params
+from qDNA.model import save_tb_params, load_tb_params
 
 def test_tb_params():
     tb_param_dict = {'relation_AliceBob': 5, 'relation_AliceCharlie': 3, 'relation_AliceEve': -2,

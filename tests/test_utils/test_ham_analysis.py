@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from DNA import calc_average_pop, calc_amplitudes, calc_frequencies
+from qDNA import calc_average_pop, calc_amplitudes, calc_frequencies
 
 matrix = np.array([[0, 1], [1, 0]])
 eigv, eigs = np.linalg.eigh(matrix)

@@ -1,5 +1,5 @@
 import pytest
-from DNA import DNA_Seq, create_upper_strands
+from qDNA import DNA_Seq, create_upper_strands
 
 # Run test in a Jupyter Notebook
 # !python -m pytest -vv tests/test_dna_seq_generator.py --disable-pytest-warnings

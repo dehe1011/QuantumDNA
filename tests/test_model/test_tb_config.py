@@ -1,5 +1,5 @@
 import pytest
-from DNA.model import get_tb_config
+from qDNA.model import get_tb_config
 
 @pytest.mark.parametrize("input, expected", [
     (('WM', (1,2)), [

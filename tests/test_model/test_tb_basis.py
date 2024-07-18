@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from DNA.model import get_tb_basis, get_eh_basis, get_eh_distance, get_particle_eh_states, basis_change, global_to_local, local_to_global
+from qDNA.model import get_tb_basis, get_eh_basis, get_eh_distance, get_particle_eh_states, basis_change, global_to_local, local_to_global
 
 @pytest.mark.parametrize("input, expected", [
     ((2, 2), ['(0, 0)', '(0, 1)', '(1, 0)', '(1, 1)'])

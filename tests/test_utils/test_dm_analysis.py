@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from DNA import calc_trace_distance, calc_purity, calc_coherence, calc_ipr_dm
+from qDNA import calc_trace_distance, calc_purity, calc_coherence, calc_ipr_dm
 
 dm_1 = np.array([[0.5, 0.5j], [-0.5j, 0.5]])
 dm_2 = np.array([[0.5, 0], [0, 0.5]])
