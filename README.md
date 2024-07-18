@@ -1,26 +1,22 @@
+<p align="center">
+  <picture>
+    <img src="docs/figures/qDNA_logo.png">
+  </picture>
+</p>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badges and Logo</title>
+    <title>Badges</title>
     <style>
         a {
             text-decoration: none;
         }
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
     </style>
 </head>
 <body>
-    <p align="center">
-        <picture>
-            <img src="docs/figures/qDNA_logo.png" alt="qDNA Logo">
-        </picture>
-    </p>
     <div align="center">
         <a href="https://opensource.org/licenses/MIT">
             <img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT">
