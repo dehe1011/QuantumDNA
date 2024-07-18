@@ -4,22 +4,15 @@
   </picture>
 </p>
 
-<div align="center">
-  <span>
-    <img src="https://img.shields.io/badge/license-MIT-blue" alt="PyPI - License">
-  </span>
-  <span>
-    <a href="https://doi.org/10.5281/zenodo.12734027">
-      <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg" alt="DOI">
-    </a>
-  </span>
-</div>
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg)](https://doi.org/10.5281/zenodo.12734027)
+[![Documentation Status](https://readthedocs.org/projects/quantumdna/badge/?version=latest)](https://quantumdna.readthedocs.io/en/latest/?badge=latest)
 
 ---
 
 # QuantumDNA
 
-**Author: Dennis Herb**
+**Author: [Dennis Herb](https://github.com/dehe1011)**
 
 This Python package can be cited as:
 
@@ -111,6 +104,8 @@ To increase the readability of the code I collected some of the shortcuts that a
 
 
 ## Documentation
+
+The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs.
 
 ### Example Program
 
