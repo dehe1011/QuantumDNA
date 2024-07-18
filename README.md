@@ -52,7 +52,8 @@ After photoexcitation of DNA, the excited electron (in the LUMO) and the remaini
 **Pre-requisites**
 
 * Conda ([Download Anaconda](https://www.anaconda.com/download) or [Download Miniconda](https://docs.anaconda.com/miniconda/))
-* Git ([Download](https://gitforwindows.org/) )
+* Git ([Download](https://gitforwindows.org/))
+* Python ([Download](https://www.python.org/downloads/))
 
 ### Installation 
 
