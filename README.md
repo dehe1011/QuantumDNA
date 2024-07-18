@@ -65,7 +65,7 @@ After photoexcitation of DNA, the excited electron (in the LUMO) and the remaini
 Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
 
 1. Clone the Github repository (downloads all files and folders from the Github project):\
-```git clone https://github.com/dehe1011/quantum_DNA.git```\
+```git clone https://github.com/dehe1011/QuantumDNA.git```\
 ```cd QuantumDNA ```
 
 2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
