@@ -22,18 +22,6 @@ This Python package can be cited as:
 
 > *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
 
-
-## To Do
-
-* Add more tests 
-* Improve tutorials and docstrings
-* Improve README file
-* Publish package on PyPI?
-* Implement disorder and correlations (Mirko)
-* Include conductance
-* Reproduce plots from other papers
-
-
 ## What's new
 
 **July 2024**
@@ -45,77 +33,19 @@ This Python package can be cited as:
 
 ## Introduction
 
-### Abstract
+Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifetimes, average charge separation, and dipole moments of excited states along DNA. Leveraging the formalism of open quantum systems and based on tight-binding Hamiltonians, QuantumDNA is equipped to handle various tight-binding models. Users can incorporate custom tight-binding parameters from ab-initio calculations or experimental data, as well as define their own models, making the tool highly adaptable. QuantumDNA is regularly updated to ensure it remains at the cutting edge and includes a user-friendly interface to be accessible even to researchers less familiar with computer science. Results from several research papers can be reproduced with QuantumDNA.
 
-After photoexcitation of DNA, the excited electron (in the LUMO) and the remaining hole (in the HOMO) localized on the same DNA base form a bound pair, called the Frenkel exciton, due to their mutual Coulomb interaction. In this study, we demonstrate that a tight-binding (TB) approach, using TB parameters for electrons and holes available in the literature, allows us to correlate relaxation properties, average charge separation, and dipole moments to a large ensemble of double-stranded DNA sequences (all 16384 possible sequences with 14 nucleobases). This way, we are able to identify a relatively small subensemble of sequences responsible for long-lived excited states, high average charge separation, and high dipole moment. Further analysis shows that these sequences are particularly T rich. By systematically screening the impact of electron-hole interaction (Coulomb forces), we verify that these correlations are relatively robust against finite-size variations of the interaction parameter, not directly accessible experimentally. This methodology combines simulation methods from quantum physics and physical chemistry with statistical analysis known from genetics and epigenetics, thus representing a powerful bridge to combine information from both fields.
+### Key Features
 
-
-## Getting started 
-
-**NOTE**: These set-up instructions have only been tested on Windows and may not work on macOS. 
-
-**Pre-requisites**
-
-* Conda ([Download Anaconda](https://www.anaconda.com/download) or [Download Miniconda](https://docs.anaconda.com/miniconda/))
-* Git ([Download](https://gitforwindows.org/))
-* Python ([Download](https://www.python.org/downloads/))
-
-### Installation 
-
-Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
-
-1. Clone the Github repository (downloads all files and folders from the Github project):\
-```git clone https://github.com/dehe1011/QuantumDNA.git```\
-```cd QuantumDNA ```
-
-2. Create and active a virtual environment and create a new kernel that can be selected in Jupyter Notebooks:\
-``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
-
-If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
-
-After you have already installed the package, you can either access the code via the user interface or in a Jupyter Notebook. Open the Anconda Powershell Prompt again and use the following ``` commands ```:
-
-1. Open the user interface: 
-
-    (i) Navigate to the directory of the package (insert the location of the package): 
-    ``` Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA ``` \
-    (ii) ``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
-
-2. Open a new Jupyter notebook: 
-
-    (i) ``` jupyter notebook ``` \
-    (ii) Select the kernel to "Python (qDNA)"
-
-To remove the virtual environment use ``` conda remove --name qDNA --all ```
-
-### Shortcuts
-
-To increase the readability of the code I collected some of the shortcuts that are used requently: 
-
-* ham: hamiltonian
-* dm: density matrix
-* tb: tight-binding
-* eigv: eigenvalue/ eigenenergy
-* eigs: eigenstates/ eigenvectors
-* dim: dimension
-* fig: figure
-* op: operator
-* loc: local
-* glob: global
-* deph: dephasing
-* therm: thermalizing
-* seq: sequence
-* calc: calculate
-
-
-
-## Documentation
-
-The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. The [package website](https://dehe1011.github.io/QuantumDNA/) contains general information about the project and planned future developments. 
+* Versatile Calculations: Calculate lifetimes, charge separation, and dipole moments.
+* Customizable Models: Add and use custom tight-binding parameters and models.
+* User-Friendly Interface: Designed for ease of use by all researchers.
+* Regular Updates: Stay current with the latest advancements and improvements.
+* Parallelization: Supports parallel computing for the calculation of excited state properties for large ensembles of DNA sequences, optimizing performance within the computationally intensive context of open quantum systems.
 
 ### Example Program
 
-To test QuantumDNA you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models and keyword arguments to investigate if and how strong the exciton lifetime and average charge separation are affected. For example you might find that in general more uniform sequences show higher values. This is because their energy landscape is less distorted leading to less localization.  
+To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example you might find that in general more uniform sequences show higher values. Do you know the reason for this observation? 
 
 ```python
 
@@ -135,6 +65,51 @@ print(f"Exciton lifetime {lifetime} fs")
 print(f"Average charge separation {dipole} A")
 
 ```
+
+
+## Getting started 
+
+**NOTE**: These set-up instructions have only been tested on Windows and may not work on macOS. 
+
+**Pre-requisites**
+
+* Conda ([Download Anaconda](https://www.anaconda.com/download) or [Download Miniconda](https://docs.anaconda.com/miniconda/))
+* Git ([Download](https://gitforwindows.org/))
+* Python ([Download](https://www.python.org/downloads/))
+
+### Installation 
+
+Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
+
+1. Clone the Github repository:\
+```git clone https://github.com/dehe1011/QuantumDNA.git```\
+```cd QuantumDNA ```
+
+2. Create and active a virtual environment:\
+``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
+
+If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
+
+After you have already installed the package, you can either access the code via the user interface or in a Jupyter Notebook. Open the Anconda Powershell Prompt again and use the following ``` commands ```:
+
+1. Open the user interface: 
+
+    (i) Navigate to the package directory: 
+    ``` Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA ``` \
+    (ii) Run the activation script:
+    ``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
+
+2. Open a new Jupyter notebook: 
+
+    (i) ``` jupyter notebook ``` \
+    (ii) Select the kernel to "Python (qDNA)"
+
+To remove the virtual environment use ``` conda remove --name qDNA --all ```
+
+
+## Documentation
+
+The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. The [package website](https://dehe1011.github.io/QuantumDNA/) contains general information about the project and planned future developments. 
 
 ### Tutorials
 
@@ -163,6 +138,25 @@ The usage of the graphical user interface is demonstrated in the following image
 ![](docs/figures/user_interface_figures/menu3.png)
 > _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
 
+### Shortcuts
+
+To increase the readability of the code I collected some of the shortcuts that are used requently: 
+
+* ham: hamiltonian
+* dm: density matrix
+* tb: tight-binding
+* eigv: eigenvalue/ eigenenergy
+* eigs: eigenstates/ eigenvectors
+* dim: dimension
+* fig: figure
+* op: operator
+* loc: local
+* glob: global
+* deph: dephasing
+* therm: thermalizing
+* seq: sequence
+* calc: calculate
+
 
 ## References
 
@@ -175,7 +169,7 @@ Tight-binding parameters:
 
 * [L.G.D. Hawke, G. Kalosakas and C. Simserides, Electronic parameters for charge transfer along DNA. *The European Physical Journal E 32*, 291 (2010)](https://doi.org/10.1140/EPJE/I2010-10650-Y)
 * [C. Simserides, A systematic study of electron or hole transfer along DNA dimers, trimers and polymers. *Chemical Physics 440*, 31 (2014)](https://doi.org/10.1016/j.chemphys.2014.05.024)
-* [M. Mantela, C. Simserides and R. Di Felice, LCAO electronic structure of nucleic acid bases and other heterocycles and transfer integrals in B-DNA, including structural variability. *Materials 14*, 4930 (2021)]
+* [M. Mantela, C. Simserides and R. Di Felice, LCAO electronic structure of nucleic acid bases and other heterocycles and transfer integrals in B-DNA, including structural variability. *Materials 14*, 4930 (2021)](https://doi.org/10.3390/ma14174930)
 
 Tight-binding models:
 
@@ -183,7 +177,7 @@ Tight-binding models:
 
 Excitons and electron-hole Coulomb interaction:
 
-* [C. Crespo-Hernandez, B. Cohen and B. Kohler, Base stacking controls excited-state dynamics in A·T DNA. *Nature 436*, 1141 (2005)]()
+* [C. Crespo-Hernandez, B. Cohen and B. Kohler, Base stacking controls excited-state dynamics in A·T DNA. *Nature 436*, 1141 (2005)](https://doi.org/10.1038/nature03933)
 * [E.R. Bittner, Lattice theory of ultrafast excitonic and charge-transfer dynamics in DNA. *Journal of Chemical Physics 125*, 094909 (2006)](https://doi.org/10.1063/1.2335452)
 * [E.M. Conwell, P.M. McLaughlin and S.M. Bloch, Charge-Transfer Excitons in DNA. *The Journal of Physical Chemistry B 112*, 2268 (2008)](https://doi.org/10.1021/jp077344x)
 * [S. Tornow, R. Bulla, F.B. Anders and G. Zwicknagl, Multiple-charge transfer and trapping in DNA dimers. *Physical Review B 82*, 195106 (2010)](https://doi.org/10.1103/PhysRevB.82.195106)
@@ -195,8 +189,8 @@ Biological relevance of DNA charge transfer:
 
 Simulation of open quantum systems:
 
+* [J.R. Johansson, P.D. Nation and Franco Nori, QuTiP: An open-source Python framework for the dynamics of open quantum systems. *Computer Physics Communications 183*, 1760 (2012)](https://doi.org/10.1016/j.cpc.2012.02.021)
 * [quantum_HEOM (github.com/jwa7/quantum_HEOM), J.W. Abbott, 2022](https://doi.org/10.5281/zenodo.7230160)
-
 
 
 ## Notes
