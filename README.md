@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg)](https://doi.org/10.5281/zenodo.12734027)
 [![Documentation Status](https://readthedocs.org/projects/quantumdna/badge/?version=latest)](https://quantumdna.readthedocs.io/en/latest/?badge=latest)
 
