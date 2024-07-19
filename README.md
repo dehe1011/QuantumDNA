@@ -6,14 +6,14 @@
     <a href="https://opensource.org/licenses/BSD-3-Clause">
         <img src="https://img.shields.io/badge/license-New%20BSD-blue.svg"
             alt="License"></a>
-    <a href="https://doi.org/10.5281/zenodo.12734027">
-        <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg"
+    <a href="https://doi.org/10.5281/zenodo.12734026">
+        <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734026.svg"
             alt="DOI"></a>
     <a href="https://quantumdna.readthedocs.io/en/latest/?badge=latest">
         <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest"
             alt="Documentation Status"></a>
     <a href="https://github.com/dehe1011/QuantumDNA/releases">
-        <img src="https://img.shields.io/badge/version-0.1.0-blue"
+        <img src="https://img.shields.io/badge/version-0.1.1-blue"
             alt="Release"></a>
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
