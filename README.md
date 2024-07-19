@@ -90,6 +90,8 @@ Open the Anconda Powershell Prompt. Copy and execute the following ```commands``
 
 If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
 
+### Usage
+
 After you have already installed the package, you can either access the code via the user interface or in a Jupyter Notebook. Open the Anconda Powershell Prompt again and use the following ``` commands ```:
 
 1. Open the user interface: 
@@ -104,7 +106,7 @@ After you have already installed the package, you can either access the code via
     (i) ``` jupyter notebook ``` \
     (ii) Select the kernel to "Python (qDNA)"
 
-To remove the virtual environment use ``` conda remove --name qDNA --all ```
+To remove the virtual environment use ``` conda remove --name qDNA --all ```. Don't forget to delete the folder "QuantumDNA" that contains the cloned GitHub repository. 
 
 
 ## Documentation
@@ -193,6 +195,6 @@ Simulation of open quantum systems:
 * [quantum_HEOM (github.com/jwa7/quantum_HEOM), J.W. Abbott, 2022](https://doi.org/10.5281/zenodo.7230160)
 
 
-## Notes
+## Support
 
-* If there occur any unexpected errors or problems please contact the author via dennis.herb@uni-ulm.de
+For support, please contact the author at dennis.herb@uni-ulm.de or visit our community forum.
