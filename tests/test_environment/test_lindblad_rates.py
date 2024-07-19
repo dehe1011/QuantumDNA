@@ -52,3 +52,6 @@ def test_rate_constant_redfield(omega, deph_rate, cutoff_freq, reorg_energy, tem
 def test_dephasing_rate(cutoff_freq, reorg_energy, temperature, expected):
     result = dephasing_rate(cutoff_freq, reorg_energy, temperature)
     assert np.isclose(result, expected)
+
+if __name__ == "__main__":
+    pytest.main()
