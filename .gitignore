@@ -10,6 +10,8 @@ environment_long.yml
 test_script.py
 info.txt
 
+*.egg-info/
+
 data/raw/geometries
 data/raw/test_params
 data/processed/

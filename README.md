@@ -1,17 +1,23 @@
 <p align="center">
-    <img src="docs/figures/qDNA_logo.png">
+    <img src="docs/figures/qDNA_logo.png"
         height="130">
 </p>
 <p align="center">
     <a href="https://opensource.org/licenses/BSD-3-Clause">
         <img src="https://img.shields.io/badge/license-New%20BSD-blue.svg"
-            alt="license"></a>
+            alt="License"></a>
     <a href="https://doi.org/10.5281/zenodo.12734027">
         <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.12734027.svg"
             alt="DOI"></a>
     <a href="https://quantumdna.readthedocs.io/en/latest/?badge=latest">
         <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest"
             alt="Documentation Status"></a>
+    <a href="https://github.com/dehe1011/QuantumDNA/releases">
+        <img src="https://img.shields.io/badge/version-1.2.3-blue"
+            alt="Release"></a>
+    <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
+        <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
+            alt='Coverage Status' /></a>
 </p>
 
 ---
