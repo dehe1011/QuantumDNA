@@ -1,5 +1,3 @@
-3-Clause BSD License
-
 Copyright (c) 2024 Dennis Herb
 All rights reserved.
 
