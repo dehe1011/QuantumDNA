@@ -1,8 +1,11 @@
 from setuptools import setup, find_packages
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 setup(
     name="qDNA",
-    version="0.1.1",
+    version="0.1.0",
     author="Dennis Herb",
     author_email="dennis.herb@uni-ulm.de",
     description="A package to calculate lifetimes, average charge separation and dipole moments of excited states along DNA within the formalism of open quantum systems.",
@@ -17,7 +20,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=[
-        'qutip==4.7.5',
-    ],
+    install_requires=required,
 )
