@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="qDNA",
-    version="0.1.0",
+    version="0.1.1",
     author="Dennis Herb",
     author_email="dennis.herb@uni-ulm.de",
     description="A package to calculate lifetimes, average charge separation and dipole moments of excited states along DNA within the formalism of open quantum systems.",
