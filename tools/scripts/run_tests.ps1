@@ -6,14 +6,14 @@
 
 # -----------------------------------------------------------
 
-echo "Running tests"
+Write-Output "Running tests"
 # -m: module, -s: start of search, -v: verbose 
 # python -m unittest discover -s tests -v
 python -m pytest -vv tests/ --disable-pytest-warnings
 
 # -------------------------------------------------------
 
-echo "Removing unnecessary files and directories created in setup"
+Write-Output "Removing unnecessary files and directories created in setup"
 
 # Specify the directories that should be deleted
 $paths = @(

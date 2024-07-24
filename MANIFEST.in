@@ -1,0 +1,7 @@
+include README.md
+include LICENSE.txt
+include VERSION
+include environment.yml
+include CITATION.bib
+include configs/*.yaml
+include data/raw/tb_params/*.json

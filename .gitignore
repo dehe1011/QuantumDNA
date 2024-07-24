@@ -6,11 +6,13 @@ docs/figures/my_figures/
 .vscode/
 
 development.ipynb
+development_2.ipynb
 environment_long.yml
 test_script.py
 info.txt
 
 *.egg-info/
+dist/
 
 data/raw/geometries
 data/raw/test_params
