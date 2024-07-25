@@ -7,3 +7,4 @@ pyyaml==6.0.1
 pytest==7.4.0
 seaborn==0.12.2
 tqdm==4.66.4
+customtkinter==5.2.2

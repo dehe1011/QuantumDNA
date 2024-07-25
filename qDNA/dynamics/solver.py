@@ -132,7 +132,7 @@ class ME_Solver:
                 self.init_state = self.me_kwargs.get("init_h_state")
 
         self.init_matrix = self.get_init_matrix()
-        self.options = q.Options(method = self.me_kwargs.get("solver_method"))
+        self.options = q.Options(method=self.me_kwargs.get("solver_method"))
         self.reset()
 
         if self.verbose:
@@ -285,7 +285,7 @@ class ME_Solver:
                 self.times,
                 self.lindblad_diss.c_ops,
                 self.lindblad_diss.pop_ops,
-                options = self.options,
+                options=self.options,
             )
             for particle in self.tb_ham.particles:
                 for tb_site in self.tb_ham.tb_basis:
@@ -317,7 +317,7 @@ class ME_Solver:
                 self.times,
                 self.lindblad_diss.c_ops,
                 self.lindblad_diss.coh_ops,
-                options = self.options,
+                options=self.options,
             )
             for particle in self.tb_ham.particles:
                 self.coh[particle] = 0
@@ -353,7 +353,7 @@ class ME_Solver:
                 self.times,
                 self.lindblad_diss.c_ops,
                 self.lindblad_diss.groundstate_pop_ops,
-                options = self.options,
+                options=self.options,
             )
             self.groundstate_pop["groundstate"] = result.expect["groundstate"]
         return self.groundstate_pop

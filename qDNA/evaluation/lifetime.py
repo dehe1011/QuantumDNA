@@ -14,6 +14,7 @@ __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
 # --------------------------------------- Estimated Exciton Lifetime ------------------------
 
+
 @timeit
 def calc_lifetime(upper_strand, tb_model_name, **kwargs):
     """
@@ -87,6 +88,6 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
         "lifetime_" + filename,
         directory="data/processed",
         save_excel=False,
-        version_index = False, 
+        version_index=False,
     )
     return lifetime_dict

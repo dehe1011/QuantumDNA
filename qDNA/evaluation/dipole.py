@@ -116,6 +116,6 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
         kwargs,
         "dipole_" + filename,
         directory="data/processed",
-        version_index = False,
+        version_index=False,
     )
     return dipole_dict
