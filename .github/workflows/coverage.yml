@@ -1,4 +1,4 @@
-name: Coverage with Coveralls
+name: Coverage with coveralls
 
 on: [push, pull_request]
 
@@ -14,14 +14,6 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |

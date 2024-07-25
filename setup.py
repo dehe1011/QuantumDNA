@@ -12,6 +12,8 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/dehe1011/QuantumDNA",
+    license='BSD-3-Clause',
+    packages=['none'],
     packages=find_packages(),
     include_package_data=True,
     classifiers=[
@@ -19,6 +21,5 @@ setup(
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
     install_requires=required,
 )
