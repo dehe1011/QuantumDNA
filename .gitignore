@@ -20,6 +20,7 @@ data/raw/geometries
 data/raw/test_params
 data/processed/
 data/figures/
+data/logging.log
 
 .ipynb_checkpoints/
 __pycache__/
