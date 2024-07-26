@@ -48,8 +48,8 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 * Versatile Calculations: Calculate lifetimes, charge separation, and dipole moments.
 * Customizable Models: Add and use custom tight-binding parameters and models.
 * User-Friendly Interface: Designed for ease of use by all researchers.
-* Regular Updates: Stay current with the latest advancements and improvements.
 * Parallelization: Supports parallel computing for the calculation of excited state properties for large ensembles of DNA sequences, optimizing performance within the computationally intensive context of open quantum systems.
+* Regular Updates: Stay current with the latest advancements and improvements.
 
 ### Example Program
 
@@ -74,8 +74,23 @@ print(f"Average charge separation {dipole} A")
 
 ```
 
-
 ## Getting started 
+
+### Installation via PyPI:
+
+We recommend creating a new virtual environment and Jupyter notebook kernel to avoid conflicts with existing packages like `qutip`. 
+1. Create a new virtual environment (using conda):\
+```conda create -n qDNA```
+
+2. Create a new Jupyter kernel (if you are using Jupyter notebook):\
+ ```ipykernel install --name qDNA --display-name "Python (qDNA)"```
+
+3. Install the qDNA package:\
+```pip install qDNA```
+
+### Installation via Cloning the Github Repository
+
+If you want to make changes to the source code or try the example notebooks, you can clone the project's GitHub repository.
 
 **NOTE**: These set-up instructions have only been tested on Windows and may not work on macOS. 
 
@@ -85,36 +100,53 @@ print(f"Average charge separation {dipole} A")
 * Git ([Download](https://gitforwindows.org/))
 * Python ([Download](https://www.python.org/downloads/))
 
-### Installation 
+**Installation procedure**
 
 Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
 
-1. Clone the Github repository:\
+1. Clone the Github repository: \
 ```git clone https://github.com/dehe1011/QuantumDNA.git```\
+
+2. Navigate to the project directory: \
 ```cd QuantumDNA ```
 
-2. Create and active a virtual environment:\
-``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
+2. Create and active a virtual environment (using a provided script): \
+```powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1```
 
-If all tests worked you have successfully installed the package and the user interface opens automatically. You can access all the implemented functionalities. Enjoy :)
+If all tests passed, the package has been successfully installed, and the user interface opens automatically. You can access all the implemented functionalities. Enjoy!
 
-### Usage
+**Usage**
 
-After you have already installed the package, you can either access the code via the user interface or in a Jupyter Notebook. Open the Anconda Powershell Prompt again and use the following ``` commands ```:
+After installing the package, you can access the code via the user interface or in a Jupyter Notebook.
 
-1. Open the user interface: 
+Using the User Interface: 
 
-    (i) Navigate to the package directory: 
-    ``` Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA ``` \
-    (ii) Run the activation script:
-    ``` powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1 ```
+1. Open the Anaconda PowerShell Prompt and navigate to the package directory:\
+ ```Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA``` 
 
-2. Open a new Jupyter notebook: 
+2. Run the activation script: \
+```powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1```
 
-    (i) ``` jupyter notebook ``` \
-    (ii) Select the kernel to "Python (qDNA)"
+Using Jupyter Notebook: 
 
-To remove the virtual environment use ``` conda remove --name qDNA --all ```. Don't forget to delete the folder "QuantumDNA" that contains the cloned GitHub repository. 
+1. Open a new Jupyter Notebook: \
+```jupyter notebook```
+
+2. Select the kernel "Python (qDNA)":
+    * In the Jupyter Notebook interface, go to Kernel > Change kernel > Python (qDNA)
+
+### Uninstallation
+
+To remove the virtual environment and Jupyter kernel:
+
+1. Remove the virtual environment:\
+ ```conda remove --name qDNA --all``` 
+
+2. Remove the Jupyter kernel:\
+ ```jupyter kernelspec remove qDNA``` 
+ 
+3. Delete the project folder:
+    * Manually delete the `QuantumDNA` folder that contains the cloned GitHub repository.
 
 
 ## Documentation
@@ -125,32 +157,53 @@ The documentation for the [latest release](https://quantumdna.readthedocs.io/en/
 
 The code contains some tutorials and demostrations to better understand and explore the functionalities. 
 
-In the ```QuantumDNA/docs/tutorials``` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+In the `QuantumDNA/docs/tutorials` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
-In the ```QuantumDNA/docs/tutorials``` folder, there exist the following tutorials:
+Additionally, the `QuantumDNA/docs/tutorials` folder contains the following tutorials:
 
 * **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
 * **1_Plotting_Routines.ipynb**: tutorial on the predefined plotting routines.
 * **2_Open_System.ipynb**: tutorial on different ways to treat DNA relaxation the DNA environment.
-* **Exploration_Notebook.ipynb**: if you are interested how single functions behave, this is the place where you can test the functionality isolated from the rest of the code. 
+* **Exploration_Notebook.ipynb**: A place to test the functionality of individual functions isolated from the rest of the code.
+
+These tutorials provide hands-on examples and explanations to help you effectively use the `qDNA` package.
 
 
 ### Graphical user interface
 
-The usage of the graphical user interface is demonstrated in the following images. Many functionalities of the code can be accessed in a very user friendly manner from the menu window:
+The `qDNA` package includes a graphical user interface (GUI) that provides an intuitive and user-friendly way to interact with the package's functionalities. You can access the GUI with the following code:
+
+```python
+
+from qDNA.gui import qDNA_app
+
+app = qDNA_app()
+app.mainloop()
+```
+
+The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
+
+* **Menu Window:** Access various functionalities from a centralized menu.*
 
 ![](docs/figures/user_interface_figures/menu_1.png)
 > _Screenshot of the menu of the user interface._
 
+* **Plot Generation:** Create plots effortlessly by submitting your parameters through the GUI.
+
 ![](docs/figures/user_interface_figures/plot_1.png)
 > _Plot obtained after pressing the submit button on the menu (see image above)._
+
+* **Calculation Display:** Perform calculations, such as exciton lifetime and average charge separation, and view the results directly within the interface.
 
 ![](docs/figures/user_interface_figures/menu3.png)
 > _Screenshot of the menu of the user interface with calculations of the exciton lifetime and average charge separation displayed in the frame on the bottom right._
 
+The GUI streamlines the process of working with `qDNA`, making it accessible even to those who may not be familiar with coding. Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.
+
+
 ### Shortcuts
 
-To increase the readability of the code I collected some of the shortcuts that are used requently: 
+To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. These abbreviations help keep the code concise while still being clear and understandable:
 
 * ham: hamiltonian
 * dm: density matrix
@@ -205,4 +258,4 @@ Simulation of open quantum systems:
 
 ## Support
 
-For support, please contact the author at dennis.herb@uni-ulm.de or visit our community forum.
+For support, please contact the author at dennis.herb@uni-ulm.de.

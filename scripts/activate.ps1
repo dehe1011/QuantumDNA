@@ -38,4 +38,4 @@ python qDNA\gui\qdna_app.py
 
 # remove jupyter kernel
 # jupyter kernelspec list
-# jupyter kernelspec remove Python(qDNA)
+# jupyter kernelspec remove qDNA
