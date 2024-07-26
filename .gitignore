@@ -10,6 +10,7 @@ development_2.ipynb
 environment_long.yml
 test_script.py
 info.txt
+.coverage
 
 *.egg-info/
 dist/
