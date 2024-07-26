@@ -51,8 +51,6 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 * Parallelization: Supports parallel computing for the calculation of excited state properties for large ensembles of DNA sequences, optimizing performance within the computationally intensive context of open quantum systems.
 * Regular Updates: Stay current with the latest advancements and improvements.
 
-```
-
 ## Getting started 
 
 ### Quick Installation
@@ -83,6 +81,7 @@ dipole = calc_dipole(upper_strand, tb_model_name, **kwargs)
 # output 
 print(f"Exciton lifetime {lifetime} fs")
 print(f"Average charge separation {dipole} A")
+```
 
 
 ## Documentation
