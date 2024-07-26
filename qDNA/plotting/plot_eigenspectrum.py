@@ -5,7 +5,7 @@ This module provides functions to plot eigenenergies and eigenstates for quantum
 import numpy as np
 import seaborn as sns
 
-from tools import get_config
+from qDNA.tools import get_config
 from qDNA import get_reduced_dm_eigs, get_conversion
 
 __all__ = ["PARTICLES", "COLORS_PARTICLES", "plot_eigv", "plot_eigs"]

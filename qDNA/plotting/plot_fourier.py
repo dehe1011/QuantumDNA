@@ -5,10 +5,15 @@ This module provides functions to plot the Fourier transform and the average pop
 import seaborn as sns
 import numpy as np
 
-from tools import get_config
+from qDNA.tools import get_config
 from qDNA.utils import get_conversion
 
-__all__ = ["plot_fourier", "plot_average_pop"]
+__all__ = [
+    "plot_fourier",
+    "plot_average_pop",
+    "get_frame_fourier",
+    "get_frame_average_pop",
+]
 
 DNA_BASES = get_config()["DNA_BASES"]
 COLORS_DNA_BASES = dict(

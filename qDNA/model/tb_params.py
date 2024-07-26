@@ -4,7 +4,7 @@ This module provides functions to save and load tight-binding parameters for qua
 
 import os
 from copy import deepcopy
-from tools import my_save, my_load
+from qDNA.tools import ROOT_DIR, my_save, my_load
 
 __all__ = [
     "save_tb_params",
@@ -17,7 +17,7 @@ __all__ = [
 def save_tb_params(
     tb_param_dict,
     info_dict,
-    directory=os.path.join("data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
     notes=None,
 ):
     """
@@ -58,7 +58,9 @@ def save_tb_params(
 
 
 def load_tb_params(
-    info_dict, directory=os.path.join("data", "raw", "tb_params"), load_metadata=False
+    info_dict,
+    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
+    load_metadata=False,
 ):
     """
     Load tight-binding parameters from a file.
@@ -95,7 +97,7 @@ def wrap_save_tb_params(
     particle,
     tb_model_name,
     unit,
-    directory=os.path.join("data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
     notes=None,
 ):
     """
@@ -131,7 +133,7 @@ def wrap_load_tb_params(
     source,
     particle,
     tb_model_name,
-    directory=os.path.join("data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
     load_metadata=False,
 ):
     """

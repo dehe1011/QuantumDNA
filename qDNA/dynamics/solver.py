@@ -6,7 +6,7 @@ from itertools import permutations
 import numpy as np
 import qutip as q
 
-from tools import get_config, check_me_kwargs
+from qDNA.tools import get_config, check_me_kwargs
 from .reduced_dm import get_reduced_dm
 from qDNA import DNA_Seq
 from qDNA.model import TB_Ham

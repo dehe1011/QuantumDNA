@@ -14,7 +14,7 @@ from qDNA.utils import (
     get_conversion_dict,
     get_conversion,
 )
-from tools import get_config, check_ham_kwargs
+from qDNA.tools import get_config, check_ham_kwargs
 from .tb_basis import get_eh_basis, get_particle_eh_states, get_eh_distance
 from .tb_model import TB_Model
 from .tb_params import wrap_load_tb_params

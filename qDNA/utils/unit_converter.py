@@ -6,7 +6,7 @@ from itertools import permutations
 import numpy as np
 import scipy.constants as c
 
-from tools import get_config
+from qDNA.tools import get_config
 
 __all__ = ["UNITS", "get_conversion", "get_all_conversions", "get_conversion_dict"]
 

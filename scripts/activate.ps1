@@ -2,7 +2,7 @@
 
 # 1. Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
 # For example: Set-Location -Path "C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA"
-# 2. powershell -ExecutionPolicy Bypass -File tools\scripts\activate.ps1
+# 2. powershell -ExecutionPolicy Bypass -File scripts\activate.ps1
 
 # -----------------------------------------------------------
 
@@ -26,8 +26,16 @@ if ($envExists) {
     python -m ipykernel install --name qDNA --display-name "Python (qDNA)"
     
     # Run all the tests to make sure that everything works:
-    powershell -ExecutionPolicy Bypass -File tools\scripts\run_tests.ps1
+    powershell -ExecutionPolicy Bypass -File scripts\run_tests.ps1
 }
 
-# Open the user interface
-python gui\qdna_app.py
+# Open the graphical user interface
+python qDNA\gui\qdna_app.py
+
+# remove virtual env with 
+# conda info --envs
+# conda remove --name qDNA --all
+
+# remove jupyter kernel
+# jupyter kernelspec list
+# jupyter kernelspec remove Python(qDNA)

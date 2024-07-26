@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from qDNA import plot_pop, plot_pops, plot_coh, plot_fourier
-from tools import save_fig
+from qDNA.tools import save_figure
 
 
 class PlottingFrame(ctk.CTkFrame):
@@ -15,6 +15,7 @@ class PlottingFrame(ctk.CTkFrame):
 
         Widgets with get() method:
             filename_entry
+            directory_entry
         """
 
         # initialization of the ctk.CTkFrame class
@@ -22,19 +23,25 @@ class PlottingFrame(ctk.CTkFrame):
 
         # widgets
         self.filename_label = ctk.CTkLabel(self, text="Filename:")
-        self.filename_label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
+        self.filename_label.grid(row=0, column=0, pady=10, padx=10)
 
         self.filename_entry = ctk.CTkEntry(self)
-        self.filename_entry.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+        self.filename_entry.grid(row=1, column=0, padx=10, pady=10)
+
+        self.directory_label = ctk.CTkLabel(self, text="Directory:")
+        self.directory_label.grid(row=0, column=1, pady=10, padx=10)
+
+        self.directory_entry = ctk.CTkEntry(self)
+        self.directory_entry.grid(row=1, column=1, padx=10, pady=10)
 
         self.subframe = ctk.CTkFrame(self)
-        self.subframe.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+        self.subframe.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
         self.save_button = ctk.CTkButton(self, text="Save", command=master.save)
-        self.save_button.grid(row=11, column=0, padx=10, pady=10)
+        self.save_button.grid(row=4, column=0, padx=10, pady=10)
 
         self.cancel_button = ctk.CTkButton(self, text="Cancel", command=master.cancel)
-        self.cancel_button.grid(row=11, column=1, padx=10, pady=10)
+        self.cancel_button.grid(row=4, column=1, padx=10, pady=10)
 
 
 class PlottingWindow(ctk.CTkToplevel):
@@ -105,7 +112,11 @@ class PlottingWindow(ctk.CTkToplevel):
 
     def save(self):
         self.filename = self.plotting_frame.filename_entry.get()
-        save_fig(self.fig, self.filename, format="pdf")
+        self.directory = self.plotting_frame.directory_entry.get()
+        if self.directory:
+            save_figure(self.fig, self.filename, directory=self.directory, format="pdf")
+        else:
+            save_figure(self.fig, self.filename, format="pdf")
         self.destroy()
 
     def cancel(self):

@@ -1,4 +1,3 @@
-from itertools import product
 import customtkinter as ctk
 
 from .user_interface_utils import change_state_all_widgets

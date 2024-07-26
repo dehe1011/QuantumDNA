@@ -7,7 +7,7 @@ from functools import partial
 import numpy as np
 from tqdm import tqdm
 
-from tools import my_save, my_load
+from qDNA.tools import my_save, my_load, ROOT_DIR
 from qDNA.model import get_eh_distance
 from qDNA.dynamics import get_me_solver
 
@@ -88,7 +88,7 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
     try:
         lifetime_dict, kwargs = my_load(
             "lifetime_" + filename,
-            directory="data/processed",
+            directory=ROOT_DIR + "/data/processed",
             load_metadata=True,
         )
     except:
@@ -115,7 +115,7 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
         dipole_dict,
         kwargs,
         "dipole_" + filename,
-        directory="data/processed",
+        directory=ROOT_DIR + "/data/processed",
         version_index=False,
     )
     return dipole_dict

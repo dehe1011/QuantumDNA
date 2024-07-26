@@ -2,7 +2,7 @@
 This module provides functions to generate configurations for different tight-binding models.
 """
 
-from tools import get_config
+from qDNA.tools import get_config
 from qDNA import TB_MODELS_PROPS
 
 __all__ = ["get_tb_config", "TB_MODELS_PROPS"]

@@ -5,7 +5,7 @@ Module for generating DNA sequences.
 from itertools import product
 import re
 
-from tools import get_config
+from qDNA.tools import get_config
 
 # Shortcuts:
 # seq: sequence

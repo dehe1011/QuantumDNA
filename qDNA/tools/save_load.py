@@ -4,8 +4,9 @@ import yaml
 import os
 import pathlib
 import logging
+import pickle
 
-ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent)
+ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -15,7 +16,7 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-filepath = os.path.join(ROOT_DIR, "configs", "config.yaml")
+filepath = os.path.join(ROOT_DIR, "qDNA", "config.yaml")
 with open(filepath, "r") as file:
     config = yaml.safe_load(file)
 verbose = config["verbose"]
@@ -27,7 +28,7 @@ def my_save(
     data,
     metadata,
     filename,
-    directory="data",
+    directory=os.path.join(ROOT_DIR, "data"),
     save_excel=False,
     version_index: bool = True,
 ):
@@ -39,23 +40,24 @@ def my_save(
         Usually the filepath starts with 'data/...'
     """
 
-    full_directory = os.path.join(ROOT_DIR, directory)
-    os.makedirs(full_directory, exist_ok=True)
+    os.makedirs(directory, exist_ok=True)
 
     if version_index:
         filename += "_version_"
         index = 0
-        filepath = os.path.join(full_directory, filename)
+        filepath = os.path.join(directory, filename)
         while os.path.exists(filepath + str(index) + ".json"):
             index += 1
-        filename += str(index)
+        filename += str(index) + ".json"
 
-    filepath = os.path.join(full_directory, filename) + ".json"
+    else:
+        filename += ".json"
 
-    short_filepath = filepath[filepath.rfind(directory) :]
-    logger.info(f"Data saved as {short_filepath}")
+    filepath = os.path.join(directory, filename)
+
+    logger.info(f"Data saved as {filepath}")
     if verbose:
-        print(f"Data saved as {short_filepath}")
+        print(f"Data saved as {filepath}")
 
     data = (data, metadata)
     with open(filepath, "w") as f:
@@ -65,7 +67,7 @@ def my_save(
         df.to_excel("data.xlsx", index=False)
 
 
-def my_load(filename, load_metadata=False, directory="data"):
+def my_load(filename, load_metadata=False, directory=os.path.join(ROOT_DIR, "data")):
     """
     Loads the data and the metadata (if wanted) from a json file.
 
@@ -73,16 +75,13 @@ def my_load(filename, load_metadata=False, directory="data"):
     -----
         Usually the filepath starts with 'data/...'
     """
+    os.makedirs(directory, exist_ok=True)
+    filename += ".json"
+    filepath = os.path.join(directory, filename)
 
-    full_directory = os.path.join(ROOT_DIR, directory)
-    os.makedirs(full_directory, exist_ok=True)
-
-    filepath = os.path.join(full_directory, filename) + ".json"
-
-    short_filepath = filepath[filepath.rfind(directory) :]
-    logger.info(f"Data loaded from {short_filepath}")
+    logger.info(f"Data loaded from {filepath}")
     if verbose:
-        print(f"Data loaded from {short_filepath}")
+        print(f"Data loaded from {filepath}")
 
     with open(filepath, "r") as f:
         data = json.load(f)
@@ -105,13 +104,12 @@ def convert_pickle_to_json(filepath):
 # ----------------------------------------- load configuration file with defualt values --------------------------
 
 
-def get_config(filename="config", directory="configs"):
+def get_config(filename="config", directory=os.path.join(ROOT_DIR, "qDNA")):
     """
     Load data stored in a .yaml configuration file (e.g., global variables).
     """
-    full_directory = os.path.join(ROOT_DIR, directory)
-    full_filename = filename + ".yaml"
-    filepath = os.path.join(full_directory, full_filename)
+    filename += ".yaml"
+    filepath = os.path.join(directory, filename)
     with open(filepath, "r") as file:
         config = yaml.safe_load(file)
     return config
@@ -120,28 +118,25 @@ def get_config(filename="config", directory="configs"):
 # ---------------------------------------------------- save figures ------------------------------------
 
 
-def save_fig(
+def save_figure(
     fig,
     filename: str,
-    directory: str = os.path.join("data", "figures"),
+    directory: str = os.path.join(ROOT_DIR, "data", "figures"),
     format: str = "pdf",
 ):
     """
     Save Figures.
     """
-    full_directory = os.path.join(ROOT_DIR, directory)
-    os.makedirs(full_directory, exist_ok=True)
+    os.makedirs(directory, exist_ok=True)
 
     filename += "_version_"
     index = 0
-    while os.path.exists(filename + str(index) + "." + format):
+    while os.path.exists(os.path.join(directory, filename + str(index) + "." + format)):
         index += 1
-    filename += str(index)
-
-    filepath = os.path.join(full_directory, filename) + "." + format
-
+    filename += str(index) + "." + format
+    filepath = os.path.join(directory, filename)
+    print("entered")
     fig.savefig(filepath)
-    short_filepath = filepath[filepath.rfind(directory) :]
-    logger.info(f"Figure saved as {short_filepath}")
+    logger.info(f"Figure saved as {filepath}")
     if verbose:
-        print(f"Figure saved as {short_filepath}")
+        print(f"Figure saved as {filepath}")

@@ -5,7 +5,7 @@ This module provides functions to plot population and coherence for quantum DNA 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from tools import get_config
+from qDNA.tools import get_config
 from qDNA.utils import calc_coherence, get_pop_fourier
 
 __all__ = ["plot_pop_fourier", "plot_pop", "plot_pops", "plot_coh", "plot_test_fourier"]

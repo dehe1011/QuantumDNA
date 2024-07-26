@@ -9,7 +9,7 @@ plt.rcParams["xtick.labelsize"] = 12
 plt.rcParams["ytick.labelsize"] = 12
 
 import seaborn as sns
-from tools import get_config
+from qDNA.tools import get_config
 
 DNA_BASES = get_config()["DNA_BASES"]
 PARTICLES = get_config()["PARTICLES"]

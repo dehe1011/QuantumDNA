@@ -1,8 +1,7 @@
-import os
 import sys
 import pathlib
 
-ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent)
+ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
 if ROOT_DIR not in sys.path:
     del sys.path[0]
     sys.path.insert(0, ROOT_DIR)
@@ -11,8 +10,8 @@ import customtkinter as ctk
 import webbrowser
 
 from qDNA import TB_Ham, DNA_Seq, TB_Model, Lindblad_Diss, ME_Solver
-from tools import get_config
-from gui import (
+from qDNA.tools import get_config
+from qDNA.gui import (
     CustomWindow,
     InitialFrame,
     ConfigFrame,
@@ -23,7 +22,7 @@ from gui import (
 )
 
 
-class qDNA_App(ctk.CTk):
+class qDNA_app(ctk.CTk):
     def __init__(self):
         """
         Notes:
@@ -202,5 +201,5 @@ class qDNA_App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    app = qDNA_App()
+    app = qDNA_app()
     app.mainloop()

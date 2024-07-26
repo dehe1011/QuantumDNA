@@ -7,7 +7,7 @@ from itertools import product, permutations
 import numpy as np
 import qutip as q
 
-from tools import get_config, check_diss_kwargs
+from qDNA.tools import get_config, check_diss_kwargs
 from qDNA.model import TB_Ham, add_groundstate, global_to_local
 from qDNA.utils import get_conversion
 from .lindblad_rates import rate_constant_redfield

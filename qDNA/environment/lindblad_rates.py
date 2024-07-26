@@ -6,7 +6,7 @@ It provides functions for calculating bath spectral densities and Lindblad rates
 
 import numpy as np
 import scipy.constants as c
-from tools import get_config
+from qDNA.tools import get_config
 
 SPECTRAL_DENSITIES = get_config()["SPECTRAL_DENSITIES"]
 

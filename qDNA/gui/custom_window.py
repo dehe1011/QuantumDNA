@@ -1,5 +1,4 @@
 import customtkinter as ctk
-import webbrowser
 
 from qDNA import wrap_save_tb_params
 

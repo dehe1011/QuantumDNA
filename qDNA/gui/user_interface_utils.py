@@ -10,4 +10,4 @@ def change_state_all_widgets(frame, state):
         elif isinstance(
             widget, ctk.CTkFrame
         ):  # Recursively disable widgets in nested frames
-            disable_all_widgets(widget)
+            change_state_all_widgets(widget, state)

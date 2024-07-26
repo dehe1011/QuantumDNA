@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from tools import get_config
+from qDNA.tools import get_config
 
 
 class DynamicsFrame(ctk.CTkFrame):

@@ -2,7 +2,7 @@
 This module provides classes to define custom and predefined tight-binding models for quantum DNA.
 """
 
-from tools import get_config
+from qDNA.tools import get_config
 from qDNA import TB_MODELS_PROPS
 from .tb_basis import get_tb_basis, get_eh_basis
 from .tb_config import get_tb_config

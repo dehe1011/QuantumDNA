@@ -2,13 +2,14 @@
 
 # 1. Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
 # For example: Set-Location -Path "C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA"
-# 2. powershell -ExecutionPolicy Bypass -File tools\scripts\run_tests.ps1
+# 2. powershell -ExecutionPolicy Bypass -File scripts\run_tests.ps1
 
 # -----------------------------------------------------------
 
 Write-Output "Running tests"
 # -m: module, -s: start of search, -v: verbose 
 # python -m unittest discover -s tests -v
+pip install pytest
 python -m pytest -vv tests/ --disable-pytest-warnings
 
 # -------------------------------------------------------

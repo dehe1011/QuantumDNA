@@ -7,7 +7,7 @@ from functools import partial
 import numpy as np
 from tqdm import tqdm
 
-from tools import my_save, timeit
+from qDNA.tools import my_save, timeit, ROOT_DIR
 from qDNA.dynamics import get_me_solver
 
 __all__ = ["calc_lifetime", "calc_lifetime_dict"]
@@ -86,7 +86,7 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
         lifetime_dict,
         kwargs,
         "lifetime_" + filename,
-        directory="data/processed",
+        directory=ROOT_DIR + "/data/processed",
         save_excel=False,
         version_index=False,
     )
