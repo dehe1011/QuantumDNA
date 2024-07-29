@@ -1,7 +1,7 @@
 # This file contains all the default values used for the simulations
 project_name: "QuantumDNA"
 
-verbose: True
+verbose: False
 DNA_BASES: ["A", "T", "G", "C", "c"]
 
 SOURCES: ['Hawke2010', 'Simserides2014', 'Mantela2021', 'Simserides2024']
