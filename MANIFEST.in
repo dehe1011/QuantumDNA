@@ -4,6 +4,7 @@ include LICENSE.txt
 include CITATION.bib
 include qDNA/config.yaml
 include qDNA/data/raw/tb_params/*.json
-include qDNA/data/figures/doc_paper/
-include qDNA/data/processed/doc_paper/
+include qDNA/data/figures/doc_paper/*.png
+include qDNA/data/figures/doc_paper/*.pdf
+include qDNA/data/processed/doc_paper/*.json
 include configs/*
