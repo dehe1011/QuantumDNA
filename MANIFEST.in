@@ -1,7 +1,10 @@
 include README.md
+include installation.md  
 include LICENSE.txt
-include VERSION
-include environment.yml
 include CITATION.bib
-include configs/*.yaml
-include data/raw/tb_params/*.json
+include qDNA/config.yaml
+include qDNA/data/raw/tb_params/*.json
+include qDNA/data/figures/doc_paper/*.png
+include qDNA/data/figures/doc_paper/*.pdf
+include qDNA/data/processed/doc_paper/*.json
+include configs/*

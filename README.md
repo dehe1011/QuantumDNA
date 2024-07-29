@@ -13,7 +13,11 @@
         <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest"
             alt="Documentation Status"></a>
     <a href="https://github.com/dehe1011/QuantumDNA/releases">
+<<<<<<< HEAD
         <img src="https://img.shields.io/badge/version-0.1.3-blue"
+=======
+        <img src="https://img.shields.io/badge/version-0.1.2-blue"
+>>>>>>> 593efd8b8f29d3713e1ebfa6cfca9401d93299c3
             alt="Release"></a>
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
@@ -34,14 +38,14 @@ This Python package can be cited as:
 
 **July 2024**
 
-* Added a graphical user interface (GUI) to the package such that it is easier accessible for users that are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
+* Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
 * Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
 * Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
 
 
 ## Introduction
 
-Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifetimes, average charge separation, and dipole moments of excited states along DNA. Leveraging the formalism of open quantum systems and based on tight-binding Hamiltonians, QuantumDNA is equipped to handle various tight-binding models. Users can incorporate custom tight-binding parameters from ab-initio calculations or experimental data, as well as define their own models, making the tool highly adaptable. QuantumDNA is regularly updated to ensure it remains at the cutting edge and includes a user-friendly interface to be accessible even to researchers less familiar with computer science. Results from several research papers can be reproduced with QuantumDNA.
+Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifetimes, average charge separation, and dipole moments of excited states along DNA. Leveraging the formalism of open quantum systems and based on tight-binding Hamiltonians, QuantumDNA is equipped to handle various tight-binding models. Users can incorporate custom tight-binding parameters from ab initio calculations or experimental data, as well as define their own models, making the tool highly adaptable. QuantumDNA is regularly updated to ensure it remains at the cutting edge and includes a user-friendly interface to be accessible even to researchers less familiar with computer science. Results from several research papers can be reproduced with QuantumDNA.
 
 ### Key Features
 
@@ -63,7 +67,7 @@ To ensure compatibility and avoid conflicts with other packages, we recommend us
 
 ### Example Program
 
-To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example you might find that in general more uniform sequences show higher values. Do you know the reason for this observation? 
+To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example, you might find that in general more uniform sequences show higher values. Do you know the reason for this observation? 
 
 ```python
 
@@ -90,7 +94,7 @@ The documentation for the [latest release](https://quantumdna.readthedocs.io/en/
 
 ### Tutorials
 
-The code contains some tutorials and demostrations to better understand and explore the functionalities. 
+The code contains some tutorials and demonstrations to better understand and explore the functionalities. 
 
 In the `QuantumDNA/docs/tutorials` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
@@ -98,7 +102,7 @@ Additionally, the `QuantumDNA/docs/tutorials` folder contains the following tuto
 
 * **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
 * **1_Plotting_Routines.ipynb**: tutorial on the predefined plotting routines.
-* **2_Open_System.ipynb**: tutorial on different ways to treat DNA relaxation the DNA environment.
+* **2_Open_System.ipynb**: tutorial on different ways to treat DNA relaxation in the DNA environment.
 * **Exploration_Notebook.ipynb**: A place to test the functionality of individual functions isolated from the rest of the code.
 
 These tutorials provide hands-on examples and explanations to help you effectively use the `qDNA` package.
@@ -180,7 +184,7 @@ Excitons and electron-hole Coulomb interaction:
 * [E.M. Conwell, P.M. McLaughlin and S.M. Bloch, Charge-Transfer Excitons in DNA. *The Journal of Physical Chemistry B 112*, 2268 (2008)](https://doi.org/10.1021/jp077344x)
 * [S. Tornow, R. Bulla, F.B. Anders and G. Zwicknagl, Multiple-charge transfer and trapping in DNA dimers. *Physical Review B 82*, 195106 (2010)](https://doi.org/10.1103/PhysRevB.82.195106)
 
-Biological relevance of DNA charge transfer:
+The biological relevance of DNA charge transfer:
 
 * [J.C. Genereux and J.K. Barton, Mechanisms for  DNA charge transport. *Chemical Reviews 110*, 1642 (2010)](https://doi.org/10.1021/cr900228f)
 * [A.R. Arnold, M.A. Grodick and J.K. Barton, DNA Charge Transport: from Chemical Principles to the Cell. *Cell Chemical Biology 23*, 183 (2016)](https://doi.org/10.1016/j.chembiol.2015.11.010)
