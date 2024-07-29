@@ -13,7 +13,7 @@
         <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest"
             alt="Documentation Status"></a>
     <a href="https://github.com/dehe1011/QuantumDNA/releases">
-        <img src="https://img.shields.io/badge/version-0.1.1-blue"
+        <img src="https://img.shields.io/badge/version-0.1.3-blue"
             alt="Release"></a>
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
