@@ -6,7 +6,7 @@ import pathlib
 import logging
 import pickle
 
-ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
+ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -16,7 +16,7 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-filepath = os.path.join(ROOT_DIR, "qDNA", "config.yaml")
+filepath = os.path.join(ROOT_DIR, "config.yaml")
 with open(filepath, "r") as file:
     config = yaml.safe_load(file)
 verbose = config["verbose"]
@@ -104,7 +104,7 @@ def convert_pickle_to_json(filepath):
 # ----------------------------------------- load configuration file with defualt values --------------------------
 
 
-def get_config(filename="config", directory=os.path.join(ROOT_DIR, "qDNA")):
+def get_config(filename="config", directory=ROOT_DIR):
     """
     Load data stored in a .yaml configuration file (e.g., global variables).
     """
@@ -135,7 +135,6 @@ def save_figure(
         index += 1
     filename += str(index) + "." + format
     filepath = os.path.join(directory, filename)
-    print("entered")
     fig.savefig(filepath)
     logger.info(f"Figure saved as {filepath}")
     if verbose:
