@@ -38,6 +38,7 @@ jobs:
         coverage run -m pytest
 
     - name: Upload coverage to Coveralls
+      continue-on-error: true
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: coveralls

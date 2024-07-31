@@ -18,8 +18,8 @@
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
             alt='Coverage Status' /></a>
-    <a href='https://github.com/dehe1011/QuantumDNA/actions/workflows/code_quality.yml'>
-        <img src='https://img.shields.io/github/actions/workflow/status/dehe1011/QuantumDNA/code_quality.yml?branch=main' 
+    <a href='https://github.com/dehe1011/QuantumDNA/actions/workflows/code-quality.yml'>
+        <img src='https://img.shields.io/github/actions/workflow/status/dehe1011/QuantumDNA/code-quality.yml?branch=main' 
             alt='GitHub Workflow Status' /></a>
     <a href='https://github.com/psf/black'>
         <img src='https://img.shields.io/badge/code%20style-black-000000.svg'
@@ -104,11 +104,9 @@ In the [`docs/tutorials`](docs/tutorials) folder you can find the notebook **0_P
 
 Additionally, the `QuantumDNA/docs/tutorials` folder contains the following tutorials:
 
-# QuantumDNA Tutorials
-
 | Tutorial Name                                                                                  | Description                                                          |
 |------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [**1_TB_Model**](docs/tutorials/1_TB_Model.ipynb)                                        | Tutorials on predefined and custom tight-binding models.             |
+| [**1_TB_Models**](docs/tutorials/1_TB_Models.ipynb)                                        | Tutorials on predefined and custom tight-binding models.             |
 | [**2_Data_Visualization**](docs/tutorials/2_Data_Visualization.ipynb)                    | Tutorial on the predefined plotting routines.                        |
 | [**3_DNA_environment**](docs/tutorials/3_DNA_environment.ipynb)                          | Tutorial on different ways to treat DNA relaxation and the DNA environment. |
 | [**4_Parallelized_Calculations**](docs/tutorials/4_Parallelized_Calculations.ipynb)      | Tutorial on how to perform parallelized calculations for several properties. |
@@ -129,6 +127,9 @@ from qDNA.gui import qDNA_app
 app = qDNA_app()
 app.mainloop()
 ```
+
+![](docs/videos/gui_demo_1.gif)
+![](docs/videos/gui_demo_2.gif)
 
 The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
 
