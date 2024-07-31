@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 from .user_interface_utils import change_state_all_widgets
-from qDNA import calc_lifetime, calc_dipole
+from qDNA import calc_lifetime, calc_dipole, calc_dipole_moment, calc_exciton_transfer
 
 
 class LifetimeFrame(ctk.CTkFrame):
@@ -20,22 +20,49 @@ class LifetimeFrame(ctk.CTkFrame):
         self.lifetime_button = ctk.CTkButton(
             self, text="Calculate exciton lifetime", command=self.calc_lifetime
         )
-        self.lifetime_button.grid(row=0, column=0, padx=10, pady=10)
+        self.lifetime_button.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
         self.dipole_button = ctk.CTkButton(
-            self, text="Calculate charge separation", command=self.calc_dipole
+            self, text="Calculate average charge separation", command=self.calc_dipole
         )
-        self.dipole_button.grid(row=1, column=0, padx=10, pady=10)
+        self.dipole_button.grid(row=1, column=0, padx=10, pady=10, sticky='ew')
+        self.dipole_moment_button = ctk.CTkButton(
+            self, text="Calculate dipole moment", command=self.calc_dipole_moment
+        )
+        self.dipole_moment_button.grid(row=2, column=0, padx=10, pady=10, sticky='ew')
+        self.exciton_transfer_button = ctk.CTkButton(
+            self, text="Calculate average exciton population", command=self.calc_exciton_transfer
+        )
+        self.exciton_transfer_button.grid(row=3, column=0, padx=10, pady=10, sticky='ew')
 
     def calc_lifetime(self):
         lifetime = calc_lifetime(**self.kwargs)
         if isinstance(lifetime, str):
+            print('---------------------------')
             print(f"Exciton Lifetime: {lifetime}")
+            print('---------------------------')
         else:
+            print('---------------------------')
             print(f"Exciton Lifetime: {lifetime} fs")
+            print('---------------------------')
 
     def calc_dipole(self):
         dipole = calc_dipole(**self.kwargs)
+        print('---------------------------')
         print(f"Charge separation: {dipole} A")
+        print('---------------------------')
+
+    def calc_dipole_moment(self):
+        dipole_moment = calc_dipole_moment(**self.kwargs)
+        print('---------------------------')
+        print(f"Dipole moment: {dipole_moment} D")
+        print('---------------------------')
+
+    def calc_exciton_transfer(self):
+        avg_pop_upper_strand, avg_pop_lower_strand = calc_exciton_transfer(**self.kwargs)
+        print('---------------------------')
+        print(f"Average exciton population of the upper strand: {avg_pop_upper_strand}")
+        print(f"Average exciton population of the lower strand: {avg_pop_lower_strand}")
+        print('---------------------------')
 
 
 # --------------------------------------------------
@@ -173,7 +200,7 @@ class PlotOptionsTab(ctk.CTkTabview):
         self.pop_tab = self.add("Population")
         self.coh_tab = self.add("Coherence")
         self.fourier_tab = self.add("Fourier")
-        self.lifetime_tab = self.add("Lifetime")
+        self.lifetime_tab = self.add("Evaluation")
         self.set("Population")
 
         self.pop_frame = PopFrame(self.pop_tab, tb_basis, **kwargs)

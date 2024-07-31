@@ -44,6 +44,7 @@ def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
         The number of initial sequences to exclude from the plot, by default 10.
     """
     fig, ax = plt.subplots(1, 1, figsize=(25, 5))
+    fontsize = 30
 
     lifetimes = (
         np.array(list(lifetime_dict.values())[cutoff_num:]) * 1e-3
@@ -56,11 +57,11 @@ def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
     ax.plot(lifetimes, (freq_a + freq_t) * 100, "o--")
     ax.plot(lifetimes, (freq_g + freq_c) * 100, "o--")
 
-    ax.set_ylabel("Percentage", fontsize=25)
-    ax.set_xlabel("Exciton lifetime (ps)", fontsize=25)
+    ax.set_ylabel("Percentage", fontsize=fontsize)
+    ax.set_xlabel("Exciton lifetime (ps)", fontsize=fontsize)
     ax.invert_xaxis()
-    ax.legend(["A-T", "G-C"], prop={"size": 30}, loc="upper right")
+    ax.legend(["A-T", "G-C"], prop={"size": fontsize}, loc="upper right")
     ax.axhline(50, linestyle="--", color="black", alpha=0.8, lw=2.2)
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
     return fig, ax

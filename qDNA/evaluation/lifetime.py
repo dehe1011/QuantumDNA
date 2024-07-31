@@ -2,6 +2,7 @@
 This module provides functions to calculate the estimated exciton lifetime for quantum DNA models.
 """
 
+import os
 import multiprocessing
 from functools import partial
 import numpy as np
@@ -86,7 +87,7 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
         lifetime_dict,
         kwargs,
         "lifetime_" + filename,
-        directory=ROOT_DIR + "/data/processed",
+        directory=os.path.join(ROOT_DIR, "data", "processed"),
         save_excel=False,
         version_index=False,
     )

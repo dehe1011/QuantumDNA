@@ -8,9 +8,26 @@ import scipy.constants as c
 
 from qDNA.tools import get_config
 
-__all__ = ["UNITS", "get_conversion", "get_all_conversions", "get_conversion_dict"]
+__all__ = ["UNITS", "get_conversion", "get_all_conversions", "get_conversion_dict", "convert_to_debye"]
 
 UNITS = get_config()["UNITS"]
+
+def convert_to_debye(charge_separation):
+    """
+    Converts the charge separation of two particles with elementary charge in Angstrom to a dipole moment in Debye.
+
+    Parameters
+    ----------
+    charge_separation: float
+        The electron and hole separation in Angstrom.
+
+    Returns
+    -------
+    float
+        The electrical dipole moment in Debye. 
+    """
+    dipole_moment = c.e * 1e-10 * charge_separation
+    return 100 * c.c * dipole_moment / 1e-19
 
 
 def get_conversion(start_unit, end_unit):

@@ -18,11 +18,17 @@
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
             alt='Coverage Status' /></a>
+    <a href='https://github.com/dehe1011/QuantumDNA/actions/workflows/code_quality.yml'>
+        <img src='https://img.shields.io/github/actions/workflow/status/dehe1011/QuantumDNA/code_quality.yml?branch=main' 
+            alt='GitHub Workflow Status' /></a>
+    <a href='https://github.com/psf/black'>
+        <img src='https://img.shields.io/badge/code%20style-black-000000.svg'
+            alt='Code Style: black' /></a>
 </p>
 
 ---
 
-# QuantumDNA
+# QuantumDNA   
 
 **Author: [Dennis Herb](https://github.com/dehe1011)**
 
@@ -57,7 +63,9 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 
 For a quick installation, you can install the `qDNA` package using pip within a virtual environment:
 
-```pip install qDNA```
+```bash
+pip install qDNA
+```
 
 To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](installation.md).
 
@@ -92,14 +100,20 @@ The documentation for the [latest release](https://quantumdna.readthedocs.io/en/
 
 The code contains some tutorials and demonstrations to better understand and explore the functionalities. 
 
-In the `QuantumDNA/docs/tutorials` folder you can find the notebook **3_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+In the [`docs/tutorials`](docs/tutorials) folder you can find the notebook **0_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
 Additionally, the `QuantumDNA/docs/tutorials` folder contains the following tutorials:
 
-* **0_TB_Model.ipynb**: tutorials on predefined and custom tight-binding models.
-* **1_Plotting_Routines.ipynb**: tutorial on the predefined plotting routines.
-* **2_Open_System.ipynb**: tutorial on different ways to treat DNA relaxation in the DNA environment.
-* **Exploration_Notebook.ipynb**: A place to test the functionality of individual functions isolated from the rest of the code.
+# QuantumDNA Tutorials
+
+| Tutorial Name                                                                                  | Description                                                          |
+|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| [**1_TB_Model**](docs/tutorials/1_TB_Model.ipynb)                                        | Tutorials on predefined and custom tight-binding models.             |
+| [**2_Data_Visualization**](docs/tutorials/2_Data_Visualization.ipynb)                    | Tutorial on the predefined plotting routines.                        |
+| [**3_DNA_environment**](docs/tutorials/3_DNA_environment.ipynb)                          | Tutorial on different ways to treat DNA relaxation and the DNA environment. |
+| [**4_Parallelized_Calculations**](docs/tutorials/4_Parallelized_Calculations.ipynb)      | Tutorial on how to perform parallelized calculations for several properties. |
+| [**Exploration_Notebook**](docs/tutorials/Exploration_Notebook.ipynb)                    | A place to test the functionality of individual functions isolated from the rest of the code. |
+
 
 These tutorials provide hands-on examples and explanations to help you effectively use the `qDNA` package.
 
@@ -118,7 +132,7 @@ app.mainloop()
 
 The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
 
-* **Menu Window:** Access various functionalities from a centralized menu.*
+* **Menu Window:** Access various functionalities from a centralized menu.
 
 ![](docs/figures/user_interface_figures/menu_1.png)
 > _Screenshot of the menu of the user interface._
@@ -140,20 +154,20 @@ The GUI streamlines the process of working with `qDNA`, making it accessible eve
 
 To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. These abbreviations help keep the code concise while still being clear and understandable:
 
-* ham: hamiltonian
-* dm: density matrix
-* tb: tight-binding
-* eigv: eigenvalue/ eigenenergy
-* eigs: eigenstates/ eigenvectors
-* dim: dimension
-* fig: figure
-* op: operator
-* loc: local
-* glob: global
-* deph: dephasing
-* therm: thermalizing
-* seq: sequence
-* calc: calculate
+* ```ham```: hamiltonian
+* ```dm```: density matrix
+* ```tb```: tight-binding
+* ```eigv```: eigenvalue/ eigenenergy
+* ```eigs```: eigenstates/ eigenvectors
+* ```dim```: dimension
+* ```fig```: figure
+* ```op```: operator
+* ```loc```: local
+* ```glob```: global
+* ```deph```: dephasing
+* ```therm```: thermalizing
+* ```seq```: sequence
+* ```calc```: calculate
 
 
 ## References

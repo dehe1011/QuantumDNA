@@ -1,12 +1,21 @@
 import matplotlib.pyplot as plt
 
 plt.style.use("seaborn-v0_8")
-plt.rcParams["font.family"] = "sans-serif"
-plt.rcParams["font.sans-serif"] = "DejaVu Sans"
-plt.rcParams["axes.labelsize"] = 15
-plt.rcParams["legend.fontsize"] = 12
-plt.rcParams["xtick.labelsize"] = 12
-plt.rcParams["ytick.labelsize"] = 12
+
+plt.rcParams.update({
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.serif": ["Times"],
+    # "font.family": "sans-serif",
+    # "font.sans-serif": ["DejaVu Sans"],
+    "text.latex.preamble": r"\usepackage{amsmath}\usepackage{siunitx}" ,
+    "legend.fontsize": 20, 
+    "xtick.labelsize": 20, 
+    "ytick.labelsize": 20, 
+    "axes.labelsize": 20, 
+    "axes.titlesize": 20,
+    "font.size": 20,  
+})
 
 import seaborn as sns
 from qDNA.tools import get_config
