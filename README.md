@@ -128,9 +128,6 @@ app = qDNA_app()
 app.mainloop()
 ```
 
-![](docs/videos/gui_demo_1.gif)
-![](docs/videos/gui_demo_2.gif)
-
 The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
 
 * **Menu Window:** Access various functionalities from a centralized menu.
