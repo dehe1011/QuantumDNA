@@ -186,17 +186,17 @@ class qDNA_app(ctk.CTk):
 
     def enable_initial_frame(self):
         self.initial_frame.change_state("normal")
-        self.options_frame.change_state("disabled")
-        self.plot_options_frame.change_state("disabled")
+        # self.options_frame.change_state("disabled")
+        # self.plot_options_frame.change_state("disabled")
 
     def enable_options_frame(self):
-        self.initial_frame.change_state("disabled")
+        # self.initial_frame.change_state("disabled")
         self.options_frame.change_state("normal")
-        self.plot_options_frame.change_state("disabled")
+        # self.plot_options_frame.change_state("disabled")
 
     def enable_plotting_frame(self):
-        self.initial_frame.change_state("disabled")
-        self.options_frame.change_state("disabled")
+        # self.initial_frame.change_state("disabled")
+        # self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("normal")
 
 
