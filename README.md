@@ -1,6 +1,5 @@
 <p align="center">
-    <img src="docs/figures/qDNA_logo.png"
-        height="130">
+    <img src="docs/figures/qDNA_logo.png">
 </p>
 <p align="center">
     <a href="https://opensource.org/licenses/BSD-3-Clause">
@@ -36,16 +35,12 @@ This Python package can be cited as:
 
 > *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
 
-## What's new
-
-**July 2024**
-
-* Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
-* Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
-* Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
-
 
 ## Introduction
+
+<p align="center">
+    <img src="docs/figures/structure.png">
+</p>
 
 Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifetimes, average charge separation, and dipole moments of excited states along DNA. Leveraging the formalism of open quantum systems and based on tight-binding Hamiltonians, QuantumDNA is equipped to handle various tight-binding models. Users can incorporate custom tight-binding parameters from ab initio calculations or experimental data, as well as define their own models, making the tool highly adaptable. QuantumDNA is regularly updated to ensure it remains at the cutting edge and includes a user-friendly interface to be accessible even to researchers less familiar with computer science. Results from several research papers can be reproduced with QuantumDNA.
 
@@ -56,6 +51,16 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 * User-Friendly Interface: Designed for ease of use by all researchers.
 * Parallelization: Supports parallel computing for the calculation of excited state properties for large ensembles of DNA sequences, optimizing performance within the computationally intensive context of open quantum systems.
 * Regular Updates: Stay current with the latest advancements and improvements.
+
+
+## What's new
+
+**July 2024**
+
+* Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
+* Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
+* Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
+
 
 ## Getting started 
 

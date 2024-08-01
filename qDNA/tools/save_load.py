@@ -6,17 +6,17 @@ import pathlib
 import logging
 import pickle
 
-ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent)
+ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    filename=os.path.join(ROOT_DIR, "data", "logging.log"),
+    filename=os.path.join(ROOT_DIR, "qDNA", "data", "logging.log"),
     encoding="utf-8",
     level=logging.INFO,
 )
 
-filepath = os.path.join(ROOT_DIR, "config.yaml")
+filepath = os.path.join(ROOT_DIR, "qDNA", "config.yaml")
 with open(filepath, "r") as file:
     config = yaml.safe_load(file)
 verbose = config["verbose"]
@@ -28,7 +28,7 @@ def my_save(
     data,
     metadata,
     filename,
-    directory=os.path.join(ROOT_DIR, "data"),
+    directory=os.path.join(ROOT_DIR, "qDNA", "data"),
     save_excel=False,
     version_index: bool = True,
 ):
@@ -67,7 +67,7 @@ def my_save(
         df.to_excel("data.xlsx", index=False)
 
 
-def my_load(filename, load_metadata=False, directory=os.path.join(ROOT_DIR, "data")):
+def my_load(filename, load_metadata=False, directory=os.path.join(ROOT_DIR, "qDNA", "data")):
     """
     Loads the data and the metadata (if wanted) from a json file.
 
@@ -104,7 +104,7 @@ def convert_pickle_to_json(filepath):
 # ----------------------------------------- load configuration file with defualt values --------------------------
 
 
-def get_config(filename="config", directory=ROOT_DIR):
+def get_config(filename="config", directory=os.path.join(ROOT_DIR, "qDNA")):
     """
     Load data stored in a .yaml configuration file (e.g., global variables).
     """
@@ -121,7 +121,7 @@ def get_config(filename="config", directory=ROOT_DIR):
 def save_figure(
     fig,
     filename: str,
-    directory: str = os.path.join(ROOT_DIR, "data", "figures"),
+    directory: str = os.path.join(ROOT_DIR, "qDNA", "data", "figures"),
     format: str = "pdf",
 ):
     """

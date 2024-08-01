@@ -17,7 +17,7 @@ __all__ = [
 def save_tb_params(
     tb_param_dict,
     info_dict,
-    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
     notes=None,
 ):
     """
@@ -59,7 +59,7 @@ def save_tb_params(
 
 def load_tb_params(
     info_dict,
-    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
     load_metadata=False,
 ):
     """
@@ -97,7 +97,7 @@ def wrap_save_tb_params(
     particle,
     tb_model_name,
     unit,
-    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
     notes=None,
 ):
     """
@@ -133,7 +133,7 @@ def wrap_load_tb_params(
     source,
     particle,
     tb_model_name,
-    directory=os.path.join(ROOT_DIR, "data", "raw", "tb_params"),
+    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
     load_metadata=False,
 ):
     """

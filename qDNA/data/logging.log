@@ -5363,3 +5363,8 @@ on
 2024-07-31 17:39:09,244 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_WM.json
 2024-07-31 17:40:06,856 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
 2024-07-31 17:40:06,856 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-08-01 14:48:37,500 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-08-01 14:48:37,500 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-08-01 14:48:40,338 - qDNA.tools.save_load - INFO - Data saved as C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\test_params\Herb2024_relations_between_persons.json
+2024-08-01 14:48:40,338 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\test_params\Herb2024_relations_between_persons.json
+2024-08-01 14:48:42,442 - qDNA.tools.save_load - INFO - Figure saved as C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\figures\test_plots\test_fourier_version_0.pdf
