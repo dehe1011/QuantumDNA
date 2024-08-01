@@ -142,12 +142,12 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 
 * **Plot Generation:** Create plots effortlessly by submitting your parameters through the GUI.
 
-![](docs/figures/user_interface_figures/plot_1_light.png)
+![](docs/figures/user_interface_figures/plot_1_light.png){width=50%}
 > _Plot obtained after pressing the submit button on the menu (see image above)._
 
 * **Calculation Display:** Perform calculations, such as exciton lifetime and average charge separation, and view the results directly within the interface.
 
-![](docs/figures/user_interface_figures/menu_2_light.png){width=70%}
+![](docs/figures/user_interface_figures/menu_2_light.png)
 > _Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right._
 
 The GUI streamlines the process of working with `qDNA`, making it accessible even to those who may not be familiar with coding. Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.

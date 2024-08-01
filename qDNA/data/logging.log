@@ -5384,3 +5384,5 @@ on
 2024-08-01 18:03:20,210 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
 2024-08-01 18:05:08,055 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
 2024-08-01 18:05:08,056 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-08-01 18:09:22,174 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-08-01 18:09:22,174 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
