@@ -58,7 +58,7 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 **July 2024**
 
 * Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
-* Added a Jupyter Notebook ```QuantumDNA/docs/tutorials/3_Paper.ipynb``` that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
+* Added a Jupyter Notebook [`0_Paper`](docs/tutorials/0_Paper.ipynb) that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
 * Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
 
 
@@ -105,17 +105,17 @@ The documentation for the [latest release](https://quantumdna.readthedocs.io/en/
 
 The code contains some tutorials and demonstrations to better understand and explore the functionalities. 
 
-In the [`docs/tutorials`](docs/tutorials) folder you can find the notebook **0_Paper.ipynb** that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
+In the [`docs/tutorials`](docs/tutorials) folder you can find the notebook [`0_Paper`](docs/tutorials/0_Paper.ipynb) that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 
 Additionally, the `QuantumDNA/docs/tutorials` folder contains the following tutorials:
 
 | Tutorial Name                                                                                  | Description                                                          |
 |------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| [**1_TB_Models**](docs/tutorials/1_TB_Models.ipynb)                                        | Tutorials on predefined and custom tight-binding models.             |
-| [**2_Data_Visualization**](docs/tutorials/2_Data_Visualization.ipynb)                    | Tutorial on the predefined plotting routines.                        |
-| [**3_DNA_environment**](docs/tutorials/3_DNA_environment.ipynb)                          | Tutorial on different ways to treat DNA relaxation and the DNA environment. |
-| [**4_Parallelized_Calculations**](docs/tutorials/4_Parallelized_Calculations.ipynb)      | Tutorial on how to perform parallelized calculations for several properties. |
-| [**Exploration_Notebook**](docs/tutorials/Exploration_Notebook.ipynb)                    | A place to test the functionality of individual functions isolated from the rest of the code. |
+| [`1_TB_Models`](docs/tutorials/1_TB_Models.ipynb)                                        | Tutorials on predefined and custom tight-binding models.             |
+| [`2_Data_Visualization`](docs/tutorials/2_Data_Visualization.ipynb)                    | Tutorial on the predefined plotting routines.                        |
+| [`3_DNA_environment`](docs/tutorials/3_DNA_environment.ipynb)                          | Tutorial on different ways to treat DNA relaxation and the DNA environment. |
+| [`4_Parallelized_Calculations`](docs/tutorials/4_Parallelized_Calculations.ipynb)      | Tutorial on how to perform parallelized calculations for several properties. |
+| [`Exploration_Notebook`](docs/tutorials/Exploration_Notebook.ipynb)                    | A place to test the functionality of individual functions isolated from the rest of the code. |
 
 
 These tutorials provide hands-on examples and explanations to help you effectively use the `qDNA` package.
@@ -138,23 +138,28 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 * **Menu Window:** Access various functionalities from a centralized menu.
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/menu_1_light.png">
+    <img src="docs/figures/user_interface_figures/menu_1_light.png" alt="Screenshot of the menu of the user interface.">
 </p>
-> _Screenshot of the menu of the user interface._
+<blockquote><em>Screenshot of the menu of the user interface.</em></blockquote>
 
-* **Plot Generation:** Create plots effortlessly by submitting your parameters through the GUI.
+<ul>
+    <li><strong>Plot Generation:</strong> Create plots effortlessly by submitting your parameters through the GUI.</li>
+</ul>
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/plot_1_light.png" width=60%>
+    <img src="docs/figures/user_interface_figures/plot_1_light.png" width="60%" alt="Plot obtained after pressing the submit button on the menu.">
 </p>
-> _Plot obtained after pressing the submit button on the menu (see image above)._
+<blockquote><em>Plot obtained after pressing the submit button on the menu (see image above).</em></blockquote>
 
-* **Calculation Display:** Perform calculations, such as exciton lifetime and average charge separation, and view the results directly within the interface.
+<ul>
+    <li><strong>Calculation Display:</strong> Perform calculations, such as exciton lifetime and average charge separation, and view the results directly within the interface.</li>
+</ul>
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/menu_2_light.png">
+    <img src="docs/figures/user_interface_figures/menu_2_light.png" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
 </p>
-> _Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right._
+<blockquote><em>Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.</em></blockquote>
+
 
 The GUI streamlines the process of working with `qDNA`, making it accessible even to those who may not be familiar with coding. Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.
 
