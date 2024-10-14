@@ -3,14 +3,16 @@ Module for solving master equations using the ME_Solver class.
 """
 
 from itertools import permutations
+
 import numpy as np
 import qutip as q
 
-from qDNA.tools import get_config, check_me_kwargs
-from .reduced_dm import get_reduced_dm
 from qDNA import DNA_Seq
-from qDNA.model import TB_Ham
-from qDNA.environment import Lindblad_Diss
+from qDNA.environment import Lindblad_Diss, get_eh_observable
+from qDNA.model import TB_Ham, add_groundstate
+from qDNA.tools import check_me_kwargs, get_config
+
+from .reduced_dm import get_reduced_dm
 
 # Shortcuts
 # me: master equation
@@ -189,12 +191,11 @@ class ME_Solver:
         Resets calculated results (for example after parameters were changed).
         """
         self.result = []
-        if self.tb_ham.description == "2P":
-            self.groundstate_pop = {}
-            self.pop = {}
-            self.coh = {}
-            for particle in self.tb_ham.particles:
-                vars(self)["result_" + particle] = []
+        self.groundstate_pop = {}
+        self.pop = {}
+        self.coh = {}
+        for particle in self.tb_ham.particles:
+            vars(self)["result_" + particle] = []
 
     def get_init_matrix(self):
         """
@@ -205,13 +206,24 @@ class ME_Solver:
         q.Qobj
             The initial density matrix.
         """
-        if self.tb_ham.description == "2P":
+        if self.me_kwargs["deloc_init_state"]:
+            tb_basis = self.tb_ham.tb_basis
+            init_states = [
+                get_eh_observable(tb_basis, "exciton", state, state)
+                for state in tb_basis
+            ]
+            if self.tb_ham.relaxation:
+                init_states = [
+                    add_groundstate(init_state) for init_state in init_states
+                ]
+            init_state = 1 / len(tb_basis) * q.Qobj(np.sum(init_states, axis=0))
+        elif self.tb_ham.description == "2P":
             init_state_idx = self.tb_ham.eh_basis.index(self.init_state)
             if self.tb_ham.relaxation:
                 init_state = q.fock_dm(self.tb_ham.matrix_dim, init_state_idx + 1)
             else:
                 init_state = q.fock_dm(self.tb_ham.matrix_dim, init_state_idx)
-        if self.tb_ham.description == "1P":
+        elif self.tb_ham.description == "1P":
             init_state_idx = self.tb_ham.tb_basis.index(self.init_state)
             init_state = q.fock_dm(self.tb_ham.matrix_dim, init_state_idx)
         return init_state
@@ -271,20 +283,27 @@ class ME_Solver:
         Dict[str, float]
             The population of states.
 
-        Raises
-        ------
-        AssertionError
-            If the Hamiltonian description is not '2P'.
         """
-        assert self.tb_ham.description == "2P", "only available for 2P description"
         if not self.pop:
+            if self.tb_ham.description == "2P":
+                e_ops = self.lindblad_diss.pop_ops
+            if self.tb_ham.description == "1P":
+                keys = [
+                    self.tb_ham.particles[0] + "_" + tb_site
+                    for tb_site in self.tb_ham.tb_basis
+                ]
+                values = [
+                    q.fock_dm(self.tb_ham.matrix_dim, i)
+                    for i in range(self.tb_ham.matrix_dim)
+                ]
+                e_ops = dict(zip(keys, values))
             ham_matrix = q.Qobj(self.tb_ham.matrix)
             result = q.mesolve(
                 ham_matrix,
                 self.init_matrix,
                 self.times,
                 self.lindblad_diss.c_ops,
-                self.lindblad_diss.pop_ops,
+                e_ops,
                 options=self.options,
             )
             for particle in self.tb_ham.particles:
@@ -303,20 +322,28 @@ class ME_Solver:
         Dict[str, float]
             The coherence of states.
 
-        Raises
-        ------
-        AssertionError
-            If the Hamiltonian description is not '2P'.
         """
-        assert self.tb_ham.description == "2P", "only available for 2P description"
         if not self.coh:
+            if self.tb_ham.description == "2P":
+                e_ops = self.lindblad_diss.coh_ops
+            if self.tb_ham.description == "1P":
+                keys = [
+                    self.tb_ham.particles[0] + "_" + tb_site1 + "_" + tb_site2
+                    for tb_site1, tb_site2 in permutations(self.tb_ham.tb_basis, 2)
+                ]
+                values = [
+                    q.basis(self.tb_ham.matrix_dim, i)
+                    * q.basis(self.tb_ham.matrix_dim, j).dag()
+                    for i, j in permutations(self.tb_ham.matrix_dim, 2)
+                ]
+                e_ops = dict(zip(keys, values))
             ham_matrix = q.Qobj(self.tb_ham.matrix)
             result = q.mesolve(
                 ham_matrix,
                 self.init_matrix,
                 self.times,
                 self.lindblad_diss.c_ops,
-                self.lindblad_diss.coh_ops,
+                e_ops,
                 options=self.options,
             )
             for particle in self.tb_ham.particles:
@@ -325,6 +352,7 @@ class ME_Solver:
                     self.coh[particle] += abs(
                         result.expect[particle + "_" + tb_site1 + "_" + tb_site2]
                     )
+
         return self.coh
 
     def get_groundstate_pop(self):

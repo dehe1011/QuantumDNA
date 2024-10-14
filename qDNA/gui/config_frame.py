@@ -21,18 +21,23 @@ class ConfigFrame(ctk.CTkFrame):
         )
         self.open_github_button.grid(row=8, column=0, pady=10, padx=10)
 
+        self.open_fasta_window_button = ctk.CTkButton(
+            self, text="FASTA Input", command=master.open_fasta_window
+        )
+        self.open_fasta_window_button.grid(row=9, column=0, pady=10, padx=10)
+
         self.open_custom_window_button = ctk.CTkButton(
             self, text="Customize", command=master.open_custom_window
         )
-        self.open_custom_window_button.grid(row=9, column=0, pady=10, padx=10)
+        self.open_custom_window_button.grid(row=10, column=0, pady=10, padx=10)
 
         self.appearance_mode_label = ctk.CTkLabel(
             self, text="Appearance Mode:", anchor="w"
         )
-        self.appearance_mode_label.grid(row=10, column=0, pady=10, padx=10)
+        self.appearance_mode_label.grid(row=11, column=0, pady=10, padx=10)
 
         self.appearance_mode_combo = ctk.CTkComboBox(
             self, values=["Light", "Dark", "System"], command=ctk.set_appearance_mode
         )
-        self.appearance_mode_combo.grid(row=11, column=0, pady=10, padx=10)
+        self.appearance_mode_combo.grid(row=12, column=0, pady=10, padx=10)
         self.appearance_mode_combo.set("System")

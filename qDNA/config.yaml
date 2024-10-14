@@ -16,7 +16,7 @@ ham_kwargs_default:
     source: 'Hawke2010'
     description: '2P'
     particles: ['electron','hole','exciton']
-    unit: 'rad/ps' 
+    unit: 'rad/ps'
     interaction_param: 0. # in rad/ps
     relaxation: True
     nn_cutoff: True
@@ -36,10 +36,11 @@ diss_kwargs_default:
     spectral_density: 'debye'
     exponent: 1.
 
-me_kwargs_default: 
+me_kwargs_default:
     t_steps: 500.
     t_end: 3. # ps
     t_unit: 'ps'
     init_e_state: '(0, 0)'
     init_h_state: '(0, 0)'
+    deloc_init_state: False
     solver_method: 'adams'

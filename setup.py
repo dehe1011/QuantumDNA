@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("configs/requirements.txt") as f:
     required = f.read().splitlines()
@@ -11,11 +11,13 @@ with open("configs/doc-requirements.txt") as f:
 
 extras = dev + docs
 
+
 def read_version():
-    with open('qDNA/__init__.py') as f:
+    with open("qDNA/__init__.py") as f:
         for line in f:
-            if line.startswith('__version__'):
-                return line.split('=')[1].strip().strip("'")
+            if line.startswith("__version__"):
+                return line.split("=")[1].strip().strip("'")
+
 
 setup(
     name="qDNA",
@@ -35,5 +37,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=required,
-    extras_require={'dev': dev, 'docs': docs, 'all': extras},
+    extras_require={"dev": dev, "docs": docs, "all": extras},
 )

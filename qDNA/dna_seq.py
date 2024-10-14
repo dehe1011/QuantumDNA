@@ -1,9 +1,9 @@
 """
-Module for generating DNA sequences. 
+Module for generating DNA sequences.
 """
 
-from itertools import product
 import re
+from itertools import product
 
 from qDNA.tools import get_config
 
@@ -105,9 +105,9 @@ class DNA_Seq:
         The generated DNA sequence including backbone if applicable.
     """
 
-    def __init__(self, upper_strand, tb_model_name, methylated=True):
+    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=""):
         self.upper_strand = upper_strand
-        self.lower_strand = ""
+        self.lower_strand = lower_strand
         self.methylated = methylated
         self.tb_model_name = tb_model_name
 
@@ -151,9 +151,11 @@ class DNA_Seq:
         Creates the DNA sequence based on the properties of the model.
         """
         if self.double_stranded:
-            self.lower_strand = "".join(
-                self.complementary_base_dict[dna_base] for dna_base in self.upper_strand
-            )
+            if not self.lower_strand:
+                self.lower_strand = "".join(
+                    self.complementary_base_dict[dna_base]
+                    for dna_base in self.upper_strand
+                )
             if self.methylated:
                 self._add_methylation()
         if self.backbone:

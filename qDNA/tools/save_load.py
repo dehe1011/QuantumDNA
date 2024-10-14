@@ -1,10 +1,11 @@
-import pandas as pd
 import json
-import yaml
+import logging
 import os
 import pathlib
-import logging
 import pickle
+
+import pandas as pd
+import yaml
 
 ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
 
@@ -67,7 +68,9 @@ def my_save(
         df.to_excel("data.xlsx", index=False)
 
 
-def my_load(filename, load_metadata=False, directory=os.path.join(ROOT_DIR, "qDNA", "data")):
+def my_load(
+    filename, load_metadata=False, directory=os.path.join(ROOT_DIR, "qDNA", "data")
+):
     """
     Loads the data and the metadata (if wanted) from a json file.
 

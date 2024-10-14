@@ -2,8 +2,8 @@
 This module provides functions to generate configurations for different tight-binding models.
 """
 
-from qDNA.tools import get_config
 from qDNA import TB_MODELS_PROPS
+from qDNA.tools import get_config
 
 __all__ = ["get_tb_config", "TB_MODELS_PROPS"]
 
@@ -143,7 +143,7 @@ def get_f_config(num_sites_per_strand, strand1=0, strand2=2):
         ("h", str((strand2 - 1, tb_site)), str((strand2, tb_site)))
         for tb_site in range(num_sites_per_strand)
     ]
-    return h_list1 + h_list2
+    return e_list + h_list1 + h_list2
 
 
 def get_fwm_config(num_sites_per_strand):

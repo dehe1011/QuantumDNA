@@ -85,10 +85,10 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
                 label=particle,
                 color=COLORS_PARTICLES[particle],
             )
-    ax.set_ylabel("Population")
-    ax.set_xlabel("Time in " + me_solver.t_unit)
     ax.set_ylim(0, 1.02)
     if add_legend:
+        ax.set_ylabel("Population")
+        ax.set_xlabel("Time in " + me_solver.t_unit)
         ax.legend()
 
 

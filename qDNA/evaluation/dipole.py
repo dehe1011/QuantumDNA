@@ -2,18 +2,26 @@
 This module provides functions to calculate the average charge separation (dipole moment) for quantum DNA models.
 """
 
-import os
+# import sys
 import multiprocessing
+import os
 from functools import partial
+
 import numpy as np
 from tqdm import tqdm
 
-from qDNA.tools import my_save, my_load, ROOT_DIR
-from qDNA.model import get_eh_distance
 from qDNA.dynamics import get_me_solver
+from qDNA.model import get_eh_distance
+from qDNA.tools import ROOT_DIR, my_load, my_save
 from qDNA.utils import convert_to_debye
 
-__all__ = ["calc_dipole", "calc_dipole_moment", "calc_dipole_wrapper", "calc_dipole_dict", "calc_dipole_moment_dict"]
+__all__ = [
+    "calc_dipole",
+    "calc_dipole_moment",
+    "calc_dipole_wrapper",
+    "calc_dipole_dict",
+    "calc_dipole_moment_dict",
+]
 
 # -------------------------------- Average Charge Separation/ Dipole Moment ------------------------------------------
 
@@ -42,10 +50,11 @@ def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):
     me_solver = get_me_solver(upper_strand, tb_model_name, **kwargs)
     distance_list = 3.4 * get_eh_distance(me_solver.tb_ham.eh_basis)
     distances = [distance_list @ dm.diag()[1:] for dm in me_solver.get_result()]
-    if average: 
+    if average:
         return np.mean(distances).real
     else:
         return distances
+
 
 def calc_dipole_moment(upper_strand, tb_model_name, average=True, **kwargs):
     """
@@ -67,7 +76,9 @@ def calc_dipole_moment(upper_strand, tb_model_name, average=True, **kwargs):
     float or List[float]
         The average dipole moment.
     """
-    return convert_to_debye(calc_dipole(upper_strand, tb_model_name, average=average, **kwargs))
+    return convert_to_debye(
+        calc_dipole(upper_strand, tb_model_name, average=average, **kwargs)
+    )
 
 
 def calc_dipole_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
@@ -117,7 +128,7 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
     try:
         lifetime_dict, kwargs = my_load(
             "lifetime_" + filename,
-            directory=os.path.join(ROOT_DIR, "data", "processed"),
+            directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
             load_metadata=True,
         )
     except:
@@ -135,7 +146,9 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
     with multiprocessing.Pool(processes=num_cpu) as pool:
         dipole_list = list(
             tqdm(
-                pool.imap(partial_calc_dipole, upper_strands), total=len(upper_strands)
+                pool.imap(partial_calc_dipole, upper_strands),
+                total=len(upper_strands),
+                # file=sys.stdout,
             )
         )
 
@@ -144,10 +157,11 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
         dipole_dict,
         kwargs,
         "dipole_" + filename,
-        directory=os.path.join(ROOT_DIR, "data", "processed"),
+        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
         version_index=False,
     )
     return dipole_dict
+
 
 def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
     """
@@ -167,10 +181,10 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
     Dict[str, float]
         Dictionary containing the dipole moment for each upper strand.
     """
-    try: 
+    try:
         dipole_dict, kwargs = my_load(
             "dipole_" + filename,
-            directory=os.path.join(ROOT_DIR, "data", "processed"),
+            directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
             load_metadata=True,
         )
         upper_strands = list(dipole_dict.keys())
@@ -179,7 +193,7 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
         try:
             lifetime_dict, kwargs = my_load(
                 "lifetime_" + filename,
-                directory=os.path.join(ROOT_DIR, "data", "processed"),
+                directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
                 load_metadata=True,
             )
         except:
@@ -197,7 +211,9 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
         with multiprocessing.Pool(processes=num_cpu) as pool:
             dipole_list = list(
                 tqdm(
-                    pool.imap(partial_calc_dipole, upper_strands), total=len(upper_strands)
+                    pool.imap(partial_calc_dipole, upper_strands),
+                    total=len(upper_strands),
+                    # file=sys.stdout,
                 )
             )
 
@@ -207,8 +223,7 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
         dipole_moment_dict,
         kwargs,
         "dipole_moment_" + filename,
-        directory=os.path.join(ROOT_DIR, "data", "processed"),
+        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
         version_index=False,
     )
     return dipole_moment_dict
-

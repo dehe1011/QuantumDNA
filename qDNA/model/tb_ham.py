@@ -4,18 +4,20 @@ for DNA sequences, as well as utility functions for working with these Hamiltoni
 """
 
 from itertools import chain
+
 import numpy as np
 
 from qDNA import DNA_Seq
+from qDNA.tools import check_ham_kwargs, get_config
 from qDNA.utils import (
     calc_amplitudes,
     calc_average_pop,
     calc_frequencies,
-    get_conversion_dict,
     get_conversion,
+    get_conversion_dict,
 )
-from qDNA.tools import get_config, check_ham_kwargs
-from .tb_basis import get_eh_basis, get_particle_eh_states, get_eh_distance
+
+from .tb_basis import get_eh_basis, get_eh_distance, get_particle_eh_states
 from .tb_model import TB_Model
 from .tb_params import wrap_load_tb_params
 
@@ -383,6 +385,35 @@ class TB_Ham:
 
     def get_average_pop(self, init_state, end_state):
         return self.get_fourier(init_state, end_state, ["average_pop"])[2]
+
+    def get_backbone_pop(self, init_state):
+        """
+        Calculates the backbone population for Fishbone models.
+
+        Returns
+        -------
+        dict
+            A dictionary where the keys are particles and the values are the corresponding backbone populations.
+        """
+        assert (
+            self.tb_model.tb_model_name[0] == "F"
+        ), "Backbone population can only be calculated for Fishbone models"
+        upper_backbone_sites = [
+            f"(0, {site})" for site in range(self.tb_model.num_sites_per_strand)
+        ]
+        lower_backbone_sites = [
+            f"({self.tb_model.num_strands-1}, {site})"
+            for site in range(self.tb_model.num_sites_per_strand)
+        ]
+        backbone_sites = upper_backbone_sites + lower_backbone_sites
+
+        backbone_pop = dict(zip(self.particles, [0] * len(self.particles)))
+        for particle in self.particles:
+            for tb_site in backbone_sites:
+                backbone_pop[particle] += self.get_average_pop(init_state, tb_site)[
+                    particle
+                ]
+        return backbone_pop
 
 
 # ------------------------------------------------------------------------------------------------------------

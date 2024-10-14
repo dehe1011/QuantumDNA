@@ -2,21 +2,24 @@
 This module provides functions to calculate the estimated exciton lifetime for quantum DNA models.
 """
 
-import os
 import multiprocessing
+import os
+
+# import sys
+import time
 from functools import partial
+
 import numpy as np
 from tqdm import tqdm
 
-from qDNA.tools import my_save, timeit, ROOT_DIR
 from qDNA.dynamics import get_me_solver
+from qDNA.tools import ROOT_DIR, get_config, my_save
 
 __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
 # --------------------------------------- Estimated Exciton Lifetime ------------------------
 
 
-@timeit
 def calc_lifetime(upper_strand, tb_model_name, **kwargs):
     """
     Calculates the exciton lifetime in femtoseconds (fs).
@@ -35,6 +38,7 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
     float or str
         The exciton lifetime in femtoseconds, or a message indicating no relaxation in the given time.
     """
+    start_time = time.time()
     me_solver = get_me_solver(upper_strand, tb_model_name, **kwargs)
     gs_pop = me_solver.get_groundstate_pop()["groundstate"]
     try:
@@ -42,6 +46,9 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
         lifetime = me_solver.times[index]
         if me_solver.t_unit == "ps":
             lifetime *= 1000
+        end_time = time.time()
+        if get_config()["verbose"]:
+            print(f"Calculation time: {end_time-start_time}")
         return lifetime
     except StopIteration:
         return "no relaxation in the given time"
@@ -79,6 +86,7 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
             tqdm(
                 pool.imap(partial_calc_lifetime, upper_strands),
                 total=len(upper_strands),
+                # file=sys.stdout,
             )
         )
 
@@ -87,7 +95,7 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
         lifetime_dict,
         kwargs,
         "lifetime_" + filename,
-        directory=os.path.join(ROOT_DIR, "data", "processed"),
+        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
         save_excel=False,
         version_index=False,
     )

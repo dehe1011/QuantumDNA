@@ -1,25 +1,27 @@
-import sys
 import pathlib
+import sys
 
 ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
 if ROOT_DIR not in sys.path:
     del sys.path[0]
     sys.path.insert(0, ROOT_DIR)
 
-import customtkinter as ctk
 import webbrowser
 
-from qDNA import TB_Ham, DNA_Seq, TB_Model, Lindblad_Diss, ME_Solver
-from qDNA.tools import get_config
+import customtkinter as ctk
+
+from qDNA import DNA_Seq, Lindblad_Diss, ME_Solver, TB_Ham, TB_Model
 from qDNA.gui import (
-    CustomWindow,
-    InitialFrame,
     ConfigFrame,
+    CustomWindow,
+    FastaWindow,
+    InitialFrame,
     OptionsFrame,
-    ScrollableConsoleFrame,
     PlotOptionsFrame,
     PlottingWindow,
+    ScrollableConsoleFrame,
 )
+from qDNA.tools import get_config
 
 
 class qDNA_app(ctk.CTk):
@@ -69,6 +71,9 @@ class qDNA_app(ctk.CTk):
 
     def open_custom_window(self):
         self.custom_window = CustomWindow(self, self.configs)
+
+    def open_fasta_window(self):
+        self.fasta_window = FastaWindow(self)
 
     # ------------------------------------------
 

@@ -11,6 +11,7 @@ environment_long.yml
 test_script.py
 info.txt
 .coverage
+.pre-commit-config.yaml
 
 *.egg-info/
 dist/
@@ -22,5 +23,5 @@ data/processed/
 data/figures/
 data/logging.log
 
-.ipynb_checkpoints/
-__pycache__/
+__pycache__
+.ipynb_checkpoints

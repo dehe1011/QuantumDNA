@@ -1,6 +1,7 @@
 import sys
-import customtkinter as ctk
 from tkinter.scrolledtext import ScrolledText
+
+import customtkinter as ctk
 
 
 class RedirectText:
@@ -28,7 +29,7 @@ class ScrollableConsoleFrame(ctk.CTkFrame):
         self.console_output.grid(row=0, column=0, sticky="nsew", padx=(10, 0), pady=10)
 
         scrollbar = ctk.CTkScrollbar(self, command=self.console_output.yview)
-        scrollbar.grid(row=0, column=1, sticky="ns", padx=(0, 10), pady=10)
+        scrollbar.grid(row=0, column=1, sticky="nsew", padx=(0, 10), pady=10)
         self.console_output["yscrollcommand"] = scrollbar.set
 
         # Redirect stdout to the ScrolledText widget

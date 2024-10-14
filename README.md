@@ -15,10 +15,10 @@
         <img src="https://img.shields.io/badge/version-0.1.4-blue"
             alt="Release"></a>
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
-        <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main' 
+        <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main'
             alt='Coverage Status' /></a>
     <a href='https://github.com/dehe1011/QuantumDNA/actions/workflows/code-quality.yml'>
-        <img src='https://img.shields.io/github/actions/workflow/status/dehe1011/QuantumDNA/code-quality.yml?branch=main' 
+        <img src='https://img.shields.io/github/actions/workflow/status/dehe1011/QuantumDNA/code-quality.yml?branch=main'
             alt='GitHub Workflow Status' /></a>
     <a href='https://github.com/psf/black'>
         <img src='https://img.shields.io/badge/code%20style-black-000000.svg'
@@ -27,7 +27,7 @@
 
 ---
 
-# QuantumDNA   
+# QuantumDNA
 
 **Author: [Dennis Herb](https://github.com/dehe1011)**
 
@@ -57,12 +57,12 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 
 **July 2024**
 
-* Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky. 
+* Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky.
 * Added a Jupyter Notebook [`0_Paper`](docs/tutorials/0_Paper.ipynb) that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
-* Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs 
+* Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs
 
 
-## Getting started 
+## Getting started
 
 ### Quick Installation
 
@@ -76,7 +76,7 @@ To ensure compatibility and avoid conflicts with other packages, we recommend us
 
 ### Example Program
 
-To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example, you might find that in general more uniform sequences show higher values. Do you know the reason for this observation? 
+To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example, you might find that in general more uniform sequences show higher values. Do you know the reason for this observation?
 
 ```python
 
@@ -87,11 +87,11 @@ upper_strand = 'GCG'
 tb_model_name = 'ELM'
 kwargs = dict(unit='rad/ps', relax_rate=3, source='Hawke2010')
 
-# calculation 
+# calculation
 lifetime = calc_lifetime(upper_strand, tb_model_name, **kwargs)
 dipole = calc_dipole(upper_strand, tb_model_name, **kwargs)
 
-# output 
+# output
 print(f"Exciton lifetime {lifetime} fs")
 print(f"Average charge separation {dipole} A")
 ```
@@ -99,11 +99,11 @@ print(f"Average charge separation {dipole} A")
 
 ## Documentation
 
-The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. The [package website](https://dehe1011.github.io/QuantumDNA/) contains general information about the project and planned future developments. 
+The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. The [package website](https://dehe1011.github.io/QuantumDNA/) contains general information about the project and planned future developments.
 
 ### Tutorials
 
-The code contains some tutorials and demonstrations to better understand and explore the functionalities. 
+The code contains some tutorials and demonstrations to better understand and explore the functionalities.
 
 In the [`docs/tutorials`](docs/tutorials) folder you can find the notebook [`0_Paper`](docs/tutorials/0_Paper.ipynb) that contains and reproduces all the figures contained in [D. Herb, M. Rossini and J. Ankerhold, Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence.](https://arxiv.org/abs/2402.16892)
 

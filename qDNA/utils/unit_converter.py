@@ -3,14 +3,22 @@ Module for unit conversion utilities.
 """
 
 from itertools import permutations
+
 import numpy as np
 import scipy.constants as c
 
 from qDNA.tools import get_config
 
-__all__ = ["UNITS", "get_conversion", "get_all_conversions", "get_conversion_dict", "convert_to_debye"]
+__all__ = [
+    "UNITS",
+    "get_conversion",
+    "get_all_conversions",
+    "get_conversion_dict",
+    "convert_to_debye",
+]
 
 UNITS = get_config()["UNITS"]
+
 
 def convert_to_debye(charge_separation):
     """
@@ -24,7 +32,7 @@ def convert_to_debye(charge_separation):
     Returns
     -------
     float
-        The electrical dipole moment in Debye. 
+        The electrical dipole moment in Debye.
     """
     dipole_moment = c.e * 1e-10 * charge_separation
     return 100 * c.c * dipole_moment / 1e-19
