@@ -1,8 +1,9 @@
 __version__ = "0.1.4"
 
 from .tools import *
-from .utils import *
 from .dna_seq import *
+
+from .utils import *
 from .model import *
 from .environment import *
 from .dynamics import *
