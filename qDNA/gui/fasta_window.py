@@ -13,7 +13,7 @@ from qDNA import (
     calc_exciton_transfer_dict,
     calc_lifetime_dict,
 )
-from qDNA.gui import ScrollableConsoleFrame
+from .scrollable_console_frame import ScrollableConsoleFrame
 
 
 def format_time(seconds):
