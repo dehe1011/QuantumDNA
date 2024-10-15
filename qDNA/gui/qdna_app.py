@@ -11,17 +11,16 @@ import webbrowser
 import customtkinter as ctk
 
 from qDNA import DNA_Seq, Lindblad_Diss, ME_Solver, TB_Ham, TB_Model
-from qDNA.gui import (
-    ConfigFrame,
-    CustomWindow,
-    FastaWindow,
-    InitialFrame,
-    OptionsFrame,
-    PlotOptionsFrame,
-    PlottingWindow,
-    ScrollableConsoleFrame,
-)
 from qDNA.tools import get_config
+
+from .initial_frame import InitialFrame
+from .config_frame import ConfigFrame
+from .custom_window import CustomWindow
+from .options_frame import OptionsFrame
+from .plot_options_frame import PlotOptionsFrame
+from .plotting_window import PlottingWindow
+from .scrollable_console_frame import ScrollableConsoleFrame
+from .fasta_window import FastaWindow
 
 
 class qDNA_app(ctk.CTk):
