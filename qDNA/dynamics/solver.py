@@ -408,7 +408,7 @@ def get_me_solver(upper_strand, tb_model_name, **kwargs):
     ME_Solver
         An instance of ME_Solver.
     """
-    dna_seq = DNA_Seq(upper_strand, tb_model_name)
+    dna_seq = DNA_Seq(upper_strand, tb_model_name, lower_strand=kwargs["lower_strand"])
     tb_ham = TB_Ham(dna_seq, **kwargs)
     lindblad_diss = Lindblad_Diss(tb_ham, **kwargs)
     me_solver = ME_Solver(tb_ham, lindblad_diss, **kwargs)
