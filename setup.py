@@ -16,7 +16,7 @@ def read_version():
     with open("qDNA/__init__.py") as f:
         for line in f:
             if line.startswith("__version__"):
-                return line.split("=")[1].strip().strip("'")
+                return line.split("=")[1].strip().strip('"')
 
 
 setup(

@@ -5,13 +5,11 @@ docs/my_notebooks/
 docs/figures/my_figures/
 .vscode/
 
-development.ipynb
-development_2.ipynb
+development/
 environment_long.yml
-test_script.py
-info.txt
 .coverage
 .pre-commit-config.yaml
+scripts/info.txt
 
 *.egg-info/
 dist/
