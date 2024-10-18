@@ -1,5 +1,0 @@
-black 
-pytest
-pylint
-coverage
-coveralls

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qDNA.environment.lindblad &mdash; QuantumDNA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../index.html" class="icon icon-home">
+            QuantumDNA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuantumDNA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qDNA.environment.lindblad</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for qDNA.environment.lindblad</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides classes and functions to construct Lindblad dissipators for master equations,</span>
+<span class="sd">specifically for quantum DNA models.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span><span class="p">,</span> <span class="n">permutations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">qutip</span> <span class="k">as</span> <span class="nn">q</span>
+
+<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">check_diss_kwargs</span>
+<span class="kn">from</span> <span class="nn">qDNA.model</span> <span class="kn">import</span> <span class="n">TB_Ham</span><span class="p">,</span> <span class="n">add_groundstate</span><span class="p">,</span> <span class="n">global_to_local</span>
+<span class="kn">from</span> <span class="nn">qDNA.utils</span> <span class="kn">import</span> <span class="n">get_conversion</span>
+<span class="kn">from</span> <span class="nn">.lindblad_rates</span> <span class="kn">import</span> <span class="n">rate_constant_redfield</span>
+<span class="kn">from</span> <span class="nn">.observables</span> <span class="kn">import</span> <span class="n">get_pop_particle</span><span class="p">,</span> <span class="n">get_eh_observable</span>
+
+<span class="c1"># Shortcuts</span>
+<span class="c1"># diss: dissipator</span>
+<span class="c1"># loc: local</span>
+<span class="c1"># glob: global</span>
+<span class="c1"># deph: dephasing</span>
+<span class="c1"># therm: thermalizing</span>
+<span class="c1"># reorg: reorganization</span>
+<span class="c1"># eigv: eigenvalue</span>
+<span class="c1"># eigs: eigensystem</span>
+<span class="c1"># pop: population</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Lindblad_Diss&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_relax_op&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_glob_therm_op&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_glob_therm_ops&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_loc_therm_op&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_loc_therm_ops&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_loc_deph_ops&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_glob_deph_ops&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_loc_deph_p_ops&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_glob_deph_p_ops&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># -------------------------------------- Lindblad operators -------------------------------------</span>
+
+
+<div class="viewcode-block" id="Lindblad_Diss"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.environment.Lindblad_Diss">[docs]</a><span class="k">class</span> <span class="nc">Lindblad_Diss</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the operators of the form :math:`\sqrt{\\gamma} a` that are used in the Lindblad dissipator of the master equation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    diss_kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for the dissipator.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    num_sites : int</span>
+<span class="sd">        Number of sites in the tight-binding model.</span>
+<span class="sd">    loc_deph_rate : float</span>
+<span class="sd">        Local dephasing rate.</span>
+<span class="sd">    glob_deph_rate : float</span>
+<span class="sd">        Global dephasing rate.</span>
+<span class="sd">    uniform_relaxation : bool</span>
+<span class="sd">        Flag for uniform relaxation.</span>
+<span class="sd">    relax_rates : dict</span>
+<span class="sd">        Relaxation rates for each DNA base.</span>
+<span class="sd">    loc_therm : bool</span>
+<span class="sd">        Flag for local thermalization.</span>
+<span class="sd">    glob_therm : bool</span>
+<span class="sd">        Flag for global thermalization.</span>
+<span class="sd">    deph_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+<span class="sd">    cutoff_freq : float</span>
+<span class="sd">        Cutoff frequency.</span>
+<span class="sd">    reorg_energy : float</span>
+<span class="sd">        Reorganization energy.</span>
+<span class="sd">    temperature : float</span>
+<span class="sd">        Temperature in Kelvin.</span>
+<span class="sd">    spectral_density : str</span>
+<span class="sd">        Type of spectral density (&#39;debye&#39; or &#39;ohmic&#39;).</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">        Exponent for the Ohmic spectral density.</span>
+<span class="sd">    relax_ops : list</span>
+<span class="sd">        List of relaxation operators.</span>
+<span class="sd">    deph_ops : list</span>
+<span class="sd">        List of dephasing operators.</span>
+<span class="sd">    therm_ops : list</span>
+<span class="sd">        List of thermalizing operators.</span>
+<span class="sd">    c_ops : list</span>
+<span class="sd">        List of collapse operators.</span>
+<span class="sd">    num_c_ops : int</span>
+<span class="sd">        Number of collapse operators.</span>
+<span class="sd">    e_ops : tuple</span>
+<span class="sd">        Tuple containing population, coherence, and ground state population operators.</span>
+<span class="sd">    pop_ops : dict</span>
+<span class="sd">        Population operators.</span>
+<span class="sd">    coh_ops : dict</span>
+<span class="sd">        Coherence operators.</span>
+<span class="sd">    groundstate_pop_ops : dict</span>
+<span class="sd">        Ground state population operators.</span>
+<span class="sd">    unit : str</span>
+<span class="sd">        Unit of the operators.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">,</span> <span class="o">**</span><span class="n">diss_kwargs</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">tb_ham</span><span class="p">,</span> <span class="n">TB_Ham</span>
+        <span class="p">),</span> <span class="s2">&quot;tb_ham must be an instance of the class TB_Ham&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;diss_kwargs_default&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">diss_kwargs</span><span class="p">)</span>
+        <span class="n">check_diss_kwargs</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully checked all inputs for the Lindblad_Diss instance.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span> <span class="o">=</span> <span class="n">tb_ham</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sites</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_deph_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;loc_deph_rate&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">glob_deph_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;glob_deph_rate&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uniform_relaxation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uniform_relaxation&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniform_relaxation</span><span class="p">:</span>
+            <span class="n">DNA_BASES</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;DNA_BASES&quot;</span><span class="p">]</span>
+            <span class="n">DNA_SITES</span> <span class="o">=</span> <span class="n">DNA_BASES</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span>
+            <span class="n">relax_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="p">[</span><span class="s2">&quot;relax_rate&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relax_rates</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">DNA_SITES</span><span class="p">,</span> <span class="p">[</span><span class="n">relax_rate</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">DNA_SITES</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relax_rates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relax_rates&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_therm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;loc_therm&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">glob_therm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;glob_therm&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deph_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;deph_rate&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cutoff_freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cutoff_freq&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorg_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reorg_energy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spectral_density</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spectral_density&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exponent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exponent&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relax_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_relax_ops</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deph_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_deph_ops</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">therm_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_therm_ops</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relax_ops</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">deph_ops</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">therm_ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_e_ops</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coh_ops</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groundstate_pop_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_ops</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">unit</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully initialized the Lindblad_Diss instance.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__vars__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the instance variables as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the Lindblad_Diss instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Lindblad_Diss(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diss_kwargs</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares two Lindblad_Diss instances for equality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="c1"># --------------------------------------------------------------------</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">c_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span>
+
+    <span class="nd">@c_ops</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">c_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_c_ops</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_c_ops</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;new_c_ops must be of type list&quot;</span>
+        <span class="n">old_c_ops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_c_ops</span> <span class="o">=</span> <span class="n">new_c_ops</span>
+        <span class="k">if</span> <span class="n">new_c_ops</span> <span class="o">!=</span> <span class="n">old_c_ops</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_c_ops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span>
+
+    <span class="nd">@unit</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_unit</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;new_unit must be of type str&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">new_unit</span> <span class="ow">in</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">]</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;new_unit must be in </span><span class="si">{</span><span class="n">get_config</span><span class="p">()[</span><span class="s1">&#39;UNITS&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">old_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unit</span> <span class="o">=</span> <span class="n">new_unit</span>
+        <span class="k">if</span> <span class="n">new_unit</span> <span class="o">!=</span> <span class="n">old_unit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">c_op</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">get_conversion</span><span class="p">(</span><span class="n">old_unit</span><span class="p">,</span> <span class="n">new_unit</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">c_op</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_ops</span>
+            <span class="p">]</span>
+
+    <span class="c1"># -------------------------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">_get_relax_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">relax_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">relax_rates</span><span class="p">:</span>
+            <span class="n">relax_ops</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">tb_site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">:</span>
+                <span class="n">relax_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relax_rates</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span><span class="p">[</span><span class="n">tb_site</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">relax_rate</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">relax_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">relax_rate</span><span class="p">)</span>
+                        <span class="o">*</span> <span class="n">get_relax_op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">tb_site</span><span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="n">relax_ops</span>
+
+    <span class="k">def</span> <span class="nf">_get_deph_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
+        <span class="n">deph_p_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_deph_rate</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+                <span class="n">loc_deph_ops</span> <span class="o">=</span> <span class="n">get_loc_deph_ops</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_deph_rate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span>
+                <span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">loc_deph_ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sites</span>
+                <span class="n">deph_p_ops</span> <span class="o">=</span> <span class="n">loc_deph_ops</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+                <span class="n">loc_deph_p_ops</span> <span class="o">=</span> <span class="n">get_loc_deph_p_ops</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_deph_rate</span>
+                <span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">loc_deph_p_ops</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sites</span>
+                <span class="n">deph_p_ops</span> <span class="o">=</span> <span class="n">loc_deph_p_ops</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">glob_deph_rate</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+                <span class="n">glob_deph_ops</span> <span class="o">=</span> <span class="n">get_glob_deph_ops</span><span class="p">(</span>
+                    <span class="n">eigs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">glob_deph_rate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span>
+                <span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob_deph_ops</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sites</span><span class="o">**</span><span class="mi">2</span>
+                <span class="n">deph_p_ops</span> <span class="o">=</span> <span class="n">glob_deph_ops</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+                <span class="n">glob_deph_p_ops</span> <span class="o">=</span> <span class="n">get_glob_deph_p_ops</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">glob_deph_rate</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob_deph_p_ops</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sites</span>
+                <span class="n">deph_p_ops</span> <span class="o">=</span> <span class="n">glob_deph_p_ops</span>
+        <span class="k">return</span> <span class="n">deph_p_ops</span>
+
+    <span class="k">def</span> <span class="nf">_get_therm_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">eigv</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
+        <span class="n">eigv</span> <span class="o">*=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">unit</span><span class="p">,</span> <span class="s2">&quot;rad/ps&quot;</span><span class="p">)</span>
+        <span class="n">therm_ops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_therm</span><span class="p">:</span>
+            <span class="n">loc_therm_ops</span> <span class="o">=</span> <span class="n">get_loc_therm_ops</span><span class="p">(</span>
+                <span class="n">eigv</span><span class="p">,</span>
+                <span class="n">eigs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span><span class="p">,</span>
+                <span class="n">deph_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">deph_rate</span><span class="p">,</span>
+                <span class="n">cutoff_freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff_freq</span><span class="p">,</span>
+                <span class="n">reorg_energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reorg_energy</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="n">spectral_density</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spectral_density</span><span class="p">,</span>
+                <span class="n">exponent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exponent</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">therm_ops</span> <span class="o">=</span> <span class="n">loc_therm_ops</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">glob_therm</span><span class="p">:</span>
+            <span class="n">glob_therm_ops</span> <span class="o">=</span> <span class="n">get_glob_therm_ops</span><span class="p">(</span>
+                <span class="n">eigv</span><span class="p">,</span>
+                <span class="n">eigs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span><span class="p">,</span>
+                <span class="n">deph_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">deph_rate</span><span class="p">,</span>
+                <span class="n">cutoff_freq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cutoff_freq</span><span class="p">,</span>
+                <span class="n">reorg_energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reorg_energy</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="n">spectral_density</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">spectral_density</span><span class="p">,</span>
+                <span class="n">exponent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exponent</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">therm_ops</span> <span class="o">=</span> <span class="n">glob_therm_ops</span>
+        <span class="k">return</span> <span class="n">therm_ops</span>
+
+    <span class="k">def</span> <span class="nf">_get_e_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;Only defined for 2P description. To treat the 1P case it is more efficient to return the whole density matrices and work with them.&quot;</span>
+        <span class="n">pop_dict</span><span class="p">,</span> <span class="n">coh_dict</span><span class="p">,</span> <span class="n">groundstate_pop_dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tb_site1</span><span class="p">,</span> <span class="n">tb_site2</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">observable</span> <span class="o">=</span> <span class="n">get_eh_observable</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">tb_site1</span><span class="p">,</span> <span class="n">tb_site2</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span><span class="p">:</span>
+                    <span class="n">observable</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">observable</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tb_site1</span> <span class="o">==</span> <span class="n">tb_site2</span><span class="p">:</span>
+                    <span class="n">pop_dict</span><span class="p">[</span><span class="n">particle</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site1</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">observable</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">coh_dict</span><span class="p">[</span><span class="n">particle</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site1</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site2</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span>
+                        <span class="n">observable</span>
+                    <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span><span class="p">:</span>
+            <span class="n">groundstate_pop_dict</span><span class="p">[</span><span class="s2">&quot;groundstate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pop_dict</span><span class="p">,</span> <span class="n">coh_dict</span><span class="p">,</span> <span class="n">groundstate_pop_dict</span></div>
+
+
+<span class="c1"># -------------------------------------- relaxation operator ------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_relax_op"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_relax_op">[docs]</a><span class="k">def</span> <span class="nf">get_relax_op</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">tb_site</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annihilation operator of an exciton on a given tight-binding site. Relaxation of the DNA to its ground state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : list</span>
+<span class="sd">        List of tight-binding site basis states.</span>
+<span class="sd">    tb_site : str</span>
+<span class="sd">        Tight-binding site.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    q.Qobj</span>
+<span class="sd">        Relaxation operator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tb_site_idx</span> <span class="o">=</span> <span class="n">tb_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tb_site</span><span class="p">)</span>
+    <span class="n">num_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">)</span>
+    <span class="n">relax_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sites</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_sites</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">relax_op</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">tb_site_idx</span> <span class="o">*</span> <span class="p">(</span><span class="n">num_sites</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">relax_op</span><span class="p">)</span></div>
+
+
+<span class="c1"># ------------------------------------- thermalizing operators -----------------------------------</span>
+
+
+<div class="viewcode-block" id="get_glob_therm_op"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_glob_therm_op">[docs]</a><span class="k">def</span> <span class="nf">get_glob_therm_op</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">eigenstate_i</span><span class="p">,</span> <span class="n">eigenstate_j</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Global thermalizing operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    eigenstate_i : int</span>
+<span class="sd">        Index of the initial eigenstate.</span>
+<span class="sd">    eigenstate_j : int</span>
+<span class="sd">        Index of the final eigenstate.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+<span class="sd">    matrix_dim : int</span>
+<span class="sd">        Dimension of the matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    q.Qobj</span>
+<span class="sd">        Thermalizing operator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">op</span><span class="p">[</span><span class="n">eigenstate_i</span><span class="p">,</span> <span class="n">eigenstate_j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">global_to_local</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">eigs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">relaxation</span><span class="p">:</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">op</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_glob_therm_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_glob_therm_ops">[docs]</a><span class="k">def</span> <span class="nf">get_glob_therm_ops</span><span class="p">(</span>
+    <span class="n">eigv</span><span class="p">,</span>
+    <span class="n">eigs</span><span class="p">,</span>
+    <span class="n">relaxation</span><span class="p">,</span>
+    <span class="n">deph_rate</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">cutoff_freq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">reorg_energy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">spectral_density</span><span class="o">=</span><span class="s2">&quot;debye&quot;</span><span class="p">,</span>
+    <span class="n">exponent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Global thermalizing operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigv : np.ndarray</span>
+<span class="sd">        Eigenvalues.</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+<span class="sd">    deph_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+<span class="sd">    cutoff_freq : float</span>
+<span class="sd">        Cutoff frequency.</span>
+<span class="sd">    reorg_energy : float</span>
+<span class="sd">        Reorganization energy.</span>
+<span class="sd">    temperature : float</span>
+<span class="sd">        Temperature in Kelvin.</span>
+<span class="sd">    spectral_density : str</span>
+<span class="sd">        Type of spectral density.</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">        Exponent for Ohmic spectral density.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of thermalizing operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matrix_dim</span> <span class="o">=</span> <span class="n">eigs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">eigenstate_i</span><span class="p">,</span> <span class="n">eigenstate_j</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dim</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">omega_i</span><span class="p">,</span> <span class="n">omega_j</span> <span class="o">=</span> <span class="n">eigv</span><span class="p">[</span><span class="n">eigenstate_i</span><span class="p">],</span> <span class="n">eigv</span><span class="p">[</span><span class="n">eigenstate_j</span><span class="p">]</span>
+        <span class="n">lind_rate</span> <span class="o">=</span> <span class="n">rate_constant_redfield</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">omega_i</span> <span class="o">-</span> <span class="n">omega_j</span><span class="p">),</span>
+            <span class="n">deph_rate</span><span class="p">,</span>
+            <span class="n">cutoff_freq</span><span class="p">,</span>
+            <span class="n">reorg_energy</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="p">,</span>
+            <span class="n">spectral_density</span><span class="p">,</span>
+            <span class="n">exponent</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">lind_op</span> <span class="o">=</span> <span class="n">get_glob_therm_op</span><span class="p">(</span>
+            <span class="n">eigs</span><span class="p">,</span> <span class="n">eigenstate_i</span><span class="p">,</span> <span class="n">eigenstate_j</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">,</span> <span class="n">matrix_dim</span>
+        <span class="p">)</span>
+        <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">lind_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">lind_op</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c_ops</span></div>
+
+
+<div class="viewcode-block" id="get_loc_therm_op"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_loc_therm_op">[docs]</a><span class="k">def</span> <span class="nf">get_loc_therm_op</span><span class="p">(</span><span class="n">eigv</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">unique</span><span class="p">,</span> <span class="n">site_m</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local thermalizing operator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigv : np.ndarray</span>
+<span class="sd">        Eigenvalues.</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    unique : float</span>
+<span class="sd">        Unique frequency gap.</span>
+<span class="sd">    site_m : int</span>
+<span class="sd">        Local site index.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+<span class="sd">    matrix_dim : int</span>
+<span class="sd">        Dimension of the matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    q.Qobj</span>
+<span class="sd">        Thermalizing operator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">matrix_dim</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">omega_i</span><span class="p">,</span> <span class="n">omega_j</span> <span class="o">=</span> <span class="n">eigv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">eigv</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">state_i</span><span class="p">,</span> <span class="n">state_j</span> <span class="o">=</span> <span class="n">eigs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">eigs</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">omega_i</span> <span class="o">-</span> <span class="n">omega_j</span> <span class="o">==</span> <span class="n">unique</span><span class="p">:</span>
+            <span class="n">op</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">state_j</span><span class="p">[</span><span class="n">site_m</span><span class="p">]</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+                <span class="o">*</span> <span class="n">state_i</span><span class="p">[</span><span class="n">site_m</span><span class="p">]</span>
+                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">state_j</span><span class="p">,</span> <span class="n">state_i</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">relaxation</span><span class="p">:</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">op</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_loc_therm_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_loc_therm_ops">[docs]</a><span class="k">def</span> <span class="nf">get_loc_therm_ops</span><span class="p">(</span>
+    <span class="n">eigv</span><span class="p">,</span>
+    <span class="n">eigs</span><span class="p">,</span>
+    <span class="n">relaxation</span><span class="p">,</span>
+    <span class="n">deph_rate</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">cutoff_freq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">reorg_energy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">spectral_density</span><span class="o">=</span><span class="s2">&quot;debye&quot;</span><span class="p">,</span>
+    <span class="n">exponent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local thermalizing operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigv : np.ndarray</span>
+<span class="sd">        Eigenvalues.</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+<span class="sd">    deph_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+<span class="sd">    cutoff_freq : float</span>
+<span class="sd">        Cutoff frequency.</span>
+<span class="sd">    reorg_energy : float</span>
+<span class="sd">        Reorganization energy.</span>
+<span class="sd">    temperature : float</span>
+<span class="sd">        Temperature in Kelvin.</span>
+<span class="sd">    spectral_density : str</span>
+<span class="sd">        Type of spectral density.</span>
+<span class="sd">    exponent : float</span>
+<span class="sd">        Exponent for Ohmic spectral density.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of thermalizing operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">matrix_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigv</span><span class="p">)</span>
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">gaps</span> <span class="o">=</span> <span class="n">eigv</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">eigv</span>
+    <span class="n">unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">gaps</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">unique</span><span class="p">,</span> <span class="n">site_m</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">unique</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">matrix_dim</span><span class="p">)):</span>
+        <span class="n">lind_rate</span> <span class="o">=</span> <span class="n">rate_constant_redfield</span><span class="p">(</span>
+            <span class="n">unique</span><span class="p">,</span>
+            <span class="n">deph_rate</span><span class="p">,</span>
+            <span class="n">cutoff_freq</span><span class="p">,</span>
+            <span class="n">reorg_energy</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="p">,</span>
+            <span class="n">spectral_density</span><span class="p">,</span>
+            <span class="n">exponent</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">lind_op</span> <span class="o">=</span> <span class="n">get_loc_therm_op</span><span class="p">(</span><span class="n">eigv</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">unique</span><span class="p">,</span> <span class="n">site_m</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">,</span> <span class="n">matrix_dim</span><span class="p">)</span>
+        <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">lind_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">lind_op</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c_ops</span></div>
+
+
+<span class="c1"># ---------------------- local and global dephasing operators (for e-h and particle description) -------------------</span>
+
+
+<div class="viewcode-block" id="get_loc_deph_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_loc_deph_ops">[docs]</a><span class="k">def</span> <span class="nf">get_loc_deph_ops</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">dephasing_rate</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local dephasing operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : list</span>
+<span class="sd">        List of tight-binding site basis states.</span>
+<span class="sd">    dephasing_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of local dephasing operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tb_site</span> <span class="ow">in</span> <span class="n">tb_basis</span><span class="p">:</span>
+        <span class="n">op_electron</span> <span class="o">=</span> <span class="n">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="s2">&quot;electron&quot;</span><span class="p">,</span> <span class="n">tb_site</span><span class="p">)</span>
+        <span class="n">op_hole</span> <span class="o">=</span> <span class="n">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="s2">&quot;hole&quot;</span><span class="p">,</span> <span class="n">tb_site</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">relaxation</span><span class="p">:</span>
+            <span class="n">op_electron</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">op_electron</span><span class="p">)</span>
+            <span class="n">op_hole</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">op_hole</span><span class="p">)</span>
+        <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dephasing_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">op_electron</span><span class="p">))</span>
+        <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dephasing_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">op_hole</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">c_ops</span></div>
+
+
+<div class="viewcode-block" id="get_glob_deph_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_glob_deph_ops">[docs]</a><span class="k">def</span> <span class="nf">get_glob_deph_ops</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">dephasing_rate</span><span class="p">,</span> <span class="n">relaxation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Global dephasing operators.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    dephasing_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+<span class="sd">    relaxation : bool</span>
+<span class="sd">        Flag for relaxation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of global dephasing operators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_eigenstates</span> <span class="o">=</span> <span class="n">eigs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_eigenstates</span><span class="p">):</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_eigenstates</span><span class="p">,</span> <span class="n">num_eigenstates</span><span class="p">))</span>
+        <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">global_to_local</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">eigs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">relaxation</span><span class="p">:</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">add_groundstate</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="n">c_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dephasing_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">op</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">c_ops</span></div>
+
+
+<div class="viewcode-block" id="get_loc_deph_p_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_loc_deph_p_ops">[docs]</a><span class="k">def</span> <span class="nf">get_loc_deph_p_ops</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">dephasing_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local dephasing operators for particle description.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis : list</span>
+<span class="sd">        List of tight-binding site basis states.</span>
+<span class="sd">    dephasing_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of local dephasing operators for particle description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dephasing_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_sites</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="get_glob_deph_p_ops"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_glob_deph_p_ops">[docs]</a><span class="k">def</span> <span class="nf">get_glob_deph_p_ops</span><span class="p">(</span><span class="n">eigs</span><span class="p">,</span> <span class="n">dephasing_rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Global dephasing operators for particle description.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eigs : np.ndarray</span>
+<span class="sd">        Eigensystem.</span>
+<span class="sd">    dephasing_rate : float</span>
+<span class="sd">        Dephasing rate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of global dephasing operators for particle description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_eigenstates</span> <span class="o">=</span> <span class="n">eigs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dephasing_rate</span><span class="p">)</span>
+        <span class="o">*</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="n">global_to_local</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="n">num_eigenstates</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">full</span><span class="p">(),</span> <span class="n">eigs</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_eigenstates</span><span class="p">)</span>
+    <span class="p">]</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2024, Dennis Herb.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qDNA.dynamics.solver &mdash; QuantumDNA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../index.html" class="icon icon-home">
+            QuantumDNA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuantumDNA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qDNA.dynamics.solver</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for qDNA.dynamics.solver</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for solving master equations using the ME_Solver class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">qutip</span> <span class="k">as</span> <span class="nn">q</span>
+
+<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">check_me_kwargs</span>
+<span class="kn">from</span> <span class="nn">.reduced_dm</span> <span class="kn">import</span> <span class="n">get_reduced_dm</span>
+<span class="kn">from</span> <span class="nn">qDNA</span> <span class="kn">import</span> <span class="n">DNA_Seq</span>
+<span class="kn">from</span> <span class="nn">qDNA.model</span> <span class="kn">import</span> <span class="n">TB_Ham</span>
+<span class="kn">from</span> <span class="nn">qDNA.environment</span> <span class="kn">import</span> <span class="n">Lindblad_Diss</span>
+
+<span class="c1"># Shortcuts</span>
+<span class="c1"># me: master equation</span>
+<span class="c1"># diss: dissipator</span>
+<span class="c1"># t: time</span>
+<span class="c1"># init: initial</span>
+<span class="c1"># pop: population</span>
+<span class="c1"># coh: coherence</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ME_Solver&quot;</span><span class="p">,</span> <span class="s2">&quot;get_me_solver&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ME_Solver"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver">[docs]</a><span class="k">class</span> <span class="nc">ME_Solver</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    lindblad_diss : LindbladDissType</span>
+<span class="sd">        The Lindblad dissipator.</span>
+<span class="sd">    me_kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for the master equation solver.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    me_kwargs : dict</span>
+<span class="sd">        Keyword arguments for the master equation solver.</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        Flag for verbose output.</span>
+<span class="sd">    t_steps : int</span>
+<span class="sd">        Number of time steps.</span>
+<span class="sd">    t_end : int</span>
+<span class="sd">        End time.</span>
+<span class="sd">    times : np.ndarray</span>
+<span class="sd">        Array of time points.</span>
+<span class="sd">    t_unit : str</span>
+<span class="sd">        Time unit.</span>
+<span class="sd">    tb_ham : TBHamType</span>
+<span class="sd">        The tight-binding Hamiltonian.</span>
+<span class="sd">    tb_model : TBModelType</span>
+<span class="sd">        The tight-binding model.</span>
+<span class="sd">    lindblad_diss : LindbladDissType</span>
+<span class="sd">        The Lindblad dissipator.</span>
+<span class="sd">    init_state : tuple or str</span>
+<span class="sd">        Initial state depending on the Hamiltonian description.</span>
+<span class="sd">    init_matrix : q.Qobj</span>
+<span class="sd">        Initial density matrix.</span>
+<span class="sd">    result : list</span>
+<span class="sd">        List to store the results.</span>
+<span class="sd">    groundstate_pop : dict</span>
+<span class="sd">        Dictionary to store ground state population.</span>
+<span class="sd">    pop : dict</span>
+<span class="sd">        Dictionary to store population of states.</span>
+<span class="sd">    coh : dict</span>
+<span class="sd">        Dictionary to store coherence of states.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_init_matrix()</span>
+<span class="sd">        Gets the initial density matrix.</span>
+
+<span class="sd">    get_result()</span>
+<span class="sd">        Solves the master equation and returns the result.</span>
+
+<span class="sd">    get_result_particle(particle)</span>
+<span class="sd">        Gets the result for a specific particle.</span>
+
+<span class="sd">    get_pop()</span>
+<span class="sd">        Gets the population of states.</span>
+
+<span class="sd">    get_coh()</span>
+<span class="sd">        Gets the coherence of states.</span>
+
+<span class="sd">    get_groundstate_pop()</span>
+<span class="sd">        Gets the ground state population.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tb_ham</span><span class="p">,</span> <span class="n">lindblad_diss</span><span class="p">,</span> <span class="o">**</span><span class="n">me_kwargs</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">tb_ham</span><span class="p">,</span> <span class="n">TB_Ham</span>
+        <span class="p">),</span> <span class="s2">&quot;tb_ham must be an instance of the class TB_Ham&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">lindblad_diss</span><span class="p">,</span> <span class="n">Lindblad_Diss</span>
+        <span class="p">),</span> <span class="s2">&quot;lindblad_diss must be an instance of the class Lindblad_Diss&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;me_kwargs_default&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">me_kwargs</span><span class="p">)</span>
+        <span class="n">check_me_kwargs</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully checked all inputs for the ME_Solver instance.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;t_steps&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;t_end&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;t_unit&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_steps</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_end</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;t_end </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">t_end</span><span class="si">}</span><span class="s2"> cannot be sufficiently resolved by t_steps </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">t_steps</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Please increase the number of steps or reduce the timespan. &quot;</span>
+            <span class="s2">&quot;Alternative: change the unit of time from fs to ps (the mesolver does not know about the unit, but you do ;) )&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span> <span class="o">=</span> <span class="n">tb_ham</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;rad/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span> <span class="o">=</span> <span class="n">lindblad_diss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;rad/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_unit</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;init_e_state&quot;</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;init_h_state&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;electron&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;init_e_state&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;hole&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;init_h_state&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_init_matrix</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully initialized the ME_Solver instance.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__vars__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the instance variables as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a string representation of the ME_Solver instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ME_Solver(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">me_kwargs</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares two ME_Solver instances for equality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">t_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span>
+
+    <span class="nd">@t_end</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">t_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_t_end</span><span class="p">):</span>
+        <span class="n">old_t_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span> <span class="o">=</span> <span class="n">new_t_end</span>
+        <span class="k">if</span> <span class="n">new_t_end</span> <span class="o">!=</span> <span class="n">old_t_end</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">t_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span>
+
+    <span class="nd">@t_steps</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">t_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_t_steps</span><span class="p">):</span>
+        <span class="n">old_t_steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span> <span class="o">=</span> <span class="n">new_t_steps</span>
+        <span class="k">if</span> <span class="n">new_t_steps</span> <span class="o">!=</span> <span class="n">old_t_steps</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_steps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="c1"># --------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="ME_Solver.reset"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets calculated results (for example after parameters were changed).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groundstate_pop</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coh</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+                <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="s2">&quot;result_&quot;</span> <span class="o">+</span> <span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_init_matrix"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_init_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_init_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the initial density matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        q.Qobj</span>
+<span class="sd">            The initial density matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">:</span>
+            <span class="n">init_state_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">eh_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span><span class="p">:</span>
+                <span class="n">init_state</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">init_state_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">init_state</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;1P&quot;</span><span class="p">:</span>
+            <span class="n">init_state_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">init_state</span><span class="p">)</span>
+            <span class="n">init_state</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">fock_dm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix_dim</span><span class="p">,</span> <span class="n">init_state_idx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">init_state</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_result"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the master equation and returns the result.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[np.ndarray]</span>
+<span class="sd">            The result of solving the master equation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">:</span>
+            <span class="n">ham_matrix</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">ham_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">c_ops</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="n">progress_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">states</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_result_particle"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_result_particle">[docs]</a>    <span class="k">def</span> <span class="nf">get_result_particle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">particle</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the result for a specific particle.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        particle : str</span>
+<span class="sd">            The type of particle (&#39;electron&#39; or &#39;hole&#39;).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[np.ndarray]</span>
+<span class="sd">            The result for the specified particle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="s2">&quot;result_&quot;</span> <span class="o">+</span> <span class="n">particle</span><span class="p">]:</span>
+            <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="s2">&quot;result_&quot;</span> <span class="o">+</span> <span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">get_reduced_dm</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="s2">&quot;result_&quot;</span> <span class="o">+</span> <span class="n">particle</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_pop"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_pop">[docs]</a>    <span class="k">def</span> <span class="nf">get_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the population of states.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, float]</span>
+<span class="sd">            The population of states.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AssertionError</span>
+<span class="sd">            If the Hamiltonian description is not &#39;2P&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">,</span> <span class="s2">&quot;only available for 2P description&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">:</span>
+            <span class="n">ham_matrix</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">ham_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">c_ops</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">pop_ops</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">tb_site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span>
+                        <span class="n">particle</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site</span>
+                    <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_coh"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_coh">[docs]</a>    <span class="k">def</span> <span class="nf">get_coh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the coherence of states.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, float]</span>
+<span class="sd">            The coherence of states.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AssertionError</span>
+<span class="sd">            If the Hamiltonian description is not &#39;2P&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">,</span> <span class="s2">&quot;only available for 2P description&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">coh</span><span class="p">:</span>
+            <span class="n">ham_matrix</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">ham_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">c_ops</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">coh_ops</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coh</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">tb_site1</span><span class="p">,</span> <span class="n">tb_site2</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">tb_basis</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">coh</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">abs</span><span class="p">(</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="n">particle</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site1</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">tb_site2</span><span class="p">]</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coh</span></div>
+
+<div class="viewcode-block" id="ME_Solver.get_groundstate_pop"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.dynamics.ME_Solver.get_groundstate_pop">[docs]</a>    <span class="k">def</span> <span class="nf">get_groundstate_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the ground state population.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, float]</span>
+<span class="sd">            The ground state population.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AssertionError</span>
+<span class="sd">            If the Hamiltonian description is not &#39;2P&#39; or if relaxation is not enabled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;2P&quot;</span><span class="p">,</span> <span class="s2">&quot;only available for 2P description&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">groundstate_pop</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">relaxation</span>
+            <span class="p">),</span> <span class="s2">&quot;function only defined if relaxation is True, otherwise the groundstate is not populated&quot;</span>
+            <span class="n">ham_matrix</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">Qobj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_ham</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">mesolve</span><span class="p">(</span>
+                <span class="n">ham_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">init_matrix</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">c_ops</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lindblad_diss</span><span class="o">.</span><span class="n">groundstate_pop_ops</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groundstate_pop</span><span class="p">[</span><span class="s2">&quot;groundstate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">expect</span><span class="p">[</span><span class="s2">&quot;groundstate&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">groundstate_pop</span></div></div>
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_me_solver"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.dynamics.get_me_solver">[docs]</a><span class="k">def</span> <span class="nf">get_me_solver</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an instance of ME_Solver.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    upper_strand : str</span>
+<span class="sd">        The upper strand of DNA sequence.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        The name of the tight-binding model.</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Additional keyword arguments for creating the ME_Solver instance.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ME_Solver</span>
+<span class="sd">        An instance of ME_Solver.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dna_seq</span> <span class="o">=</span> <span class="n">DNA_Seq</span><span class="p">(</span><span class="n">upper_strand</span><span class="p">,</span> <span class="n">tb_model_name</span><span class="p">)</span>
+    <span class="n">tb_ham</span> <span class="o">=</span> <span class="n">TB_Ham</span><span class="p">(</span><span class="n">dna_seq</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">lindblad_diss</span> <span class="o">=</span> <span class="n">Lindblad_Diss</span><span class="p">(</span><span class="n">tb_ham</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">me_solver</span> <span class="o">=</span> <span class="n">ME_Solver</span><span class="p">(</span><span class="n">tb_ham</span><span class="p">,</span> <span class="n">lindblad_diss</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">me_solver</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2024, Dennis Herb.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

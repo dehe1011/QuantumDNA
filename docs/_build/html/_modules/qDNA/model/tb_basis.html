@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qDNA.model.tb_basis &mdash; QuantumDNA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../index.html" class="icon icon-home">
+            QuantumDNA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuantumDNA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qDNA.model.tb_basis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for qDNA.model.tb_basis</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides functions for working with tight-binding (tb) basis and </span>
+<span class="sd">electron-hole (eh) basis in quantum systems. It includes functions to generate </span>
+<span class="sd">symbolic representations of basis indices, convert between different </span>
+<span class="sd">representations, and perform basis changes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Shortcuts</span>
+<span class="c1"># tb: tight-binding</span>
+<span class="c1"># dim: dimension</span>
+<span class="c1"># eh: electron-hole</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;get_tb_basis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_eh_basis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_eh_distance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_particle_eh_states&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;basis_change&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;local_to_global&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;global_to_local&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># -------------------------------------------- Tight-binding basis --------------------------------</span>
+
+
+<div class="viewcode-block" id="get_tb_basis"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.get_tb_basis">[docs]</a><span class="k">def</span> <span class="nf">get_tb_basis</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a symbolic string representation of the indices &#39;(i, j)&#39; where i indicates the strand</span>
+<span class="sd">    number and j the site number inside the strand.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of string representations of site indices.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; get_tb_basis((2, 2))</span>
+<span class="sd">    [&#39;(0, 0)&#39;, &#39;(0, 1)&#39;, &#39;(1, 0)&#39;, &#39;(1, 1)&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_sites</span> <span class="o">=</span> <span class="n">tb_dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tb_dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tb_basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">int_to_str</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">site_num</span><span class="p">)</span> <span class="k">for</span> <span class="n">site_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_sites</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">tb_basis</span></div>
+
+
+<span class="k">def</span> <span class="nf">str_to_int</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">tb_basis_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a string representation of a site index to an integer representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+<span class="sd">    tb_basis_str: str</span>
+<span class="sd">        String representation of the site index.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Integer representation of the site index.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; str_to_int((1,3), &#39;(0, 2)&#39;)</span>
+<span class="sd">    2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tuple_to_int</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">str_to_tuple</span><span class="p">(</span><span class="n">tb_basis_str</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">int_to_str</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">tb_basis_int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the integer representation of a basis state to the string representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+<span class="sd">    tb_basis_int: int</span>
+<span class="sd">        Integer representation of the basis state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        String representation of the basis state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tuple_to_str</span><span class="p">(</span><span class="n">int_to_tuple</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">tb_basis_int</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">str_to_tuple</span><span class="p">(</span><span class="n">tb_basis_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the string representation of a basis state to the tuple representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis_str: str</span>
+<span class="sd">        String representation of the basis state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Tuple representation of the basis state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">tb_basis_str</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">tuple_to_str</span><span class="p">(</span><span class="n">tb_basis_tuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the tuple representation of a basis state to the string representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_basis_tuple: tuple</span>
+<span class="sd">        Tuple representation of the basis state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        String representation of the basis state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">tb_basis_tuple</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">int_to_tuple</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">tb_basis_int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the integer representation of a basis state to the tuple representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+<span class="sd">    tb_basis_int: int</span>
+<span class="sd">        Integer representation of the basis state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Tuple representation of the basis state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">num_sites_per_strand</span> <span class="o">=</span> <span class="n">tb_dims</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">tb_basis_int</span> <span class="o">//</span> <span class="n">num_sites_per_strand</span><span class="p">,</span> <span class="n">tb_basis_int</span> <span class="o">%</span> <span class="n">num_sites_per_strand</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">tuple_to_int</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">,</span> <span class="n">tb_basis_tuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the tuple representation of a basis state to the integer representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+<span class="sd">    tb_basis_tuple: tuple</span>
+<span class="sd">        Tuple representation of the basis state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Integer representation of the basis state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">num_sites_per_strand</span> <span class="o">=</span> <span class="n">tb_dims</span>
+    <span class="n">strand_num</span><span class="p">,</span> <span class="n">site_in_strand_num</span> <span class="o">=</span> <span class="n">tb_basis_tuple</span>
+    <span class="k">return</span> <span class="n">strand_num</span> <span class="o">*</span> <span class="n">num_sites_per_strand</span> <span class="o">+</span> <span class="n">site_in_strand_num</span>
+
+
+<span class="c1"># --------------------------------------- Electron-hole basis ----------------------------------</span>
+
+
+<div class="viewcode-block" id="get_eh_basis"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.get_eh_basis">[docs]</a><span class="k">def</span> <span class="nf">get_eh_basis</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a symbolic string representation of electron-hole basis indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_dims: tuple</span>
+<span class="sd">        A tuple (num_strands, num_sites_per_strand) representing the tight-binding dimensions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of tuples representing electron-hole basis indices.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; get_eh_basis((2, 2))</span>
+<span class="sd">    [(&#39;(0, 0)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 0)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 0)&#39;, &#39;(1, 0)&#39;), (&#39;(0, 0)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="sd">     (&#39;(0, 1)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 1)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 1)&#39;, &#39;(1, 0)&#39;), (&#39;(0, 1)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="sd">     (&#39;(1, 0)&#39;, &#39;(0, 0)&#39;), (&#39;(1, 0)&#39;, &#39;(0, 1)&#39;), (&#39;(1, 0)&#39;, &#39;(1, 0)&#39;), (&#39;(1, 0)&#39;, &#39;(1, 1)&#39;),</span>
+<span class="sd">     (&#39;(1, 1)&#39;, &#39;(0, 0)&#39;), (&#39;(1, 1)&#39;, &#39;(0, 1)&#39;), (&#39;(1, 1)&#39;, &#39;(1, 0)&#39;), (&#39;(1, 1)&#39;, &#39;(1, 1)&#39;)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tb_basis</span> <span class="o">=</span> <span class="n">get_tb_basis</span><span class="p">(</span><span class="n">tb_dims</span><span class="p">)</span>
+    <span class="n">eh_basis</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">tb_basis</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">eh_basis</span></div>
+
+
+<div class="viewcode-block" id="get_eh_distance"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.get_eh_distance">[docs]</a><span class="k">def</span> <span class="nf">get_eh_distance</span><span class="p">(</span><span class="n">eh_basis</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the distance between electron and hole for each state in the basis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eh_basis: list</span>
+<span class="sd">        List of electron and hole positions as tuples of strings.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Array of distances between electron and hole for each state.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; get_distance([(&#39;(0, 0)&#39;, &#39;(1, 1)&#39;), (&#39;(1, 0)&#39;, &#39;(0, 0)&#39;)])</span>
+<span class="sd">    array([1.41421356, 1.        ])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">distance_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">position_electron</span><span class="p">,</span> <span class="n">position_hole</span> <span class="ow">in</span> <span class="n">eh_basis</span><span class="p">:</span>
+        <span class="n">position_electron</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">position_electron</span><span class="p">)</span>
+        <span class="n">position_hole</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">position_hole</span><span class="p">)</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">idx_electron</span> <span class="o">-</span> <span class="n">idx_hole</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="k">for</span> <span class="n">idx_electron</span><span class="p">,</span> <span class="n">idx_hole</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">position_electron</span><span class="p">,</span> <span class="n">position_hole</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">distance_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">distance_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_particle_eh_states"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.get_particle_eh_states">[docs]</a><span class="k">def</span> <span class="nf">get_particle_eh_states</span><span class="p">(</span><span class="n">particle</span><span class="p">,</span> <span class="n">tb_basis_element</span><span class="p">,</span> <span class="n">tb_basis</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a list of electron-hole states for a given particle and site basis element.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    particle: str</span>
+<span class="sd">        The type of particle (&#39;electron&#39;, &#39;hole&#39;, or &#39;exciton&#39;).</span>
+<span class="sd">    tb_basis_element: str</span>
+<span class="sd">        The site basis element for which to generate the states.</span>
+<span class="sd">    tb_basis: list</span>
+<span class="sd">        The list of all site basis elements.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of tuples representing the electron-hole states.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; get_particle_eh_states(&#39;electron&#39;, &#39;(0, 2)&#39;, get_tb_basis((1,3)))</span>
+<span class="sd">    [(&#39;(0, 2)&#39;, &#39;(0, 0)&#39;), (&#39;(0, 2)&#39;, &#39;(0, 1)&#39;), (&#39;(0, 2)&#39;, &#39;(0, 2)&#39;)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tb_basis_element</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tb_basis</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Given basis element </span><span class="si">{</span><span class="n">tb_basis_element</span><span class="si">}</span><span class="s2"> not in tight-binding basis </span><span class="si">{</span><span class="n">tb_basis</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;electron&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="n">tb_basis_element</span><span class="p">],</span> <span class="n">tb_basis</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;hole&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="p">[</span><span class="n">tb_basis_element</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">particle</span> <span class="o">==</span> <span class="s2">&quot;exciton&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">([</span><span class="n">tb_basis_element</span><span class="p">],</span> <span class="p">[</span><span class="n">tb_basis_element</span><span class="p">]))</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid particle type: </span><span class="si">{</span><span class="n">particle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># -------------------------- Basis change from local to global basis (eigenbasis) ------------------</span>
+
+
+<div class="viewcode-block" id="basis_change"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.basis_change">[docs]</a><span class="k">def</span> <span class="nf">basis_change</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">liouville</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a basis change of the given matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix: ndarray</span>
+<span class="sd">        The matrix to change basis.</span>
+<span class="sd">    states: ndarray</span>
+<span class="sd">        The old basis expressed as a vector in the new basis.</span>
+<span class="sd">    liouville: bool</span>
+<span class="sd">        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Matrix in the new basis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">liouville</span><span class="p">:</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">states</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">states</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="global_to_local"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.global_to_local">[docs]</a><span class="k">def</span> <span class="nf">global_to_local</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">liouville</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a basis change from the eigenbasis to the site basis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix: ndarray</span>
+<span class="sd">        The matrix to change basis.</span>
+<span class="sd">    eigs: ndarray</span>
+<span class="sd">        The eigenbasis (old) expressed in the site basis (new).</span>
+<span class="sd">    liouville: bool</span>
+<span class="sd">        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Matrix in the site basis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">basis_change</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">liouville</span><span class="o">=</span><span class="n">liouville</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="local_to_global"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.local_to_global">[docs]</a><span class="k">def</span> <span class="nf">local_to_global</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">liouville</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a basis change from the site basis to the eigenbasis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix: ndarray</span>
+<span class="sd">        The matrix to change basis.</span>
+<span class="sd">    eigs: ndarray</span>
+<span class="sd">        The site basis (old) expressed in the eigenbasis (new).</span>
+<span class="sd">    liouville: bool</span>
+<span class="sd">        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        Matrix in the eigenbasis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">basis_change</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">eigs</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">liouville</span><span class="o">=</span><span class="n">liouville</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2024, Dennis Herb.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

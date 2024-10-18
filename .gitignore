@@ -1,25 +1,24 @@
 # check which files are ignored: git status --ignored
 
+.venv/
 archive/
-docs/my_notebooks/
-docs/figures/my_figures/
-.vscode/
-
-development/
-environment_long.yml
-.coverage
 .pre-commit-config.yaml
-scripts/info.txt
+HOWTO.md
+info.txt
+main.py
+qDNA/data/raw/geometries/
+requirements/pip_freeze.txt
 
-*.egg-info/
+# created by build
 dist/
 build/
 
-data/raw/geometries
-data/raw/test_params
-data/processed/
-data/figures/
-data/logging.log
-
+# created by pytest
 __pycache__
+.pytest_cache/
+
+# created by coverage
+*.egg-info/
+.coverage
+
 .ipynb_checkpoints
