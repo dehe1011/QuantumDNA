@@ -3,15 +3,15 @@
 .venv/
 archive/
 .pre-commit-config.yaml
-HOWTO.md
+howto/
 notes.txt
+TODO.txt
 main.py
 qDNA/data/raw/geometries/
 requirements/pip_freeze.txt
 
-# created by build
-dist/
-build/
+# created by coverage
+htmlcov/
 
 # created by pytest
 __pycache__
@@ -21,4 +21,15 @@ __pycache__
 *.egg-info/
 .coverage
 
+# created by setuptools (python setup.py sdist bdist_wheel)
+dist/
+build/
+.egg-info/
+
+# created by build (python -m build)
+dist/
+.egg-info/
+
+# created by Jupyter Notebooks
+__pycache__
 .ipynb_checkpoints

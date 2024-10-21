@@ -7,7 +7,7 @@
 # -----------------------------------------------------------
 
 Write-Output "Running tests"
-# -m: module, -s: start of search, -v: verbose 
+# -m: module, -s: start of search, -v: verbose
 # python -m unittest discover -s tests -v
 pip install pytest
 python -m pytest -vv tests/ --disable-pytest-warnings
@@ -25,14 +25,14 @@ $paths = @(
 foreach ($path in $paths) {
 
     if (Test-Path -Path $path) {
-    
+
         Remove-Item -Path $path -Recurse -Force
         Write-Output "Removed $path"
-        
+
     } else {
-    
+
         Write-Output "$path does not exist"
-        
+
     }
 }
 

@@ -23,7 +23,7 @@ copyright = "2024, Dennis Herb"
 author = "Dennis Herb"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.4"
+release = "0.1.5"
 
 
 # -- General configuration ---------------------------------------------------

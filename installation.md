@@ -2,7 +2,7 @@
 
 ## Installation via PyPI:
 
-We recommend creating a new virtual environment and Jupyter notebook kernel to avoid conflicts with existing packages like `qutip`. 
+We recommend creating a new virtual environment and Jupyter notebook kernel to avoid conflicts with existing packages like `qutip`.
 1. Create a new virtual environment (using conda):
 ```bash
 conda create -n qDNA
@@ -23,7 +23,7 @@ pip install qDNA
 
 If you want to make changes to the source code or try the example notebooks, you can clone the project's GitHub repository.
 
-**NOTE**: These set-up instructions have only been tested on Windows and may not work on macOS. 
+**NOTE**: These set-up instructions have only been tested on Windows and may not work on macOS.
 
 ### Pre-requisites
 
@@ -35,17 +35,17 @@ If you want to make changes to the source code or try the example notebooks, you
 
 Open the Anconda Powershell Prompt. Copy and execute the following ```commands```.
 
-1. Clone the Github repository: 
+1. Clone the Github repository:
 ```bash
 git clone https://github.com/dehe1011/QuantumDNA.git
 ```
 
-2. Navigate to the project directory: 
+2. Navigate to the project directory:
 ```bash
 cd QuantumDNA
 ```
 
-2. Create and active a virtual environment (using a provided script): 
+2. Create and active a virtual environment (using a provided script):
 ```bash
 powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1
 ```
@@ -56,21 +56,21 @@ If all tests passed, the package has been successfully installed, and the user i
 
 After installing the package, you can access the code via the user interface or in a Jupyter Notebook.
 
-Using the User Interface: 
+Using the User Interface:
 
 1. Open the Anaconda PowerShell Prompt and navigate to the package directory:
  ```bash
  Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA
- ``` 
+ ```
 
-2. Run the activation script: 
+2. Run the activation script:
 ```bash
 powershell -ExecutionPolicy Bypass -File tools/scripts/activate.ps1
 ```
 
-Using Jupyter Notebook: 
+Using Jupyter Notebook:
 
-1. Open a new Jupyter Notebook: 
+1. Open a new Jupyter Notebook:
 ```bash
 jupyter notebook
 ```
@@ -86,12 +86,12 @@ To remove the virtual environment and Jupyter kernel:
 1. Remove the virtual environment:
  ```bash
  conda remove --name qDNA --all
- ``` 
+ ```
 
 2. Remove the Jupyter kernel:
  ```bash
  jupyter kernelspec remove qDNA
- ``` 
- 
+ ```
+
 3. Delete the project folder:
     * Manually delete the `QuantumDNA` folder that contains the cloned GitHub repository.

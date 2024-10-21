@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utilities &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+  <title>Utilities &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -52,7 +50,12 @@
 <li class="toctree-l2"><a class="reference internal" href="classes.html">Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Utilities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.utils">Unit conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.utils">Unit conversion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.utils.get_all_conversions"><code class="docutils literal notranslate"><span class="pre">get_all_conversions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.utils.get_conversion"><code class="docutils literal notranslate"><span class="pre">get_conversion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.utils.get_conversion_dict"><code class="docutils literal notranslate"><span class="pre">get_conversion_dict()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#hamiltonian-analysis">Hamiltonian analysis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#density-matrix-analysis">Density matrix analysis</a></li>
 </ul>
@@ -91,15 +94,15 @@
            <div itemprop="articleBody">
 
   <section id="utilities">
-<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading"></a></h1>
+<h1>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h1>
 <section id="module-qDNA.utils">
-<span id="unit-conversion"></span><h2>Unit conversion<a class="headerlink" href="#module-qDNA.utils" title="Permalink to this heading"></a></h2>
+<span id="unit-conversion"></span><h2>Unit conversion<a class="headerlink" href="#module-qDNA.utils" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.utils.get_all_conversions">
-<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_all_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_all_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_all_conversions" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_all_conversions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_all_conversions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_all_conversions" title="Link to this definition"></a></dt>
 <dd><p>Generates a dictionary with all possible conversions between units.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Dict[str, float]</dt><dd><p>A dictionary where the keys are conversion descriptions (e.g., ‘100meV_to_rad/fs’)
 and the values are the conversion factors.</p>
@@ -111,10 +114,10 @@ and the values are the conversion factors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.utils.get_conversion">
-<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_conversion" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_conversion" title="Link to this definition"></a></dt>
 <dd><p>Converts a value from the start_unit to the end_unit.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>start_unit</strong><span class="classifier">str</span></dt><dd><p>The unit to convert from.</p>
 </dd>
@@ -122,7 +125,7 @@ and the values are the conversion factors.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The conversion factor between the two units.</p>
 </dd>
@@ -136,10 +139,10 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.utils.get_conversion_dict">
-<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_conversion_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_conversion_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_conversion_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_conversion_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/unit_converter.html#get_conversion_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.utils.get_conversion_dict" title="Link to this definition"></a></dt>
 <dd><p>Converts the values in param_dict from start_unit to end_unit.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>param_dict</strong><span class="classifier">Dict[Any, float]</span></dt><dd><p>Dictionary containing parameters to convert.</p>
 </dd>
@@ -149,7 +152,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>Dict[Any, float]</dt><dd><p>The parameter dictionary with converted values.</p>
 </dd>
@@ -160,13 +163,13 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 
 </section>
 <section id="hamiltonian-analysis">
-<h2>Hamiltonian analysis<a class="headerlink" href="#hamiltonian-analysis" title="Permalink to this heading"></a></h2>
+<h2>Hamiltonian analysis<a class="headerlink" href="#hamiltonian-analysis" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_amplitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/ham_analysis.html#calc_amplitudes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the amplitudes for transitions between states.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>eigs</strong><span class="classifier">np.ndarray</span></dt><dd><p>Eigenvector matrix.</p>
 </dd>
@@ -176,7 +179,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>np.ndarray</dt><dd><p>A list of amplitudes for transitions.</p>
 </dd>
@@ -190,7 +193,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_average_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/ham_analysis.html#calc_average_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the time-averaged/ static population of the end state when initially in the initial state.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>eigs</strong><span class="classifier">np.ndarray</span></dt><dd><p>Eigenvector matrix.</p>
 </dd>
@@ -200,7 +203,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The static population of the end state.</p>
 </dd>
@@ -214,13 +217,13 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/ham_analysis.html#calc_frequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the frequencies corresponding to energy level differences.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>eigv</strong><span class="classifier">np.ndarray</span></dt><dd><p>Eigenvalue vector.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>np.ndarray</dt><dd><p>A list of frequencies.</p>
 </dd>
@@ -235,13 +238,13 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 <dd><p>Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.</p>
 <p>1 (localized eigenstate/ exciton state) &lt; IPR &lt; N (delocalized eigenstate/ exciton state)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>eigs</strong><span class="classifier">np.ndarray</span></dt><dd><p>Eigenvector matrix.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>list of float</dt><dd><p>The IPR values for each eigenstate.</p>
 </dd>
@@ -255,7 +258,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">get_pop_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitudes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequencies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/ham_analysis.html#get_pop_fourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the population using Fourier series.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>t</strong><span class="classifier">float</span></dt><dd><p>Time variable.</p>
 </dd>
@@ -267,7 +270,7 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The population at time t.</p>
 </dd>
@@ -278,19 +281,19 @@ Example: real_units = 1 / get_conversion(‘100meV’, ‘rad/fs’).</p>
 
 </section>
 <section id="density-matrix-analysis">
-<h2>Density matrix analysis<a class="headerlink" href="#density-matrix-analysis" title="Permalink to this heading"></a></h2>
+<h2>Density matrix analysis<a class="headerlink" href="#density-matrix-analysis" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_coherence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/dm_analysis.html#calc_coherence"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the coherence (absolute sum of the off-diagonals) of a density matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dm</strong><span class="classifier">np.ndarray</span></dt><dd><p>Density matrix.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The coherence of the density matrix.</p>
 </dd>
@@ -314,13 +317,13 @@ Delocalized coherent state: IPR = N
 Maximally mixed state (1/N on diagonal, no off-diagonal elements): IPR = 1</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dm</strong><span class="classifier">np.ndarray</span></dt><dd><p>Density matrix.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The inverse participation ratio of the density matrix.</p>
 </dd>
@@ -334,13 +337,13 @@ Maximally mixed state (1/N on diagonal, no off-diagonal elements): IPR = 1</p>
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_purity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/dm_analysis.html#calc_purity"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the purity of a density matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dm</strong><span class="classifier">np.ndarray</span></dt><dd><p>Density matrix.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The purity of the density matrix.</p>
 </dd>
@@ -354,7 +357,7 @@ Maximally mixed state (1/N on diagonal, no off-diagonal elements): IPR = 1</p>
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_trace_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/utils/dm_analysis.html#calc_trace_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates the trace distance of two density matrices.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dm_1</strong><span class="classifier">np.ndarray</span></dt><dd><p>First density matrix.</p>
 </dd>
@@ -362,7 +365,7 @@ Maximally mixed state (1/N on diagonal, no off-diagonal elements): IPR = 1</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The trace distance between the two density matrices.</p>
 </dd>

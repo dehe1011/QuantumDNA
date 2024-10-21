@@ -1,5 +1,5 @@
 """
-This module provides functions to calculate the frequency of DNA bases in a given set of DNA sequences 
+This module provides functions to calculate the frequency of DNA bases in a given set of DNA sequences
 and to plot the frequency of these bases against the exciton lifetime.
 """
 

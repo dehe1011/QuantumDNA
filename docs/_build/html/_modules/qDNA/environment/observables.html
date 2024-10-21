@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qDNA.environment.observables &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+  <title>qDNA.environment.observables &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -77,7 +75,7 @@
 
   <h1>Source code for qDNA.environment.observables</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Module calculates observables. </span>
+<span class="sd">Module calculates observables.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -129,7 +127,9 @@
     <span class="k">return</span> <span class="n">matrix</span>
 
 
-<div class="viewcode-block" id="get_tb_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_tb_observable">[docs]</a><span class="k">def</span> <span class="nf">get_tb_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
+<div class="viewcode-block" id="get_tb_observable">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_tb_observable">[docs]</a>
+<span class="k">def</span> <span class="nf">get_tb_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper function to get the density matrix for tight-binding sites.</span>
 
@@ -157,7 +157,10 @@
     <span class="k">return</span> <span class="n">get_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_eh_observable"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_eh_observable">[docs]</a><span class="k">def</span> <span class="nf">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_eh_observable">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_eh_observable">[docs]</a>
+<span class="k">def</span> <span class="nf">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">start_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs the electron-hole density matrix for the given particle type.</span>
 
@@ -207,7 +210,10 @@
     <span class="k">return</span> <span class="n">eh_observable</span></div>
 
 
-<div class="viewcode-block" id="get_pop_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_pop_particle">[docs]</a><span class="k">def</span> <span class="nf">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_pop_particle">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_pop_particle">[docs]</a>
+<span class="k">def</span> <span class="nf">get_pop_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the population density matrix for a specific particle and state.</span>
 
@@ -236,7 +242,10 @@
     <span class="k">return</span> <span class="n">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_coh_particle"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_coh_particle">[docs]</a><span class="k">def</span> <span class="nf">get_coh_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_coh_particle">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.environment.get_coh_particle">[docs]</a>
+<span class="k">def</span> <span class="nf">get_coh_particle</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets the coherence density matrix for a specific particle and pair of states.</span>
 
@@ -265,6 +274,7 @@
 <span class="sd">           [0., 0., 0., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_eh_observable</span><span class="p">(</span><span class="n">tb_basis</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">state1</span><span class="p">,</span> <span class="n">state2</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>

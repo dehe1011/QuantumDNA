@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qDNA.evaluation.eq_states &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+  <title>qDNA.evaluation.eq_states &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -94,7 +92,9 @@
 <span class="c1"># ----------------------------------- Equilibrium States --------------------------------------</span>
 
 
-<div class="viewcode-block" id="get_therm_eq_state"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.get_therm_eq_state">[docs]</a><span class="k">def</span> <span class="nf">get_therm_eq_state</span><span class="p">(</span><span class="n">me_solver</span><span class="p">):</span>
+<div class="viewcode-block" id="get_therm_eq_state">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.get_therm_eq_state">[docs]</a>
+<span class="k">def</span> <span class="nf">get_therm_eq_state</span><span class="p">(</span><span class="n">me_solver</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the thermal equilibrium state.</span>
 
@@ -124,7 +124,10 @@
     <span class="k">return</span> <span class="n">eq_state</span></div>
 
 
-<div class="viewcode-block" id="get_deph_eq_state"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.get_deph_eq_state">[docs]</a><span class="k">def</span> <span class="nf">get_deph_eq_state</span><span class="p">(</span><span class="n">me_solver</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_deph_eq_state">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.evaluation.get_deph_eq_state">[docs]</a>
+<span class="k">def</span> <span class="nf">get_deph_eq_state</span><span class="p">(</span><span class="n">me_solver</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the dephasing equilibrium state.</span>
 
@@ -151,6 +154,7 @@
         <span class="p">)</span>  <span class="c1"># cancel all off-diagonal elements</span>
         <span class="n">loc_init_matrix</span> <span class="o">=</span> <span class="n">global_to_local</span><span class="p">(</span><span class="n">glob_init_matrix</span><span class="p">,</span> <span class="n">eigs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">loc_init_matrix</span></div>
+
 </pre></div>
 
            </div>

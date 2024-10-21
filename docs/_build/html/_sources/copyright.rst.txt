@@ -13,10 +13,15 @@ License Terms for Documentation Text
 The canonical form of this license is available at `https://creativecommons.org/licenses/by/3.0/ <https://creativecommons.org/licenses/by/3.0/>`_, which should be considered the binding version of this license.
 It is reproduced here for convenience.
 
+
+..
+    Creative Commons 3.0 license
 .. include:: LICENSE_cc-by-3.0.txt
 
 
 License Terms for Source Code of QuTiP and Code Samples
 =======================================================
 
+..
+    BSD-3-Clause/ MIT license
 .. include:: ../LICENSE.txt

@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qDNA.utils.unit_converter &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+  <title>qDNA.utils.unit_converter &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -81,17 +79,44 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">c</span>
 
-<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span>
+<span class="kn">from</span> <span class="nn">qDNA.tools</span> <span class="kn">import</span> <span class="n">get_config</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">,</span> <span class="s2">&quot;get_conversion&quot;</span><span class="p">,</span> <span class="s2">&quot;get_all_conversions&quot;</span><span class="p">,</span> <span class="s2">&quot;get_conversion_dict&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;UNITS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_conversion&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_all_conversions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_conversion_dict&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;convert_to_debye&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="n">UNITS</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;UNITS&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="get_conversion"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion">[docs]</a><span class="k">def</span> <span class="nf">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">convert_to_debye</span><span class="p">(</span><span class="n">charge_separation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the charge separation of two particles with elementary charge in Angstrom to a dipole moment in Debye.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    charge_separation: float</span>
+<span class="sd">        The electron and hole separation in Angstrom.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        The electrical dipole moment in Debye.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dipole_moment</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">e</span> <span class="o">*</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">charge_separation</span>
+    <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">c</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">dipole_moment</span> <span class="o">/</span> <span class="mf">1e-19</span>
+
+
+<div class="viewcode-block" id="get_conversion">
+<a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion">[docs]</a>
+<span class="k">def</span> <span class="nf">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a value from the start_unit to the end_unit.</span>
 
@@ -131,7 +156,10 @@
     <span class="k">return</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">start_unit</span><span class="p">]</span> <span class="o">/</span> <span class="n">convert_to_Joule</span><span class="p">[</span><span class="n">end_unit</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="get_all_conversions"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_all_conversions">[docs]</a><span class="k">def</span> <span class="nf">get_all_conversions</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_all_conversions">
+<a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_all_conversions">[docs]</a>
+<span class="k">def</span> <span class="nf">get_all_conversions</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a dictionary with all possible conversions between units.</span>
 
@@ -149,7 +177,10 @@
     <span class="k">return</span> <span class="n">conversion_dict</span></div>
 
 
-<div class="viewcode-block" id="get_conversion_dict"><a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion_dict">[docs]</a><span class="k">def</span> <span class="nf">get_conversion_dict</span><span class="p">(</span><span class="n">param_dict</span><span class="p">,</span> <span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_conversion_dict">
+<a class="viewcode-back" href="../../../apidoc/utils.html#qDNA.utils.get_conversion_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">get_conversion_dict</span><span class="p">(</span><span class="n">param_dict</span><span class="p">,</span> <span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts the values in param_dict from start_unit to end_unit.</span>
 
@@ -170,6 +201,7 @@
     <span class="n">conversion_val</span> <span class="o">=</span> <span class="n">get_conversion</span><span class="p">(</span><span class="n">start_unit</span><span class="p">,</span> <span class="n">end_unit</span><span class="p">)</span>
     <span class="n">converted_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="o">*</span> <span class="n">conversion_val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">param_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">return</span> <span class="n">converted_dict</span></div>
+
 </pre></div>
 
            </div>

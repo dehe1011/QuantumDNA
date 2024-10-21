@@ -5,6 +5,5 @@ coverage
 coveralls
 pre-commit
 build
-setuptools
 wheel
 twine

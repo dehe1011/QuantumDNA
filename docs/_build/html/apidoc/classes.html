@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Classes &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+  <title>Classes &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -94,15 +92,15 @@
            <div itemprop="articleBody">
 
   <section id="classes">
-<h1>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h1>
+<h1>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h1>
 <section id="dna-seq">
-<h2>DNA_Seq<a class="headerlink" href="#dna-seq" title="Permalink to this heading"></a></h2>
+<h2>DNA_Seq<a class="headerlink" href="#dna-seq" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">DNA_Seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methylated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dna_seq.html#DNA_Seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">DNA_Seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methylated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dna_seq.html#DNA_Seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>A class representing a DNA sequence with optional methylation and backbone properties.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The sequence of the upper strand of the DNA.</p>
 </dd>
@@ -112,7 +110,7 @@
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The sequence of the upper strand of the DNA.</p>
 </dd>
@@ -145,13 +143,13 @@
 
 </section>
 <section id="tb-model">
-<h2>TB_Model<a class="headerlink" href="#tb-model" title="Permalink to this heading"></a></h2>
+<h2>TB_Model<a class="headerlink" href="#tb-model" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">TB_Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_model.html#TB_Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>A class to define a predefined tight-binding model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the predefined tight-binding model.</p>
 </dd>
@@ -159,7 +157,7 @@
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the predefined tight-binding model.</p>
 </dd>
@@ -188,13 +186,13 @@
 
 </section>
 <section id="tb-ham">
-<h2>TB_Ham<a class="headerlink" href="#tb-ham" title="Permalink to this heading"></a></h2>
+<h2>TB_Ham<a class="headerlink" href="#tb-ham" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">TB_Ham</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dna_seq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ham_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#TB_Ham"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>A class used to represent the tight-binding Hamiltonian for DNA sequences.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dna_seq</strong><span class="classifier">DNA_Seq</span></dt><dd><p>The DNA sequence object containing the sequence and model information.</p>
 </dd>
@@ -202,7 +200,7 @@
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dna_seq</strong><span class="classifier">DNA_Seq</span></dt><dd><p>The DNA sequence object containing the sequence and model information.</p>
 </dd>
@@ -247,10 +245,6 @@
 </dl>
 <p class="rubric">Methods</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><strong>get_param_dicts()</strong></p></td>
 <td><p>Retrieves the tight-binding parameters for electrons and holes.</p></td>
@@ -277,10 +271,24 @@
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_backbone_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#TB_Ham.get_backbone_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates the backbone population for Fishbone models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict</dt><dd><p>A dictionary where the keys are particles and the values are the corresponding backbone populations.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#TB_Ham.get_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Computes and returns the Hamiltonian matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>np.ndarray</dt><dd><p>Hamiltonian matrix.</p>
 </dd>
@@ -293,13 +301,13 @@
 
 </section>
 <section id="me-solver">
-<h2>ME_Solver<a class="headerlink" href="#me-solver" title="Permalink to this heading"></a></h2>
+<h2>ME_Solver<a class="headerlink" href="#me-solver" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">ME_Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lindblad_diss</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">me_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
 </dd>
@@ -309,7 +317,7 @@
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>me_kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keyword arguments for the master equation solver.</p>
 </dd>
@@ -346,10 +354,6 @@
 </dl>
 <p class="rubric">Methods</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 40%" />
-<col style="width: 60%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><strong>get_init_matrix()</strong></p></td>
 <td><p>Gets the initial density matrix.</p></td>
@@ -376,15 +380,9 @@
 <span class="sig-name descname"><span class="pre">get_coh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_coh"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Gets the coherence of states.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Dict[str, float]</dt><dd><p>The coherence of states.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><dl class="simple">
-<dt>AssertionError</dt><dd><p>If the Hamiltonian description is not ‘2P’.</p>
 </dd>
 </dl>
 </dd>
@@ -396,13 +394,13 @@
 <span class="sig-name descname"><span class="pre">get_groundstate_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_groundstate_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Gets the ground state population.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Dict[str, float]</dt><dd><p>The ground state population.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>AssertionError</dt><dd><p>If the Hamiltonian description is not ‘2P’ or if relaxation is not enabled.</p>
 </dd>
@@ -416,7 +414,7 @@
 <span class="sig-name descname"><span class="pre">get_init_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_init_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Gets the initial density matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>q.Qobj</dt><dd><p>The initial density matrix.</p>
 </dd>
@@ -430,15 +428,9 @@
 <span class="sig-name descname"><span class="pre">get_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Gets the population of states.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Dict[str, float]</dt><dd><p>The population of states.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><dl class="simple">
-<dt>AssertionError</dt><dd><p>If the Hamiltonian description is not ‘2P’.</p>
 </dd>
 </dl>
 </dd>
@@ -450,7 +442,7 @@
 <span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Solves the master equation and returns the result.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>List[np.ndarray]</dt><dd><p>The result of solving the master equation.</p>
 </dd>
@@ -464,13 +456,13 @@
 <span class="sig-name descname"><span class="pre">get_result_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#ME_Solver.get_result_particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Gets the result for a specific particle.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>particle</strong><span class="classifier">str</span></dt><dd><p>The type of particle (‘electron’ or ‘hole’).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>List[np.ndarray]</dt><dd><p>The result for the specified particle.</p>
 </dd>
@@ -489,13 +481,13 @@
 
 </section>
 <section id="lindblad-diss">
-<h2>Lindblad_Diss<a class="headerlink" href="#lindblad-diss" title="Permalink to this heading"></a></h2>
+<h2>Lindblad_Diss<a class="headerlink" href="#lindblad-diss" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">Lindblad_Diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">diss_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#Lindblad_Diss"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Provides the operators of the form <span class="math notranslate nohighlight">\(\sqrt{\gamma} a\)</span> that are used in the Lindblad dissipator of the master equation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
 </dd>
@@ -503,7 +495,7 @@
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
 </dd>

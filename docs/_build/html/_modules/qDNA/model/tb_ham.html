@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>qDNA.model.tb_ham &mdash; QuantumDNA 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+  <title>qDNA.model.tb_ham &mdash; QuantumDNA 0.1.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
 
 
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -82,18 +80,20 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">qDNA</span> <span class="kn">import</span> <span class="n">DNA_Seq</span>
+<span class="kn">from</span> <span class="nn">qDNA.tools</span> <span class="kn">import</span> <span class="n">check_ham_kwargs</span><span class="p">,</span> <span class="n">get_config</span>
 <span class="kn">from</span> <span class="nn">qDNA.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">calc_amplitudes</span><span class="p">,</span>
     <span class="n">calc_average_pop</span><span class="p">,</span>
     <span class="n">calc_frequencies</span><span class="p">,</span>
-    <span class="n">get_conversion_dict</span><span class="p">,</span>
     <span class="n">get_conversion</span><span class="p">,</span>
+    <span class="n">get_conversion_dict</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">get_config</span><span class="p">,</span> <span class="n">check_ham_kwargs</span>
-<span class="kn">from</span> <span class="nn">.tb_basis</span> <span class="kn">import</span> <span class="n">get_eh_basis</span><span class="p">,</span> <span class="n">get_particle_eh_states</span><span class="p">,</span> <span class="n">get_eh_distance</span>
+
+<span class="kn">from</span> <span class="nn">.tb_basis</span> <span class="kn">import</span> <span class="n">get_eh_basis</span><span class="p">,</span> <span class="n">get_eh_distance</span><span class="p">,</span> <span class="n">get_particle_eh_states</span>
 <span class="kn">from</span> <span class="nn">.tb_model</span> <span class="kn">import</span> <span class="n">TB_Model</span>
 <span class="kn">from</span> <span class="nn">.tb_params</span> <span class="kn">import</span> <span class="n">wrap_load_tb_params</span>
 
@@ -120,7 +120,9 @@
 <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="TB_Ham"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham">[docs]</a><span class="k">class</span> <span class="nc">TB_Ham</span><span class="p">:</span>
+<div class="viewcode-block" id="TB_Ham">
+<a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham">[docs]</a>
+<span class="k">class</span> <span class="nc">TB_Ham</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class used to represent the tight-binding Hamiltonian for DNA sequences.</span>
 
@@ -358,7 +360,9 @@
                 <span class="n">matrix</span> <span class="o">=</span> <span class="n">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TB_Ham.get_matrix"><a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham.get_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">get_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TB_Ham.get_matrix">
+<a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham.get_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes and returns the Hamiltonian matrix.</span>
 
@@ -393,6 +397,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_params_hole</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tb_basis_sites_dict</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">matrix</span></div>
+
 
     <span class="k">def</span> <span class="nf">get_fourier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="n">quantities</span><span class="p">):</span>
         <span class="n">eigv</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_eigensystem</span><span class="p">()</span>
@@ -460,13 +465,48 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_average_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;average_pop&quot;</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fourier</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">end_state</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;average_pop&quot;</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TB_Ham.get_backbone_pop">
+<a class="viewcode-back" href="../../../apidoc/classes.html#qDNA.model.TB_Ham.get_backbone_pop">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_backbone_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the backbone population for Fishbone models.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary where the keys are particles and the values are the corresponding backbone populations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">tb_model_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;F&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;Backbone population can only be calculated for Fishbone models&quot;</span>
+        <span class="n">upper_backbone_sites</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;(0, </span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites_per_strand</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">lower_backbone_sites</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_strands</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tb_model</span><span class="o">.</span><span class="n">num_sites_per_strand</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">backbone_sites</span> <span class="o">=</span> <span class="n">upper_backbone_sites</span> <span class="o">+</span> <span class="n">lower_backbone_sites</span>
+
+        <span class="n">backbone_pop</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tb_site</span> <span class="ow">in</span> <span class="n">backbone_sites</span><span class="p">:</span>
+                <span class="n">backbone_pop</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_average_pop</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">tb_site</span><span class="p">)[</span>
+                    <span class="n">particle</span>
+                <span class="p">]</span>
+        <span class="k">return</span> <span class="n">backbone_pop</span></div>
+</div>
+
 
 
 <span class="c1"># ------------------------------------------------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="set_matrix_element"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.set_matrix_element">[docs]</a><span class="k">def</span> <span class="nf">set_matrix_element</span><span class="p">(</span>
+<div class="viewcode-block" id="set_matrix_element">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.set_matrix_element">[docs]</a>
+<span class="k">def</span> <span class="nf">set_matrix_element</span><span class="p">(</span>
     <span class="n">matrix</span><span class="p">,</span>
     <span class="n">tb_value</span><span class="p">,</span>
     <span class="n">new_state</span><span class="p">,</span>
@@ -508,7 +548,10 @@
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
-<div class="viewcode-block" id="tb_ham_1P"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_1P">[docs]</a><span class="k">def</span> <span class="nf">tb_ham_1P</span><span class="p">(</span>
+
+<div class="viewcode-block" id="tb_ham_1P">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_1P">[docs]</a>
+<span class="k">def</span> <span class="nf">tb_ham_1P</span><span class="p">(</span>
     <span class="n">tb_model</span><span class="p">,</span>
     <span class="n">tb_param_dict</span><span class="p">,</span>
     <span class="n">tb_basis_sites_dict</span><span class="p">,</span>
@@ -561,7 +604,10 @@
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
-<div class="viewcode-block" id="tb_ham_2P"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_2P">[docs]</a><span class="k">def</span> <span class="nf">tb_ham_2P</span><span class="p">(</span>
+
+<div class="viewcode-block" id="tb_ham_2P">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.tb_ham_2P">[docs]</a>
+<span class="k">def</span> <span class="nf">tb_ham_2P</span><span class="p">(</span>
     <span class="n">tb_model</span><span class="p">,</span>
     <span class="n">tb_param_dict_electron</span><span class="p">,</span>
     <span class="n">tb_param_dict_hole</span><span class="p">,</span>
@@ -606,10 +652,13 @@
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
+
 <span class="c1"># ------------------------------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="add_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_groundstate">[docs]</a><span class="k">def</span> <span class="nf">add_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<div class="viewcode-block" id="add_groundstate">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_groundstate">[docs]</a>
+<span class="k">def</span> <span class="nf">add_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds a dimension to the matrix to include the ground state.</span>
 
@@ -636,7 +685,10 @@
     <span class="k">return</span> <span class="n">matrix</span></div>
 
 
-<div class="viewcode-block" id="delete_groundstate"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.delete_groundstate">[docs]</a><span class="k">def</span> <span class="nf">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+
+<div class="viewcode-block" id="delete_groundstate">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.delete_groundstate">[docs]</a>
+<span class="k">def</span> <span class="nf">delete_groundstate</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes the ground state dimension from the matrix.</span>
 
@@ -659,10 +711,13 @@
     <span class="k">return</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span></div>
 
 
+
 <span class="c1"># --------------------------------------------------------------------------------------------</span>
 
 
-<div class="viewcode-block" id="add_interaction"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_interaction">[docs]</a><span class="k">def</span> <span class="nf">add_interaction</span><span class="p">(</span>
+<div class="viewcode-block" id="add_interaction">
+<a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.add_interaction">[docs]</a>
+<span class="k">def</span> <span class="nf">add_interaction</span><span class="p">(</span>
     <span class="n">matrix</span><span class="p">,</span>
     <span class="n">eh_basis</span><span class="p">,</span>
     <span class="n">interaction_param</span><span class="p">,</span>
@@ -714,6 +769,7 @@
             <span class="n">matrix</span><span class="p">,</span> <span class="n">interaction_strength</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis_state</span><span class="p">,</span> <span class="n">eh_basis</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">matrix</span></div>
+
 </pre></div>
 
            </div>

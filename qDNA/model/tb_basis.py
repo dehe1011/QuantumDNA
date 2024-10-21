@@ -1,7 +1,7 @@
 """
-This module provides functions for working with tight-binding (tb) basis and 
-electron-hole (eh) basis in quantum systems. It includes functions to generate 
-symbolic representations of basis indices, convert between different 
+This module provides functions for working with tight-binding (tb) basis and
+electron-hole (eh) basis in quantum systems. It includes functions to generate
+symbolic representations of basis indices, convert between different
 representations, and perform basis changes.
 """
 

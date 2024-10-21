@@ -124,7 +124,7 @@ class qDNA_app(ctk.CTk):
             **self.plot_option,
             **self.pop_kwargs,
             **self.coh_kwargs,
-            **self.fourier_kwargs
+            **self.fourier_kwargs,
         )
         self.kwargs.update(self.plot_options_kwargs)
 

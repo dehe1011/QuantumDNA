@@ -1,5 +1,5 @@
 """
-Module calculates observables. 
+Module calculates observables.
 """
 
 import numpy as np
