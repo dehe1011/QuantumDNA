@@ -4,7 +4,7 @@
 archive/
 .pre-commit-config.yaml
 HOWTO.md
-info.txt
+notes.txt
 main.py
 qDNA/data/raw/geometries/
 requirements/pip_freeze.txt

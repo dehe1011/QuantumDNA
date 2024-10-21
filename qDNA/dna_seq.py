@@ -18,6 +18,7 @@ from qDNA.tools import get_config
 
 __all__ = ["DNA_Seq", "create_upper_strands", "TB_MODELS_PROPS"]
 
+
 TB_MODELS_PROPS = {
     "WM": {
         "backbone": False,
