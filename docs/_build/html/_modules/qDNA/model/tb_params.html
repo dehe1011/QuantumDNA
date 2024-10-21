@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qDNA.model.tb_params &mdash; QuantumDNA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../../copyright.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="../../../index.html" class="icon icon-home">
+            QuantumDNA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/apidoc.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../copyright.html">Copyright and Licensing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">QuantumDNA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qDNA.model.tb_params</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for qDNA.model.tb_params</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides functions to save and load tight-binding parameters for quantum DNA models.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">tools</span> <span class="kn">import</span> <span class="n">my_save</span><span class="p">,</span> <span class="n">my_load</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;save_tb_params&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;load_tb_params&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wrap_save_tb_params&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wrap_load_tb_params&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="save_tb_params"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.save_tb_params">[docs]</a><span class="k">def</span> <span class="nf">save_tb_params</span><span class="p">(</span>
+    <span class="n">tb_param_dict</span><span class="p">,</span>
+    <span class="n">info_dict</span><span class="p">,</span>
+    <span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;tb_params&quot;</span><span class="p">),</span>
+    <span class="n">notes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save tight-binding parameters to a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_param_dict : dict</span>
+<span class="sd">        Dictionary containing the tight-binding parameters.</span>
+<span class="sd">    info_dict : dict</span>
+<span class="sd">        Dictionary with metadata, e.g., &#39;source&#39;, &#39;particle&#39;, and &#39;tb_model_name&#39;.</span>
+<span class="sd">    directory : str, optional</span>
+<span class="sd">        Directory to save the file, by default &#39;data/raw/tb_params&#39;.</span>
+<span class="sd">    notes : str, optional</span>
+<span class="sd">        Additional notes to include in the info_dict, by default None.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; save_tb_params(</span>
+<span class="sd">            {&#39;couple&#39;: 5, &#39;bff&#39;: 3, &#39;enemies&#39;: -2, &#39;very_cool&#39;: 3.5},</span>
+<span class="sd">            {&#39;source&#39;: &#39;author2024&#39;, &#39;particle&#39;: &#39;particle&#39;, &#39;tb_model_name&#39;: &#39;WM&#39;},</span>
+<span class="sd">            directory=&#39;stored_data/my_params&#39;,</span>
+<span class="sd">            notes=&#39;here you can add some notes.&#39;</span>
+<span class="sd">        )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">info_dict_notes</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">info_dict</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">notes</span><span class="p">:</span>
+        <span class="n">info_dict_notes</span><span class="p">[</span><span class="s2">&quot;notes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">notes</span>
+    <span class="n">my_save</span><span class="p">(</span>
+        <span class="n">tb_param_dict</span><span class="p">,</span>
+        <span class="n">info_dict_notes</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">,</span>
+        <span class="n">directory</span><span class="o">=</span><span class="n">directory</span><span class="p">,</span>
+        <span class="n">save_excel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">version_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_tb_params"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.load_tb_params">[docs]</a><span class="k">def</span> <span class="nf">load_tb_params</span><span class="p">(</span>
+    <span class="n">info_dict</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;tb_params&quot;</span><span class="p">),</span> <span class="n">load_metadata</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load tight-binding parameters from a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    info_dict : dict</span>
+<span class="sd">        Dictionary with metadata, e.g., &#39;source&#39;, &#39;particle&#39;, and &#39;tb_model_name&#39;.</span>
+<span class="sd">    directory : str, optional</span>
+<span class="sd">        Directory to load the file from, by default &#39;data/raw/tb_params&#39;.</span>
+<span class="sd">    load_metadata : bool, optional</span>
+<span class="sd">        Whether to load metadata along with the parameters, by default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Loaded tight-binding parameters.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; load_tb_params(</span>
+<span class="sd">            {&#39;source&#39;: &#39;author2024&#39;, &#39;particle&#39;: &#39;particle&#39;, &#39;tb_model_name&#39;: &#39;WM&#39;},</span>
+<span class="sd">            directory=&#39;stored_data/my_params&#39;,</span>
+<span class="sd">            load_metadata=True</span>
+<span class="sd">        )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">my_load</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="n">load_metadata</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">directory</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap_save_tb_params"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.wrap_save_tb_params">[docs]</a><span class="k">def</span> <span class="nf">wrap_save_tb_params</span><span class="p">(</span>
+    <span class="n">tb_param_dict</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">,</span>
+    <span class="n">particle</span><span class="p">,</span>
+    <span class="n">tb_model_name</span><span class="p">,</span>
+    <span class="n">unit</span><span class="p">,</span>
+    <span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;tb_params&quot;</span><span class="p">),</span>
+    <span class="n">notes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper function for save_tb_params().</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tb_param_dict : dict</span>
+<span class="sd">        Dictionary containing the tight-binding parameters.</span>
+<span class="sd">    source : str</span>
+<span class="sd">        Source of the parameters, e.g., &#39;Hawke2010&#39;.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        Type of particle, e.g., &#39;electron&#39;, &#39;hole&#39;, &#39;exciton&#39;.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        Name of the tight-binding model.</span>
+<span class="sd">    unit : str</span>
+<span class="sd">        The unit of the parameters.</span>
+<span class="sd">    directory : str, optional</span>
+<span class="sd">        Directory to save the file, by default &#39;data/raw/tb_params&#39;.</span>
+<span class="sd">    notes : str, optional</span>
+<span class="sd">        Additional notes to include in the info_dict, by default None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+        <span class="s2">&quot;particle&quot;</span><span class="p">:</span> <span class="n">particle</span><span class="p">,</span>
+        <span class="s2">&quot;tb_model_name&quot;</span><span class="p">:</span> <span class="n">tb_model_name</span><span class="p">,</span>
+        <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="n">unit</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">save_tb_params</span><span class="p">(</span><span class="n">tb_param_dict</span><span class="p">,</span> <span class="n">info_dict</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">directory</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap_load_tb_params"><a class="viewcode-back" href="../../../apidoc/functions.html#qDNA.model.wrap_load_tb_params">[docs]</a><span class="k">def</span> <span class="nf">wrap_load_tb_params</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">,</span>
+    <span class="n">particle</span><span class="p">,</span>
+    <span class="n">tb_model_name</span><span class="p">,</span>
+    <span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;tb_params&quot;</span><span class="p">),</span>
+    <span class="n">load_metadata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper function for load_tb_params().</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source : str</span>
+<span class="sd">        Source of the parameters, e.g., &#39;Hawke2010&#39;.</span>
+<span class="sd">    particle : str</span>
+<span class="sd">        Type of particle, e.g., &#39;electron&#39;, &#39;hole&#39;, &#39;exciton&#39;.</span>
+<span class="sd">    tb_model_name : str</span>
+<span class="sd">        Name of the tight-binding model.</span>
+<span class="sd">    directory : str, optional</span>
+<span class="sd">        Directory to load the file from, by default &#39;data/raw/tb_params&#39;.</span>
+<span class="sd">    load_metadata : bool, optional</span>
+<span class="sd">        Whether to load metadata along with the parameters, by default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Loaded tight-binding parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span> <span class="s2">&quot;particle&quot;</span><span class="p">:</span> <span class="n">particle</span><span class="p">,</span> <span class="s2">&quot;tb_model_name&quot;</span><span class="p">:</span> <span class="n">tb_model_name</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">load_tb_params</span><span class="p">(</span><span class="n">info_dict</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">directory</span><span class="p">,</span> <span class="n">load_metadata</span><span class="o">=</span><span class="n">load_metadata</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../../../copyright.html">Copyright</a> 2024, Dennis Herb.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

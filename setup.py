@@ -1,12 +1,12 @@
 from setuptools import find_packages, setup
 
-with open("configs/requirements.txt") as f:
+with open("requirements/requirements.txt") as f:
     required = f.read().splitlines()
 
-with open("configs/dev-requirements.txt") as f:
+with open("requirements/dev-requirements.txt") as f:
     dev = f.read().splitlines()
 
-with open("configs/doc-requirements.txt") as f:
+with open("requirements/doc-requirements.txt") as f:
     docs = f.read().splitlines()
 
 extras = dev + docs

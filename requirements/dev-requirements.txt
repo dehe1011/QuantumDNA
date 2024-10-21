@@ -1,0 +1,10 @@
+black
+pytest
+pylint
+coverage
+coveralls
+pre-commit
+build
+setuptools
+wheel
+twine
