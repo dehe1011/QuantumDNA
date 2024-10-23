@@ -35,7 +35,6 @@ This Python package can be cited as:
 
 > *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
 
-
 ## Introduction
 
 Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifetimes, average charge separation, and dipole moments of excited states along DNA. Leveraging the formalism of open quantum systems and based on tight-binding Hamiltonians, QuantumDNA is equipped to handle various tight-binding models. Users can incorporate custom tight-binding parameters from ab initio calculations or experimental data, as well as define their own models, making the tool highly adaptable. QuantumDNA is regularly updated to ensure it remains at the cutting edge and includes a user-friendly interface to be accessible even to researchers less familiar with computer science. Results from several research papers can be reproduced with QuantumDNA.
@@ -52,27 +51,22 @@ Welcome to QuantumDNA, a powerful and flexible tool designed to calculate lifeti
 * Parallelization: Supports parallel computing for the calculation of excited state properties for large ensembles of DNA sequences, optimizing performance within the computationally intensive context of open quantum systems.
 * Regular Updates: Stay current with the latest advancements and improvements.
 
-
 ## What's new
 
-**July 2024**
-
 * Added a graphical user interface (GUI) to the package such that it is easily accessible for users who are less familiar with computer science. The user interface is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky.
-* Added a Jupyter Notebook [`0_Paper`](docs/tutorials/0_Paper.ipynb) that reproduces all figures contained in our paper (and the supplementary) [D. Herb, M. Rossini and J. Ankerhold, *Physical Review E 109*, 064413 (2024).](https://doi.org/10.1103/PhysRevE.109.064413)
 * Added a [documentation](https://quantumdna.readthedocs.io/en/latest/) available on Read the Docs
-
 
 ## Getting started
 
 ### Quick Installation
 
-For a quick installation, you can install the `qDNA` package using pip within a virtual environment:
+For a quick installation, you can install the `qDNA` package via pip:
 
 ```bash
 pip install qDNA
 ```
 
-To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](installation.md).
+To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](INSTALLATION.md).
 
 ### Example Program
 
@@ -96,17 +90,11 @@ print(f"Exciton lifetime {lifetime} fs")
 print(f"Average charge separation {dipole} A")
 ```
 
-
 ## Documentation
 
-The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. The [package website](https://dehe1011.github.io/QuantumDNA/) contains general information about the project and planned future developments.
+The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. Tutorials can be found in a separate GitHub repository [QuantumDNA-notebooks](https://github.com/dehe1011/QuantumDNA-notebooks)
 
-### Tutorials
-
-
-
-
-### Graphical user interface
+## Graphical User Interface
 
 The `qDNA` package includes a graphical user interface (GUI) that provides an intuitive and user-friendly way to interact with the package's functionalities. You can access the GUI with the following code:
 
@@ -145,11 +133,9 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 </p>
 <blockquote><em>Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.</em></blockquote>
 
-
 The GUI streamlines the process of working with `qDNA`, making it accessible even to those who may not be familiar with coding. Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.
 
-
-### Shortcuts
+## Shortcuts
 
 To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. These abbreviations help keep the code concise while still being clear and understandable:
 
@@ -167,7 +153,6 @@ To enhance the readability and maintainability of the code, we have standardized
 * ```therm```: thermalizing
 * ```seq```: sequence
 * ```calc```: calculate
-
 
 ## References
 
@@ -202,7 +187,6 @@ Simulation of open quantum systems:
 
 * [J.R. Johansson, P.D. Nation and Franco Nori, QuTiP: An open-source Python framework for the dynamics of open quantum systems. *Computer Physics Communications 183*, 1760 (2012)](https://doi.org/10.1016/j.cpc.2012.02.021)
 * [quantum_HEOM (github.com/jwa7/quantum_HEOM), J.W. Abbott, 2022](https://doi.org/10.5281/zenodo.7230160)
-
 
 ## Support
 

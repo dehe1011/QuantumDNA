@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from qDNA.dynamics import get_me_solver
 from qDNA.model import get_eh_distance
-from qDNA.tools import ROOT_DIR, my_load, my_save
+from qDNA.tools import load_json, save_json
 from qDNA.utils import convert_to_debye
 
 __all__ = [
@@ -107,7 +107,7 @@ def calc_dipole_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
     return calc_dipole(upper_strand, tb_model_name, **kwargs)
 
 
-def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
+def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
     """
     Calculates the average charge separation for multiple upper strands using multiprocessing.
 
@@ -126,13 +126,14 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
         Dictionary containing the average charge separation for each upper strand.
     """
     try:
-        lifetime_dict, kwargs = my_load(
+        lifetime_dict, kwargs = load_json(
             "lifetime_" + filename,
-            directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
+            directory,
             load_metadata=True,
         )
     except:
         print("Could not load lifetime_dict")
+        return
 
     if not num_cpu:
         num_cpu = multiprocessing.cpu_count() - 1
@@ -153,17 +154,16 @@ def calc_dipole_dict(tb_model_name, filename, num_cpu=None):
         )
 
     dipole_dict = dict(zip(upper_strands, dipole_list))
-    my_save(
+    save_json(
         dipole_dict,
         kwargs,
         "dipole_" + filename,
-        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
-        version_index=False,
+        directory,
     )
     return dipole_dict
 
 
-def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
+def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
     """
     Calculates the dipole moment for multiple upper strands using multiprocessing.
 
@@ -182,22 +182,23 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
         Dictionary containing the dipole moment for each upper strand.
     """
     try:
-        dipole_dict, kwargs = my_load(
+        dipole_dict, kwargs = load_json(
             "dipole_" + filename,
-            directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
+            directory,
             load_metadata=True,
         )
         upper_strands = list(dipole_dict.keys())
         dipole_list = list(dipole_dict.values())
     except:
         try:
-            lifetime_dict, kwargs = my_load(
+            lifetime_dict, kwargs = load_json(
                 "lifetime_" + filename,
-                directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
+                directory,
                 load_metadata=True,
             )
         except:
             print("Could not load lifetime_dict")
+            return
 
         if not num_cpu:
             num_cpu = multiprocessing.cpu_count() - 1
@@ -219,11 +220,10 @@ def calc_dipole_moment_dict(tb_model_name, filename, num_cpu=None):
 
     dipole_moment_list = [convert_to_debye(dipole) for dipole in dipole_list]
     dipole_moment_dict = dict(zip(upper_strands, dipole_moment_list))
-    my_save(
-        dipole_moment_dict,
+    save_json(
+        dipole_dict,
         kwargs,
-        "dipole_moment_" + filename,
-        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
-        version_index=False,
+        "dipole_" + filename,
+        directory,
     )
     return dipole_moment_dict

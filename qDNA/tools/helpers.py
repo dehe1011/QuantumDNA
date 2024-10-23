@@ -1,19 +1,8 @@
 import time
 from functools import wraps
-import os
 import numpy as np
 
-from .save_load import my_load
-
-__all_ = [
-    "timeit",
-    "sorted_dict",
-    "get_dominant_dict",
-    "get_sorted_dict",
-    "get_correlation",
-]
-
-# ------------------------------------ wrappers ----------------------------------------
+from .save_load import load_json
 
 
 def timeit(f):
@@ -32,9 +21,6 @@ def timeit(f):
     return timed
 
 
-# ---------------------------------------------------------------------------------------------------------
-
-
 def sorted_dict(dictionary, reverse=True):
     """
     Sorts the dictionary by value.
@@ -44,7 +30,7 @@ def sorted_dict(dictionary, reverse=True):
 
 def get_dominant_dict(dominant_filename, directory):
     """returns soreted dictionary from a given filepath"""
-    dominant_dict = sorted_dict(my_load(dominant_filename, directory=directory))
+    dominant_dict = sorted_dict(load_json(dominant_filename, directory))
     return dominant_dict
 
 
@@ -54,7 +40,7 @@ def get_sorted_dict(dominant_filename, filename, directory):
     if dominant_filename == filename:
         return dominant_dict
     sequence_ordering = list(dominant_dict.keys())
-    lifetime_dict = my_load(filename, directory=directory)
+    lifetime_dict = load_json(filename, directory)
     sorted_keys = sorted(lifetime_dict.keys(), key=lambda x: sequence_ordering.index(x))
     lifetime_dict = {key: lifetime_dict[key] for key in sorted_keys}
     return lifetime_dict

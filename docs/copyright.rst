@@ -19,7 +19,7 @@ It is reproduced here for convenience.
 .. include:: LICENSE_cc-by-3.0.txt
 
 
-License Terms for Source Code of QuTiP and Code Samples
+License Terms for Source Code of QuantumDNA and Code Samples
 =======================================================
 
 ..

@@ -1,14 +1,12 @@
 # check which files are ignored: git status --ignored
 
 .venv/
-archive/
+.vscode/
 .pre-commit-config.yaml
 howto/
-notes.txt
 TODO.txt
 main.py
 qDNA/data/raw/geometries/
-requirements/pip_freeze.txt
 
 # created by coverage
 htmlcov/

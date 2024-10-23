@@ -6,15 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functions &mdash; QuantumDNA 0.1.4 documentation</title>
+  <title>Functions &mdash; QuantumDNA 0.1.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
 
 
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=fd825880"></script>
+      <script src="../_static/documentation_options.js?v=59fadc99"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -131,7 +130,7 @@
 <span id="tight-binding-basis"></span><h2>Tight-binding basis<a class="headerlink" href="#module-qDNA.model" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.basis_change">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">basis_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#basis_change"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.basis_change" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">basis_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.basis_change" title="Link to this definition"></a></dt>
 <dd><p>Performs a basis change of the given matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -155,7 +154,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_eh_basis">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_eh_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_eh_basis" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_eh_basis" title="Link to this definition"></a></dt>
 <dd><p>Generates a symbolic string representation of electron-hole basis indices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -183,7 +182,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_eh_distance">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_eh_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_eh_distance" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_eh_distance" title="Link to this definition"></a></dt>
 <dd><p>Calculates the distance between electron and hole for each state in the basis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -203,7 +202,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_particle_eh_states">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_particle_eh_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_particle_eh_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_particle_eh_states" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_particle_eh_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_particle_eh_states" title="Link to this definition"></a></dt>
 <dd><p>Generates a list of electron-hole states for a given particle and site basis element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -232,7 +231,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_tb_basis">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#get_tb_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.get_tb_basis" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_tb_basis" title="Link to this definition"></a></dt>
 <dd><p>Generates a symbolic string representation of the indices ‘(i, j)’ where i indicates the strand
 number and j the site number inside the strand.</p>
 <dl class="field-list simple">
@@ -258,7 +257,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.global_to_local">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">global_to_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#global_to_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.global_to_local" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">global_to_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.global_to_local" title="Link to this definition"></a></dt>
 <dd><p>Performs a basis change from the eigenbasis to the site basis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -282,7 +281,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.local_to_global">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">local_to_global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_basis.html#local_to_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.model.local_to_global" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">local_to_global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liouville</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.local_to_global" title="Link to this definition"></a></dt>
 <dd><p>Performs a basis change from the site basis to the eigenbasis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -309,7 +308,7 @@ number and j the site number inside the strand.</p>
 <h2>Tight-binding configuration<a class="headerlink" href="#tight-binding-configuration" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_config.html#get_tb_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Get the tight-binding configuration for a specified model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -334,7 +333,7 @@ number and j the site number inside the strand.</p>
 <h2>Tight-binding Hamiltonian<a class="headerlink" href="#tight-binding-hamiltonian" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#add_groundstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Adds a dimension to the matrix to include the ground state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -354,7 +353,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#add_interaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Adds interaction terms to the Hamiltonian based on the distance between electron and hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -380,7 +379,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">delete_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#delete_groundstate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">delete_groundstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Removes the ground state dimension from the matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -400,7 +399,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">set_matrix_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#set_matrix_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">set_matrix_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -428,7 +427,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_1P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#tb_ham_1P"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_1P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Constructs the particle tight-binding Hamiltonian matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -452,7 +451,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_2P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_electron</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_hole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_ham.html#tb_ham_2P"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">tb_ham_2P</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_electron</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_param_dict_hole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_sites_dict</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Constructs the electron-hole tight-binding Hamiltonian matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -481,7 +480,7 @@ number and j the site number inside the strand.</p>
 <h2>Save and load tight-binding parameters<a class="headerlink" href="#save-and-load-tight-binding-parameters" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#load_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Load tight-binding parameters from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -505,7 +504,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#save_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Save tight-binding parameters to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -525,7 +524,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#wrap_load_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_load_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Wrapper function for load_tb_params().</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -553,7 +552,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/model/tb_params.html#wrap_save_tb_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">wrap_save_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_param_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\raw\\tb_params'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Wrapper function for save_tb_params().</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -582,7 +581,7 @@ number and j the site number inside the strand.</p>
 <span id="reduced-density-matrix"></span><h2>Reduced density matrix<a class="headerlink" href="#module-qDNA.dynamics" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.dynamics.get_reduced_dm">
-<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/reduced_dm.html#get_reduced_dm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm" title="Link to this definition"></a></dt>
 <dd><p>Reduces the density matrix for a specific particle type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -612,7 +611,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.dynamics.get_reduced_dm_eigs">
-<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/reduced_dm.html#get_reduced_dm_eigs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm_eigs" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm_eigs" title="Link to this definition"></a></dt>
 <dd><p>Reduces the density matrix using the eigenstates of the Hamiltonian for a specific particle type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -639,7 +638,7 @@ number and j the site number inside the strand.</p>
 <h2>Master equation solver<a class="headerlink" href="#master-equation-solver" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_me_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dynamics/solver.html#get_me_solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_me_solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Creates an instance of ME_Solver.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -666,7 +665,7 @@ number and j the site number inside the strand.</p>
 <span id="exciton-lifetime"></span><h2>Exciton Lifetime<a class="headerlink" href="#module-qDNA.evaluation" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.evaluation.calc_lifetime">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_lifetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/lifetime.html#calc_lifetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.evaluation.calc_lifetime" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_lifetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.evaluation.calc_lifetime" title="Link to this definition"></a></dt>
 <dd><p>Calculates the exciton lifetime in femtoseconds (fs).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -690,7 +689,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.evaluation.calc_lifetime_dict">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_lifetime_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/lifetime.html#calc_lifetime_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.evaluation.calc_lifetime_dict" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_lifetime_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.evaluation.calc_lifetime_dict" title="Link to this definition"></a></dt>
 <dd><p>Calculates the exciton lifetime for multiple upper strands using multiprocessing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -721,7 +720,7 @@ number and j the site number inside the strand.</p>
 <h2>Average charge separation<a class="headerlink" href="#average-charge-separation" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/dipole.html#calc_dipole"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the average charge separation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -747,7 +746,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/dipole.html#calc_dipole_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the average charge separation for multiple upper strands using multiprocessing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -771,7 +770,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifetime_dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/dipole.html#calc_dipole_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lifetime_dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the average charge separation in the exciton lifetime.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -800,7 +799,7 @@ number and j the site number inside the strand.</p>
 <h2>Equilibrium states<a class="headerlink" href="#equilibrium-states" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_deph_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/eq_states.html#get_deph_eq_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_deph_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Computes the dephasing equilibrium state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -820,7 +819,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_therm_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/evaluation/eq_states.html#get_therm_eq_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">get_therm_eq_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">me_solver</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Computes the thermal equilibrium state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -843,7 +842,7 @@ number and j the site number inside the strand.</p>
 <span id="dna-sequences"></span><h2>DNA sequences<a class="headerlink" href="#module-qDNA" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.create_upper_strands">
-<span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">create_upper_strands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_dna_bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dna_bases</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/dna_seq.html#create_upper_strands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.create_upper_strands" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">create_upper_strands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_dna_bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dna_bases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.create_upper_strands" title="Link to this definition"></a></dt>
 <dd><p>Creates all possible permutations of the given DNA bases for the specified length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -868,7 +867,7 @@ number and j the site number inside the strand.</p>
 <span id="observables"></span><h2>Observables<a class="headerlink" href="#module-qDNA.environment" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.environment.get_coh_particle">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_coh_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_coh_particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_coh_particle" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_coh_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.environment.get_coh_particle" title="Link to this definition"></a></dt>
 <dd><p>Gets the coherence density matrix for a specific particle and pair of states.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -894,7 +893,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.environment.get_eh_observable">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_eh_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_eh_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_eh_observable" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_eh_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.environment.get_eh_observable" title="Link to this definition"></a></dt>
 <dd><p>Constructs the electron-hole density matrix for the given particle type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -926,7 +925,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.environment.get_pop_particle">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_pop_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_pop_particle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_pop_particle" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_pop_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.environment.get_pop_particle" title="Link to this definition"></a></dt>
 <dd><p>Gets the population density matrix for a specific particle and state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -950,7 +949,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.environment.get_tb_observable">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_tb_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/observables.html#get_tb_observable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qDNA.environment.get_tb_observable" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_tb_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.environment.get_tb_observable" title="Link to this definition"></a></dt>
 <dd><p>Wrapper function to get the density matrix for tight-binding sites.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -977,7 +976,7 @@ number and j the site number inside the strand.</p>
 <h2>Lindblad rates<a class="headerlink" href="#lindblad-rates" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">bose_einstein_distrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad_rates.html#bose_einstein_distrib"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">bose_einstein_distrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the Bose-Einstein distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -999,7 +998,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">debye_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad_rates.html#debye_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">debye_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the Debye spectral density.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1023,7 +1022,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">dephasing_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad_rates.html#dephasing_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">dephasing_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the dephasing rate in the limit of the Redfield rate equation as the frequency approaches zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1047,7 +1046,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">ohmic_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad_rates.html#ohmic_spectral_density"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">ohmic_spectral_density</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Calculates the Ohmic spectral density.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1076,7 +1075,7 @@ number and j the site number inside the strand.</p>
 <h2>Lindblad operators<a class="headerlink" href="#lindblad-operators" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_glob_deph_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Global dephasing operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1100,7 +1099,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_glob_deph_p_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Global dephasing operators for particle description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1122,7 +1121,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_therm_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_glob_therm_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_therm_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Global thermalizing operator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1150,7 +1149,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_therm_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deph_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debye'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_glob_therm_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_therm_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deph_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debye'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Global thermalizing operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1186,7 +1185,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_loc_deph_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Local dephasing operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1210,7 +1209,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_loc_deph_p_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Local dephasing operators for particle description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1232,7 +1231,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_therm_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_loc_therm_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_therm_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Local thermalizing operator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1262,7 +1261,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_therm_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deph_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debye'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_loc_therm_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_therm_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deph_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectral_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'debye'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Local thermalizing operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1298,7 +1297,7 @@ number and j the site number inside the strand.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_relax_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/qDNA/environment/lindblad.html#get_relax_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_relax_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Annihilation operator of an exciton on a given tight-binding site. Relaxation of the DNA to its ground state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

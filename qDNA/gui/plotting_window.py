@@ -113,10 +113,7 @@ class PlottingWindow(ctk.CTkToplevel):
     def save(self):
         self.filename = self.plotting_frame.filename_entry.get()
         self.directory = self.plotting_frame.directory_entry.get()
-        if self.directory:
-            save_figure(self.fig, self.filename, directory=self.directory, format="pdf")
-        else:
-            save_figure(self.fig, self.filename, format="pdf")
+        save_figure(self.fig, self.filename, self.directory, extension="pdf")
         self.destroy()
 
     def cancel(self):

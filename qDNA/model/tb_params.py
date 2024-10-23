@@ -1,10 +1,10 @@
 """
-This module provides functions to save and load tight-binding parameters for quantum DNA models.
+This module provides functions to save and load tight-binding parameters. The parameters are by default stored in the "qDNA/data/raw/tb_params" directory as JSON files.
 """
 
 import os
-from copy import deepcopy
-from qDNA.tools import ROOT_DIR, my_save, my_load
+from qDNA import DATA_DIR
+from qDNA.tools import load_json, save_json
 
 __all__ = [
     "save_tb_params",
@@ -15,10 +15,9 @@ __all__ = [
 
 
 def save_tb_params(
-    tb_param_dict,
-    info_dict,
-    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
-    notes=None,
+    tb_params,
+    metadata,
+    directory,
 ):
     """
     Save tight-binding parameters to a file.
@@ -36,30 +35,22 @@ def save_tb_params(
 
     Example
     -------
-    >>> save_tb_params(
-            {'couple': 5, 'bff': 3, 'enemies': -2, 'very_cool': 3.5},
-            {'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'WM'},
-            directory='stored_data/my_params',
-            notes='here you can add some notes.'
-        )
+    >>> save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, {'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder")
     """
-    filename = "_".join(info_dict.values())
-    info_dict_notes = deepcopy(info_dict)
-    if notes:
-        info_dict_notes["notes"] = notes
-    my_save(
-        tb_param_dict,
-        info_dict_notes,
+    filename = "_".join(
+        [metadata[key] for key in ["source", "particle", "tb_model_name"]]
+    )
+    save_json(
+        tb_params,
+        metadata,
         filename,
-        directory=directory,
-        save_excel=False,
-        version_index=False,
+        directory,
     )
 
 
 def load_tb_params(
-    info_dict,
-    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
+    metadata,
+    directory,
     load_metadata=False,
 ):
     """
@@ -81,23 +72,20 @@ def load_tb_params(
 
     Example
     -------
-    >>> load_tb_params(
-            {'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'WM'},
-            directory='stored_data/my_params',
-            load_metadata=True
-        )
+    >>> load_tb_params({'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder", load_metadata=False)
     """
-    filename = "_".join(info_dict.values())
-    return my_load(filename, load_metadata=load_metadata, directory=directory)
+    filename = "_".join(
+        [metadata[key] for key in ["source", "particle", "tb_model_name"]]
+    )
+    return load_json(filename, directory, load_metadata=load_metadata)
 
 
 def wrap_save_tb_params(
-    tb_param_dict,
+    tb_params,
     source,
     particle,
     tb_model_name,
-    unit,
-    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
+    unit=None,
     notes=None,
 ):
     """
@@ -113,27 +101,30 @@ def wrap_save_tb_params(
         Type of particle, e.g., 'electron', 'hole', 'exciton'.
     tb_model_name : str
         Name of the tight-binding model.
-    unit : str
+    unit : str, optional
         The unit of the parameters.
-    directory : str, optional
-        Directory to save the file, by default 'data/raw/tb_params'.
     notes : str, optional
         Additional notes to include in the info_dict, by default None.
+
+    Example
+    -------
+    >>> wrap_save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, 'author2024', 'particle', 'model', "delete_this_folder")
     """
-    info_dict = {
+    directory = os.path.join(DATA_DIR, "raw", "tb_params")
+    metadata = {
         "source": source,
         "particle": particle,
         "tb_model_name": tb_model_name,
         "unit": unit,
+        "notes": notes,
     }
-    save_tb_params(tb_param_dict, info_dict, directory=directory, notes=notes)
+    save_tb_params(tb_params, metadata, directory)
 
 
 def wrap_load_tb_params(
     source,
     particle,
     tb_model_name,
-    directory=os.path.join(ROOT_DIR, "qDNA", "data", "raw", "tb_params"),
     load_metadata=False,
 ):
     """
@@ -147,8 +138,6 @@ def wrap_load_tb_params(
         Type of particle, e.g., 'electron', 'hole', 'exciton'.
     tb_model_name : str
         Name of the tight-binding model.
-    directory : str, optional
-        Directory to load the file from, by default 'data/raw/tb_params'.
     load_metadata : bool, optional
         Whether to load metadata along with the parameters, by default False.
 
@@ -156,6 +145,11 @@ def wrap_load_tb_params(
     -------
     dict
         Loaded tight-binding parameters.
+
+    Example
+    -------
+    >>> wrap_load_tb_params('author2024', 'particle', 'model', load_metadata=False)
     """
-    info_dict = {"source": source, "particle": particle, "tb_model_name": tb_model_name}
-    return load_tb_params(info_dict, directory=directory, load_metadata=load_metadata)
+    directory = os.path.join("DATA_DIR", "raw", "tb_params")
+    metadata = {"source": source, "particle": particle, "tb_model_name": tb_model_name}
+    return load_tb_params(metadata, directory, load_metadata=load_metadata)

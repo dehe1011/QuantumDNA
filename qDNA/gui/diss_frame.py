@@ -1,7 +1,5 @@
 import customtkinter as ctk
 
-from qDNA.tools import get_config
-
 
 class DissFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):

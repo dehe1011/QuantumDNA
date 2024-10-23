@@ -11,7 +11,7 @@ import numpy as np
 from tqdm import tqdm
 
 from qDNA.dynamics import get_me_solver
-from qDNA.tools import ROOT_DIR, my_load, my_save
+from qDNA.tools import load_json, save_json
 
 __all__ = [
     "calc_backbone_transfer",
@@ -179,7 +179,7 @@ def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **
     return calc_exciton_transfer(upper_strand, tb_model_name, **kwargs)
 
 
-def calc_exciton_transfer_dict(tb_model_name, filename, num_cpu=None):
+def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None):
     """
     Calculates the average exciton population for multiple upper strands using multiprocessing.
 
@@ -198,9 +198,9 @@ def calc_exciton_transfer_dict(tb_model_name, filename, num_cpu=None):
         Dictionary containing the average exciton population for each upper strand.
     """
     try:
-        lifetime_dict, kwargs = my_load(
+        lifetime_dict, kwargs = load_json(
             "lifetime_" + filename,
-            directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
+            directory,
             load_metadata=True,
         )
     except:
@@ -225,11 +225,10 @@ def calc_exciton_transfer_dict(tb_model_name, filename, num_cpu=None):
         )
 
     exciton_transfer_dict = dict(zip(upper_strands, exciton_transfer_list))
-    my_save(
+    save_json(
         exciton_transfer_dict,
         kwargs,
         "exciton_transfer_" + filename,
-        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
-        version_index=False,
+        directory,
     )
     return exciton_transfer_dict

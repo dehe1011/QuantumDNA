@@ -1,1 +1,8 @@
-[{"E_A": -83, "E_T": -90, "E_G": -80, "E_C": -88, "t_AA": -0.08, "t_AT": 0.68, "t_AG": -0.05, "t_AC": 0.68, "t_TA": 0.26, "t_TT": -1.17, "t_TG": 0.28, "t_TC": -0.86, "t_GA": -0.79, "t_GT": 0.73, "t_GG": -0.62, "t_GC": 0.8, "t_CA": 0.05, "t_CT": -1.07, "t_CG": -0.01, "t_CC": -0.66, "h_AT": -0.12, "h_GC": -0.12, "h_TA": -0.12, "h_CG": -0.12, "E_B": -90, "t_BB": 1, "h_AB": 1, "h_TB": 1, "h_GB": 1, "h_CB": 1, "h_BA": 1, "h_BT": 1, "h_BG": 1, "h_BC": 1}, {"source": "Hawke2010", "particle": "hole", "tb_model_name": "FLM", "unit": "100meV", "notes": "energy unit: 100 meV"}]
+{
+"data": {
+"E_A": -83, "E_T": -90, "E_G": -80, "E_C": -88, "t_AA": -0.08, "t_AT": 0.68, "t_AG": -0.05, "t_AC": 0.68, "t_TA": 0.26, "t_TT": -1.17, "t_TG": 0.28, "t_TC": -0.86, "t_GA": -0.79, "t_GT": 0.73, "t_GG": -0.62, "t_GC": 0.8, "t_CA": 0.05, "t_CT": -1.07, "t_CG": -0.01, "t_CC": -0.66, "h_AT": -0.12, "h_GC": -0.12, "h_TA": -0.12, "h_CG": -0.12, "E_B": -90, "t_BB": 1, "h_AB": 1, "h_TB": 1, "h_GB": 1, "h_CB": 1, "h_BA": 1, "h_BT": 1, "h_BG": 1, "h_BC": 1
+},
+"metadata": {
+"source": "Hawke2010", "particle": "hole", "tb_model_name": "FLM", "unit": "100meV", "notes": "energy unit: 100 meV"
+}
+}

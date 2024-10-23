@@ -1,7 +1,6 @@
 import json
 import multiprocessing
 import time
-import tkinter as tk
 from tkinter import filedialog, messagebox
 
 import customtkinter as ctk

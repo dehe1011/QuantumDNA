@@ -1,28 +1,17 @@
-import pytest
+import shutil
 from qDNA.model import save_tb_params, load_tb_params
 
 
 def test_tb_params():
-    tb_param_dict = {
-        "relation_AliceBob": 5,
-        "relation_AliceCharlie": 3,
-        "relation_AliceEve": -2,
-        "relation_BobAlice": 5,
-        "relation_CharlieAlice": 3,
-        "relation_EveAlice": -2,
+    tb_params = {"t_AB": 5, "t_AC": 3, "t_BC": -2}
+    metadata = {
+        "source": "author2024",
+        "particle": "particle",
+        "tb_model_name": "model",
     }
-    info_dict = {"author": "Herb2024", "subject": "relations_between_persons"}
-    save_tb_params(
-        tb_param_dict,
-        info_dict,
-        directory="data/raw/test_params",
-        notes="The parameters describe relations between persons.",
+    save_tb_params(tb_params, metadata, "delete_this_folder")
+    loaded_tb_params = load_tb_params(
+        metadata, "delete_this_folder", load_metadata=False
     )
-    loaded_tb_param_dict = load_tb_params(
-        info_dict, directory="data/raw/test_params", load_metadata=False
-    )
-    assert tb_param_dict == loaded_tb_param_dict
-
-
-if __name__ == "__main__":
-    pytest.main()
+    shutil.rmtree("delete_this_folder")
+    assert tb_params == loaded_tb_params

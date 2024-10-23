@@ -13,7 +13,7 @@ import numpy as np
 from tqdm import tqdm
 
 from qDNA.dynamics import get_me_solver
-from qDNA.tools import ROOT_DIR, get_config, my_save
+from qDNA.tools import get_config, save_json
 
 __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
@@ -54,7 +54,9 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
         return "no relaxation in the given time"
 
 
-def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **kwargs):
+def calc_lifetime_dict(
+    upper_strands, tb_model_name, filename, directory, num_cpu=None, **kwargs
+):
     """
     Calculates the exciton lifetime for multiple upper strands using multiprocessing.
 
@@ -91,12 +93,10 @@ def calc_lifetime_dict(upper_strands, tb_model_name, filename, num_cpu=None, **k
         )
 
     lifetime_dict = dict(zip(upper_strands, lifetime_list))
-    my_save(
+    save_json(
         lifetime_dict,
         kwargs,
         "lifetime_" + filename,
-        directory=os.path.join(ROOT_DIR, "qDNA", "data", "processed"),
-        save_excel=False,
-        version_index=False,
+        directory,
     )
     return lifetime_dict

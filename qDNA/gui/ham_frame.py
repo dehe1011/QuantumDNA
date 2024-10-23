@@ -1,8 +1,5 @@
 import customtkinter as ctk
 
-from qDNA import wrap_save_tb_params
-from qDNA.tools import get_config
-
 
 class HamFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):

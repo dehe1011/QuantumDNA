@@ -1,17 +1,9 @@
-import pathlib
-import sys
-
-ROOT_DIR = str(pathlib.Path(__file__).absolute().parent.parent.parent)
-if ROOT_DIR not in sys.path:
-    del sys.path[0]
-    sys.path.insert(0, ROOT_DIR)
-
 import webbrowser
 
 import customtkinter as ctk
 
 from qDNA import DNA_Seq, Lindblad_Diss, ME_Solver, TB_Ham, TB_Model
-from qDNA.tools import get_config
+from qDNA.tools import CONFIG
 
 from .initial_frame import InitialFrame
 from .config_frame import ConfigFrame
@@ -35,9 +27,8 @@ class qDNA_app(ctk.CTk):
         super().__init__()
 
         self.title("QuantumDNA")
-        self.configs = get_config()
+        self.configs = CONFIG
         self.kwargs = dict()
-        self.configs = get_config()
         self.tb_basis = ["(0, 0)"]
 
         # frames

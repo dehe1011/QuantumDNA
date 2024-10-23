@@ -7,7 +7,7 @@ from itertools import permutations
 import numpy as np
 import scipy.constants as c
 
-from qDNA.tools import get_config
+from qDNA.tools import CONFIG
 
 __all__ = [
     "UNITS",
@@ -17,7 +17,7 @@ __all__ = [
     "convert_to_debye",
 ]
 
-UNITS = get_config()["UNITS"]
+UNITS = CONFIG["UNITS"]
 
 
 def convert_to_debye(charge_separation):
