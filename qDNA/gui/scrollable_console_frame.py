@@ -3,6 +3,8 @@ from tkinter.scrolledtext import ScrolledText
 
 import customtkinter as ctk
 
+# ------------------------------------------------------------
+
 
 class RedirectText:
     def __init__(self, text_widget):

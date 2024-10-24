@@ -13,6 +13,7 @@ Shortcuts
 
 from itertools import product
 from ast import literal_eval
+
 import numpy as np
 
 # -------------------------------------------- Tight-binding basis --------------------------------

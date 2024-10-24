@@ -10,7 +10,7 @@ from itertools import permutations
 import numpy as np
 import scipy.constants as c
 
-from qDNA.tools import CONFIG
+from ..tools import CONFIG
 
 __all__ = [
     "UNITS",

@@ -10,7 +10,7 @@ import os
 import random
 import yaml
 
-from qDNA import ROOT_DIR, DATA_DIR
+from .. import ROOT_DIR, DATA_DIR
 
 # ------------------------------------------------
 

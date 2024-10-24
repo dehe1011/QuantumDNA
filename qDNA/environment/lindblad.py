@@ -19,9 +19,9 @@ from itertools import product
 import numpy as np
 import qutip as q
 
-from qDNA.tools import CONFIG, check_diss_kwargs
-from qDNA.utils import get_conversion
-from qDNA.hamiltonian import TB_Ham, add_groundstate
+from ..tools import CONFIG, check_diss_kwargs
+from ..utils import get_conversion
+from ..hamiltonian import TB_Ham, add_groundstate
 
 from .relax_ops import get_relax_ops
 from .deph_ops import (
@@ -392,7 +392,7 @@ class Lindblad_Diss:
 
                 # Add observable as coherence operator
                 else:
-                    particle + "_" + tb_site1 + "_" + tb_site2
+                    key = particle + "_" + tb_site1 + "_" + tb_site2
                     coh_dict[key] = q.Qobj(observable)
 
         # Ground state population operator

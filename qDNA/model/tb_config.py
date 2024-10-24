@@ -10,8 +10,8 @@ Shortcuts
 - FC: Fully Connected
 """
 
-from qDNA import TB_MODELS_PROPS
-from qDNA.tools import CONFIG
+from .. import TB_MODELS_PROPS
+from ..tools import CONFIG
 
 __all__ = ["get_tb_config", "TB_MODELS_PROPS"]
 

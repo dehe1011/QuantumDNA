@@ -1,8 +1,15 @@
 import customtkinter as ctk
 
-from qDNA import calc_dipole, calc_dipole_moment, calc_exciton_transfer, calc_lifetime
+from ..evaluation import (
+    calc_dipole,
+    calc_dipole_moment,
+    calc_exciton_transfer,
+    calc_lifetime,
+)
 
 from .user_interface_utils import change_state_all_widgets
+
+# --------------------------------------------------
 
 
 class LifetimeFrame(ctk.CTkFrame):

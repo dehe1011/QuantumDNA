@@ -2,18 +2,16 @@
 This module provides functions to calculate the average charge separation (dipole moment) for quantum DNA models.
 """
 
-# import sys
 import multiprocessing
-import os
 from functools import partial
 
 import numpy as np
 from tqdm import tqdm
 
-from qDNA.dynamics import get_me_solver
-from qDNA.model import get_eh_distance
-from qDNA.tools import load_json, save_json
-from qDNA.utils import convert_to_debye
+from ..dynamics import get_me_solver
+from ..model import get_eh_distance
+from ..tools import load_json, save_json
+from ..utils import convert_to_debye
 
 __all__ = [
     "calc_dipole",
@@ -23,7 +21,7 @@ __all__ = [
     "calc_dipole_moment_dict",
 ]
 
-# -------------------------------- Average Charge Separation/ Dipole Moment ------------------------------------------
+# ------------------------------------------------
 
 
 def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):

@@ -1,5 +1,5 @@
 import shutil
-from qDNA.model import save_tb_params, load_tb_params
+from qDNA.hamiltonian import save_tb_params, load_tb_params
 
 
 def test_tb_params():

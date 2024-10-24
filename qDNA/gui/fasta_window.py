@@ -1,4 +1,6 @@
 import json
+import glob
+import os
 import multiprocessing
 import time
 from tkinter import filedialog, messagebox
@@ -6,13 +8,17 @@ from tkinter import filedialog, messagebox
 import customtkinter as ctk
 import pandas as pd
 
-from qDNA import (
+from .. import DATA_DIR
+from ..tools import load_json
+from ..evaluation import (
     calc_dipole_dict,
     calc_dipole_moment_dict,
     calc_exciton_transfer_dict,
     calc_lifetime_dict,
 )
 from .scrollable_console_frame import ScrollableConsoleFrame
+
+# --------------------------------------------------
 
 
 def format_time(seconds):
@@ -44,6 +50,7 @@ class FastaWindow(ctk.CTkToplevel):
         self.tb_model_name = "ELM"
         self.filename = "delete"
         self.num_cpu = multiprocessing.cpu_count() - 1
+        self.directory = os.path.join(DATA_DIR, "gui")
 
     def setup_ui(self):
         self.logo_label = ctk.CTkLabel(
@@ -165,27 +172,39 @@ class FastaWindow(ctk.CTkToplevel):
         except:
             pass
 
+        # start calculations
         start_time = time.time()
+
+        # Lifetime calculation
         if self.lifetime_var.get():
             lifetime_dict = calc_lifetime_dict(
-                self.upper_strands, self.tb_model_name, self.filename, **self.kwargs
+                self.upper_strands,
+                self.tb_model_name,
+                self.filename,
+                self.directory,
+                **self.kwargs,
             )
             fasta_data["Exciton Lifetime (fs)"] = list(lifetime_dict.values())
         end_time_lifetime = time.time()
 
+        # Charge separation calculation
         if self.dipole_var.get():
-            dipole_dict = calc_dipole_dict(self.tb_model_name, self.filename)
+            dipole_dict = calc_dipole_dict(
+                self.tb_model_name, self.filename, self.directory
+            )
             fasta_data["Charge Separation (A)"] = list(dipole_dict.values())
 
+        # Dipole moment calculation
         if self.dipole_moment_var.get():
             dipole_moment_dict = calc_dipole_moment_dict(
-                self.tb_model_name, self.filename
+                self.tb_model_name, self.filename, self.directory
             )
             fasta_data["Dipole Moment (D)"] = list(dipole_moment_dict.values())
 
+        # Exciton transfer calculation
         if self.exciton_transfer_var.get():
             exciton_transfer_dict = calc_exciton_transfer_dict(
-                self.tb_model_name, self.filename
+                self.tb_model_name, self.filename, self.directory
             )
             fasta_data["Exciton Transfer (upper strand)"] = [
                 val[0]["exciton"] for val in exciton_transfer_dict.values()
@@ -194,6 +213,7 @@ class FastaWindow(ctk.CTkToplevel):
                 val[1]["exciton"] for val in exciton_transfer_dict.values()
             ]
         end_time = time.time()
+        # end calculations
 
         print("-------------------")
         print(fasta_data)
@@ -204,8 +224,14 @@ class FastaWindow(ctk.CTkToplevel):
         metadata_df = pd.DataFrame(
             list(self.kwargs.items()), columns=["Parameter", "Value"]
         )
-
+        # save as excel file
         self.save_to_excel(df_fasta, metadata_df)
+
+        # delete files created during calculations
+        json_files = glob.glob(os.path.join(self.directory, "*.json"))
+        for file in json_files:
+            os.remove(file)
+            print(f"Deleted: {file}")
 
     def parse_fasta_data(self):
         for line in self.fasta_data:
@@ -233,56 +259,7 @@ class FastaWindow(ctk.CTkToplevel):
             messagebox.showerror("Error", f"Failed to save file: {e}")
 
     def estimate_comp_time(self):
-        comp_time_dict = {
-            "WM": [
-                0.04849529266357422,
-                0.04625391960144043,
-                0.07857656478881836,
-                0.13587403297424316,
-                0.21225285530090332,
-                0.3305344581604004,
-            ],
-            "LM": [
-                0.2975034713745117,
-                1.308180570602417,
-                3.8845632076263428,
-                9.669641017913818,
-                19.188920259475708,
-                35.40109610557556,
-            ],
-            "ELM": [
-                0.30926942825317383,
-                1.379915475845337,
-                4.239468812942505,
-                11.73042607307434,
-                25.32820200920105,
-                52.95796084403992,
-            ],
-            "FWM": [
-                8.07165561,
-                34.5582086,
-                139.004404,
-                364.221048,
-                1015.64643,
-                2094.59942,
-            ],
-            "FLM": [
-                22.8213988,
-                133.818269,
-                523.606570,
-                1572.64914,
-                3480.68617,
-                5173.29872,
-            ],
-            "FELM": [
-                23.9733094,
-                140.136105,
-                553.018477,
-                1760.12157,
-                4562.22129,
-                5655.94587,
-            ],
-        }
+        comp_time_dict = load_json("comp_time", os.path.join(DATA_DIR, "raw"))
         comp_time = 0
         for upper_strand in self.upper_strands:
             comp_time += comp_time_dict[self.tb_model_name][len(upper_strand) - 2]

@@ -5,10 +5,12 @@ Module for reducing density matrices to the electron, hole or exciton subspace.
 from itertools import product
 import numpy as np
 
-from qDNA.model import delete_groundstate
-from qDNA.environment import get_eh_observable, get_tb_observable
+from ..hamiltonian import delete_groundstate
+from ..environment import get_eh_observable, get_tb_observable
 
 __all__ = ["get_reduced_dm", "get_reduced_dm_eigs"]
+
+# ------------------------------------------------
 
 
 def get_reduced_dm(dm, particle, tb_basis):
@@ -41,21 +43,27 @@ def get_reduced_dm(dm, particle, tb_basis):
     array([[2., 0.],
            [0., 2.]])
     """
+
     num_sites = len(tb_basis)
+
+    # Before taking the trace the groundstate needs to be removed
     if dm.shape[0] != num_sites**2:
         dm = delete_groundstate(dm)
-    reduced_dm = np.zeros((num_sites, num_sites), dtype=np.complex128)
+
+    reduced_dm = np.zeros((num_sites, num_sites), dtype=complex)
     for start_state, end_state in product(tb_basis, repeat=2):
-        value = np.trace(
-            get_eh_observable(tb_basis, particle, start_state, end_state) @ dm
-        )
+        # Calculate expectation using the full density matrix
+        observable = get_eh_observable(tb_basis, particle, start_state, end_state)
+        value = np.trace(observable @ dm)
+
+        # Multiply expectation value with the corresponding element of the reduced density matrix
         reduced_dm += value * get_tb_observable(tb_basis, start_state, end_state).T
     return reduced_dm
 
 
 def get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx):
     """
-    Reduces the density matrix using the eigenstates of the Hamiltonian for a specific particle type.
+    Reduces the density matrix of a selected eigenstate of the Hamiltonian for a specific particle type.
 
     Parameters
     ----------
@@ -71,6 +79,7 @@ def get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx):
     np.ndarray
         The reduced density matrix.
     """
+
     _, eigs = tb_ham.get_eigensystem()
     dm = np.outer(eigs[:, eigenstate_idx], eigs[:, eigenstate_idx].conj())
     return get_reduced_dm(dm, particle, tb_ham.tb_basis)

@@ -1,16 +1,13 @@
 import pytest
 from qDNA import DNA_Seq, create_upper_strands
 
-# Run test in a Jupyter Notebook
-# !python -m pytest -vv tests/test_dna_seq_generator.py --disable-pytest-warnings
-
 
 @pytest.mark.parametrize(
     "seq, mode, methylated, expected",
     [
-        ("GcG", "ELM", True, ("GcG", "CGc")),
-        ("GcG", "WM", True, ("GcG",)),
-        ("GcG", "FLM", True, ("BBB", "GcG", "CGc", "BBB")),
+        ("GCG", "ELM", True, ("GCG", "CGC")),
+        ("GCG", "WM", True, ("GCG",)),
+        ("GCG", "FLM", True, ("BBB", "GCG", "CGC", "BBB")),
     ],
 )
 def test_DNA_Seq(seq, mode, methylated, expected):
@@ -23,7 +20,3 @@ def test_DNA_Seq(seq, mode, methylated, expected):
 )
 def test_create_upper_strands(length, bases, expected):
     assert create_upper_strands(length, bases) == expected
-
-
-if __name__ == "__main__":
-    pytest.main()

@@ -5,71 +5,94 @@ This module provides functions to compute equilibrium states for quantum DNA mod
 import numpy as np
 import scipy.constants as c
 
-from qDNA.utils import get_conversion
-from qDNA.model import global_to_local, local_to_global
-
-# Shortcuts:
-# eq: equilibrium
+from ..utils import get_conversion
+from ..model import global_to_local, local_to_global
 
 __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
-# ----------------------------------- Equilibrium States --------------------------------------
+# ---------------------------------------------------------------------
 
 
 def get_therm_eq_state(me_solver):
     """
-    Computes the thermal equilibrium state.
+    Calculate the thermal equilibrium state.
 
     Parameters
     ----------
-    me_solver : MESolverType
-        The master equation solver instance.
-
+    me_solver : object
+        An instance of a master equation solver which contains the tight-binding Hamiltonian (`tb_ham`)
+        and the Lindblad dissipation parameters (`lindblad_diss`).
     Returns
     -------
-    np.ndarray
-        The thermal equilibrium state.
+    numpy.ndarray
+        The thermal equilibrium state of the system. If the temperature is zero, returns the ground state.
+        Otherwise, returns the thermal equilibrium state as a density matrix in the local basis.
+    Notes
+    -----
+    - The function first checks if the temperature is zero. If so, it returns the ground state.
+    - For non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the Hamiltonian,
+      normalizes them, and transforms the resulting diagonal matrix to the local basis.
     """
+
     tb_ham = me_solver.tb_ham
     eigv, eigs = tb_ham.get_eigensystem()
     temperature = me_solver.lindblad_diss.temperature
-    if temperature == 0:
-        return tb_ham.eigs[:, 0]  # ground state
 
+    # Ground state
+    if temperature == 0:
+        return tb_ham.eigs[:, 0]
+
+    # Thermal equilibrium state
+    # Calculate the equilibrium values for each eigenvalue
     eq_values = np.zeros(tb_ham.matrix_dim)
     for i in range(tb_ham.matrix_dim):
-        eq_values[i] = np.exp(
-            -eigv[i] * get_conversion(tb_ham.unit, "J") / (c.k * temperature)
-        )
-    eq_values = np.diag(eq_values / np.sum(eq_values))
+        energy = eigv[i] * get_conversion(tb_ham.unit, "J")
+        eq_values[i] = np.exp(-energy / (c.k * temperature))
+
+    # Normalize the equilibrium values, convert to a diagonal matrix and transform to the local basis
+    eq_values /= np.sum(eq_values)
+    eq_values = np.diag(eq_values)
     eq_state = global_to_local(eq_values, eigs)
+
     return eq_state
 
 
 def get_deph_eq_state(me_solver):
     """
-    Computes the dephasing equilibrium state.
+    Calculate the dephasing equilibrium state.
 
     Parameters
     ----------
-    me_solver : MESolverType
-        The master equation solver instance.
-
+    me_solver : object
+        An instance of a master equation solver which contains the following attributes:
+        - lindblad_diss.loc_deph_rate : float
+            Local dephasing rate.
+        - lindblad_diss.glob_deph_rate : float
+            Global dephasing rate.
+        - tb_ham.matrix_dim : int
+            Dimension of the Hamiltonian matrix.
+        - init_matrix.full() : numpy.ndarray
+            Initial density matrix.
+        - tb_ham.get_eigensystem() : tuple
+            Returns eigenvalues and eigenvectors of the Hamiltonian.
     Returns
     -------
-    np.ndarray
-        The dephasing equilibrium state.
+    numpy.ndarray
+        The dephasing equilibrium state as a density matrix.
     """
+
+    # Local dephasing
     if me_solver.lindblad_diss.loc_deph_rate:
-        return (
-            np.eye(me_solver.tb_ham.matrix_dim) / me_solver.tb_ham.matrix_dim
-        )  # maximally mixed state
+        # maximally mixed state
+        return np.eye(me_solver.tb_ham.matrix_dim) / me_solver.tb_ham.matrix_dim
+
+    # Global dephasing
     if me_solver.lindblad_diss.glob_deph_rate:
         loc_init_matrix = me_solver.init_matrix.full()
         _, eigs = me_solver.tb_ham.get_eigensystem()
         glob_init_matrix = local_to_global(loc_init_matrix, eigs)
-        glob_init_matrix = np.diag(
-            np.diag(glob_init_matrix)
-        )  # cancel all off-diagonal elements
+
+        # cancel all off-diagonal elements
+        glob_init_matrix = np.diag(np.diag(glob_init_matrix))
         loc_init_matrix = global_to_local(glob_init_matrix, eigs)
         return loc_init_matrix

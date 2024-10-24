@@ -5,8 +5,9 @@ This module defines two classes for tight-binding models: Custom_TB_Model and TB
 - TB_Model provides a predefined tight-binding model based on the model name and dimensions, and retrieves the corresponding properties, configurations, and basis states.
 """
 
-from qDNA.tools import CONFIG
-from qDNA import TB_MODELS_PROPS
+from ..tools import CONFIG
+from .. import TB_MODELS_PROPS
+
 from .tb_basis import get_tb_basis, get_eh_basis
 from .tb_config import get_tb_config
 

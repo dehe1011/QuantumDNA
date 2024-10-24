@@ -1,6 +1,8 @@
 import customtkinter as ctk
 
-from qDNA import wrap_save_tb_params
+from ..hamiltonian import wrap_save_tb_params
+
+# --------------------------------------------------
 
 
 class CustomFrame(ctk.CTkFrame):

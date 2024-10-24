@@ -1,8 +1,8 @@
 import numpy as np
 import qutip as q
 
-from qDNA.model import add_groundstate, global_to_local
-
+from ..model import global_to_local
+from ..hamiltonian import add_groundstate
 from .observables import get_pop_particle
 
 # ----------------------------------------------

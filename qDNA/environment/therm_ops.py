@@ -3,7 +3,8 @@ import scipy.constants as c
 from itertools import permutations, product
 import qutip as q
 
-from qDNA.model import add_groundstate, global_to_local
+from ..model import global_to_local
+from ..hamiltonian import add_groundstate
 from .therm_rates import rate_constant_redfield
 
 # ----------------------------------------------------

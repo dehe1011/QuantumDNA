@@ -2,16 +2,14 @@
 This module provides functions to calculate the average exciton population for quantum DNA models.
 """
 
-# import sys
 import multiprocessing
-import os
 from functools import partial
 
 import numpy as np
 from tqdm import tqdm
 
-from qDNA.dynamics import get_me_solver
-from qDNA.tools import load_json, save_json
+from ..dynamics import get_me_solver
+from ..tools import load_json, save_json
 
 __all__ = [
     "calc_backbone_transfer",
@@ -20,6 +18,8 @@ __all__ = [
     "calc_exciton_transfer_wrapper",
     "calc_exciton_transfer_dict",
 ]
+
+# ------------------------------------------------
 
 
 def calc_average_transfer(tb_sites, me_solver, average=True):

@@ -3,15 +3,13 @@ This module provides functions to plot eigenenergies and eigenstates for quantum
 """
 
 import numpy as np
-import seaborn as sns
 
-from qDNA.tools import get_config
-from qDNA import get_reduced_dm_eigs, get_conversion
+from ..utils import get_conversion
+from ..dynamics import get_reduced_dm_eigs
+
+from . import PARTICLES, COLORS_PARTICLES
 
 __all__ = ["PARTICLES", "COLORS_PARTICLES", "plot_eigv", "plot_eigs"]
-
-PARTICLES = get_config()["PARTICLES"]
-COLORS_PARTICLES = dict(zip(PARTICLES, sns.color_palette()[:3]))
 
 # -------------------------------------------------------------------------------------
 
@@ -29,8 +27,12 @@ def plot_eigv(ax, tb_ham, energy_unit="100meV"):
     energy_unit : str, optional
         The unit of energy to plot, by default '100meV'.
     """
+
+    # calculation
     eigv, _ = tb_ham.get_eigensystem()
     eigv *= get_conversion(tb_ham.unit, energy_unit)
+
+    # plotting
     ax.set_title("Eigenvalues")
     ax.plot(eigv, "o")
     ax.set_ylabel("Energy in " + energy_unit)
@@ -49,32 +51,37 @@ def plot_eigs(ax, tb_ham, eigenstate_idx):
     eigenstate_idx : int
         The index of the eigenstate to plot.
     """
+
+    # calculation
     _, eigs = tb_ham.get_eigensystem()
+
+    # 1P description
     if tb_ham.description == "2P":
         for particle in tb_ham.particles:
+            # extract eigenstate population for each local state
             reduced_dm_eigs = get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx)
             eigs_distribution = np.diag(reduced_dm_eigs)
             eigs_prob_distribution = np.multiply(
                 eigs_distribution, eigs_distribution.conj()
             ).real
-            ax.plot(
-                tb_ham.tb_basis,
-                eigs_prob_distribution,
-                label=particle,
-                color=COLORS_PARTICLES[particle],
-            )
+
+    # 2P description
     elif tb_ham.description == "1P":
         for particle in tb_ham.particles:
+            # extract eigenstate population for each local state
             eigs_distribution = np.diag(eigs)
             eigs_prob_distribution = np.multiply(
                 eigs_distribution, eigs_distribution.conj()
             ).real
-            ax.plot(
-                tb_ham.tb_basis,
-                eigs_prob_distribution,
-                label=particle,
-                color=COLORS_PARTICLES[particle],
-            )
+
+    # plotting
+    for particle in tb_ham.particles:
+        ax.plot(
+            tb_ham.tb_basis,
+            eigs_prob_distribution,
+            label=particle,
+            color=COLORS_PARTICLES[particle],
+        )
     ax.set_ylim(0, 1.02)
     ax.set_title(f"Distribution of Eigenstate {eigenstate_idx}")
     ax.legend()

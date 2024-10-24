@@ -185,7 +185,3 @@ def test_get_tb_config_FELM(input, expected):
 )
 def test_get_tb_config_FC(input, expected):
     assert get_tb_config(*input) == expected
-
-
-if __name__ == "__main__":
-    pytest.main()

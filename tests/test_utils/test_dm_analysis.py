@@ -24,7 +24,3 @@ def test_calc_coherence(dm, expected):
 @pytest.mark.parametrize("dm, expected", [(dm_1, 2.0), (dm_2, 1.0)])
 def test_calc_ipr_dm(dm, expected):
     assert np.allclose(calc_ipr_dm(dm), expected)
-
-
-if __name__ == "__main__":
-    pytest.main()

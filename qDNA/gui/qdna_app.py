@@ -2,8 +2,12 @@ import webbrowser
 
 import customtkinter as ctk
 
-from qDNA import DNA_Seq, Lindblad_Diss, ME_Solver, TB_Ham, TB_Model
-from qDNA.tools import CONFIG
+from .. import DNA_Seq
+from ..environment import Lindblad_Diss
+from ..dynamics import ME_Solver
+from ..hamiltonian import TB_Ham
+from ..model import TB_Model
+from ..tools import CONFIG
 
 from .initial_frame import InitialFrame
 from .config_frame import ConfigFrame
@@ -13,6 +17,8 @@ from .plot_options_frame import PlotOptionsFrame
 from .plotting_window import PlottingWindow
 from .scrollable_console_frame import ScrollableConsoleFrame
 from .fasta_window import FastaWindow
+
+# --------------------------------------------------
 
 
 class qDNA_app(ctk.CTk):

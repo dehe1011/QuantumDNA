@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+
 from qDNA.model import (
     get_tb_basis,
     get_eh_basis,
@@ -118,7 +119,3 @@ def test_global_to_local(matrix, eigs, expected):
 )
 def test_local_to_global(matrix, eigs, expected):
     assert np.allclose(local_to_global(matrix, eigs), expected)
-
-
-if __name__ == "__main__":
-    pytest.main()

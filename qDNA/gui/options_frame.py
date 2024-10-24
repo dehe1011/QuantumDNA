@@ -5,6 +5,8 @@ from .diss_frame import DissFrame
 from .dynamics_frame import DynamicsFrame
 from .user_interface_utils import change_state_all_widgets
 
+# --------------------------------------------------
+
 
 class OptionsTab(ctk.CTkTabview):
     def __init__(self, master, configs, **kwargs):

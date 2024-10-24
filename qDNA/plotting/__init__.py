@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
+
+from ..tools import CONFIG
 
 plt.style.use("seaborn-v0_8")
 
@@ -18,12 +21,8 @@ plt.rcParams.update(
     }
 )
 
-import seaborn as sns
-
-from qDNA.tools import get_config
-
-DNA_BASES = get_config()["DNA_BASES"]
-PARTICLES = get_config()["PARTICLES"]
+DNA_BASES = CONFIG["DNA_BASES"]
+PARTICLES = CONFIG["PARTICLES"]
 COLORS_DNA_BASES = dict(
     zip(DNA_BASES, sns.color_palette("colorblind", n_colors=len(DNA_BASES)))
 )

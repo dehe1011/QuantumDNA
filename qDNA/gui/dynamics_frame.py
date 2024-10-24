@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+# --------------------------------------------------
+
 
 class DynamicsFrame(ctk.CTkFrame):
     def __init__(self, master, configs, **kwargs):

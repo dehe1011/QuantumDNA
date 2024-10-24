@@ -2,8 +2,10 @@ import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from qDNA import plot_pop, plot_pops, plot_coh, plot_fourier
-from qDNA.tools import save_figure
+from ..plotting import plot_pop, plot_pops, plot_coh, plot_fourier
+from ..tools import save_figure
+
+# -----------------------------------------------------------------------------------------------------
 
 
 class PlottingFrame(ctk.CTkFrame):

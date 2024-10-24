@@ -21,7 +21,3 @@ def test_calc_amplitudes(eigs, state1, state2, expected):
 @pytest.mark.parametrize("eigv, expected", [(eigv, np.array([2.0]))])
 def test_calc_frequencies(eigv, expected):
     assert np.allclose(calc_frequencies(eigv), expected)
-
-
-if __name__ == "__main__":
-    pytest.main()

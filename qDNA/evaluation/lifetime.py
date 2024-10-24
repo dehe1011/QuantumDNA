@@ -3,21 +3,18 @@ This module provides functions to calculate the estimated exciton lifetime for q
 """
 
 import multiprocessing
-import os
-
-# import sys
 import time
 from functools import partial
 
 import numpy as np
 from tqdm import tqdm
 
-from qDNA.dynamics import get_me_solver
-from qDNA.tools import get_config, save_json
+from ..dynamics import get_me_solver
+from ..tools import get_config, save_json
 
 __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
-# --------------------------------------- Estimated Exciton Lifetime ------------------------
+# ---------------------------------------------------------------
 
 
 def calc_lifetime(upper_strand, tb_model_name, **kwargs):

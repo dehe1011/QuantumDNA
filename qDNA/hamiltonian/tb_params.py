@@ -5,8 +5,8 @@ The module includes functions to handle metadata associated with the parameters,
 """
 
 import os
-from qDNA import DATA_DIR
-from qDNA.tools import load_json, save_json
+from .. import DATA_DIR
+from ..tools import load_json, save_json
 
 __all__ = [
     "save_tb_params",
