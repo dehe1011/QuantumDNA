@@ -1,0 +1,26 @@
+2024-10-23 12:59:51,608 - qDNA.tools.save_load - INFO - Data loaded from c:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA-notebooks\data\data_paper\dipole_7bp_J0.json
+2024-10-23 12:59:51,619 - qDNA.tools.save_load - INFO - Data loaded from c:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA-notebooks\data\data_paper\lifetime_7bp_J0.json
+2024-10-23 16:06:00,100 - qDNA.tools.save_load - WARNING - File C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-23 16:06:16,132 - qDNA.tools.save_load - WARNING - File C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-23 16:06:35,725 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models.json
+2024-10-23 16:08:35,121 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models.json
+2024-10-23 18:14:26,775 - qDNA.tools.save_load - WARNING - File c:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-23 18:14:35,406 - qDNA.tools.save_load - WARNING - File c:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-23 18:14:38,467 - qDNA.tools.save_load - WARNING - File c:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-24 11:49:21,567 - qDNA.tools.save_load - WARNING - File DATA_DIR\raw\tb_params\Hawke2010_electron_ELM.json does not exist.
+2024-10-24 11:50:25,699 - qDNA.tools.save_load - WARNING - File C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models_props.json does not exist.
+2024-10-24 11:51:51,250 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models.json
+2024-10-24 11:51:51,985 - qDNA.tools.save_load - WARNING - File DATA_DIR\raw\tb_params\Hawke2010_electron_ELM.json does not exist.
+2024-10-24 11:56:09,697 - qDNA.tools.save_load - WARNING - File DATA_DIR\raw\tb_params\Hawke2010_electron_ELM.json does not exist.
+2024-10-24 11:56:16,546 - qDNA.tools.save_load - WARNING - File DATA_DIR\raw\tb_params\Hawke2010_electron_ELM.json does not exist.
+2024-10-24 11:57:09,550 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_models.json
+2024-10-24 11:57:10,309 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-10-24 11:57:10,310 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-10-24 11:57:21,435 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-10-24 11:57:21,435 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-10-24 11:57:49,851 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-10-24 11:57:49,852 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-10-24 11:58:04,956 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-10-24 11:58:04,957 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json
+2024-10-24 11:58:10,718 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_electron_ELM.json
+2024-10-24 11:58:10,718 - qDNA.tools.save_load - INFO - Data loaded from C:\Users\Dennis Herb\OneDrive\2_Uni\Doktor\python_projects\QuantumDNA\qDNA\data\raw\tb_params\Hawke2010_hole_ELM.json

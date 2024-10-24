@@ -1,18 +1,19 @@
 """
 This module provides functions to generate configurations for different tight-binding models.
+
+Shortcuts
+---------
+- WM: Wire Model
+- LM: Ladder Model
+- ELM: Extended Ladder Model
+- F: Fishbone
+- FC: Fully Connected
 """
 
 from qDNA import TB_MODELS_PROPS
-from qDNA.tools import get_config
+from qDNA.tools import CONFIG
 
 __all__ = ["get_tb_config", "TB_MODELS_PROPS"]
-
-# Shortcuts:
-# WM: wire model
-# LM: ladder model
-# ELM: extended ladder model
-# F: fishbone
-# FC: fully connected
 
 # --------------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ def get_wm_config(num_sites_per_strand, strand=0, reversed_direction=False):
     list of tuple
         The configuration of the Wire Model.
     """
+
     e_list = [
         ("E", str((strand, tb_site)), str((strand, tb_site)))
         for tb_site in range(num_sites_per_strand)
@@ -68,6 +70,7 @@ def get_lm_config(num_sites_per_strand, strand1=0, strand2=1):
     list of tuple
         The configuration of the Ladder Model.
     """
+
     wm_config_strand1 = get_wm_config(num_sites_per_strand, strand=strand1)
     wm_config_strand2 = get_wm_config(
         num_sites_per_strand, strand=strand2, reversed_direction=True
@@ -97,6 +100,7 @@ def get_elm_config(num_sites_per_strand, strand1=0, strand2=1):
     list of tuple
         The configuration of the Extended Ladder Model.
     """
+
     lm_config = get_lm_config(num_sites_per_strand, strand1=strand1, strand2=strand2)
     r_plus_list = [
         ("r+", str((strand1, site)), str((strand2, site + 1)))
@@ -127,6 +131,7 @@ def get_f_config(num_sites_per_strand, strand1=0, strand2=2):
     list of tuple
         The configuration of the Fishbone Model.
     """
+
     e_list = [
         ("E", str((strand1, tb_site)), str((strand1, tb_site)))
         for tb_site in range(num_sites_per_strand)
@@ -231,7 +236,7 @@ def get_fc_config(num_sites_per_strand):
 
 # --------------------------------------------------------------
 
-TB_MODELS = get_config()["TB_MODELS"]
+TB_MODELS = CONFIG["TB_MODELS"]
 TB_CONFIGS = dict(
     zip(
         TB_MODELS,
@@ -264,6 +269,7 @@ def get_tb_config(tb_model_name, tb_dims):
     list of tuple
         The configuration of the specified tight-binding model.
     """
+
     tb_model_name = tb_model_name.upper()
     _, num_sites_per_strand = tb_dims
     return TB_CONFIGS[tb_model_name](num_sites_per_strand)

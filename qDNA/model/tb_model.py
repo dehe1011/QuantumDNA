@@ -1,8 +1,11 @@
 """
-This module provides classes to define custom and predefined tight-binding models for quantum DNA.
+This module defines two classes for tight-binding models: Custom_TB_Model and TB_Model.
+
+- Custom_TB_Model allows users to define a custom tight-binding model by specifying the model name, dimensions, basis states, and configurations.
+- TB_Model provides a predefined tight-binding model based on the model name and dimensions, and retrieves the corresponding properties, configurations, and basis states.
 """
 
-from qDNA.tools import get_config
+from qDNA.tools import CONFIG
 from qDNA import TB_MODELS_PROPS
 from .tb_basis import get_tb_basis, get_eh_basis
 from .tb_config import get_tb_config
@@ -48,6 +51,7 @@ class Custom_TB_Model:
     """
 
     def __init__(self, tb_model_name, tb_dims, tb_basis, tb_config):
+        # check inputs
         assert isinstance(tb_model_name, str), "tb_model_name must be of type str"
         assert (
             isinstance(tb_dims, tuple) and len(tb_dims) == 2
@@ -67,10 +71,11 @@ class Custom_TB_Model:
             ]
         ), "elements of tb_config must be of type tuple and of length three"
 
-        self.verbose = get_config()["verbose"]
+        self.verbose = CONFIG["verbose"]
         if self.verbose:
             print("Successfully checked all inputs of the Custom_TB_Model instance.")
 
+        # set attributes
         self.tb_model_name = tb_model_name
         self.tb_dims = tb_dims
         self.num_strands, self.num_sites_per_strand = self.tb_dims
@@ -139,6 +144,7 @@ class TB_Model:
     """
 
     def __init__(self, tb_model_name, tb_dims):
+        # check inputs
         assert isinstance(tb_model_name, str), "tb_model_name must be of type str"
         assert (
             isinstance(tb_dims, tuple) and len(tb_dims) == 2
@@ -146,15 +152,17 @@ class TB_Model:
         assert all(
             [isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims]
         ), "elements of tb_dim must be of type int and > 0"
-        self.verbose = get_config()["verbose"]
+        self.verbose = CONFIG["verbose"]
         if self.verbose:
             print("Successfully checked all inputs of the TB_Model instance.")
 
+        # set attributes
         self.tb_model_name = tb_model_name
         self.tb_dims = tb_dims
         self.num_strands, self.num_sites_per_strand = self.tb_dims
         self.num_sites = self.num_strands * self.num_sites_per_strand
 
+        # take predefined model properties
         TB_MODELS = list(TB_MODELS_PROPS.keys())
         assert (
             self.tb_model_name in TB_MODELS

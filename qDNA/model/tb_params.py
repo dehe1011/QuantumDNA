@@ -1,5 +1,7 @@
 """
-This module provides functions to save and load tight-binding parameters. The parameters are by default stored in the "qDNA/data/raw/tb_params" directory as JSON files.
+This module provides utility functions to save and load tight-binding parameters as JSON files.
+By default, the parameters are stored in the "qDNA/data/raw/tb_params" directory.
+The module includes functions to handle metadata associated with the parameters, ensuring that the data is well-organized and easily retrievable.
 """
 
 import os
@@ -12,6 +14,8 @@ __all__ = [
     "wrap_save_tb_params",
     "wrap_load_tb_params",
 ]
+
+# ------------------------------------------------
 
 
 def save_tb_params(
@@ -37,15 +41,11 @@ def save_tb_params(
     -------
     >>> save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, {'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder")
     """
+
     filename = "_".join(
         [metadata[key] for key in ["source", "particle", "tb_model_name"]]
     )
-    save_json(
-        tb_params,
-        metadata,
-        filename,
-        directory,
-    )
+    save_json(tb_params, metadata, filename, directory)
 
 
 def load_tb_params(
@@ -74,6 +74,7 @@ def load_tb_params(
     -------
     >>> load_tb_params({'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder", load_metadata=False)
     """
+
     filename = "_".join(
         [metadata[key] for key in ["source", "particle", "tb_model_name"]]
     )
@@ -110,6 +111,7 @@ def wrap_save_tb_params(
     -------
     >>> wrap_save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, 'author2024', 'particle', 'model', "delete_this_folder")
     """
+
     directory = os.path.join(DATA_DIR, "raw", "tb_params")
     metadata = {
         "source": source,
@@ -150,6 +152,7 @@ def wrap_load_tb_params(
     -------
     >>> wrap_load_tb_params('author2024', 'particle', 'model', load_metadata=False)
     """
-    directory = os.path.join("DATA_DIR", "raw", "tb_params")
+
+    directory = os.path.join(DATA_DIR, "raw", "tb_params")
     metadata = {"source": source, "particle": particle, "tb_model_name": tb_model_name}
     return load_tb_params(metadata, directory, load_metadata=load_metadata)

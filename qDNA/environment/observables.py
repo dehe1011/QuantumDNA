@@ -1,5 +1,7 @@
 """
-Module calculates observables.
+This module provides functions to calculate various observables.
+It includes utilities to construct observables for different particle types (electrons, holes, and excitons) as transitions between states in a given basis,
+especially their populations and coherences. The observables are represented in a specified basis of tight-binding site states.
 """
 
 import numpy as np
@@ -11,10 +13,12 @@ __all__ = [
     "get_coh_particle",
 ]
 
+# ------------------------------------------------------------------------------
+
 
 def get_observable(basis, start_state, end_state):
     """
-    Creates a density matrix for the given start and end states in the provided basis.
+    Creates a matrix element for the transition between a given start and end state in the provided basis.
 
     Parameters
     ----------
@@ -42,6 +46,7 @@ def get_observable(basis, start_state, end_state):
            [0., 0., 1.],
            [0., 0., 0.]])
     """
+
     start_state_idx = basis.index(start_state)
     end_state_idx = basis.index(end_state)
 
@@ -53,7 +58,7 @@ def get_observable(basis, start_state, end_state):
 
 def get_tb_observable(tb_basis, start_state, end_state):
     """
-    Wrapper function to get the density matrix for tight-binding sites.
+    Wrapper function of get_observable. Creates a matrix element for the transition between a given start and end state in the provided basis.
 
     Parameters
     ----------
@@ -76,12 +81,13 @@ def get_tb_observable(tb_basis, start_state, end_state):
            [0., 0., 1.],
            [0., 0., 0.]])
     """
+
     return get_observable(tb_basis, start_state, end_state)
 
 
 def get_eh_observable(tb_basis, particle, start_state, end_state):
     """
-    Constructs the electron-hole density matrix for the given particle type.
+    Creates a electron-hole matrix element for the given particle type.
 
     Parameters
     ----------
@@ -113,14 +119,20 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
            [0., 0., 0., 0.]])
     """
     num_sites = len(tb_basis)
+
+    # Create the electron observable
     if particle == "electron":
         eh_observable = np.kron(
             get_observable(tb_basis, start_state, end_state), np.eye(num_sites)
         )
+
+    # Create the hole observable
     if particle == "hole":
         eh_observable = np.kron(
             np.eye(num_sites), get_observable(tb_basis, start_state, end_state)
         )
+
+    # Create the exciton observable
     if particle == "exciton":
         eh_observable = np.kron(
             get_observable(tb_basis, start_state, end_state),
@@ -131,7 +143,7 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
 
 def get_pop_particle(tb_basis, particle, state):
     """
-    Gets the population density matrix for a specific particle and state.
+    Creates the population observable for a specific particle and state.
 
     Parameters
     ----------
@@ -155,12 +167,13 @@ def get_pop_particle(tb_basis, particle, state):
            [0., 0., 0., 0.],
            [0., 0., 0., 0.]])
     """
+
     return get_eh_observable(tb_basis, particle, state, state)
 
 
 def get_coh_particle(tb_basis, particle, state1, state2):
     """
-    Gets the coherence density matrix for a specific particle and pair of states.
+    Creates the coherence observable for a specific particle and pair of states.
 
     Parameters
     ----------
@@ -186,4 +199,5 @@ def get_coh_particle(tb_basis, particle, state1, state2):
            [0., 0., 0., 0.],
            [0., 0., 0., 0.]])
     """
+
     return get_eh_observable(tb_basis, particle, state1, state2)

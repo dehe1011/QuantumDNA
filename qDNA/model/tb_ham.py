@@ -1,6 +1,16 @@
 """
-This module provides the TB_Ham class for constructing and manipulating tight-binding Hamiltonians
-for DNA sequences, as well as utility functions for working with these Hamiltonians.
+This module provides the implementation of a tight-binding Hamiltonian for DNA sequences.
+It includes the `TB_Ham` class, which represents the Hamiltonian and provides methods for its construction, manipulation, and analysis.
+The module also includes several utility functions for setting matrix elements, constructing Hamiltonian matrices for single and two-particle systems, and adding interaction terms.
+
+Shortcuts
+---------
+- tb: tight-binding
+- nn: nearest-neighbor
+- ham: hamiltonian
+- param: parameter
+- dim: dimension
+
 """
 
 from itertools import chain
@@ -8,7 +18,7 @@ from itertools import chain
 import numpy as np
 
 from qDNA import DNA_Seq
-from qDNA.tools import check_ham_kwargs, get_config
+from qDNA.tools import check_ham_kwargs, CONFIG
 from qDNA.utils import (
     calc_amplitudes,
     calc_average_pop,
@@ -21,16 +31,6 @@ from .tb_basis import get_eh_basis, get_eh_distance, get_particle_eh_states
 from .tb_model import TB_Model
 from .tb_params import wrap_load_tb_params
 
-# Shortcuts:
-# tb: tight-binding
-# nn: nearest-neighbor
-# ham: hamiltonian
-# param: parameter
-# dim: dimension
-
-PARTICLES = get_config()["PARTICLES"]
-DESCRIPTIONS = get_config()["DESCRIPTIONS"]
-
 __all__ = [
     "TB_Ham",
     "set_matrix_element",
@@ -41,7 +41,11 @@ __all__ = [
     "add_interaction",
 ]
 
-# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------
+
+
+PARTICLES = CONFIG["PARTICLES"]
+DESCRIPTIONS = CONFIG["DESCRIPTIONS"]
 
 
 class TB_Ham:
@@ -71,23 +75,23 @@ class TB_Ham:
         The array of TB sites.
     description : str
         Description of the Hamiltonian (e.g., '1P' or '2P').
-    _particles : list
-        List of particles considered (e.g., 'electron', 'hole').
-    _source : str
+    particles : list
+        List of particles considered (e.g., ['electron', 'hole']).
+    source : str
         Source of the tight-binding parameters.
-    _unit : str
+    unit : str
         Unit of the Hamiltonian parameters.
     tb_params_electron : dict
         Tight-binding parameters for electrons.
     tb_params_hole : dict
         Tight-binding parameters for holes.
-    _relaxation : bool
+    relaxation : bool
         Flag indicating if relaxation is considered.
-    _interaction_param : float
+    interaction_param : float
         Interaction parameter for the Hamiltonian.
     eh_basis : list
         Electron-hole basis states.
-    _nn_cutoff : float
+    nn_cutoff : bool
         Nearest-neighbor cutoff for interactions.
     matrix : np.ndarray
         The Hamiltonian matrix.
@@ -115,16 +119,20 @@ class TB_Ham:
     """
 
     def __init__(self, dna_seq, **ham_kwargs):
+        # check inputs
         assert isinstance(dna_seq, DNA_Seq), "dna_seq must be an instance of DNA_Seq"
-        self.ham_kwargs = get_config()["ham_kwargs_default"]
+        self.ham_kwargs = CONFIG["ham_kwargs_default"]
         self.ham_kwargs.update(ham_kwargs)
         check_ham_kwargs(**self.ham_kwargs)
-        self.verbose = get_config()["verbose"]
+        self.verbose = CONFIG["verbose"]
         if self.verbose:
             print("Successfully checked all inputs for the TB_Ham instance.")
 
+        # instance of DNA_Seq and TB_Model
         self.dna_seq = dna_seq
         self.tb_model = TB_Model(dna_seq.tb_model_name, dna_seq.tb_dims)
+
+        # assigns each element of the DNA sequence to the corresponding tight-binding site
         self.tb_basis = self.tb_model.tb_basis
         self.tb_sites_flattened = list(chain(*self.dna_seq.dna_seq))
         self.tb_basis_sites_dict = dict(zip(self.tb_basis, self.tb_sites_flattened))
@@ -132,10 +140,13 @@ class TB_Ham:
             self.tb_model.num_strands, self.tb_model.num_sites_per_strand
         )
 
+        # Hamiltonian parameters
         self.description = self.ham_kwargs.get("description")
         self._particles = self.ham_kwargs.get("particles")
         self._source = self.ham_kwargs.get("source")
         self._unit = self.ham_kwargs.get("unit")
+
+        # tight-binding parameters
         self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
 
         self._relaxation = False
@@ -143,7 +154,7 @@ class TB_Ham:
             self._interaction_param = self.ham_kwargs.get("interaction_param")
             self._relaxation = self.ham_kwargs.get("relaxation")
             self.eh_basis = get_eh_basis(self.tb_model.tb_dims)
-            self._nn_cutoff = self.ham_kwargs.get("nearest_neighbor_cutoff")
+            self._nn_cutoff = self.ham_kwargs.get("nn_cutoff")
         self.matrix = self.get_matrix()
         self.matrix_dim = self.matrix.shape[0]
         self.backbone = True if self.tb_model.num_strands in (3, 4) else False
@@ -194,6 +205,8 @@ class TB_Ham:
         ), "interaction_param must be of type float"
         old_interaction_param = self._interaction_param
         self._interaction_param = new_interaction_param
+
+        # update the matrix
         if old_interaction_param != new_interaction_param:
             self.matrix = self.get_matrix()
 
@@ -206,10 +219,14 @@ class TB_Ham:
         assert isinstance(new_relaxation, bool), "new_relaxation must be of type bool"
         old_relaxation = self._relaxation
         self._relaxation = new_relaxation
+
+        # update the matrix
         if new_relaxation != old_relaxation:
             if new_relaxation:
+                # add the ground state
                 self.matrix = add_groundstate(self.matrix)
             if not new_relaxation:
+                # remove the ground state
                 self.matrix = delete_groundstate(self.matrix)
             self.matrix_dim = self.matrix.shape[0]
 
@@ -221,6 +238,8 @@ class TB_Ham:
     def nn_cutoff(self, new_nearest_neighbor_cutoff):
         old_nn_cutoff = self._nn_cutoff
         self._nn_cutoff = new_nearest_neighbor_cutoff
+
+        # update the matrix
         if old_nn_cutoff != new_nearest_neighbor_cutoff:
             self.matrix = self.get_matrix()
 
@@ -231,11 +250,11 @@ class TB_Ham:
     @unit.setter
     def unit(self, new_unit):
         assert isinstance(new_unit, str), "new_unit must be of type str"
-        assert (
-            new_unit in get_config()["UNITS"]
-        ), f"new_unit must be in {get_config()['UNITS']}"
+        assert new_unit in CONFIG["UNITS"], f"new_unit must be in {CONFIG['UNITS']}"
         old_unit = self._unit
         self._unit = new_unit
+
+        # update the matrix and tight-binding parameters
         if new_unit != old_unit:
             self.matrix *= get_conversion(old_unit, new_unit)
             self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
@@ -248,10 +267,12 @@ class TB_Ham:
     def source(self, new_source):
         assert isinstance(new_source, str), "new_source must be of type str"
         assert (
-            new_source in get_config()["SOURCES"]
-        ), f"new_source must be in {get_config()['SOURCES']}"
+            new_source in CONFIG["SOURCES"]
+        ), f"new_source must be in {CONFIG['SOURCES']}"
         old_source = self._source
         self._source = new_source
+
+        # update the matrix and tight-binding parameters
         if new_source != old_source:
             self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
             self.matrix = self.get_matrix()
@@ -259,14 +280,33 @@ class TB_Ham:
     # ---------------------------------------------------------------
 
     def get_param_dicts(self):
+        """
+        Retrieves the tight-binding parameters for electrons and holes.
+        This method loads the tight-binding parameters for both electrons and holes
+        from the specified source and model name. If the unit of the loaded parameters
+        does not match the expected unit, it converts the parameters to the expected unit.
+        Returns
+        -------
+        tuple
+            A tuple containing two dictionaries:
+            - tb_params_electron : dict
+                The tight-binding parameters for electrons.
+            - tb_params_hole : dict
+                The tight-binding parameters for holes.
+        """
+
         model_name = self.tb_model.tb_model_name
+
+        # load the tight-binding parameters for electrons
         tb_params_electron, metadata = wrap_load_tb_params(
             self.source, "electron", model_name, load_metadata=True
         )
+        # load the tight-binding parameters for holes
         tb_params_hole, metadata = wrap_load_tb_params(
             self.source, "hole", model_name, load_metadata=True
         )
-        if self._unit != metadata["unit"]:
+        # convert the parameters to the expected unit
+        if self.unit != metadata["unit"]:
             tb_params_electron = get_conversion_dict(
                 tb_params_electron, metadata["unit"], self.unit
             )
@@ -276,28 +316,60 @@ class TB_Ham:
         return tb_params_electron, tb_params_hole
 
     def get_eigensystem(self):
+        """
+        Compute the eigenvalues and eigenvectors of the matrix.
+        This method computes the eigenvalues and eigenvectors of the matrix
+        associated with the instance. If the description is "2P" and relaxation
+        is enabled, the ground state is deleted from the matrix before computing
+        the eigensystem.
+        Returns
+        -------
+        tuple
+            A tuple containing:
+            - eigenvalues : ndarray
+                The eigenvalues of the matrix.
+            - eigenvectors : ndarray
+                The eigenvectors of the matrix.
+        """
+
         matrix = self.matrix
+
+        # remove the ground state if relaxation is enabled
         if self.description == "2P":
             if self.relaxation:
                 matrix = delete_groundstate(matrix)
+
         return np.linalg.eigh(matrix)
 
     def get_matrix(self):
         """
-        Computes and returns the Hamiltonian matrix.
-
+        Generate the tight-binding Hamiltonian matrix based on the system description.
         Returns
         -------
-        np.ndarray
-            Hamiltonian matrix.
+        matrix : numpy.ndarray
+            The Hamiltonian matrix for the system.
+        Notes
+        -----
+        - For a "2P" description, the Hamiltonian matrix is generated using `tb_ham_2P`
+          and may include interaction and relaxation terms if specified.
+        - For a "1P" description, the Hamiltonian matrix is generated using `tb_ham_1P`
+          for either electrons or holes based on the `particles` attribute.
+        Raises
+        ------
+        ValueError
+            If the `description` attribute is not "2P" or "1P".
         """
+
         if self.description == "2P":
+            # generate the Hamiltonian matrix for independent electron and hole
             matrix = tb_ham_2P(
                 self.tb_model,
                 self.tb_params_electron,
                 self.tb_params_hole,
                 self.tb_basis_sites_dict,
             )
+
+            # add interaction terms
             if self.interaction_param:
                 matrix = add_interaction(
                     matrix,
@@ -305,29 +377,67 @@ class TB_Ham:
                     self.interaction_param,
                     nn_cutoff=self.nn_cutoff,
                 )
+
+            # add relaxation terms
             if self._relaxation:
                 matrix = add_groundstate(matrix)
+
         if self.description == "1P":
+            # generate the Hamiltonian matrix for the electron
             if self.particles == ["electron"]:
                 matrix = tb_ham_1P(
                     self.tb_model, self.tb_params_electron, self.tb_basis_sites_dict
                 )
+
+            # generate the Hamiltonian matrix for the hole
             if self.particles == ["hole"]:
                 matrix = tb_ham_1P(
                     self.tb_model, self.tb_params_hole, self.tb_basis_sites_dict
                 )
+
         return matrix
 
     def get_fourier(self, init_state, end_state, quantities):
+        """
+        Calculate the Fourier components of the transition between initial and end states.
+
+        Parameters
+        ----------
+        init_state : str
+            The initial state from which the transition starts.
+        end_state : str
+            The end state to which the transition occurs.
+        quantities : list of str
+            List of quantities to calculate. Possible values are "amplitude", "frequency", and "average_pop".
+        Returns
+        -------
+        amplitudes_dict : dict
+            Dictionary containing the amplitudes for each particle.
+        frequencies_dict : dict
+            Dictionary containing the frequencies for each particle.
+        average_pop_dict : dict
+            Dictionary containing the average population for each particle.
+        Raises
+        ------
+        AssertionError
+            If `end_state` is not in `self.tb_basis`.
+            If `init_state` is not in `self.eh_basis` or `self.tb_basis` depending on the description.
+        """
+
         eigv, eigs = self.get_eigensystem()
+
+        # check if the end state is in the tight-binding basis
         assert (
             end_state in self.tb_basis
         ), f"end_state must be in tb_basis {self.tb_basis}"
+
+        # check if the initial state is in the electron-hole basis or tight-binding basis
         if self.description == "2P":
             assert (
                 init_state in self.eh_basis
             ), f"init_state must be in tb_basis {self.eh_basis}"
             init_state_idx = self.eh_basis.index(init_state)
+
         if self.description == "1P":
             assert (
                 init_state in self.tb_basis
@@ -338,12 +448,15 @@ class TB_Ham:
         amplitudes_dict, frequencies_dict, average_pop_dict = {}, {}, {}
         for particle in self.particles:
             if self.description == "2P":
+                # get the end states for the particle
                 end_states_idx = [
                     self.eh_basis.index(end_state)
                     for end_state in get_particle_eh_states(
                         particle, end_state, self.tb_basis
                     )
                 ]
+
+                # calculate amplitude
                 if "amplitude" in quantities:
                     amplitudes_dict[particle] = list(
                         chain.from_iterable(
@@ -353,10 +466,14 @@ class TB_Ham:
                             ]
                         )
                     )
+
+                # calculate frequency
                 if "frequency" in quantities:
                     frequencies_dict[particle] = list(calc_frequencies(eigv)) * len(
                         end_states_idx
                     )
+
+                # calculate average population
                 if "average_pop" in quantities:
                     average_pop_dict[particle] = np.sum(
                         [
@@ -365,12 +482,17 @@ class TB_Ham:
                         ]
                     )
             if self.description == "1P":
+                # calculate amplitude
                 if "amplitude" in quantities:
                     amplitudes_dict[particle] = calc_amplitudes(
                         eigs, init_state_idx, end_state_idx
                     )
+
+                # calculate frequency
                 if "frequency" in quantities:
                     frequencies_dict[particle] = calc_frequencies(eigv)
+
+                # calculate average population
                 if "average_pop" in quantities:
                     average_pop_dict[particle] = calc_average_pop(
                         eigs, init_state_idx, end_state_idx
@@ -388,16 +510,29 @@ class TB_Ham:
 
     def get_backbone_pop(self, init_state):
         """
-        Calculates the backbone population for Fishbone models.
+        Calculate the population of particles on the backbone sites of a Fishbone model.
 
+        Parameters
+        ----------
+        init_state : str
+            The initial state of the system.
         Returns
         -------
         dict
-            A dictionary where the keys are particles and the values are the corresponding backbone populations.
+            A dictionary where keys are particle identifiers and values are the population
+            of each particle on the backbone sites.
+        Raises
+        ------
+        AssertionError
+            If the model is not a Fishbone model.
         """
+
+        # check if the model is a Fishbone model
         assert (
             self.tb_model.tb_model_name[0] == "F"
         ), "Backbone population can only be calculated for Fishbone models"
+
+        # collect all backbone sites
         upper_backbone_sites = [
             f"(0, {site})" for site in range(self.tb_model.num_sites_per_strand)
         ]
@@ -407,6 +542,7 @@ class TB_Ham:
         ]
         backbone_sites = upper_backbone_sites + lower_backbone_sites
 
+        # calculate the backbone population
         backbone_pop = dict(zip(self.particles, [0] * len(self.particles)))
         for particle in self.particles:
             for tb_site in backbone_sites:
@@ -456,6 +592,8 @@ def set_matrix_element(
     old_state_idx = basis.index(old_state)
     new_state_idx = basis.index(new_state)
     matrix[new_state_idx][old_state_idx] += tb_value
+
+    # ensure hermiticity
     if old_state != new_state:
         matrix[old_state_idx][new_state_idx] += tb_value
     return matrix
@@ -583,6 +721,7 @@ def add_groundstate(matrix):
            [0., 1., 2.],
            [0., 3., 4.]])
     """
+
     N = matrix.shape[0]
     matrix = np.r_[np.zeros((1, N)), matrix]
     matrix = np.c_[np.zeros((N + 1, 1)), matrix]
@@ -609,6 +748,7 @@ def delete_groundstate(matrix):
     array([[1., 2.],
            [3., 4.]])
     """
+
     return matrix[1:, 1:]
 
 
@@ -653,12 +793,17 @@ def add_interaction(
     array([[0.        , 1.17639077],
            [1.17639077, 0.        ]])
     """
+
     distance_list = get_eh_distance(eh_basis)
+    # as used by Bittner
     interaction_strength_list = interaction_param / (1 + 3.4 * distance_list)
+
+    # nearest neighbor cutoff
     if nn_cutoff:
         for i in np.where(distance_list > 1):
             interaction_strength_list[i] = 0
 
+    # add interaction terms on the diagonal for exciton states
     for eh_basis_state_idx, interaction_strength in enumerate(
         interaction_strength_list
     ):

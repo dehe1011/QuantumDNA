@@ -1,18 +1,20 @@
 """
-Module for calculating properties of the Hamiltonian.
+This module provides functions for analyzing Hamiltonians in quantum systems, including calculations of average population,
+amplitudes, frequencies, population using Fourier series, and inverse participation ratio (IPR).
+
+Notes
+-----
+- IPR: inverse participation ratio
+- calc: calculate
+- pop: population
+- eigs: eigenstates
+- val: value
+- dims: dimensions
+- init: initial
 """
 
 from itertools import product
 import numpy as np
-
-# Shortcuts:
-# IPR: inverse participation ratio
-# calc: calculate
-# pop: population
-# eigs: eigenstates
-# val: value
-# dims: dimensions
-# init: initial
 
 __all__ = [
     "calc_average_pop",
@@ -21,6 +23,8 @@ __all__ = [
     "get_pop_fourier",
     "calc_ipr_hamiltonian",
 ]
+
+# ------------------------------------------------
 
 
 def calc_average_pop(eigs, init_state, end_state):
@@ -129,7 +133,18 @@ def calc_ipr_hamiltonian(eigs):
     """
     Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.
 
-    1 (localized eigenstate/ exciton state) < IPR < N (delocalized eigenstate/ exciton state)
+    The IPR is a measure of the localization of an eigenstate. It is defined as the sum of the squared coefficients of the
+    eigenvector. The IPR ranges from 1 to N, where N is the dimension of the Hilbert space. The IPR values can be used to
+    distinguish between localized and delocalized eigenstates:
+
+    The IPR is defined as:
+
+    .. math:
+        IPR = \\frac{1}{\\sum_{i=1}^{N} |c_i|^4}
+
+    Where:
+    - Localized state: IPR = 1/N
+    - Delocalized coherent state: IPR = N
 
     Parameters
     ----------
@@ -141,6 +156,7 @@ def calc_ipr_hamiltonian(eigs):
     list of float
         The IPR values for each eigenstate.
     """
+
     dims = eigs.shape[0]
     ratios = []
     for idx in range(dims):

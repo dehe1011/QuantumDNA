@@ -1,8 +1,9 @@
 # This file contains all the default values used for the simulations
 project_name: "QuantumDNA"
-
 verbose: True
+
 DNA_BASES: ["A", "T", "G", "C", "c"]
+TB_MODELS: ['WM', 'LM', 'ELM', 'FWM', 'FLM', 'FELM', 'FC']
 
 SOURCES: ['Hawke2010', 'Simserides2014', 'Mantela2021', 'Simserides2024']
 DESCRIPTIONS: ["1P", "2P"]
@@ -10,7 +11,6 @@ PARTICLES: ["electron", "hole", "exciton"]
 UNITS: ['meV', 'eV', '100meV', 'rad/ps', 'rad/fs', '1/cm', 'K', 'J', '1/fs', '1/ps']
 T_UNITS: ['fs', 'ps']
 SPECTRAL_DENSITIES: ['debye', 'ohmic']
-TB_MODELS: ['WM', 'LM', 'ELM', 'FWM', 'FLM', 'FELM', 'FC']
 
 ham_kwargs_default:
     source: 'Hawke2010'
@@ -22,7 +22,7 @@ ham_kwargs_default:
     nn_cutoff: True
 
 diss_kwargs_default:
-    loc_deph_rate: 0. # rad/fs
+    loc_deph_rate: 0.
     glob_deph_rate: 0. # rad/fs
     uniform_relaxation: True
     relax_rate: 0. # rad/fs

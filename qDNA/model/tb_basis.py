@@ -3,16 +3,17 @@ This module provides functions for working with tight-binding (tb) basis and
 electron-hole (eh) basis in quantum systems. It includes functions to generate
 symbolic representations of basis indices, convert between different
 representations, and perform basis changes.
+
+Shortcuts
+---------
+- tb: tight-binding
+- dim: dimension
+- eh: electron-hole
 """
 
 from itertools import product
 from ast import literal_eval
 import numpy as np
-
-# Shortcuts
-# tb: tight-binding
-# dim: dimension
-# eh: electron-hole
 
 # -------------------------------------------- Tight-binding basis --------------------------------
 
@@ -37,6 +38,7 @@ def get_tb_basis(tb_dims):
     >>> get_tb_basis((2, 2))
     ['(0, 0)', '(0, 1)', '(1, 0)', '(1, 1)']
     """
+
     num_sites = tb_dims[0] * tb_dims[1]
     tb_basis = [int_to_str(tb_dims, site_num) for site_num in range(num_sites)]
     return tb_basis
@@ -63,6 +65,7 @@ def str_to_int(tb_dims, tb_basis_str):
     >>> str_to_int((1,3), '(0, 2)')
     2
     """
+
     return tuple_to_int(tb_dims, str_to_tuple(tb_basis_str))
 
 
@@ -82,6 +85,7 @@ def int_to_str(tb_dims, tb_basis_int):
     str
         String representation of the basis state.
     """
+
     return tuple_to_str(int_to_tuple(tb_dims, tb_basis_int))
 
 
@@ -99,6 +103,7 @@ def str_to_tuple(tb_basis_str):
     tuple
         Tuple representation of the basis state.
     """
+
     return literal_eval(tb_basis_str)
 
 
@@ -116,6 +121,7 @@ def tuple_to_str(tb_basis_tuple):
     str
         String representation of the basis state.
     """
+
     return str(tb_basis_tuple)
 
 
@@ -135,6 +141,7 @@ def int_to_tuple(tb_dims, tb_basis_int):
     tuple
         Tuple representation of the basis state.
     """
+
     _, num_sites_per_strand = tb_dims
     return (tb_basis_int // num_sites_per_strand, tb_basis_int % num_sites_per_strand)
 
@@ -155,6 +162,7 @@ def tuple_to_int(tb_dims, tb_basis_tuple):
     int
         Integer representation of the basis state.
     """
+
     _, num_sites_per_strand = tb_dims
     strand_num, site_in_strand_num = tb_basis_tuple
     return strand_num * num_sites_per_strand + site_in_strand_num
@@ -185,6 +193,7 @@ def get_eh_basis(tb_dims):
      ('(1, 0)', '(0, 0)'), ('(1, 0)', '(0, 1)'), ('(1, 0)', '(1, 0)'), ('(1, 0)', '(1, 1)'),
      ('(1, 1)', '(0, 0)'), ('(1, 1)', '(0, 1)'), ('(1, 1)', '(1, 0)'), ('(1, 1)', '(1, 1)')]
     """
+
     tb_basis = get_tb_basis(tb_dims)
     eh_basis = list(product(tb_basis, tb_basis))
     return eh_basis
@@ -192,7 +201,7 @@ def get_eh_basis(tb_dims):
 
 def get_eh_distance(eh_basis):
     """
-    Calculates the distance between electron and hole for each state in the basis.
+    Calculates the distance between electron and hole for each state in the basis (in multiples of the lattice spacing).
 
     Parameters
     ----------
@@ -206,9 +215,10 @@ def get_eh_distance(eh_basis):
 
     Example
     -------
-    >>> get_distance([('(0, 0)', '(1, 1)'), ('(1, 0)', '(0, 0)')])
+    >>> get_eh_distance([('(0, 0)', '(1, 1)'), ('(1, 0)', '(0, 0)')])
     array([1.41421356, 1.        ])
     """
+
     distance_list = []
     for position_electron, position_hole in eh_basis:
         position_electron = literal_eval(position_electron)
@@ -246,6 +256,7 @@ def get_particle_eh_states(particle, tb_basis_element, tb_basis):
     >>> get_particle_eh_states('electron', '(0, 2)', get_tb_basis((1,3)))
     [('(0, 2)', '(0, 0)'), ('(0, 2)', '(0, 1)'), ('(0, 2)', '(0, 2)')]
     """
+
     if tb_basis_element not in tb_basis:
         raise ValueError(
             f"Given basis element {tb_basis_element} not in tight-binding basis {tb_basis}"
@@ -282,6 +293,7 @@ def basis_change(matrix, states, liouville=False):
     ndarray
         Matrix in the new basis.
     """
+
     if liouville:
         states = np.kron(states, np.conj(states))
     return np.matmul(states, np.matmul(matrix, np.conj(states).T))
@@ -305,6 +317,7 @@ def global_to_local(matrix, eigs, liouville=False):
     ndarray
         Matrix in the site basis.
     """
+
     return basis_change(matrix, eigs, liouville=liouville)
 
 
@@ -326,4 +339,5 @@ def local_to_global(matrix, eigs, liouville=False):
     ndarray
         Matrix in the eigenbasis.
     """
+
     return basis_change(matrix, np.conj(eigs).T, liouville=liouville)
