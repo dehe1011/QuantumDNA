@@ -12,8 +12,10 @@ include MANIFEST.in
 
 # Include all .py files
 recursive-include qDNA *.py
+include qDNA/defaults.yaml
 
 # Include specific data files
 include qDNA/data/data_paper/*.json
 include qDNA/data/figures_paper/*.pdf *.png
 include qDNA/data/raw/tb_params/*.json
+include qDNA/data/raw/*.json
