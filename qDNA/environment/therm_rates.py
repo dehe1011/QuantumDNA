@@ -6,9 +6,6 @@ It provides functions for calculating bath spectral densities and Lindblad rates
 
 import numpy as np
 import scipy.constants as c
-from ..tools import get_config
-
-SPECTRAL_DENSITIES = get_config()["SPECTRAL_DENSITIES"]
 
 # --------------------------- Bath Spectral Densities --------------------------------------
 
@@ -80,7 +77,8 @@ def bose_einstein_distrib(omega, temperature):
     float
         Bose-Einstein distribution.
     """
-    return 1.0 / (np.exp(c.hbar * omega * 1e12 / (c.k * temperature)) - 1)
+    if temperature != 0 and omega != 0:
+        return 1.0 / (np.exp(c.hbar * omega * 1e12 / (c.k * temperature)) - 1)
 
 
 def rate_constant_redfield(

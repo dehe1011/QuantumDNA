@@ -20,7 +20,7 @@ It is reproduced here for convenience.
 
 
 License Terms for Source Code of QuantumDNA and Code Samples
-=======================================================
+============================================================
 
 ..
     BSD-3-Clause/ MIT license

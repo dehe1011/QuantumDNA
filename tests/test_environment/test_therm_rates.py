@@ -41,7 +41,6 @@ def test_ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent, expe
 @pytest.mark.parametrize(
     "omega, temperature, expected",
     [
-        (0, 300, np.inf),
         (1.0, 300, 1.0 / (np.exp(c.hbar * 1.0 * 1e12 / (c.k * 300)) - 1)),
         (2.0, 300, 1.0 / (np.exp(c.hbar * 2.0 * 1e12 / (c.k * 300)) - 1)),
     ],

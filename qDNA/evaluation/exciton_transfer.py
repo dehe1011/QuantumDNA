@@ -108,6 +108,15 @@ def calc_exciton_transfer(upper_strand, tb_model_name, average=True, **kwargs):
     Tuple[dict] or List[Tuple[dict]]
         The average exciton population on the upper and lower strand.
 
+    Examples
+    --------
+    >>> calc_exciton_transfer("GCG", "ELM")
+    ({'electron': 0.6867427675114343,
+    'hole': 0.9943813264087192,
+    'exciton': 0.45001514054414693},
+    {'electron': 0.31325723248857257,
+    'hole': 0.005618673591287626,
+    'exciton': 0.0001960836601784245})
     """
     me_solver = get_me_solver(upper_strand, tb_model_name, **kwargs)
     tb_model = me_solver.tb_ham.tb_model

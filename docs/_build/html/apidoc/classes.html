@@ -46,13 +46,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Classes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#dna-seq">DNA_Seq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tb-model">TB_Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tb-ham">TB_Ham</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#me-solver">ME_Solver</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#lindblad-diss">Lindblad_Diss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dna-sequence">DNA Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-model">Tight-binding model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#master-equation-solver">Master equation solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lindblad-dissipator">Lindblad Dissipator</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
@@ -92,48 +93,50 @@
 
   <section id="classes">
 <h1>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h1>
-<section id="dna-seq">
-<h2>DNA_Seq<a class="headerlink" href="#dna-seq" title="Link to this heading"></a></h2>
+<section id="dna-sequence">
+<h2>DNA Sequence<a class="headerlink" href="#dna-sequence" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">DNA_Seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methylated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>A class representing a DNA sequence with optional methylation and backbone properties.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">DNA_Seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methylated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>A class to represent a DNA sequence and its properties based on a tight-binding model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The sequence of the upper strand of the DNA.</p>
+<dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The upper strand of the DNA sequence.</p>
 </dd>
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the tight-binding model.</p>
 </dd>
-<dt><strong>methylated</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the DNA sequence is methylated (default is True).</p>
+<dt><strong>methylated</strong><span class="classifier">bool, optional</span></dt><dd><p>Indicates whether the DNA sequence is methylated (default is True).</p>
+</dd>
+<dt><strong>lower_strand</strong><span class="classifier">str, optional</span></dt><dd><p>The lower strand of the DNA sequence (default is None).</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The sequence of the upper strand of the DNA.</p>
+<dt><strong>upper_strand</strong><span class="classifier">str</span></dt><dd><p>The upper strand of the DNA sequence.</p>
 </dd>
-<dt><strong>lower_strand</strong><span class="classifier">str</span></dt><dd><p>The sequence of the lower strand of the DNA.</p>
+<dt><strong>lower_strand</strong><span class="classifier">str</span></dt><dd><p>The lower strand of the DNA sequence.</p>
 </dd>
-<dt><strong>methylated</strong><span class="classifier">bool</span></dt><dd><p>Indicates if the DNA is methylated.</p>
+<dt><strong>methylated</strong><span class="classifier">bool</span></dt><dd><p>Indicates whether the DNA sequence is methylated.</p>
 </dd>
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the tight-binding model.</p>
 </dd>
 <dt><strong>tb_model_props</strong><span class="classifier">dict</span></dt><dd><p>Properties of the tight-binding model.</p>
 </dd>
-<dt><strong>backbone</strong><span class="classifier">bool</span></dt><dd><p>Indicates if the model includes a backbone.</p>
+<dt><strong>backbone</strong><span class="classifier">bool</span></dt><dd><p>Indicates whether the model includes a backbone.</p>
 </dd>
-<dt><strong>double_stranded</strong><span class="classifier">bool</span></dt><dd><p>Indicates if the DNA is double-stranded.</p>
+<dt><strong>double_stranded</strong><span class="classifier">bool</span></dt><dd><p>Indicates whether the DNA is double-stranded.</p>
 </dd>
-<dt><strong>num_strands</strong><span class="classifier">int</span></dt><dd><p>Number of strands in the model.</p>
+<dt><strong>num_strands</strong><span class="classifier">int</span></dt><dd><p>Number of strands in the DNA sequence.</p>
 </dd>
-<dt><strong>num_sites_per_strand</strong><span class="classifier">int</span></dt><dd><p>Number of sites per strand.</p>
+<dt><strong>num_sites_per_strand</strong><span class="classifier">int</span></dt><dd><p>Number of sites per strand in the DNA sequence.</p>
 </dd>
-<dt><strong>tb_dims</strong><span class="classifier">Tuple[int, int]</span></dt><dd><p>Dimensions of the tight-binding model.</p>
+<dt><strong>tb_dims</strong><span class="classifier">tuple</span></dt><dd><p>Dimensions of the tight-binding model.</p>
 </dd>
-<dt><strong>complementary_base_dict</strong><span class="classifier">dict</span></dt><dd><p>Mapping of bases to their complements.</p>
+<dt><strong>complementary_base_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary mapping each base to its complementary base.</p>
 </dd>
-<dt><strong>dna_seq</strong><span class="classifier">Tuple[str]</span></dt><dd><p>The generated DNA sequence including backbone if applicable.</p>
+<dt><strong>dna_seq</strong><span class="classifier">tuple</span></dt><dd><p>The generated DNA sequence.</p>
 </dd>
 </dl>
 </dd>
@@ -141,8 +144,8 @@
 </dd></dl>
 
 </section>
-<section id="tb-model">
-<h2>TB_Model<a class="headerlink" href="#tb-model" title="Link to this heading"></a></h2>
+<section id="tight-binding-model">
+<h2>Tight-binding model<a class="headerlink" href="#tight-binding-model" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">TB_Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span></dt>
@@ -184,11 +187,11 @@
 </dd></dl>
 
 </section>
-<section id="tb-ham">
-<h2>TB_Ham<a class="headerlink" href="#tb-ham" title="Link to this heading"></a></h2>
+<section id="tight-binding-hamiltonian">
+<h2>Tight-binding Hamiltonian<a class="headerlink" href="#tight-binding-hamiltonian" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">TB_Ham</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dna_seq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ham_kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.hamiltonian.</span></span><span class="sig-name descname"><span class="pre">TB_Ham</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dna_seq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ham_kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>A class used to represent the tight-binding Hamiltonian for DNA sequences.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -215,23 +218,23 @@
 </dd>
 <dt><strong>description</strong><span class="classifier">str</span></dt><dd><p>Description of the Hamiltonian (e.g., ‘1P’ or ‘2P’).</p>
 </dd>
-<dt><strong>_particles</strong><span class="classifier">list</span></dt><dd><p>List of particles considered (e.g., ‘electron’, ‘hole’).</p>
+<dt><strong>particles</strong><span class="classifier">list</span></dt><dd><p>List of particles considered (e.g., [‘electron’, ‘hole’]).</p>
 </dd>
-<dt><strong>_source</strong><span class="classifier">str</span></dt><dd><p>Source of the tight-binding parameters.</p>
+<dt><strong>source</strong><span class="classifier">str</span></dt><dd><p>Source of the tight-binding parameters.</p>
 </dd>
-<dt><strong>_unit</strong><span class="classifier">str</span></dt><dd><p>Unit of the Hamiltonian parameters.</p>
+<dt><strong>unit</strong><span class="classifier">str</span></dt><dd><p>Unit of the Hamiltonian parameters.</p>
 </dd>
 <dt><strong>tb_params_electron</strong><span class="classifier">dict</span></dt><dd><p>Tight-binding parameters for electrons.</p>
 </dd>
 <dt><strong>tb_params_hole</strong><span class="classifier">dict</span></dt><dd><p>Tight-binding parameters for holes.</p>
 </dd>
-<dt><strong>_relaxation</strong><span class="classifier">bool</span></dt><dd><p>Flag indicating if relaxation is considered.</p>
+<dt><strong>relaxation</strong><span class="classifier">bool</span></dt><dd><p>Flag indicating if relaxation is considered.</p>
 </dd>
-<dt><strong>_interaction_param</strong><span class="classifier">float</span></dt><dd><p>Interaction parameter for the Hamiltonian.</p>
+<dt><strong>interaction_param</strong><span class="classifier">float</span></dt><dd><p>Interaction parameter for the Hamiltonian.</p>
 </dd>
 <dt><strong>eh_basis</strong><span class="classifier">list</span></dt><dd><p>Electron-hole basis states.</p>
 </dd>
-<dt><strong>_nn_cutoff</strong><span class="classifier">float</span></dt><dd><p>Nearest-neighbor cutoff for interactions.</p>
+<dt><strong>nn_cutoff</strong><span class="classifier">bool</span></dt><dd><p>Nearest-neighbor cutoff for interactions.</p>
 </dd>
 <dt><strong>matrix</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Hamiltonian matrix.</p>
 </dd>
@@ -266,16 +269,93 @@
 <tr class="row-odd"><td><p><strong>get_average_pop(init_state, end_state)</strong></p></td>
 <td><p>Computes and returns the average population for given states.</p></td>
 </tr>
+<tr class="row-even"><td><p><strong>get_backbone_pop(init_state)</strong></p></td>
+<td><p>Computes and returns the population of particles on the backbone sites.</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_backbone_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculates the backbone population for Fishbone models.</p>
+<dd><p>Calculate the population of particles on the backbone sites of a Fishbone model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>init_state</strong><span class="classifier">str</span></dt><dd><p>The initial state of the system.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd><p>A dictionary where keys are particle identifiers and values are the population
+of each particle on the backbone sites.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>If the model is not a Fishbone model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_eigensystem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Compute the eigenvalues and eigenvectors of the matrix.
+This method computes the eigenvalues and eigenvectors of the matrix
+associated with the instance. If the description is “2P” and relaxation
+is enabled, the ground state is deleted from the matrix before computing
+the eigensystem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>dict</dt><dd><p>A dictionary where the keys are particles and the values are the corresponding backbone populations.</p>
+<dt>tuple</dt><dd><dl class="simple">
+<dt>A tuple containing:</dt><dd><dl class="simple">
+<dt>eigenvalues<span class="classifier">ndarray</span></dt><dd><p>The eigenvalues of the matrix.</p>
+</dd>
+<dt>eigenvectors<span class="classifier">ndarray</span></dt><dd><p>The eigenvectors of the matrix.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantities</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Calculate the Fourier components of the transition between initial and end states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>init_state</strong><span class="classifier">str</span></dt><dd><p>The initial state from which the transition starts.</p>
+</dd>
+<dt><strong>end_state</strong><span class="classifier">str</span></dt><dd><p>The end state to which the transition occurs.</p>
+</dd>
+<dt><strong>quantities</strong><span class="classifier">list of str</span></dt><dd><p>List of quantities to calculate. Possible values are “amplitude”, “frequency”, and “average_pop”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>amplitudes_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the amplitudes for each particle.</p>
+</dd>
+<dt><strong>frequencies_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the frequencies for each particle.</p>
+</dd>
+<dt><strong>average_pop_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the average population for each particle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>If <cite>end_state</cite> is not in <cite>self.tb_basis</cite>.
+If <cite>init_state</cite> is not in <cite>self.eh_basis</cite> or <cite>self.tb_basis</cite> depending on the description.</p>
 </dd>
 </dl>
 </dd>
@@ -285,11 +365,50 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Computes and returns the Hamiltonian matrix.</p>
+<dd><p>Generate the tight-binding Hamiltonian matrix based on the system description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>np.ndarray</dt><dd><p>Hamiltonian matrix.</p>
+<dt><strong>matrix</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The Hamiltonian matrix for the system.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the <cite>description</cite> attribute is not “2P” or “1P”.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>For a “2P” description, the Hamiltonian matrix is generated using <cite>tb_ham_2P</cite> and may include interaction and relaxation terms if specified.</p></li>
+<li><p>For a “1P” description, the Hamiltonian matrix is generated using <cite>tb_ham_1P</cite> for either electrons or holes based on the <cite>particles</cite> attribute.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_param_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Retrieves the tight-binding parameters for electrons and holes.
+This method loads the tight-binding parameters for both electrons and holes
+from the specified source and model name. If the unit of the loaded parameters
+does not match the expected unit, it converts the parameters to the expected unit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>tuple</dt><dd><dl class="simple">
+<dt>A tuple containing two dictionaries:</dt><dd><dl class="simple">
+<dt>tb_params_electron<span class="classifier">dict</span></dt><dd><p>The tight-binding parameters for electrons.</p>
+</dd>
+<dt>tb_params_hole<span class="classifier">dict</span></dt><dd><p>The tight-binding parameters for holes.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
@@ -299,20 +418,22 @@
 </dd></dl>
 
 </section>
-<section id="me-solver">
-<h2>ME_Solver<a class="headerlink" href="#me-solver" title="Link to this heading"></a></h2>
+<section id="master-equation-solver">
+<h2>Master equation solver<a class="headerlink" href="#master-equation-solver" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">ME_Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lindblad_diss</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">me_kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.</p>
+<p>This class provides methods to initialize the solver, set up the Hamiltonian and Lindblad dissipator,
+and compute various properties such as populations, coherences, and ground state populations over time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+<dt><strong>tb_ham</strong><span class="classifier">TB_Ham</span></dt><dd><p>The tight-binding Hamiltonian.</p>
 </dd>
-<dt><strong>lindblad_diss</strong><span class="classifier">LindbladDissType</span></dt><dd><p>The Lindblad dissipator.</p>
+<dt><strong>lindblad_diss</strong><span class="classifier">Lindblad_Diss</span></dt><dd><p>The Lindblad dissipator.</p>
 </dd>
-<dt><strong>me_kwargs</strong><span class="classifier">dict</span></dt><dd><p>Additional keyword arguments for the master equation solver.</p>
+<dt><strong>me_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional keyword arguments for the master equation solver.</p>
 </dd>
 </dl>
 </dd>
@@ -330,15 +451,15 @@
 </dd>
 <dt><strong>t_unit</strong><span class="classifier">str</span></dt><dd><p>Time unit.</p>
 </dd>
-<dt><strong>tb_ham</strong><span class="classifier">TBHamType</span></dt><dd><p>The tight-binding Hamiltonian.</p>
+<dt><strong>tb_ham</strong><span class="classifier">TB_Ham</span></dt><dd><p>The tight-binding Hamiltonian.</p>
 </dd>
-<dt><strong>tb_model</strong><span class="classifier">TBModelType</span></dt><dd><p>The tight-binding model.</p>
+<dt><strong>tb_model</strong><span class="classifier">TB_Model</span></dt><dd><p>The tight-binding model.</p>
 </dd>
-<dt><strong>lindblad_diss</strong><span class="classifier">LindbladDissType</span></dt><dd><p>The Lindblad dissipator.</p>
+<dt><strong>lindblad_diss</strong><span class="classifier">Lindblad_Diss</span></dt><dd><p>The Lindblad dissipator.</p>
 </dd>
 <dt><strong>init_state</strong><span class="classifier">tuple or str</span></dt><dd><p>Initial state depending on the Hamiltonian description.</p>
 </dd>
-<dt><strong>init_matrix</strong><span class="classifier">q.Qobj</span></dt><dd><p>Initial density matrix.</p>
+<dt><strong>init_matrix</strong><span class="classifier">qutip.Qobj</span></dt><dd><p>Initial density matrix.</p>
 </dd>
 <dt><strong>result</strong><span class="classifier">list</span></dt><dd><p>List to store the results.</p>
 </dd>
@@ -355,33 +476,46 @@
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><strong>get_init_matrix()</strong></p></td>
-<td><p>Gets the initial density matrix.</p></td>
+<td><p>Generate the initial state matrix for the quantum system based on the Hamiltonian description.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>get_result()</strong></p></td>
-<td><p>Solves the master equation and returns the result.</p></td>
+<td><p>Calculate and return the result of the master equation solver.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>get_result_particle(particle)</strong></p></td>
-<td><p>Gets the result for a specific particle.</p></td>
+<td><p>Retrieve the reduced density matrix for a specified particle.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>get_pop()</strong></p></td>
-<td><p>Gets the population of states.</p></td>
+<td><p>Calculate and return the population of particles in the system.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>get_coh()</strong></p></td>
-<td><p>Gets the coherence of states.</p></td>
+<td><p>Calculate and return the coherence of the system.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>get_groundstate_pop()</strong></p></td>
-<td><p>Gets the ground state population.</p></td>
+<td><p>Calculate and return the ground state population.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>reset()</strong></p></td>
+<td><p>Resets the solver’s state by clearing results and initializing dictionaries for populations and coherences.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_coh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Gets the coherence of states.</p>
+<dd><p>Calculate and return the coherence of the system.
+This method computes the coherence of the system based on the Hamiltonian
+description and the Lindblad dissipation operators. It supports two types
+of Hamiltonian descriptions: “2P” and “1P”.
+For “2P” description, it uses the coherence operators from the Lindblad
+dissipation.
+For “1P” description, it constructs the coherence operators based on the
+tensor basis permutations.
+The method then solves the master equation using the QuTiP <cite>mesolve</cite> function
+and calculates the coherence for each particle in the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>Dict[str, float]</dt><dd><p>The coherence of states.</p>
+<dt>dict</dt><dd><p>A dictionary where the keys are particle identifiers and the values are
+the computed coherence values.</p>
 </dd>
 </dl>
 </dd>
@@ -391,17 +525,23 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_groundstate_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Gets the ground state population.</p>
+<dd><p>Calculate and return the ground state population.
+This function computes the ground state population of a system described
+by a two-particle (2P) Hamiltonian with relaxation. If the ground state
+population has already been computed, it returns the cached result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>Dict[str, float]</dt><dd><p>The ground state population.</p>
+<dt>dict</dt><dd><p>A dictionary containing the ground state population with the key
+“groundstate”.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>AssertionError</dt><dd><p>If the Hamiltonian description is not ‘2P’ or if relaxation is not enabled.</p>
+<dt>AssertionError</dt><dd><p>If the Hamiltonian description is not “2P”.</p>
+</dd>
+<dt>AssertionError</dt><dd><p>If relaxation is not enabled in the Hamiltonian.</p>
 </dd>
 </dl>
 </dd>
@@ -411,11 +551,21 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_init_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Gets the initial density matrix.</p>
+<dd><p>Generate the initial state matrix for the quantum system based on the Hamiltonian description.
+The method supports two types of descriptions for the tight-binding Hamiltonian (tb_ham):
+“2P” (two-particle) and “1P” (one-particle). Depending on the description and the
+initialization parameters, the initial state matrix is constructed either as a delocalized
+state over all exciton states or as a localized state on a single exciton state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>q.Qobj</dt><dd><p>The initial density matrix.</p>
+<dt>qutip.Qobj</dt><dd><p>The initial state matrix of the quantum system as a Qobj instance from the QuTiP library.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the Hamiltonian description is not recognized.</p>
 </dd>
 </dl>
 </dd>
@@ -425,25 +575,45 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Gets the population of states.</p>
+<dd><p>Calculate and return the population of particles in the system.
+This method computes the population of particles based on the Hamiltonian
+description and the Lindblad dissipation operators. It uses the QuTiP
+library to solve the master equation and obtain the expectation values
+of the population operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>Dict[str, float]</dt><dd><p>The population of states.</p>
+<dt>dict</dt><dd><p>A dictionary where the keys are particle-site combinations and the
+values are the corresponding population expectation values.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If the population (<cite>self.pop</cite>) is already computed, it returns the cached result.</p></li>
+<li><p>The method supports two types of Hamiltonian descriptions: “2P” and “1P”.</p></li>
+<li><p>For “2P” description, it uses the population operators from <cite>self.lindblad_diss.pop_ops</cite>.</p></li>
+<li><p>For “1P” description, it constructs the population operators based on the tight-binding basis (<cite>self.tb_ham.tb_basis</cite>).</p></li>
+<li><p>The master equation is solved using <cite>qutip.mesolve</cite> with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.</p></li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Solves the master equation and returns the result.</p>
+<dd><p>Calculate and return the result of the master equation solver.
+This method checks if the result has already been calculated. If not, it
+constructs the Hamiltonian matrix and solves the master equation using
+QuTiP’s <cite>mesolve</cite> function. The result is then stored and returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>List[np.ndarray]</dt><dd><p>The result of solving the master equation.</p>
+<dt>list</dt><dd><p>A list of quantum states representing the solution of the master
+equation at different time points.</p>
 </dd>
 </dl>
 </dd>
@@ -453,17 +623,21 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_result_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Gets the result for a specific particle.</p>
+<dd><p>Retrieve the reduced density matrix for a specified particle.
+This method checks if the result has already been calculated. If not, it
+calculates the result. Then, it checks if the reduced density matrix for
+the specified particle has been calculated. If not, it calculates the
+reduced density matrix for the specified particle and stores it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>particle</strong><span class="classifier">str</span></dt><dd><p>The type of particle (‘electron’ or ‘hole’).</p>
+<dt><strong>particle</strong><span class="classifier">str</span></dt><dd><p>The particle for which the reduced density matrix is to be retrieved.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>List[np.ndarray]</dt><dd><p>The result for the specified particle.</p>
+<dt>list</dt><dd><p>A list of reduced density matrices for the specified particle.</p>
 </dd>
 </dl>
 </dd>
@@ -473,14 +647,22 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Resets calculated results (for example after parameters were changed).</p>
+<dd><p>Resets the solver’s state by clearing results and initializing dictionaries for populations and coherences.</p>
+<p class="rubric">Notes</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Clears the <code class="docutils literal notranslate"><span class="pre">result</span></code> list (for the full the all reduced density matrices).</p></li>
+<li><p>Initializes <cite>groundstate_pop</cite>, <cite>pop</cite>, and <cite>coh</cite> dictionaries.</p></li>
+</ul>
+</div>
 </dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="lindblad-diss">
-<h2>Lindblad_Diss<a class="headerlink" href="#lindblad-diss" title="Link to this heading"></a></h2>
+<section id="lindblad-dissipator">
+<h2>Lindblad Dissipator<a class="headerlink" href="#lindblad-dissipator" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">Lindblad_Diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">diss_kwargs</span></span></em><span class="sig-paren">)</span></dt>

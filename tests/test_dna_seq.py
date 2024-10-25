@@ -1,17 +1,22 @@
 import pytest
+
 from qDNA import DNA_Seq, create_upper_strands
 
 
 @pytest.mark.parametrize(
-    "seq, mode, methylated, expected",
+    "seq, mode, methylated, lower_strand, expected",
     [
-        ("GCG", "ELM", True, ("GCG", "CGC")),
-        ("GCG", "WM", True, ("GCG",)),
-        ("GCG", "FLM", True, ("BBB", "GCG", "CGC", "BBB")),
+        ("GCG", "ELM", True, None, ("GCG", "CGC")),
+        ("GCG", "WM", True, None, ("GCG",)),
+        ("GCG", "FLM", True, None, ("BBB", "GCG", "CGC", "BBB")),
+        ("GCGCG", "LM", False, "cGcGC", ("GCGCG", "cGcGC")),
     ],
 )
-def test_DNA_Seq(seq, mode, methylated, expected):
-    assert DNA_Seq(seq, mode, methylated).dna_seq == expected
+def test_DNA_Seq(seq, mode, methylated, lower_strand, expected):
+    assert (
+        DNA_Seq(seq, mode, methylated=methylated, lower_strand=lower_strand).dna_seq
+        == expected
+    )
 
 
 @pytest.mark.parametrize(

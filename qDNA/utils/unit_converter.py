@@ -10,7 +10,7 @@ from itertools import permutations
 import numpy as np
 import scipy.constants as c
 
-from ..tools import CONFIG
+from ..tools import UNITS
 
 __all__ = [
     "UNITS",
@@ -21,8 +21,6 @@ __all__ = [
 ]
 
 # ------------------------------------------------
-
-UNITS = CONFIG["UNITS"]
 
 
 def convert_to_debye(charge_separation):
@@ -62,7 +60,7 @@ def get_conversion(start_unit, end_unit):
 
     Examples
     --------
-    >>> 1/get_conversion('100meV', 'rad/fs').
+    >>> 1/get_conversion("100meV", "rad/fs").
     """
 
     # Conversion factors to Joule
@@ -96,12 +94,12 @@ def get_all_conversions():
     Returns
     -------
     Dict[str, float]
-        A dictionary where the keys are conversion descriptions (e.g., '100meV_to_rad/fs')
+        A dictionary where the keys are conversion descriptions
         and the values are the conversion factors.
     """
 
     conversion_dict = {}
-    for start_unit, end_unit in permutations(CONFIG["UNITS"], 2):
+    for start_unit, end_unit in permutations(UNITS, 2):
         conversion = start_unit + "_to_" + end_unit
         conversion_val = get_conversion(start_unit, end_unit)
         conversion_dict[conversion] = conversion_val

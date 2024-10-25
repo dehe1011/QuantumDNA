@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuantumDNA: Toolbox for quantum simulation of DNA &mdash; QuantumDNA 0.1.5 documentation</title>
+  <title>QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA &mdash; QuantumDNA 0.1.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="next" title="API documentation" href="apidoc/apidoc.html" />
+    <link rel="next" title="Installation" href="installation.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -45,6 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc/apidoc.html">API documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Users Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -65,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">QuantumDNA: Toolbox for quantum simulation of DNA</li>
+      <li class="breadcrumb-item active">QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -79,23 +80,43 @@
 <a class="reference internal image-reference" href="_images/qDNA_logo.png"><img alt="_images/qDNA_logo.png" src="_images/qDNA_logo.png" style="width: 7in;" />
 </a>
 </figure>
-<section id="quantumdna-toolbox-for-quantum-simulation-of-dna">
-<h1>QuantumDNA: Toolbox for quantum simulation of DNA<a class="headerlink" href="#quantumdna-toolbox-for-quantum-simulation-of-dna" title="Link to this heading"></a></h1>
-<p>This documentation contains a user guide and automatically generated API documentation for QuantumDNA. For more information see the <a class="reference external" href="https://github.com/dehe1011/QuantumDNA">QuantumDNA GitHub repository</a>. Here, you can also find a collection of tutorials for QuantumDNA.</p>
+<section id="quantumdna-a-toolbox-for-evaluating-excited-states-and-charge-transfer-in-dna">
+<h1>QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA<a class="headerlink" href="#quantumdna-a-toolbox-for-evaluating-excited-states-and-charge-transfer-in-dna" title="Link to this heading"></a></h1>
+<p>Welcome to <strong>QuantumDNA</strong> – a comprehensive tool for performing quantum mechanical calculations on DNA.
+QuantumDNA leverages the formalism of open quantum systems, utilizing tight-binding Hamiltonians to model DNA at a quantum level.
+This tool can handle a variety of tight-binding models and allows users to input custom parameters derived from <em>ab initio</em> calculations or experimental data.
+Furthermore, QuantumDNA enables users to define unique models, making it highly adaptable to a wide range of research needs.</p>
+<p>Designed with accessibility in mind, QuantumDNA includes a user-friendly interface to make quantum calculations accessible to researchers of all technical backgrounds.</p>
+<p>Some of the core functionalities of QuantumDNA include the calculation of exciton lifetimes, average charge separation, and dipole moments for excited states along DNA strands <span id="id1">[<a class="reference internal" href="biblio.html#id2" title="Dennis Herb, Mirko Rossini, and Joachim Ankerhold. Ultrafast excitonic dynamics in DNA: Bridging correlated quantum dynamics and sequence dependence. Phys. Rev. E, 109:064413, 2024. doi:10.1103/PhysRevE.109.064413.">HRA24</a>]</span>.</p>
+<section id="about-this-documentation">
+<h2>About This Documentation<a class="headerlink" href="#about-this-documentation" title="Link to this heading"></a></h2>
+<p>This documentation includes:</p>
+<ul class="simple">
+<li><p><strong>API Reference</strong>: Description on QuantumDNA’s functions and classes.</p></li>
+<li><p><strong>User Guide</strong>: Tutorials and instructions for getting started and using QuantumDNA effectively.</p></li>
+</ul>
+<p>For additional resources and development information, visit the <a class="reference external" href="https://github.com/dehe1011/QuantumDNA">QuantumDNA GitHub repository</a>. For hands-on learning, check out the <a class="reference external" href="https://github.com/dehe1011/QuantumDNA-notebooks">Tutorial Notebooks</a> repository, which contains examples and guided exercises.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-pypi">Installation via PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-cloning-the-github-repository">Installation via Cloning the GitHub Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#uninstallation">Uninstallation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc/apidoc.html">API documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="apidoc/classes.html">Classes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#dna-seq">DNA_Seq</a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#tb-model">TB_Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#tb-ham">TB_Ham</a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#me-solver">ME_Solver</a></li>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#lindblad-diss">Lindblad_Diss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#dna-sequence">DNA Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#tight-binding-model">Tight-binding model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#master-equation-solver">Master equation solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/classes.html#lindblad-dissipator">Lindblad Dissipator</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apidoc/functions.html">Functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="apidoc/functions.html#module-qDNA.model">Tight-binding basis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apidoc/functions.html#tight-binding-basis">Tight-binding basis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidoc/functions.html#tight-binding-configuration">Tight-binding configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidoc/functions.html#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="apidoc/functions.html#save-and-load-tight-binding-parameters">Save and load tight-binding parameters</a></li>
@@ -126,7 +147,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Users Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guide/guide-tb_model.html">First section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/guide-tb_model.html">Tutorial</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -137,6 +158,7 @@
 </li>
 </ul>
 </div>
+</section>
 </section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
@@ -151,7 +173,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="apidoc/apidoc.html" class="btn btn-neutral float-right" title="API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

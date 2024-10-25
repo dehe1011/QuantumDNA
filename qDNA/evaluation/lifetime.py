@@ -10,7 +10,7 @@ import numpy as np
 from tqdm import tqdm
 
 from ..dynamics import get_me_solver
-from ..tools import get_config, save_json
+from ..tools import DEFAULTS, save_json
 
 __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
@@ -34,6 +34,11 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
     -------
     float or str
         The exciton lifetime in femtoseconds, or a message indicating no relaxation in the given time.
+
+    Examples
+    --------
+    >>> calc_lifetime("GCG", "ELM", relax_rate=3, unit="rad/ps")
+    775.5511022044088
     """
     start_time = time.time()
     me_solver = get_me_solver(upper_strand, tb_model_name, **kwargs)
@@ -44,7 +49,7 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
         if me_solver.t_unit == "ps":
             lifetime *= 1000
         end_time = time.time()
-        if get_config()["verbose"]:
+        if DEFAULTS["verbose"]:
             print(f"Calculation time: {end_time-start_time}")
         return lifetime
     except StopIteration:

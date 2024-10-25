@@ -31,15 +31,15 @@ def save_tb_params(
     tb_param_dict : dict
         Dictionary containing the tight-binding parameters.
     info_dict : dict
-        Dictionary with metadata, e.g., 'source', 'particle', and 'tb_model_name'.
+        Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
-        Directory to save the file, by default 'data/raw/tb_params'.
+        Directory to save the file, by default `data/raw/tb_params`.
     notes : str, optional
         Additional notes to include in the info_dict, by default None.
 
-    Example
-    -------
-    >>> save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, {'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder")
+    Examples
+    --------
+    >>> save_tb_params({"t_AB": 5, "t_AC": 3, "t_BC": -2}, {"source": "author2024", "particle": "particle", "tb_model_name": "model"}, "delete_this_folder")
     """
 
     filename = "_".join(
@@ -59,9 +59,9 @@ def load_tb_params(
     Parameters
     ----------
     info_dict : dict
-        Dictionary with metadata, e.g., 'source', 'particle', and 'tb_model_name'.
+        Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
-        Directory to load the file from, by default 'data/raw/tb_params'.
+        Directory to load the file from, by default `data/raw/tb_params`.
     load_metadata : bool, optional
         Whether to load metadata along with the parameters, by default False.
 
@@ -70,9 +70,9 @@ def load_tb_params(
     dict
         Loaded tight-binding parameters.
 
-    Example
-    -------
-    >>> load_tb_params({'source': 'author2024', 'particle': 'particle', 'tb_model_name': 'model'}, "delete_this_folder", load_metadata=False)
+    Examples
+    --------
+    >>> load_tb_params({"source": "author2024", "particle": "particle", "tb_model_name": "model"}, "delete_this_folder", load_metadata=False)
     """
 
     filename = "_".join(
@@ -97,9 +97,9 @@ def wrap_save_tb_params(
     tb_param_dict : dict
         Dictionary containing the tight-binding parameters.
     source : str
-        Source of the parameters, e.g., 'Hawke2010'.
+        Source of the parameters, e.g., `Hawke2010`.
     particle : str
-        Type of particle, e.g., 'electron', 'hole', 'exciton'.
+        Type of particle, e.g., `electron`, `hole`, `exciton`.
     tb_model_name : str
         Name of the tight-binding model.
     unit : str, optional
@@ -107,9 +107,9 @@ def wrap_save_tb_params(
     notes : str, optional
         Additional notes to include in the info_dict, by default None.
 
-    Example
-    -------
-    >>> wrap_save_tb_params({'t_AB': 5, 't_AC': 3, 't_BC': -2}, 'author2024', 'particle', 'model', "delete_this_folder")
+    Examples
+    --------
+    >>> wrap_save_tb_params({"t_AB": 5, "t_AC": 3, "t_BC": -2}, "author2024", "particle", "model", "delete_this_folder")
     """
 
     directory = os.path.join(DATA_DIR, "raw", "tb_params")
@@ -135,9 +135,9 @@ def wrap_load_tb_params(
     Parameters
     ----------
     source : str
-        Source of the parameters, e.g., 'Hawke2010'.
+        Source of the parameters, e.g., `Hawke2010`.
     particle : str
-        Type of particle, e.g., 'electron', 'hole', 'exciton'.
+        Type of particle, e.g., `electron`, `hole`, `exciton`.
     tb_model_name : str
         Name of the tight-binding model.
     load_metadata : bool, optional
@@ -148,9 +148,9 @@ def wrap_load_tb_params(
     dict
         Loaded tight-binding parameters.
 
-    Example
-    -------
-    >>> wrap_load_tb_params('author2024', 'particle', 'model', load_metadata=False)
+    Examples
+    --------
+    >>> wrap_load_tb_params("author2024", "particle", "model", load_metadata=False)
     """
 
     directory = os.path.join(DATA_DIR, "raw", "tb_params")

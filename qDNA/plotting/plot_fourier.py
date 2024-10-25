@@ -5,7 +5,7 @@ This module provides functions to plot the Fourier transform and the average pop
 import numpy as np
 
 from ..utils import get_conversion
-from ..tools import CONFIG
+from ..tools import DEFAULTS
 from . import COLORS_DNA_BASES, PARTICLES, COLORS_PARTICLES
 
 __all__ = [
@@ -25,7 +25,7 @@ def plot_fourier(ax, tb_ham, init_state, end_state, x_axis):
     ----------
     ax : matplotlib.axes.Axes
         The axes to plot on.
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     init_state : Any
         The initial state.
@@ -90,14 +90,14 @@ def get_cumulative_average_pop(tb_ham, J_list):
 
     Parameters
     ----------
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     J_list : list
         List of interaction parameters.
 
     Returns
     -------
-    np.ndarray
+    numpy.ndarray
         Cumulative average population.
     """
 
@@ -108,8 +108,8 @@ def get_cumulative_average_pop(tb_ham, J_list):
 
     # TODO: make this work for other initial states
     init_state = (
-        CONFIG["me_kwargs_default"].get("init_e_state"),
-        CONFIG["me_kwargs_default"].get("init_h_state"),
+        DEFAULTS["me_kwargs_default"].get("init_e_state"),
+        DEFAULTS["me_kwargs_default"].get("init_h_state"),
     )
     num_sites = len(tb_ham.tb_basis)
 
@@ -184,7 +184,7 @@ def plot_average_pop(ax, tb_ham, J_list, J_unit):
     ----------
     ax : list of matplotlib.axes.Axes
         The axes to plot on.
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     J_list : list
         List of interaction parameters.

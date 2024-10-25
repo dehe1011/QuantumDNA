@@ -41,9 +41,9 @@ def set_matrix_element(
     np.ndarray
         The updated Hamiltonian matrix.
 
-    Example
-    -------
-    >>> set_matrix_element(np.zeros((2, 2)), 1, '(0, 0)', '(1, 0)', ['(0, 0)', '(1, 0)'])
+    Examples
+    --------
+    >>> set_matrix_element(np.zeros((2, 2)), 1, "(0, 0)", "(1, 0)", ["(0, 0)", "(1, 0)"])
     array([[0., 1.],
            [1., 0.]])
     """
@@ -79,11 +79,11 @@ def tb_ham_1P(
     np.ndarray
         The tight-binding Hamiltonian matrix.
 
-    Example
-    -------
-    >>> tb_model = TB_Model('model_name', (2, 2))
-    >>> tb_param_dict = {'E_G': 1.0, 'C_GC': 0.5}
-    >>> tb_basis_sites_dict = {'(0, 0)': 'G', '(1, 0)': 'C'}
+    Examples
+    --------
+    >>> tb_model = TB_Model("model_name", (2, 2))
+    >>> tb_param_dict = {"E_G": 1.0, "C_GC": 0.5}
+    >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
     >>> tb_ham_1P(tb_model, tb_param_dict, tb_basis_sites_dict)
     array([[1. , 0.5],
            [0.5, 1. ]])
@@ -135,12 +135,12 @@ def tb_ham_2P(
     np.ndarray
         The electron-hole tight-binding Hamiltonian matrix.
 
-    Example
-    -------
-    >>> tb_model = TB_Model('model_name', (2, 2))
-    >>> tb_param_dict_electron = {'E_G': 1.0, 'C_GC': 0.5}
-    >>> tb_param_dict_hole = {'E_G': 0.8, 'C_GC': 0.4}
-    >>> tb_basis_sites_dict = {'(0, 0)': 'G', '(1, 0)': 'C'}
+    Examples
+    --------
+    >>> tb_model = TB_Model("model_name", (2, 2))
+    >>> tb_param_dict_electron = {"E_G": 1.0, "C_GC": 0.5}
+    >>> tb_param_dict_hole = {"E_G": 0.8, "C_GC": 0.4}
+    >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
     >>> tb_ham_2P(tb_model, tb_param_dict_electron, tb_param_dict_hole, tb_basis_sites_dict)
     array([[1.5, 0.5, 0.4, 0. ],
            [0.5, 1. , 0. , 0. ],
@@ -169,8 +169,8 @@ def add_groundstate(matrix):
     np.ndarray
         Matrix with an additional dimension for the ground state.
 
-    Example
-    -------
+    Examples
+    --------
     >>> add_groundstate(np.array([[1, 2], [3, 4]]))
     array([[0., 0., 0.],
            [0., 1., 2.],
@@ -197,8 +197,8 @@ def delete_groundstate(matrix):
     np.ndarray
         Matrix without the ground state dimension.
 
-    Example
-    -------
+    Examples
+    --------
     >>> delete_groundstate(np.array([[0., 0., 0.], [0., 1., 2.], [0., 3., 4.]]))
     array([[1., 2.],
            [3., 4.]])
@@ -237,10 +237,10 @@ def add_interaction(
     This works only for a Hamiltonian without the additional basis element accounting for relaxation.
     Therefore the interaction should always be added before the relaxation.
 
-    Example
-    -------
+    Examples
+    --------
     >>> Hamiltonian = np.array([[0, 1], [1, 0]])
-    >>> eh_basis = [('(0, 0)', '(1, 1)'), ('(1, 0)', '(0, 0)')]
+    >>> eh_basis = [("(0, 0)", "(1, 1)"), ("(1, 0)", "(0, 0)")]
     >>> add_interaction(Hamiltonian, eh_basis, 1.0, True)
     array([[0.        , 1.17639077],
            [1.17639077, 0.        ]])

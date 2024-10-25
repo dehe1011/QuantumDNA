@@ -22,7 +22,7 @@ def plot_eigv(ax, tb_ham, energy_unit="100meV"):
     ----------
     ax : matplotlib.axes.Axes
         The axes to plot on.
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     energy_unit : str, optional
         The unit of energy to plot, by default '100meV'.
@@ -46,7 +46,7 @@ def plot_eigs(ax, tb_ham, eigenstate_idx):
     ----------
     ax : matplotlib.axes.Axes
         The axes to plot on.
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     eigenstate_idx : int
         The index of the eigenstate to plot.

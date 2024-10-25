@@ -14,62 +14,59 @@ Shortcuts:
 """
 
 import re
-import os
 from itertools import product
 
-from qDNA import DATA_DIR
-from qDNA.tools import CONFIG, load_json
+from qDNA.tools import DNA_BASES, TB_MODELS_PROPS
 
-__all__ = ["DNA_Seq", "create_upper_strands", "TB_MODELS_PROPS"]
+__all__ = ["DNA_Seq", "create_upper_strands"]
 
 # ------------------------------------------------
 
 
-TB_MODELS_PROPS = load_json("tb_models", os.path.join(DATA_DIR, "raw"))
-
-
 class DNA_Seq:
     """
-    A class representing a DNA sequence with optional methylation and backbone properties.
+    A class to represent a DNA sequence and its properties based on a tight-binding model.
 
     Parameters
     ----------
     upper_strand : str
-        The sequence of the upper strand of the DNA.
+        The upper strand of the DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
     methylated : bool, optional
-        Whether the DNA sequence is methylated (default is True).
+        Indicates whether the DNA sequence is methylated (default is True).
+    lower_strand : str, optional
+        The lower strand of the DNA sequence (default is None).
 
     Attributes
     ----------
     upper_strand : str
-        The sequence of the upper strand of the DNA.
+        The upper strand of the DNA sequence.
     lower_strand : str
-        The sequence of the lower strand of the DNA.
+        The lower strand of the DNA sequence.
     methylated : bool
-        Indicates if the DNA is methylated.
+        Indicates whether the DNA sequence is methylated.
     tb_model_name : str
         The name of the tight-binding model.
     tb_model_props : dict
         Properties of the tight-binding model.
     backbone : bool
-        Indicates if the model includes a backbone.
+        Indicates whether the model includes a backbone.
     double_stranded : bool
-        Indicates if the DNA is double-stranded.
+        Indicates whether the DNA is double-stranded.
     num_strands : int
-        Number of strands in the model.
+        Number of strands in the DNA sequence.
     num_sites_per_strand : int
-        Number of sites per strand.
-    tb_dims : Tuple[int, int]
+        Number of sites per strand in the DNA sequence.
+    tb_dims : tuple
         Dimensions of the tight-binding model.
     complementary_base_dict : dict
-        Mapping of bases to their complements.
-    dna_seq : Tuple[str]
-        The generated DNA sequence including backbone if applicable.
+        Dictionary mapping each base to its complementary base.
+    dna_seq : tuple
+        The generated DNA sequence.
     """
 
-    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=""):
+    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=None):
         # Initialize the DNA sequence
         self.upper_strand = upper_strand
         self.lower_strand = lower_strand
@@ -122,15 +119,16 @@ class DNA_Seq:
         This method generates the DNA sequence considering whether it is double-stranded,
         methylated, and/or has a backbone. It uses the `upper_strand` attribute as the
         primary sequence and generates the `lower_strand` if the DNA is double-stranded.
+
         Returns
         -------
         tuple
             A tuple representing the DNA sequence. The contents of the tuple vary based
             on the attributes:
-            - If double-stranded and has a backbone: (backbone_strand, upper_strand, lower_strand, backbone_strand)
-            - If double-stranded and no backbone: (upper_strand, lower_strand)
-            - If single-stranded and has a backbone: (backbone_strand, upper_strand, backbone_strand)
-            - If single-stranded and no backbone: (upper_strand,)
+              If double-stranded and has a backbone: (backbone_strand, upper_strand, lower_strand, backbone_strand)
+              If double-stranded and no backbone: (upper_strand, lower_strand)
+              If single-stranded and has a backbone: (backbone_strand, upper_strand, backbone_strand)
+              If single-stranded and no backbone: (upper_strand,)
         """
 
         # Generate the lower strand if it is not provided and the model is double-stranded
@@ -181,16 +179,19 @@ class DNA_Seq:
 def create_upper_strands(num_dna_bases, dna_bases):
     """
     Generate all possible upper DNA strands of a given length using specified DNA bases.
+
     Parameters
     ----------
     num_dna_bases : int
         The number of DNA bases in each strand.
     dna_bases : list of str
         A list of DNA bases to use for generating the strands.
+
     Returns
     -------
     list of str
         A list containing all possible upper DNA strands of the specified length.
+
     Raises
     ------
     AssertionError
@@ -198,7 +199,6 @@ def create_upper_strands(num_dna_bases, dna_bases):
     """
 
     # Check that the DNA bases are valid
-    DNA_BASES = CONFIG["DNA_BASES"]
     assert all(
         [dna_base in DNA_BASES for dna_base in dna_bases]
     ), f"Elements of dna_bases must be in {DNA_BASES}"

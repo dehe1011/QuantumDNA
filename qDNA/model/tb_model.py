@@ -5,7 +5,7 @@ This module defines two classes for tight-binding models: Custom_TB_Model and TB
 - TB_Model provides a predefined tight-binding model based on the model name and dimensions, and retrieves the corresponding properties, configurations, and basis states.
 """
 
-from ..tools import CONFIG
+from ..tools import DEFAULTS
 from .. import TB_MODELS_PROPS
 
 from .tb_basis import get_tb_basis, get_eh_basis
@@ -72,7 +72,7 @@ class Custom_TB_Model:
             ]
         ), "elements of tb_config must be of type tuple and of length three"
 
-        self.verbose = CONFIG["verbose"]
+        self.verbose = DEFAULTS["verbose"]
         if self.verbose:
             print("Successfully checked all inputs of the Custom_TB_Model instance.")
 
@@ -153,7 +153,7 @@ class TB_Model:
         assert all(
             [isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims]
         ), "elements of tb_dim must be of type int and > 0"
-        self.verbose = CONFIG["verbose"]
+        self.verbose = DEFAULTS["verbose"]
         if self.verbose:
             print("Successfully checked all inputs of the TB_Model instance.")
 

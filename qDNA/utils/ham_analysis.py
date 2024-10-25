@@ -124,28 +124,15 @@ def get_pop_fourier(t, average_pop, amplitudes, frequencies):
     float
         The population at time t.
     """
-    return average_pop + np.sum(
-        amplitude * np.cos(frequency * t)
-        for amplitude, frequency in zip(amplitudes, frequencies)
-    )
+    population = average_pop
+    for amplitude, frequency in zip(amplitudes, frequencies):
+        population += amplitude * np.cos(frequency * t)
+    return population
 
 
 def calc_ipr_hamiltonian(eigs):
-    """
+    r"""
     Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.
-
-    The IPR is a measure of the localization of an eigenstate. It is defined as the sum of the squared coefficients of the
-    eigenvector. The IPR ranges from 1 to N, where N is the dimension of the Hilbert space. The IPR values can be used to
-    distinguish between localized and delocalized eigenstates:
-
-    The IPR is defined as:
-
-    .. math:
-        IPR = \\frac{1}{\\sum_{i=1}^{N} |c_i|^4}
-
-    Where:
-    - Localized state: IPR = 1/N
-    - Delocalized coherent state: IPR = N
 
     Parameters
     ----------
@@ -156,6 +143,20 @@ def calc_ipr_hamiltonian(eigs):
     -------
     list of float
         The IPR values for each eigenstate.
+
+    Notes
+    -----
+    .. note::
+
+        The IPR is a measure of the localization of an eigenstate. It is defined as the sum of the squared coefficients of the
+        eigenvector. The IPR ranges from 1 to N, where N is the dimension of the Hilbert space. The IPR values can be used to
+        distinguish between localized and delocalized eigenstates.
+
+        .. math::
+            \mathrm{IPR} = 1/\sum_{i=1}^{N} |c_i|^4.
+
+        - Localized state: :math:`\mathrm{IPR} = 1/N`
+        - Delocalized coherent state: :math:`\mathrm{IPR} = N`
     """
 
     dims = eigs.shape[0]

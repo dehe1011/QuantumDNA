@@ -43,7 +43,13 @@ def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):
     -------
     float or List[float]
         The average charge separation.
+
+    Examples
+    --------
+    >>> calc_dipole("GCG", "ELM")
+    2.951734389657976
     """
+
     kwargs["relax_rate"] = 0
     me_solver = get_me_solver(upper_strand, tb_model_name, **kwargs)
     distance_list = 3.4 * get_eh_distance(me_solver.tb_ham.eh_basis)
@@ -54,7 +60,7 @@ def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):
         return distances
 
 
-def calc_dipole_moment(upper_strand, tb_model_name, average=True, **kwargs):
+def calc_dipole_moment(upper_strand, tb_model_name, **kwargs):
     """
     Calculates the dipole moment.
 
@@ -64,8 +70,6 @@ def calc_dipole_moment(upper_strand, tb_model_name, average=True, **kwargs):
         The upper strand of DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
-    average : bool
-        Indicates if the dipole moment should be time-averaged.
     kwargs : dict
         Additional keyword arguments for the master equation solver.
 
@@ -73,9 +77,14 @@ def calc_dipole_moment(upper_strand, tb_model_name, average=True, **kwargs):
     -------
     float or List[float]
         The average dipole moment.
+
+    Examples
+    --------
+    >>> calc_dipole_moment("GCG", "ELM")
+    14.177784530660903
     """
     return convert_to_debye(
-        calc_dipole(upper_strand, tb_model_name, average=average, **kwargs)
+        calc_dipole(upper_strand, tb_model_name, average=True, **kwargs)
     )
 
 

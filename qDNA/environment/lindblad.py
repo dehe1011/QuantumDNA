@@ -16,10 +16,12 @@ pop: population
 """
 
 from itertools import product
+import copy
+
 import numpy as np
 import qutip as q
 
-from ..tools import CONFIG, check_diss_kwargs
+from ..tools import DEFAULTS, UNITS, DNA_BASES, check_diss_kwargs
 from ..utils import get_conversion
 from ..hamiltonian import TB_Ham, add_groundstate
 
@@ -107,10 +109,10 @@ class Lindblad_Diss:
         assert isinstance(
             tb_ham, TB_Ham
         ), "tb_ham must be an instance of the class TB_Ham"
-        self.diss_kwargs = CONFIG["diss_kwargs_default"]
+        self.diss_kwargs = copy.copy(DEFAULTS["diss_kwargs_default"])
         self.diss_kwargs.update(diss_kwargs)
         check_diss_kwargs(**self.diss_kwargs)
-        self.verbose = CONFIG["verbose"]
+        self.verbose = DEFAULTS["verbose"]
 
         if self.verbose:
             print("Successfully checked all inputs for the Lindblad_Diss instance.")
@@ -130,7 +132,6 @@ class Lindblad_Diss:
         # Relaxation
         self.uniform_relaxation = self.diss_kwargs.get("uniform_relaxation")
         if self.uniform_relaxation:
-            DNA_BASES = CONFIG["DNA_BASES"]
             DNA_SITES = DNA_BASES + ["B"]
             relax_rate = self.diss_kwargs["relax_rate"]
             self.relax_rates = dict(zip(DNA_SITES, [relax_rate] * len(DNA_SITES)))
@@ -206,7 +207,7 @@ class Lindblad_Diss:
     @unit.setter
     def unit(self, new_unit):
         assert isinstance(new_unit, str), "new_unit must be of type str"
-        assert new_unit in CONFIG["UNITS"], f"new_unit must be in {CONFIG['UNITS']}"
+        assert new_unit in UNITS, f"new_unit must be in {UNITS}"
         old_unit = self._unit
         self._unit = new_unit
 
@@ -247,6 +248,7 @@ class Lindblad_Diss:
             - For local dephasing in a 1P description: num_sites operators.
             - For global dephasing in a 2P description: num_sites^2 operators.
             - For global dephasing in a 1P description: num_sites operators.
+
         Raises
         ------
         AssertionError
@@ -303,6 +305,7 @@ class Lindblad_Diss:
         -------
         therm_ops : list
             A list of thermal operations, scaled by the square root of the corresponding thermalization rate.
+
         Notes
         -----
         - The method first retrieves the eigensystem of the Hamiltonian and converts
@@ -357,6 +360,7 @@ class Lindblad_Diss:
         This method constructs dictionaries of population and coherence operators for each particle
         in the tight-binding Hamiltonian (tb_ham). It also includes ground state population operators
         if relaxation is considered.
+
         Returns
         -------
         tuple of dict
@@ -364,6 +368,7 @@ class Lindblad_Diss:
             - pop_dict: Population operators for each particle and site.
             - coh_dict: Coherence operators for each particle and pair of sites.
             - groundstate_pop_dict: Ground state population operators (only if relaxation is considered).
+
         Raises
         ------
         AssertionError

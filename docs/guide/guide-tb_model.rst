@@ -1,4 +1,4 @@
-First section
-=============
+Tutorial
+========
 
-ToDo: write a users guide.
+ToDo: write Tutorials for the user guide.

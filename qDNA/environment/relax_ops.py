@@ -17,7 +17,7 @@ def get_relax_op(tb_basis, tb_site):
 
     Returns
     -------
-    q.Qobj
+    qutip.Qobj
         Relaxation operator.
     """
 

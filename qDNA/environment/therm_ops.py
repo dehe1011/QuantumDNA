@@ -29,7 +29,7 @@ def get_glob_therm_op(eigs, eigenstate_i, eigenstate_j, relaxation, matrix_dim):
 
     Returns
     -------
-    q.Qobj
+    qutip.Qobj
         Thermalizing operator.
     """
 
@@ -75,6 +75,7 @@ def get_glob_therm_ops(
         Type of spectral density function (default is "debye").
     exponent : float, optional
         Exponent for the spectral density function (default is 1).
+
     Returns
     -------
     list
@@ -126,7 +127,7 @@ def get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim):
 
     Returns
     -------
-    q.Qobj
+    qutip.Qobj
         Thermalizing operator.
     """
 

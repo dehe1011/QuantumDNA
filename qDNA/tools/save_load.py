@@ -57,7 +57,7 @@ def load_yaml(filepath):
         return yaml.safe_load(yaml_file)
 
 
-def get_config():
+def get_defaults():
     """
     Retrieves the configuration settings from the 'config.yaml' file located in the 'qDNA' directory.
 
@@ -65,12 +65,12 @@ def get_config():
         dict: The configuration settings loaded from the YAML file.
     """
 
-    filepath = os.path.join(ROOT_DIR, "qDNA", "config.yaml")
+    filepath = os.path.join(ROOT_DIR, "qDNA", "defaults.yaml")
     return load_yaml(filepath)
 
 
-# Load the configuration settings
-CONFIG = get_config()
+# Load the default values
+DEFAULTS = get_defaults()
 
 
 def save_json(data, metadata, filename, directory):
@@ -101,7 +101,7 @@ def save_json(data, metadata, filename, directory):
     # check if the file already exists
     if os.path.exists(filepath):
         logger.warning(f"File {filepath} already exists.")
-        if CONFIG["verbose"]:
+        if DEFAULTS["verbose"]:
             print(f"File {filepath} already exists")
         return
 
@@ -112,7 +112,7 @@ def save_json(data, metadata, filename, directory):
 
     # log the saving process
     logger.info(f"Data saved as {filepath}")
-    if CONFIG["verbose"]:
+    if DEFAULTS["verbose"]:
         print(f"Data saved as {filepath}")
 
 
@@ -146,13 +146,13 @@ def load_json(filename, directory, load_metadata=False):
     # check if the file exists
     if not os.path.exists(filepath):
         logger.warning(f"File {filepath} does not exist.")
-        if CONFIG["verbose"]:
+        if DEFAULTS["verbose"]:
             print(f"File {filepath} does not exist.")
         return
 
     # log the loading process
     logger.info(f"Data loaded from {filepath}")
-    if CONFIG["verbose"]:
+    if DEFAULTS["verbose"]:
         print(f"Data loaded from {filepath}")
 
     # load the data and metadata from the JSON file
@@ -196,7 +196,7 @@ def save_figure(fig, filename, directory, extension="svg"):
     if os.path.exists(filepath):
         rand_idx = random.randint(0, 1000)
         logger.warning(f"Figure {filepath} already exists. Filepath changed.")
-        if CONFIG["verbose"]:
+        if DEFAULTS["verbose"]:
             print(f"Figure {filepath} already exists. Filepath changed.")
         filepath = os.path.join(directory, filename, f"_{rand_idx}_", ".", extension)
 
@@ -205,5 +205,5 @@ def save_figure(fig, filename, directory, extension="svg"):
 
     # log the saving process
     logger.info(f"Figure saved as {filepath}")
-    if CONFIG["verbose"]:
+    if DEFAULTS["verbose"]:
         print(f"Figure saved as {filepath}")

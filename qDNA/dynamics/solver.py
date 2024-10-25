@@ -12,6 +12,7 @@ Shortcuts
 """
 
 from itertools import permutations
+import copy
 
 import numpy as np
 import qutip as q
@@ -19,7 +20,7 @@ import qutip as q
 from .. import DNA_Seq
 from ..environment import Lindblad_Diss, get_eh_observable
 from ..hamiltonian import TB_Ham, add_groundstate
-from ..tools import check_me_kwargs, CONFIG
+from ..tools import check_me_kwargs, DEFAULTS
 
 from .reduced_dm import get_reduced_dm
 
@@ -104,10 +105,10 @@ class ME_Solver:
             lindblad_diss, Lindblad_Diss
         ), "lindblad_diss must be an instance of the class Lindblad_Diss"
 
-        self.me_kwargs = CONFIG["me_kwargs_default"]
+        self.me_kwargs = copy.copy(DEFAULTS["me_kwargs_default"])
         self.me_kwargs.update(me_kwargs)
         check_me_kwargs(**self.me_kwargs)
-        self.verbose = CONFIG["verbose"]
+        self.verbose = DEFAULTS["verbose"]
         if self.verbose:
             print("Successfully checked all inputs for the ME_Solver instance.")
 
@@ -208,9 +209,13 @@ class ME_Solver:
     def reset(self):
         """
         Resets the solver's state by clearing results and initializing dictionaries for populations and coherences.
-        This method performs the following actions:
-        - Clears the `result` list (for the full the all reduced density matrices).
-        - Initializes `groundstate_pop`, `pop`, and `coh` dictionaries.
+
+        Notes
+        -----
+        .. note::
+
+            - Clears the ``result`` list (for the full the all reduced density matrices).
+            - Initializes `groundstate_pop`, `pop`, and `coh` dictionaries.
         """
 
         self.result = []
@@ -227,10 +232,12 @@ class ME_Solver:
         "2P" (two-particle) and "1P" (one-particle). Depending on the description and the
         initialization parameters, the initial state matrix is constructed either as a delocalized
         state over all exciton states or as a localized state on a single exciton state.
+
         Returns
         -------
-        init_state : qutip.Qobj
+        qutip.Qobj
             The initial state matrix of the quantum system as a Qobj instance from the QuTiP library.
+
         Raises
         ------
         ValueError
@@ -313,6 +320,7 @@ class ME_Solver:
         ----------
         particle : str
             The particle for which the reduced density matrix is to be retrieved.
+
         Returns
         -------
         list
@@ -348,18 +356,17 @@ class ME_Solver:
         dict
             A dictionary where the keys are particle-site combinations and the
             values are the corresponding population expectation values.
+
         Notes
         -----
-        - If the population (`self.pop`) is already computed, it returns the
-          cached result.
-        - The method supports two types of Hamiltonian descriptions: "2P" and "1P".
-        - For "2P" description, it uses the population operators from
-          `self.lindblad_diss.pop_ops`.
-        - For "1P" description, it constructs the population operators based on
-          the tight-binding basis (`self.tb_ham.tb_basis`).
-        - The master equation is solved using `qutip.mesolve` with the Hamiltonian
-          matrix, initial state, time points, collapse operators, and population
-          operators.
+        .. note::
+
+            - If the population (`self.pop`) is already computed, it returns the cached result.
+            - The method supports two types of Hamiltonian descriptions: "2P" and "1P".
+            - For "2P" description, it uses the population operators from `self.lindblad_diss.pop_ops`.
+            - For "1P" description, it constructs the population operators based on the tight-binding basis (`self.tb_ham.tb_basis`).
+            - The master equation is solved using `qutip.mesolve` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
+
         """
 
         # check if the population is already calculated
@@ -459,11 +466,13 @@ class ME_Solver:
         This function computes the ground state population of a system described
         by a two-particle (2P) Hamiltonian with relaxation. If the ground state
         population has already been computed, it returns the cached result.
+
         Returns
         -------
         dict
             A dictionary containing the ground state population with the key
             "groundstate".
+
         Raises
         ------
         AssertionError
@@ -520,6 +529,7 @@ def get_me_solver(upper_strand, tb_model_name, **kwargs):
     """
 
     dna_seq = DNA_Seq(upper_strand, tb_model_name)
+    print(DEFAULTS)
     tb_ham = TB_Ham(dna_seq, **kwargs)
     lindblad_diss = Lindblad_Diss(tb_ham, **kwargs)
     me_solver = ME_Solver(tb_ham, lindblad_diss, **kwargs)

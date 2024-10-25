@@ -214,8 +214,8 @@ def get_eh_distance(eh_basis):
     ndarray
         Array of distances between electron and hole for each state.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_eh_distance([('(0, 0)', '(1, 1)'), ('(1, 0)', '(0, 0)')])
     array([1.41421356, 1.        ])
     """
@@ -287,7 +287,7 @@ def basis_change(matrix, states, liouville=False):
     states: ndarray
         The old basis expressed as a vector in the new basis.
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.
+        Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.
 
     Returns
     -------
@@ -311,7 +311,7 @@ def global_to_local(matrix, eigs, liouville=False):
     eigs: ndarray
         The eigenbasis (old) expressed in the site basis (new).
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.
+        Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.
 
     Returns
     -------
@@ -333,7 +333,7 @@ def local_to_global(matrix, eigs, liouville=False):
     eigs: ndarray
         The site basis (old) expressed in the eigenbasis (new).
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension N**2 instead of N.
+        Set to True for an open quantum system. The matrix must have dimension :math:`N^2` instead of :math`N`.
 
     Returns
     -------

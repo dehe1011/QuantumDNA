@@ -20,7 +20,7 @@ def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
     ----------
     ax : matplotlib.axes.Axes
         The axes to plot on.
-    tb_ham : TBHamType
+    tb_ham : TB_Ham
         The tight-binding Hamiltonian.
     init_state : str
         The initial state.
@@ -68,7 +68,7 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
         The axes to plot on.
     tb_site : str
         The tight-binding site.
-    me_solver : MESolverType
+    me_solver : ME_Solver
         The master equation solver instance.
     add_legend : bool, optional
         Whether to add a legend, by default True.
@@ -115,7 +115,7 @@ def plot_pops(me_solver):
 
     Parameters
     ----------
-    me_solver : MESolverType
+    me_solver : ME_Solver
         The master equation solver instance.
 
     Returns
@@ -148,7 +148,7 @@ def plot_coh(ax, me_solver):
     ----------
     ax : matplotlib.axes.Axes
         The axes to plot on.
-    me_solver : MESolverType
+    me_solver : ME_Solver
         The master equation solver instance.
     """
 
@@ -187,7 +187,7 @@ def plot_test_fourier(ax, tb_site, me_solver):
         The axes to plot on.
     tb_site : str
         The tight-binding site.
-    me_solver : MESolverType
+    me_solver : ME_Solver
         The master equation solver instance.
     """
 

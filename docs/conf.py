@@ -17,6 +17,10 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    # "nbsphinx",
+    # "pandoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.mathjax",
 ]
 autosummary_generate = True
 

@@ -41,7 +41,7 @@ def get_loc_deph_ops(tb_basis, dephasing_rate, relaxation):
 
 def get_glob_deph_ops(eigs, dephasing_rate, relaxation):
     """
-    Global dephasing operators. In total :math:`N**2` operators (where :math:`N` is the number of eigenstates).
+    Global dephasing operators. In total :math:`N^2` operators (where :math:`N` is the number of eigenstates).
 
     Parameters
     ----------

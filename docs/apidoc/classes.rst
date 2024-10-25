@@ -2,8 +2,8 @@ Classes
 =======
 
 
-DNA_Seq
--------
+DNA Sequence
+------------
 
 .. currentmodule:: qDNA
 
@@ -11,8 +11,8 @@ DNA_Seq
    :members:
    :noindex:
 
-TB_Model
---------
+Tight-binding model
+-------------------
 
 .. currentmodule:: qDNA.model
 
@@ -20,17 +20,17 @@ TB_Model
    :members:
    :noindex:
 
-TB_Ham
-------
+Tight-binding Hamiltonian
+-------------------------
 
-.. currentmodule:: qDNA.model
+.. currentmodule:: qDNA.hamiltonian
 
 .. autoclass:: TB_Ham
    :members:
    :noindex:
 
-ME_Solver
----------
+Master equation solver
+----------------------
 
 .. currentmodule:: qDNA.dynamics
 
@@ -38,8 +38,8 @@ ME_Solver
     :members:
     :noindex:
 
-Lindblad_Diss
--------------
+Lindblad Dissipator
+-------------------
 
 .. currentmodule:: qDNA.environment
 

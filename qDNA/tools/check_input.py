@@ -3,7 +3,7 @@ This module provides functions to validate keyword arguments for various configu
 related to Hamiltonian, dissipation parameters, and other miscellaneous parameters.
 """
 
-from .save_load import CONFIG
+from . import CONFIG, DEFAULTS
 
 # --------------------------------------------------
 

@@ -36,8 +36,8 @@ def get_reduced_dm(dm, particle, tb_basis):
     ValueError
         If the particle type is not recognized.
 
-    Example
-    -------
+    Examples
+    --------
     >>> dm = np.eye(4)
     >>> get_reduced_dm(dm, 'electron', ['(0, 0)', '(1, 0)'])
     array([[2., 0.],

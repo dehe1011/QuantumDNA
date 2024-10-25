@@ -1,10 +1,17 @@
 Functions
 =========
 
-This is based on :cite:`Herb2024` .
 
 Tight-binding basis
 -------------------
+
+There are three relevant bases:
+
+- The `tight-binding basis` or one-particle basis, which is the basis in which the tight-binding Hamiltonian is defined.
+- The `electron-hole basis` or two-particle basis, which is the basis in which the electron-hole states are defined.
+- The `eigenstate basis`, which is the basis in which the Hamiltonian is diagonal.
+
+The first two are refered to as `local` bases, the third as the `global` basis. The functions below define these bases and allow to change between them.
 
 .. automodule:: qDNA.model
    :members: get_tb_basis, get_eh_basis, get_eh_distance, get_particle_eh_states, basis_change, local_to_global, global_to_local
@@ -21,7 +28,7 @@ Tight-binding configuration
 Tight-binding Hamiltonian
 -------------------------
 
-.. automodule:: qDNA.model
+.. automodule:: qDNA.hamiltonian
    :members: set_matrix_element, tb_ham_1P, tb_ham_2P, add_groundstate, delete_groundstate, add_interaction
    :show-inheritance: False
    :noindex:
@@ -29,7 +36,7 @@ Tight-binding Hamiltonian
 Save and load tight-binding parameters
 --------------------------------------
 
-.. automodule:: qDNA.model
+.. automodule:: qDNA.hamiltonian
    :members: save_tb_params, load_tb_params, wrap_save_tb_params, wrap_load_tb_params
    :show-inheritance: False
    :noindex:
@@ -92,6 +99,8 @@ Observables
 
 Lindblad rates
 --------------
+
+This module is adapted from the quantum_HEOM GitHub repository :cite:`quantum_HEOM`.
 
 .. automodule:: qDNA.environment
    :members: debye_spectral_density, ohmic_spectral_density, bose_einstein_distrib, dephasing_rate

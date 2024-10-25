@@ -11,7 +11,7 @@ Shortcuts
 """
 
 from .. import TB_MODELS_PROPS
-from ..tools import CONFIG
+from ..tools import TB_MODELS
 
 __all__ = ["get_tb_config", "TB_MODELS_PROPS"]
 
@@ -236,7 +236,6 @@ def get_fc_config(num_sites_per_strand):
 
 # --------------------------------------------------------------
 
-TB_MODELS = CONFIG["TB_MODELS"]
 TB_CONFIGS = dict(
     zip(
         TB_MODELS,
@@ -268,6 +267,15 @@ def get_tb_config(tb_model_name, tb_dims):
     -------
     list of tuple
         The configuration of the specified tight-binding model.
+
+    Examples
+    --------
+    >>> get_tb_config("WM", (1, 3))
+    [('E', '(0, 0)', '(0, 0)'),
+    ('E', '(0, 1)', '(0, 1)'),
+    ('E', '(0, 2)', '(0, 2)'),
+    ('t', '(0, 1)', '(0, 0)'),
+    ('t', '(0, 2)', '(0, 1)')]
     """
 
     tb_model_name = tb_model_name.upper()

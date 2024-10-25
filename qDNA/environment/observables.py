@@ -39,8 +39,8 @@ def get_observable(basis, start_state, end_state):
     ValueError
         If the start or end state is not found in the basis list.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_observable(['(0, 0)', '(0, 1)', '(0, 2)'], '(0, 1)', '(0, 2)')
     array([[0., 0., 0.],
            [0., 0., 1.],
@@ -74,8 +74,8 @@ def get_tb_observable(tb_basis, start_state, end_state):
     np.ndarray
         The density matrix.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_tb_observable(['(0, 0)', '(0, 1)', '(0, 2)'], '(0, 1)', '(0, 2)')
     array([[0., 0., 0.],
            [0., 0., 1.],
@@ -110,8 +110,8 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
     ValueError
         If the particle type is not recognized.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_eh_observable(['(0, 0)', '(1, 0)'], 'electron', '(0, 0)', '(1, 0)')
     array([[0., 0., 1., 0.],
            [0., 0., 0., 1.],
@@ -159,8 +159,8 @@ def get_pop_particle(tb_basis, particle, state):
     np.ndarray
         The population density matrix.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_pop_particle(['(0, 0)', '(1, 0)'], 'electron', '(0, 0)')
     array([[1., 0., 0., 0.],
            [0., 1., 0., 0.],
@@ -191,8 +191,8 @@ def get_coh_particle(tb_basis, particle, state1, state2):
     np.ndarray
         The coherence density matrix.
 
-    Example
-    -------
+    Examples
+    --------
     >>> get_coh_particle(['(0, 0)', '(1, 0)'], 'electron', '(0, 0)', '(1, 0)')
     array([[0., 0., 1., 0.],
            [0., 0., 0., 1.],

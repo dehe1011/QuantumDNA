@@ -14,11 +14,12 @@ Shortcuts
 """
 
 from itertools import chain
+import copy
 
 import numpy as np
 
 from .. import DNA_Seq
-from ..tools import check_ham_kwargs, CONFIG
+from ..tools import check_ham_kwargs, DEFAULTS, UNITS, SOURCES
 from ..utils import (
     calc_amplitudes,
     calc_average_pop,
@@ -41,10 +42,6 @@ from .tb_params import wrap_load_tb_params
 __all__ = ["TB_Ham"]
 
 # ------------------------------------------------------
-
-
-PARTICLES = CONFIG["PARTICLES"]
-DESCRIPTIONS = CONFIG["DESCRIPTIONS"]
 
 
 class TB_Ham:
@@ -115,15 +112,19 @@ class TB_Ham:
         Computes and returns the frequencies for given states.
     get_average_pop(init_state, end_state)
         Computes and returns the average population for given states.
+    get_backbone_pop(init_state)
+        Computes and returns the population of particles on the backbone sites.
     """
 
     def __init__(self, dna_seq, **ham_kwargs):
         # check inputs
         assert isinstance(dna_seq, DNA_Seq), "dna_seq must be an instance of DNA_Seq"
-        self.ham_kwargs = CONFIG["ham_kwargs_default"]
+        self.ham_kwargs = copy.copy(DEFAULTS["ham_kwargs_default"])
+        print(DEFAULTS)
         self.ham_kwargs.update(ham_kwargs)
+        print(DEFAULTS)
         check_ham_kwargs(**self.ham_kwargs)
-        self.verbose = CONFIG["verbose"]
+        self.verbose = DEFAULTS["verbose"]
         if self.verbose:
             print("Successfully checked all inputs for the TB_Ham instance.")
 
@@ -249,7 +250,7 @@ class TB_Ham:
     @unit.setter
     def unit(self, new_unit):
         assert isinstance(new_unit, str), "new_unit must be of type str"
-        assert new_unit in CONFIG["UNITS"], f"new_unit must be in {CONFIG['UNITS']}"
+        assert new_unit in UNITS, f"new_unit must be in {UNITS}"
         old_unit = self._unit
         self._unit = new_unit
 
@@ -265,9 +266,7 @@ class TB_Ham:
     @source.setter
     def source(self, new_source):
         assert isinstance(new_source, str), "new_source must be of type str"
-        assert (
-            new_source in CONFIG["SOURCES"]
-        ), f"new_source must be in {CONFIG['SOURCES']}"
+        assert new_source in SOURCES, f"new_source must be in {SOURCES}"
         old_source = self._source
         self._source = new_source
 
@@ -284,13 +283,14 @@ class TB_Ham:
         This method loads the tight-binding parameters for both electrons and holes
         from the specified source and model name. If the unit of the loaded parameters
         does not match the expected unit, it converts the parameters to the expected unit.
+
         Returns
         -------
         tuple
             A tuple containing two dictionaries:
-            - tb_params_electron : dict
+              tb_params_electron : dict
                 The tight-binding parameters for electrons.
-            - tb_params_hole : dict
+              tb_params_hole : dict
                 The tight-binding parameters for holes.
         """
 
@@ -321,13 +321,14 @@ class TB_Ham:
         associated with the instance. If the description is "2P" and relaxation
         is enabled, the ground state is deleted from the matrix before computing
         the eigensystem.
+
         Returns
         -------
         tuple
             A tuple containing:
-            - eigenvalues : ndarray
+              eigenvalues : ndarray
                 The eigenvalues of the matrix.
-            - eigenvectors : ndarray
+              eigenvectors : ndarray
                 The eigenvectors of the matrix.
         """
 
@@ -343,16 +344,19 @@ class TB_Ham:
     def get_matrix(self):
         """
         Generate the tight-binding Hamiltonian matrix based on the system description.
+
         Returns
         -------
         matrix : numpy.ndarray
             The Hamiltonian matrix for the system.
+
         Notes
         -----
-        - For a "2P" description, the Hamiltonian matrix is generated using `tb_ham_2P`
-          and may include interaction and relaxation terms if specified.
-        - For a "1P" description, the Hamiltonian matrix is generated using `tb_ham_1P`
-          for either electrons or holes based on the `particles` attribute.
+        .. note::
+
+            - For a "2P" description, the Hamiltonian matrix is generated using `tb_ham_2P` and may include interaction and relaxation terms if specified.
+            - For a "1P" description, the Hamiltonian matrix is generated using `tb_ham_1P` for either electrons or holes based on the `particles` attribute.
+
         Raises
         ------
         ValueError
@@ -408,6 +412,7 @@ class TB_Ham:
             The end state to which the transition occurs.
         quantities : list of str
             List of quantities to calculate. Possible values are "amplitude", "frequency", and "average_pop".
+
         Returns
         -------
         amplitudes_dict : dict
@@ -416,6 +421,7 @@ class TB_Ham:
             Dictionary containing the frequencies for each particle.
         average_pop_dict : dict
             Dictionary containing the average population for each particle.
+
         Raises
         ------
         AssertionError
@@ -515,11 +521,13 @@ class TB_Ham:
         ----------
         init_state : str
             The initial state of the system.
+
         Returns
         -------
         dict
             A dictionary where keys are particle identifiers and values are the population
             of each particle on the backbone sites.
+
         Raises
         ------
         AssertionError

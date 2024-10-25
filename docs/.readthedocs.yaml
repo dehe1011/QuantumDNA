@@ -1,5 +1,8 @@
 version: 2
 
+formats:
+  - pdf
+
 build:
   os: ubuntu-22.04
   tools:
@@ -7,6 +10,7 @@ build:
 
 sphinx:
   configuration: docs/conf.py
+  fail_on_warning: true
 
 python:
    install:

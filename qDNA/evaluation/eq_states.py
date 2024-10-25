@@ -22,11 +22,13 @@ def get_therm_eq_state(me_solver):
     me_solver : object
         An instance of a master equation solver which contains the tight-binding Hamiltonian (`tb_ham`)
         and the Lindblad dissipation parameters (`lindblad_diss`).
+
     Returns
     -------
     numpy.ndarray
         The thermal equilibrium state of the system. If the temperature is zero, returns the ground state.
         Otherwise, returns the thermal equilibrium state as a density matrix in the local basis.
+
     Notes
     -----
     - The function first checks if the temperature is zero. If so, it returns the ground state.
@@ -35,6 +37,7 @@ def get_therm_eq_state(me_solver):
     """
 
     tb_ham = me_solver.tb_ham
+    tb_ham.relaxation = False
     eigv, eigs = tb_ham.get_eigensystem()
     temperature = me_solver.lindblad_diss.temperature
 
@@ -64,17 +67,8 @@ def get_deph_eq_state(me_solver):
     Parameters
     ----------
     me_solver : object
-        An instance of a master equation solver which contains the following attributes:
-        - lindblad_diss.loc_deph_rate : float
-            Local dephasing rate.
-        - lindblad_diss.glob_deph_rate : float
-            Global dephasing rate.
-        - tb_ham.matrix_dim : int
-            Dimension of the Hamiltonian matrix.
-        - init_matrix.full() : numpy.ndarray
-            Initial density matrix.
-        - tb_ham.get_eigensystem() : tuple
-            Returns eigenvalues and eigenvectors of the Hamiltonian.
+        An instance of :class:`ME_Solver` solver which contains the following attributes:
+
     Returns
     -------
     numpy.ndarray

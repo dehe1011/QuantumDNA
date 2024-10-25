@@ -16,16 +16,19 @@ def calc_trace_distance(dm_1, dm_2):
     The trace distance is a measure of the distinguishability between two quantum states
     represented by their density matrices. It is defined as half the trace of the absolute
     difference between the two density matrices.
+
     Parameters
     ----------
     dm_1 : numpy.ndarray
         The first density matrix.
     dm_2 : numpy.ndarray
         The second density matrix.
+
     Returns
     -------
     float
         The trace distance between the two density matrices.
+
     Raises
     ------
     ValueError
@@ -80,28 +83,33 @@ def calc_coherence(dm):
 
 
 def calc_ipr_dm(dm):
-    """
-    Calculates the inverse participation ratio (IPR) of a density matrix.
-
-    The IPR is defined as:
-
-    .. math::
-        \text{IPR} = \frac{\left( \sum_{i,j} |\rho_{i,j}| \right)^2}{N \sum_{i,j} |\rho_{i,j}|^2}
-
-    Where:
-    - Localized state: IPR = 1/N
-    - Delocalized coherent state: IPR = N
-    - Maximally mixed state: IPR = 1
+    r"""
+    Calculate the inverse participation ratio (IPR) of a density matrix.
 
     Parameters
     ----------
     dm : np.ndarray
-        Density matrix.
+        The density matrix for which the IPR is calculated. Should be a square, complex-valued matrix.
 
     Returns
     -------
     float
-        The inverse participation ratio of the density matrix.
+        The inverse participation ratio of the density matrix, providing an indication of state localization.
+
+    Notes
+    -----
+    .. note::
+
+        The IPR provides a measure of the localization of a quantum state
+
+        .. math::
+
+            \mathrm{IPR} = \frac{\left( \sum_{i,j} |\rho_{i,j}| \right)^2}{N \sum_{i,j} |\rho_{i,j}|^2}
+
+        - Localized state: :math:`IPR = 1/N`, where `N` is the dimension of the density matrix.
+        - Delocalized (coherent) state: :math:`IPR = N`, indicating full coherence.
+        - Maximally mixed state: :math:`IPR = 1`, representing maximal mixing.
+
     """
 
     dims = dm.shape[0]
