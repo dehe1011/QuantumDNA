@@ -18,7 +18,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements/dev-requirements.txt
+        pip install black pylint pytest coverage coveralls
+        pip install numpy scipy
 
     - name: Run black
       continue-on-error: true
