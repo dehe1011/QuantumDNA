@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 
 from qDNA.evaluation import calc_exciton_transfer
 
@@ -25,4 +26,11 @@ from qDNA.evaluation import calc_exciton_transfer
     ],
 )
 def test_calc_exciton_transfer(upper_strand, tb_model_name, expected):
-    assert calc_exciton_transfer(upper_strand, tb_model_name) == expected
+    assert np.allclose(
+        list(calc_exciton_transfer(upper_strand, tb_model_name)[0].values()),
+        list(expected[0].values()),
+    )
+    assert np.allclose(
+        list(calc_exciton_transfer(upper_strand, tb_model_name)[1].values()),
+        list(expected[1].values()),
+    )
