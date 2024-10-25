@@ -120,9 +120,7 @@ class TB_Ham:
         # check inputs
         assert isinstance(dna_seq, DNA_Seq), "dna_seq must be an instance of DNA_Seq"
         self.ham_kwargs = copy.copy(DEFAULTS["ham_kwargs_default"])
-        print(DEFAULTS)
         self.ham_kwargs.update(ham_kwargs)
-        print(DEFAULTS)
         check_ham_kwargs(**self.ham_kwargs)
         self.verbose = DEFAULTS["verbose"]
         if self.verbose:

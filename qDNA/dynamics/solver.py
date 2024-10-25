@@ -529,7 +529,6 @@ def get_me_solver(upper_strand, tb_model_name, **kwargs):
     """
 
     dna_seq = DNA_Seq(upper_strand, tb_model_name)
-    print(DEFAULTS)
     tb_ham = TB_Ham(dna_seq, **kwargs)
     lindblad_diss = Lindblad_Diss(tb_ham, **kwargs)
     me_solver = ME_Solver(tb_ham, lindblad_diss, **kwargs)
