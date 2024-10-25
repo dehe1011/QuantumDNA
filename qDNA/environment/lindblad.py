@@ -42,7 +42,7 @@ __all__ = ["Lindblad_Diss"]
 
 class Lindblad_Diss:
     """
-    Provides the operators of the form :math:`\sqrt{\\gamma} a` that are used in the Lindblad dissipator of the master equation.
+    Provides the operators of the form :math:`\sqrt{\gamma} a` that are used in the Lindblad dissipator of the master equation.
 
     Parameters
     ----------
