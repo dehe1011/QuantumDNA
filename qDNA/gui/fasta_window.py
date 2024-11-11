@@ -215,9 +215,9 @@ class FastaWindow(ctk.CTkToplevel):
         end_time = time.time()
         # end calculations
 
-        print("-------------------")
-        print(fasta_data)
-        print("-------------------")
+        # print("-------------------")
+        # print(fasta_data)
+        # print("-------------------")
         df_fasta = pd.DataFrame(fasta_data)
         self.kwargs["Computation Time (s)"] = end_time - start_time
         self.kwargs["Computation Time Lifetime (s)"] = end_time_lifetime - start_time
@@ -231,7 +231,7 @@ class FastaWindow(ctk.CTkToplevel):
         json_files = glob.glob(os.path.join(self.directory, "*.json"))
         for file in json_files:
             os.remove(file)
-            print(f"Deleted: {file}")
+            # print(f"Deleted: {file}")
 
     def parse_fasta_data(self):
         for line in self.fasta_data:
