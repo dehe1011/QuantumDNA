@@ -7,11 +7,11 @@ plt.style.use("seaborn-v0_8")
 
 plt.rcParams.update(
     {
-        "text.usetex": True,
-        "font.family": "serif",
-        "font.serif": ["Times"],  # used in elsarticle (Elsevier)
+        # "text.usetex": True,
+        # "font.family": "serif",
+        # "font.serif": ["Times"],  # used in elsarticle (Elsevier)
         # "font.serif": ["Computer Modern Roman"], # used in revtex4-2 (APS)
-        "text.latex.preamble": r"\usepackage{amsmath}\usepackage{siunitx}",
+        # "text.latex.preamble": r"\usepackage{amsmath}\usepackage{siunitx}",
         "legend.fontsize": 20,
         "xtick.labelsize": 20,
         "ytick.labelsize": 20,

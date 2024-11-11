@@ -51,7 +51,7 @@ def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
 
     # calculation
     lifetimes = np.array(list(lifetime_dict.values())[cutoff_num:])  # in fs
-    lifetime *= 1e-3  # Convert fs to ps
+    lifetimes *= 1e-3  # Convert fs to ps
 
     base_freq_dict = {}
     for base in ["A", "T", "G", "C"]:

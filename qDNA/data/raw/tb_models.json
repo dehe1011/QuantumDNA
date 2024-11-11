@@ -1,48 +1,48 @@
 {
-"data": {
-    "WM": {
-        "backbone": false,
-        "double_stranded": false,
-        "num_strands": 1,
-        "diagonal_hopping": false
-    },
-    "LM": {
-        "backbone": false,
-        "double_stranded": true,
-        "num_strands": 2,
-        "diagonal_hopping": false
-    },
-    "ELM": {
-        "backbone": false,
-        "double_stranded": true,
-        "num_strands": 2,
-        "diagonal_hopping": true
-    },
-    "FWM": {
-        "backbone": true,
-        "double_stranded": false,
-        "num_strands": 3,
-        "diagonal_hopping": false
-    },
-    "FLM": {
-        "backbone": true,
-        "double_stranded": true,
-        "num_strands": 4,
-        "diagonal_hopping": false
-    },
-    "FELM": {
-        "backbone": true,
-        "double_stranded": true,
-        "num_strands": 4,
-        "diagonal_hopping": true
-    },
-    "FC": {
-        "backbone": true,
-        "double_stranded": true,
-        "num_strands": 4,
-        "diagonal_hopping": true
+    "data": {
+        "WM": {
+            "backbone": false,
+            "double_stranded": false,
+            "num_strands": 1,
+            "diagonal_hopping": false
+        },
+        "LM": {
+            "backbone": false,
+            "double_stranded": true,
+            "num_strands": 2,
+            "diagonal_hopping": false
+        },
+        "ELM": {
+            "backbone": false,
+            "double_stranded": true,
+            "num_strands": 2,
+            "diagonal_hopping": true
+        },
+        "FWM": {
+            "backbone": true,
+            "double_stranded": false,
+            "num_strands": 3,
+            "diagonal_hopping": false
+        },
+        "FLM": {
+            "backbone": true,
+            "double_stranded": true,
+            "num_strands": 4,
+            "diagonal_hopping": false
+        },
+        "FELM": {
+            "backbone": true,
+            "double_stranded": true,
+            "num_strands": 4,
+            "diagonal_hopping": true
+        },
+        "FC": {
+            "backbone": true,
+            "double_stranded": true,
+            "num_strands": 4,
+            "diagonal_hopping": true
+        }
+        },
+    "metadata": {
+        }
     }
-    },
-"metadata": {
-    }
-}

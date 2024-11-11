@@ -1,14 +1,1 @@
-{
-"data": {
-    "DNA_BASES": ["A", "T", "G", "C", "c"],
-    "TB_MODELS": ["WM", "LM", "ELM", "FWM", "FLM", "FELM", "FC"],
-    "SOURCES": ["Hawke2010", "Simserides2014", "Mantela2021", "Simserides2024"],
-    "DESCRIPTIONS": ["1P", "2P"],
-    "PARTICLES": ["electron", "hole", "exciton"],
-    "UNITS": ["meV", "eV", "100meV", "rad/ps", "rad/fs", "1/cm", "K", "J", "1/fs", "1/ps"],
-    "T_UNITS": ["fs", "ps"],
-    "SPECTRAL_DENSITIES": ["debye", "ohmic"]
-    },
-"metadata": {
-    }
-}
+{"data": {"DNA_BASES": ["A", "T", "G", "C", "F"], "TB_MODELS": ["WM", "LM", "ELM", "FWM", "FLM", "FELM", "FC"], "SOURCES": ["Hawke2010", "Simserides2014", "Mantela2021", "Simserides2024", "MMYY"], "DESCRIPTIONS": ["1P", "2P"], "PARTICLES": ["electron", "hole", "exciton"], "UNITS": ["meV", "eV", "100meV", "rad/ps", "rad/fs", "1/cm", "K", "J", "1/fs", "1/ps"], "T_UNITS": ["fs", "ps"], "SPECTRAL_DENSITIES": ["debye", "ohmic"]}, "metadata": {}}

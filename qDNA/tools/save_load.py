@@ -12,7 +12,9 @@ import yaml
 
 from .. import ROOT_DIR, DATA_DIR
 
-# ------------------------------------------------
+# -------------------------------------------------------------------
+
+# ----------------------------- Logging -----------------------------
 
 
 def setup_logging():
@@ -37,24 +39,85 @@ def setup_logging():
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# ----------------------------- YAML -----------------------------
+
 
 def load_yaml(filepath):
     """
-    Load a YAML file and return its contents.
+    Load data from a YAML file.
 
     Parameters
     ----------
     filepath : str
         The path to the YAML file to be loaded.
-
     Returns
     -------
     dict
-        The contents of the YAML file as a dictionary.
+        The data loaded from the YAML file. If an error occurs during loading,
+        an empty dictionary is returned.
+
+    Raises
+    ------
+    yaml.YAMLError
+        If there is an error while parsing the YAML file.
     """
 
-    with open(filepath, "r") as yaml_file:
-        return yaml.safe_load(yaml_file)
+    with open(filepath, "r") as file:
+        try:
+            data = yaml.safe_load(file)
+            return data
+        except yaml.YAMLError as exc:
+            print(f"Error loading YAML file: {exc}")
+            return {}
+
+
+def save_yaml(filepath, data):
+    """
+    Save data to a YAML file.
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the file where the data should be saved.
+    data : dict
+        The data to be saved in YAML format.
+
+    Raises
+    ------
+    yaml.YAMLError
+        If there is an error during the YAML serialization process.
+    """
+
+    with open(filepath, "w") as file:
+        try:
+            yaml.safe_dump(data, file, default_flow_style=False)
+        except yaml.YAMLError as exc:
+            print(f"Error saving YAML file: {exc}")
+
+
+def modify_yaml(filepath, key, value):
+    """
+    Modify a specific key-value pair in a YAML file.
+
+    Parameters
+    ----------
+    file_path : str
+        The path to the YAML file to be modified.
+    key : str
+        The key whose value needs to be modified.
+    value : any
+        The new value to be assigned to the specified key.
+
+    Raises
+    ------
+    yaml.YAMLError
+        If there is an error while parsing or saving the YAML file.
+    """
+
+    data = load_yaml(filepath)
+    if data is not None:
+        data[key] = value
+        save_yaml(filepath, data)
 
 
 def get_defaults():
@@ -72,10 +135,37 @@ def get_defaults():
 # Load the default values
 DEFAULTS = get_defaults()
 
+# ----------------------------- JSON -----------------------------
 
-def save_json(data, metadata, filename, directory):
+
+def modify_json(filename, directory, key, value):
+    """
+    Modify a JSON file by adding a value to a specified key.
+
+    Parameters
+    ----------
+    filename : str
+        The name of the JSON file to modify.
+    directory : str
+        The directory where the JSON file is located.
+    key : str
+        The key in the JSON file whose value will be modified.
+    value : int or float
+        The value to add to the specified key's current value.
+    """
+
+    data, metadata = load_json(filename, directory, load_metadata=True)
+
+    if data is not None:
+        data[key] = value
+        save_json(data, metadata, filename, directory, override=True)
+        logger.info(f"Value {value} added to key {key} in {filename}.json")
+
+
+def save_json(data, metadata, filename, directory, override=False):
     """
     Save data and metadata to a JSON file.
+
     Parameters
     ----------
     data : dict
@@ -86,9 +176,7 @@ def save_json(data, metadata, filename, directory):
         The name of the file (without extension) to save the data to.
     directory : str
         The directory where the file should be saved.
-    Returns
-    -------
-    None
+
     Notes
     -----
     If a file with the same name already exists in the specified directory,
@@ -99,11 +187,12 @@ def save_json(data, metadata, filename, directory):
     filepath = os.path.join(directory, filename + ".json")
 
     # check if the file already exists
-    if os.path.exists(filepath):
-        logger.warning(f"File {filepath} already exists.")
-        if DEFAULTS["verbose"]:
-            print(f"File {filepath} already exists")
-        return
+    if not override:
+        if os.path.exists(filepath):
+            logger.warning(f"File {filepath} already exists.")
+            if DEFAULTS["verbose"]:
+                print(f"File {filepath} already exists")
+            return
 
     # save the data and metadata to a JSON file
     combined_data = dict(data=data, metadata=metadata)
@@ -119,6 +208,7 @@ def save_json(data, metadata, filename, directory):
 def load_json(filename, directory, load_metadata=False):
     """
     Load data from a JSON file.
+
     Parameters
     ----------
     filename : str
@@ -127,15 +217,18 @@ def load_json(filename, directory, load_metadata=False):
         The directory where the JSON file is located.
     load_metadata : bool, optional
         If True, also load metadata from the JSON file. Default is False.
+
     Returns
     -------
     dict or tuple
         If `load_metadata` is False, returns a dictionary containing the data.
         If `load_metadata` is True, returns a tuple containing the data and metadata.
+
     Raises
     ------
     FileNotFoundError
         If the specified JSON file does not exist.
+
     Notes
     -----
     Logs a warning if the file does not exist and an info message when the data is successfully loaded.
@@ -167,6 +260,7 @@ def load_json(filename, directory, load_metadata=False):
 def save_figure(fig, filename, directory, extension="svg"):
     """
     Save a figure to a specified directory with a given filename and extension.
+
     Parameters
     ----------
     fig : matplotlib.figure.Figure
@@ -177,12 +271,14 @@ def save_figure(fig, filename, directory, extension="svg"):
         The directory where the figure will be saved.
     extension : str, optional
         The file extension for the saved figure (default is "svg").
+
     Notes
     -----
     If a file with the same name already exists in the specified directory,
     a random index will be appended to the filename to avoid overwriting.
     The function logs the saving process and prints messages if the verbose
     configuration is enabled.
+
     Raises
     ------
     OSError

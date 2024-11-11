@@ -16,7 +16,7 @@ diss_kwargs_default:
     glob_deph_rate: 0. # rad/fs
     uniform_relaxation: True
     relax_rate: 0. # rad/fs
-    relax_rates: {'A': 0, 'T': 0, 'G': 0, 'C': 0, 'B': 0}
+    relax_rates: {'A': 0, 'T': 0, 'G': 0, 'C': 0, 'F':0, 'B': 0}
     loc_therm: False
     glob_therm: False
     deph_rate: 7. # in rad/ps

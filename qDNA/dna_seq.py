@@ -88,7 +88,7 @@ class DNA_Seq:
             "T": "A",
             "G": "C",
             "C": "G",
-            "c": "G",
+            "F": "G",
         }
         # Generate the DNA sequence
         self.dna_seq = self._create_dna_seq()
@@ -162,17 +162,17 @@ class DNA_Seq:
     def _add_methylation(self):
         """
         Adds methylation to the lower DNA strand according to the fragile X syndrome.
-        This method searches for occurrences of the sequence "cG" in the upper DNA strand.
+        This method searches for occurrences of the sequence "FG" in the upper DNA strand.
         For each occurrence, it modifies the corresponding position in the lower DNA strand
-        by changing the character following the match to "c".
+        by changing the character following the match to "F".
         """
         # Find all occurrences of "cG" in the upper DNA strand
-        matches = [match.start() for match in re.finditer("cG", self.upper_strand)]
+        matches = [match.start() for match in re.finditer("FG", self.upper_strand)]
 
         # Modify the lower DNA strand based on the matches
         lower_strand_list = list(self.lower_strand)
         for match in matches:
-            lower_strand_list[match + 1] = "c"
+            lower_strand_list[match + 1] = "F"
         self.lower_strand = "".join(lower_strand_list)
 
 
