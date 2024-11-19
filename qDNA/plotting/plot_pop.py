@@ -54,7 +54,7 @@ def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
 
     # plot settings
     ax.set_ylabel("Population")
-    ax.set_xlabel("Time in " + t_unit)
+    ax.set_xlabel("Time [" + t_unit + "]")
     ax.legend()
 
 
@@ -105,7 +105,7 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
     ax.set_ylim(0, 1.02)
     if add_legend:
         ax.set_ylabel("Population")
-        ax.set_xlabel("Time in " + me_solver.t_unit)
+        ax.set_xlabel("Time [" + me_solver.t_unit + "]")
         ax.legend()
 
 
@@ -173,7 +173,7 @@ def plot_coh(ax, me_solver):
 
     # plot settings
     ax.set_ylabel("Coherence")
-    ax.set_xlabel("Time in " + me_solver.t_unit)
+    ax.set_xlabel("Time [" + me_solver.t_unit + "]")
     ax.legend()
 
 

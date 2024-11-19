@@ -9,6 +9,7 @@ DATA_DIR = os.path.join(ROOT_DIR, "qDNA", "data")
 from .tools import *
 from .utils import *
 
+from .lcao import *
 from .dna_seq import *
 from .model import *
 from .hamiltonian import *

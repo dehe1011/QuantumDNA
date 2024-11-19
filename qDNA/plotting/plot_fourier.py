@@ -155,14 +155,13 @@ def get_frame_average_pop(ax, dna_seq, J_list, J_unit):
         The unit of the interaction parameters.
     """
 
-    ax[0].set_ylabel(r"$P_k^{(\mathrm{acc})}$", fontsize=20)
+    ax[0].set_ylabel("Acc. Population")
     for particle_idx, particle in enumerate(PARTICLES):
         # plot the bottom line
         ax[particle_idx].plot(J_list, [0] * len(J_list), color="k")
-        ax[particle_idx].set_xlabel("J in " + J_unit)
-        ax[particle_idx].set_title(particle, fontsize=20)
-        ax[particle_idx].tick_params(axis="both", which="both")
-        ax[particle_idx].set_ylim(0, 1.05)
+        ax[particle_idx].set_xlabel("J [" + J_unit + "]")
+        ax[particle_idx].set_title(particle.capitalize(), fontsize=18)
+        # ax[particle_idx].set_ylim(0, 1.05)
 
     # plot the DNA bases as letters
     for dna_base_idx, dna_base in enumerate(dna_seq):
@@ -170,9 +169,9 @@ def get_frame_average_pop(ax, dna_seq, J_list, J_unit):
             0,
             dna_base_idx / len(dna_seq),
             dna_base,
-            fontsize=25,
-            color=COLORS_DNA_BASES[dna_base],
-            alpha=0.6,
+            fontsize=20,
+            color="k",
+            alpha=0.8,
         )
 
 
@@ -215,7 +214,7 @@ def plot_average_pop(ax, tb_ham, J_list, J_unit):
                 cumulative_average_pop[dna_base_idx - 1][:][particle_idx],
                 cumulative_average_pop[dna_base_idx][:][particle_idx],
                 color=COLORS_DNA_BASES[dna_base],
-                alpha=0.15,
+                alpha=0.3,
             )
 
     # plot settings

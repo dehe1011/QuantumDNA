@@ -2,6 +2,9 @@
 project_name: "QuantumDNA"
 verbose: False
 
+lcao_default:
+    parametrization: MSF
+
 ham_kwargs_default:
     source: 'Hawke2010'
     description: '2P'

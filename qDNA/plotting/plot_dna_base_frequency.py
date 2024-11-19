@@ -6,6 +6,8 @@ and to plot the frequency of these bases against the exciton lifetime.
 import numpy as np
 import matplotlib.pyplot as plt
 
+from . import COLORS_DNA_BASES
+
 # ------------------------------------------------------------------------------
 
 
@@ -58,18 +60,29 @@ def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
         base_freq_dict[base] = dna_base_counter(base, lifetime_dict)[cutoff_num:]
 
     # plotting
-    fig, ax = plt.subplots(1, 1, figsize=(25, 5))
-    ax.plot(lifetimes, (base_freq_dict["A"] + base_freq_dict["T"]) * 100, "o--")
-    ax.plot(lifetimes, (base_freq_dict["G"] + base_freq_dict["C"]) * 100, "o--")
+    fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+    ax.plot(
+        lifetimes,
+        (base_freq_dict["G"] + base_freq_dict["C"]) * 100,
+        "o--",
+        markersize=4,
+        color=COLORS_DNA_BASES["C"],
+    )
+    ax.plot(
+        lifetimes,
+        (base_freq_dict["A"] + base_freq_dict["T"]) * 100,
+        "o--",
+        markersize=4,
+        color=COLORS_DNA_BASES["T"],
+    )
 
     # plot settings
-    fontsize = 30
-    ax.set_ylabel("Percentage", fontsize=fontsize)
-    ax.set_xlabel("Exciton lifetime (ps)", fontsize=fontsize)
+    ax.set_ylabel("Percentage")
+    ax.set_xlabel("Exciton lifetime [ps]")
     ax.invert_xaxis()
-    ax.legend(["A-T", "G-C"], prop={"size": fontsize}, loc="upper right")
+    ax.legend(["G-C", "A-T"], loc="upper right")
     ax.axhline(50, linestyle="--", color="black", alpha=0.8, lw=2.2)
-    plt.xticks(fontsize=fontsize)
-    plt.yticks(fontsize=fontsize)
+    plt.xticks()
+    plt.yticks()
 
     return fig, ax
