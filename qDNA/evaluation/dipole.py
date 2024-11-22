@@ -230,7 +230,7 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
     save_json(
         dipole_dict,
         kwargs,
-        "dipole_" + filename,
+        "dipole_moment_" + filename,
         directory,
     )
     return dipole_moment_dict

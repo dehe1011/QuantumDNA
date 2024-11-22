@@ -199,8 +199,3 @@ class qDNA_app(ctk.CTk):
         self.initial_frame.change_state("disabled")
         self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("normal")
-
-
-if __name__ == "__main__":
-    app = qDNA_app()
-    app.mainloop()

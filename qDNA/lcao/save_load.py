@@ -77,7 +77,9 @@ def convert_pdb_to_xyz(filepath_pdb):
     elements = []
     coordinates = []
     current_base = None
-    xyz_files = {}
+
+    current_chain = ""
+    current_base_number = 0
 
     # Read the PDB file
     with open(filepath_pdb, "r") as file:
@@ -90,11 +92,26 @@ def convert_pdb_to_xyz(filepath_pdb):
                 z = float(line[46:54].strip())  # Extract Z coordinate
 
                 # Parse base identifier
-                residue_name = line[17:20].strip()
-                residue_sequence_number = line[22:26].strip()
-                base_identifier = (
-                    str(residue_sequence_number).zfill(2) + residue_name[1]
-                )
+                base_identifier = line[17:20].strip()
+                chain_identifier = line[21].strip()
+                base_number = int(line[22:26].strip())
+
+                chain_changes = current_chain != chain_identifier
+                base_changes = current_base_number != base_number
+
+                # checks if the base counter starts from one if the chain changes
+                if chain_changes:
+                    lower_strand = True
+                    num_bases_per_strand = current_base_number
+                    start_from_one = bool(base_number == 1)
+
+                if base_changes and lower_strand and start_from_one:
+                    base_number += num_bases_per_strand
+
+                current_chain = chain_identifier
+                current_base_number = base_number
+
+                base_identifier = str(base_number).zfill(2) + base_identifier[1]
 
                 # If base changes, write the previous base to a new .xyz file
                 if current_base is not None and base_identifier != current_base:

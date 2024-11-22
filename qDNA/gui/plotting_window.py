@@ -2,7 +2,7 @@ import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from ..plotting import plot_pop, plot_pops, plot_coh, plot_fourier
+from ..visualization import plot_pop, plot_pops, plot_coh, plot_fourier
 from ..tools import save_figure
 
 # -----------------------------------------------------------------------------------------------------

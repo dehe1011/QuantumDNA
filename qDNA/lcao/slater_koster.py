@@ -17,8 +17,11 @@ def calc_orbital_overlap(orbital1, orbital2, connection):
 
     vector = np.array(orbital2.coordinates) - np.array(orbital1.coordinates)
     distance = np.linalg.norm(vector)
-    if distance != 0:
-        vector_norm = vector / distance
+
+    if distance == 0:
+        return 0
+
+    vector_norm = vector / distance
 
     orbital_types = [orbital1.orbital_type, orbital2.orbital_type]
 

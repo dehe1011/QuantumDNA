@@ -95,8 +95,8 @@ def tb_ham_1P(
             tb_str = f"E_{tb_basis_sites_dict[old_state]}"
         else:
             tb_str = f"{tb_str}_{tb_basis_sites_dict[old_state]}{tb_basis_sites_dict[new_state]}"
-        if tb_str[0] == "h" and tb_str not in tb_param_dict:
-            tb_str = f"{tb_str[0]}_{tb_basis_sites_dict[new_state]}{tb_basis_sites_dict[old_state]}"
+        if tb_str[0] in ["h", "r"] and tb_str not in tb_param_dict:
+            tb_str = f"{tb_str.split('_')[0]}_{tb_basis_sites_dict[new_state]}{tb_basis_sites_dict[old_state]}"
 
         if tb_str not in tb_param_dict:
             raise ValueError(

@@ -148,7 +148,7 @@ class ME_Solver:
         self.init_matrix = self.get_init_matrix()
 
         # set options for the solver
-        self.options = q.Options(method=self.me_kwargs.get("solver_method"))
+        self.options = None
 
         # empty lists to store results
         self.reset()

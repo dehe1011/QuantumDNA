@@ -153,6 +153,7 @@ class TB_Ham:
             self._relaxation = self.ham_kwargs.get("relaxation")
             self.eh_basis = get_eh_basis(self.tb_model.tb_dims)
             self._nn_cutoff = self.ham_kwargs.get("nn_cutoff")
+
         self.matrix = self.get_matrix()
         self.matrix_dim = self.matrix.shape[0]
         self.backbone = True if self.tb_model.num_strands in (3, 4) else False

@@ -1,13 +1,44 @@
-# Example on Windows Powershell
 
-Navigate to the project directory
+# How to Run the Script
 
-```bash
+## Windows
+
+Navigate to the project directory:
+
+```powershell
 Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
 ```
 
-Run the desired script
+Run the desired script:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\activate.ps1
+```
+
+## macOS
+
+Navigate to the project directory:
 
 ```bash
-powershell -ExecutionPolicy Bypass -File scripts\activate.ps1
+cd /Users/<YourUsername>/QuantumDNA
+```
+
+Run the desired script:
+
+```bash
+source scripts/activate.sh
+```
+
+## Linux
+
+Navigate to the project directory:
+
+```bash
+cd /home/<YourUsername>/QuantumDNA
+```
+
+Run the desired script:
+
+```bash
+source scripts/activate.sh
 ```

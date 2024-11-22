@@ -12,8 +12,11 @@
         <img src="https://readthedocs.org/projects/quantumdna/badge/?version=latest"
             alt="Documentation Status"></a>
     <a href="https://github.com/dehe1011/QuantumDNA/releases">
-        <img src="https://img.shields.io/badge/version-0.1.8-blue"
-            alt="Release"></a>
+        <img src="https://img.shields.io/github/v/release/dehe1011/QuantumDNA"
+            alt="Latest Release"></a>
+    <a href="https://pypi.org/project/qDNA/">
+    <img src="https://img.shields.io/pypi/v/qDNA"
+        alt="PyPI Version"></a>
     <a href='https://coveralls.io/github/dehe1011/QuantumDNA?branch=main'>
         <img src='https://coveralls.io/repos/github/dehe1011/QuantumDNA/badge.svg?branch=main'
             alt='Coverage Status' /></a>
@@ -66,7 +69,7 @@ For a quick installation, you can install the `qDNA` package via pip:
 pip install qDNA
 ```
 
-To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](INSTALLATION.md).
+To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](installation.md).
 
 ### Example Program
 
@@ -92,7 +95,7 @@ print(f"Average charge separation {dipole} A")
 
 ## Documentation
 
-The documentation for the [latest release](https://quantumdna.readthedocs.io/en/latest/) is available for reading on Read The Docs. Tutorials can be found in a separate GitHub repository [QuantumDNA-notebooks](https://github.com/dehe1011/QuantumDNA-notebooks)
+The documentation for the latest release is available for reading on [Read The Docs](https://quantumdna.readthedocs.io/en/latest/). Tutorials can be found in a separate GitHub repository [QuantumDNA-notebooks](https://github.com/dehe1011/QuantumDNA-notebooks).
 
 ## Graphical User Interface
 

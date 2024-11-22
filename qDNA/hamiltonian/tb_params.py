@@ -28,14 +28,12 @@ def save_tb_params(
 
     Parameters
     ----------
-    tb_param_dict : dict
+    tb_params : dict
         Dictionary containing the tight-binding parameters.
-    info_dict : dict
+    metadata : dict
         Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
         Directory to save the file, by default `data/raw/tb_params`.
-    notes : str, optional
-        Additional notes to include in the info_dict, by default None.
 
     Examples
     --------
@@ -58,7 +56,7 @@ def load_tb_params(
 
     Parameters
     ----------
-    info_dict : dict
+    metadata : dict
         Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
         Directory to load the file from, by default `data/raw/tb_params`.

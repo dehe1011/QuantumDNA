@@ -28,7 +28,7 @@ def get_relax_op(tb_basis, tb_site):
     return q.Qobj(relax_op)
 
 
-def get_relax_ops(relax_rates, tb_ham):
+def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
     """
     Generate relaxation operators based on the provided relaxation rates and tight-binding Hamiltonian.
 
@@ -45,10 +45,9 @@ def get_relax_ops(relax_rates, tb_ham):
     """
 
     relax_ops = []
-    if tb_ham.relaxation:
-        for tb_site in tb_ham.tb_basis:
-            relax_rate = relax_rates[tb_ham.tb_basis_sites_dict[tb_site]]
-            if relax_rate != 0:
-                relax_op = get_relax_op(tb_ham.tb_basis, tb_site)
-                relax_ops.append(np.sqrt(relax_rate) * relax_op)
+    for tb_site in tb_basis:
+        relax_rate = relax_rates[tb_basis_sites_dict[tb_site]]
+        if relax_rate != 0:
+            relax_op = get_relax_op(tb_basis, tb_site)
+            relax_ops.append(np.sqrt(relax_rate) * relax_op)
     return relax_ops

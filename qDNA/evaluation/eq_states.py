@@ -7,6 +7,7 @@ import scipy.constants as c
 
 from ..utils import get_conversion
 from ..model import global_to_local, local_to_global
+from ..hamiltonian import delete_groundstate
 
 __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
@@ -78,11 +79,16 @@ def get_deph_eq_state(me_solver):
     # Local dephasing
     if me_solver.lindblad_diss.loc_deph_rate:
         # maximally mixed state
-        return np.eye(me_solver.tb_ham.matrix_dim) / me_solver.tb_ham.matrix_dim
+        dim = me_solver.tb_ham.matrix_dim
+        if me_solver.tb_ham.relaxation:
+            dim -= 1
+        return np.eye(dim) / dim
 
     # Global dephasing
     if me_solver.lindblad_diss.glob_deph_rate:
-        loc_init_matrix = me_solver.init_matrix.full()
+        loc_init_matrix = me_solver.init_matrix.full().real
+        if me_solver.tb_ham.relaxation:
+            loc_init_matrix = delete_groundstate(loc_init_matrix)
         _, eigs = me_solver.tb_ham.get_eigensystem()
         glob_init_matrix = local_to_global(loc_init_matrix, eigs)
 

@@ -21,7 +21,7 @@ import copy
 import numpy as np
 import qutip as q
 
-from ..tools import DEFAULTS, UNITS, DNA_BASES, check_diss_kwargs
+from ..tools import DEFAULTS, UNITS, check_diss_kwargs
 from ..utils import get_conversion
 from ..hamiltonian import TB_Ham, add_groundstate
 
@@ -132,11 +132,14 @@ class Lindblad_Diss:
         # Relaxation
         self.uniform_relaxation = self.diss_kwargs.get("uniform_relaxation")
         if self.uniform_relaxation:
-            DNA_SITES = DNA_BASES + ["B"]
             relax_rate = self.diss_kwargs["relax_rate"]
-            self.relax_rates = dict(zip(DNA_SITES, [relax_rate] * len(DNA_SITES)))
+            tb_sites = tb_ham.tb_sites_flattened
+            self.relax_rates = dict(zip(tb_sites, [relax_rate] * len(tb_sites)))
         else:
             self.relax_rates = self.diss_kwargs.get("relax_rates")
+            assert set(self.relax_rates.keys()) == set(
+                tb_ham.tb_sites_flattened
+            ), "relax_rates must have the same keys as the tight-binding sites"
 
         # Relaxation operators
         self.relax_ops = self._get_relax_ops()
@@ -229,8 +232,13 @@ class Lindblad_Diss:
         list
             A list of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
         """
+        if not self.tb_ham.relaxation:
+            return []
 
-        return get_relax_ops(self.relax_rates, self.tb_ham)
+        tb_basis = self.tb_ham.tb_basis
+        tb_basis_sites_dict = self.tb_ham.tb_basis_sites_dict
+
+        return get_relax_ops(tb_basis, tb_basis_sites_dict, self.relax_rates)
 
     def _get_deph_ops(self):
         """

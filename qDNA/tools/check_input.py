@@ -139,13 +139,6 @@ def check_diss_kwargs(**diss_kwargs):
     assert isinstance(kwargs["relax_rates"], dict), f"relax_rates must be of form dict"
 
     # check values
-    DNA_SITES = CONFIG["DNA_BASES"] + ["B"]
-    assert all(
-        [
-            key in DNA_SITES and isinstance(value, (int, float))
-            for key, value in kwargs["relax_rates"].items()
-        ]
-    )
     assert (
         kwargs["spectral_density"] in CONFIG["SPECTRAL_DENSITIES"]
     ), f"spectral_density must be in {CONFIG['SPECTRAL_DENSITIES']}"
