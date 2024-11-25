@@ -120,6 +120,8 @@ def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 
@@ -174,6 +176,8 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 

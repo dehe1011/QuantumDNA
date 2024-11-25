@@ -67,6 +67,8 @@ def calc_lifetime_dict(
         The name of the tight-binding model.
     filename : str
         The filename to save the lifetime dictionary.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
     kwargs : dict

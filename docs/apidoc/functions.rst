@@ -5,7 +5,7 @@ Linear Combination of Atomic Orbitals (LCAO)
 --------------------------------------------
 
 .. automodule:: qDNA.lcao
-   :members: calc_orbital_energy, calc_orbital_overlap, load_xyz, find_xyz_files, lcao_load_json, convert_json_to_xyz, convert_pdb_to_xyz, calc_tb_energies_monomers, calc_tb_params_dimer, calc_tb_params
+   :members: calc_orbital_energy, calc_orbital_overlap, load_xyz, convert_json_to_xyz, convert_pdb_to_xyz, calc_tb_energies_monomers, calc_tb_params_dimer, calc_tb_params
    :show-inheritance: False
 
 

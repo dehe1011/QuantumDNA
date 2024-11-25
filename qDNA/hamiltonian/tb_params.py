@@ -91,7 +91,7 @@ def wrap_save_tb_params(
 
     Parameters
     ----------
-    tb_param_dict : dict
+    tb_params : dict
         Dictionary containing the tight-binding parameters.
     source : str
         Source of the parameters, e.g., `Hawke2010`.

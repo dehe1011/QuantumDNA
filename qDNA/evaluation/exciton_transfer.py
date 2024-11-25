@@ -145,6 +145,8 @@ def calc_backbone_transfer_wrapper(
         The upper strand of DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
+    lifetime_dict : dict
+        A dictionary containing the lifetimes for different DNA sequences.
     kwargs : dict
         Additional keyword arguments for the master equation solver.
 
@@ -168,6 +170,8 @@ def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **
         The upper strand of DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
+    lifetime_dict : dict
+        A dictionary containing the lifetimes for different DNA sequences.
     kwargs : dict
         Additional keyword arguments for the master equation solver.
 
@@ -192,6 +196,8 @@ def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None)
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 

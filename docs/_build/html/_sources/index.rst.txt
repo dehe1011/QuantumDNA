@@ -21,7 +21,7 @@ This documentation includes:
 - **API Reference**: Description on QuantumDNA's functions and classes.
 - **User Guide**: Tutorials and instructions for getting started and using QuantumDNA effectively.
 
-For additional resources and development information, visit the `QuantumDNA GitHub repository <https://github.com/dehe1011/QuantumDNA>`_. For hands-on learning, check out the `Tutorial Notebooks <https://github.com/dehe1011/QuantumDNA-notebooks>`_ repository, which contains examples and guided exercises.
+For additional resources and development information, visit the `QuantumDNA GitHub repository <https://github.com/dehe1011/QuantumDNA>`_. For hands-on learning, check out the `Tutorial Notebook GitHub repository <https://github.com/dehe1011/QuantumDNA-notebooks>`_, which contains examples and guided exercises.
 
 .. toctree::
    :maxdepth: 3

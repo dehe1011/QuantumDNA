@@ -278,7 +278,7 @@ def basis_change(matrix, states, liouville=False):
     states: ndarray
         The old basis expressed as a vector in the new basis.
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.
+        Set to True for an open quantum system. The matrix must have dimension :math:`N^2` instead of :math:`N`.
 
     Returns
     -------
@@ -301,7 +301,7 @@ def global_to_local(matrix, eigs, liouville=False):
     eigs: ndarray
         The eigenbasis (old) expressed in the site basis (new).
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.
+        Set to True for an open quantum system. The matrix must have dimension :math:`N^2` instead of :math:`N`.
 
     Returns
     -------
@@ -322,7 +322,7 @@ def local_to_global(matrix, eigs, liouville=False):
     eigs: ndarray
         The site basis (old) expressed in the eigenbasis (new).
     liouville: bool
-        Set to True for an open quantum system. The matrix must have dimension :math:`N^2` instead of :math`N`.
+        Set to True for an open quantum system. The matrix must have dimension :math:`N^2` instead of :math:`N`.
 
     Returns
     -------

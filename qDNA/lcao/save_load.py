@@ -82,18 +82,15 @@ def load_xyz(filename, directory=os.path.join(DATA_DIR, "geometries")):
     Returns
     -------
     tuple
-        A tuple containing:
-        - xyz_identifier : str
-            The identifier from the second line of the XYZ file.
-        - xyz_data : pandas.DataFrame
-            A DataFrame containing the atomic coordinates with columns ["Atom", "X", "Y", "Z"].
+        A tuple containing the identifier from the second line of the XYZ file and a
+        DataFrame containing the atomic coordinates with columns ["Atom", "X", "Y", "Z"].
 
     Notes
     -----
-    The XYZ file is expected to have the following format:
-    - The first line contains the number of atoms (ignored).
-    - The second line contains a comment or identifier.
-    - Subsequent lines contain atomic coordinates in the format: Atom X Y Z.
+        - The XYZ file is expected to have the following format:
+            - The first line contains the number of atoms (ignored).
+            - The second line contains a comment or identifier.
+            - Subsequent lines contain atomic coordinates in the format: Atom X Y Z.
     """
 
     filepath = os.path.join(directory, filename + ".xyz")
@@ -215,10 +212,6 @@ def write_xyz_file(output_dir, base_identifier, elements, coordinates):
         A list of atomic element symbols.
     coordinates : list of tuple of float
         A list of tuples, each containing the x, y, and z coordinates of an atom.
-
-    Returns
-    -------
-    None
     """
 
     filepath_xyz = os.path.join(output_dir, f"{base_identifier}.xyz")

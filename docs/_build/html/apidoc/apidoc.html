@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API documentation &mdash; QuantumDNA 0.1.5 documentation</title>
+  <title>API documentation &mdash; QuantumDNA 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
 
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../_static/documentation_options.js?v=22607128"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -98,7 +98,18 @@ list of QuantumDNA’s public classes and functions.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="functions.html#tight-binding-basis">Tight-binding basis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#module-qDNA.lcao">Linear Combination of Atomic Orbitals (LCAO)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.calc_orbital_energy"><code class="docutils literal notranslate"><span class="pre">calc_orbital_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.calc_orbital_overlap"><code class="docutils literal notranslate"><span class="pre">calc_orbital_overlap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.calc_tb_energies_monomers"><code class="docutils literal notranslate"><span class="pre">calc_tb_energies_monomers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.calc_tb_params"><code class="docutils literal notranslate"><span class="pre">calc_tb_params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.calc_tb_params_dimer"><code class="docutils literal notranslate"><span class="pre">calc_tb_params_dimer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.convert_json_to_xyz"><code class="docutils literal notranslate"><span class="pre">convert_json_to_xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.convert_pdb_to_xyz"><code class="docutils literal notranslate"><span class="pre">convert_pdb_to_xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.lcao.load_xyz"><code class="docutils literal notranslate"><span class="pre">load_xyz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#tight-binding-basis">Tight-binding Basis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.model.basis_change"><code class="docutils literal notranslate"><span class="pre">basis_change()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.model.get_eh_basis"><code class="docutils literal notranslate"><span class="pre">get_eh_basis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.model.get_eh_distance"><code class="docutils literal notranslate"><span class="pre">get_eh_distance()</span></code></a></li>
@@ -108,7 +119,7 @@ list of QuantumDNA’s public classes and functions.</p>
 <li class="toctree-l3"><a class="reference internal" href="functions.html#qDNA.model.local_to_global"><code class="docutils literal notranslate"><span class="pre">local_to_global()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions.html#tight-binding-configuration">Tight-binding configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#tight-binding-configuration">Tight-binding Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html#save-and-load-tight-binding-parameters">Save and load tight-binding parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html#module-qDNA.dynamics">Reduced density matrix</a><ul>
@@ -151,8 +162,8 @@ list of QuantumDNA’s public classes and functions.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plotting.html">Plotting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="plotting.html#module-qDNA.plotting">Plot DNA base frequency</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="plotting.html#qDNA.plotting.plot_dna_base_frequency"><code class="docutils literal notranslate"><span class="pre">plot_dna_base_frequency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html#module-qDNA.visualization">Plot DNA base frequency</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#qDNA.visualization.plot_dna_base_frequency"><code class="docutils literal notranslate"><span class="pre">plot_dna_base_frequency()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html#plot-eigenspectrum">Plot eigenspectrum</a></li>

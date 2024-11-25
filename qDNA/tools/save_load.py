@@ -77,7 +77,7 @@ def save_yaml(filepath, data):
 
     Parameters
     ----------
-    file_path : str
+    filepath : str
         The path to the file where the data should be saved.
     data : dict
         The data to be saved in YAML format.
@@ -100,7 +100,7 @@ def modify_yaml(filepath, key, value):
 
     Parameters
     ----------
-    file_path : str
+    filepath : str
         The path to the YAML file to be modified.
     key : str
         The key whose value needs to be modified.
@@ -132,7 +132,7 @@ def get_defaults():
 
 
 # Load the default values
-DEFAULTS = get_defaults()
+DEFAULTS: dict = get_defaults()
 
 # ----------------------------- JSON -----------------------------
 
@@ -173,6 +173,8 @@ def save_json(data, metadata, filename, directory, override=False):
         The name of the file (without extension) to save the data to.
     directory : str
         The directory where the file should be saved.
+    override : bool, optional
+        If True, override the existing file if it exists. Default is False.
 
     Notes
     -----

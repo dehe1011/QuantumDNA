@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functions &mdash; QuantumDNA 0.1.5 documentation</title>
+  <title>Functions &mdash; QuantumDNA 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
 
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../_static/documentation_options.js?v=22607128"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -50,7 +50,18 @@
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="classes.html">Classes</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tight-binding-basis">Tight-binding basis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-qDNA.lcao">Linear Combination of Atomic Orbitals (LCAO)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.calc_orbital_energy"><code class="docutils literal notranslate"><span class="pre">calc_orbital_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.calc_orbital_overlap"><code class="docutils literal notranslate"><span class="pre">calc_orbital_overlap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.calc_tb_energies_monomers"><code class="docutils literal notranslate"><span class="pre">calc_tb_energies_monomers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.calc_tb_params"><code class="docutils literal notranslate"><span class="pre">calc_tb_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.calc_tb_params_dimer"><code class="docutils literal notranslate"><span class="pre">calc_tb_params_dimer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.convert_json_to_xyz"><code class="docutils literal notranslate"><span class="pre">convert_json_to_xyz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.convert_pdb_to_xyz"><code class="docutils literal notranslate"><span class="pre">convert_pdb_to_xyz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qDNA.lcao.load_xyz"><code class="docutils literal notranslate"><span class="pre">load_xyz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-basis">Tight-binding Basis</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#qDNA.model.basis_change"><code class="docutils literal notranslate"><span class="pre">basis_change()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qDNA.model.get_eh_basis"><code class="docutils literal notranslate"><span class="pre">get_eh_basis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qDNA.model.get_eh_distance"><code class="docutils literal notranslate"><span class="pre">get_eh_distance()</span></code></a></li>
@@ -60,7 +71,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#qDNA.model.local_to_global"><code class="docutils literal notranslate"><span class="pre">local_to_global()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#tight-binding-configuration">Tight-binding configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tight-binding-configuration">Tight-binding Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tight-binding-hamiltonian">Tight-binding Hamiltonian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#save-and-load-tight-binding-parameters">Save and load tight-binding parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-qDNA.dynamics">Reduced density matrix</a><ul>
@@ -127,8 +138,241 @@
 
   <section id="functions">
 <h1>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h1>
+<section id="module-qDNA.lcao">
+<span id="linear-combination-of-atomic-orbitals-lcao"></span><h2>Linear Combination of Atomic Orbitals (LCAO)<a class="headerlink" href="#module-qDNA.lcao" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.calc_orbital_energy">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">calc_orbital_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orbital</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.calc_orbital_energy" title="Link to this definition"></a></dt>
+<dd><p>Calculate the energy of a given orbital.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>orbital</strong><span class="classifier">Orbital</span></dt><dd><p>An instance of the Orbital class containing information about the atom and orbital type.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The energy of the specified orbital.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.calc_orbital_overlap">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">calc_orbital_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orbital1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbital2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.calc_orbital_overlap" title="Link to this definition"></a></dt>
+<dd><p>Calculate the overlap between two orbitals using the Harrison expression and the Slater-Koster two-center interactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>orbital1</strong><span class="classifier">Orbital</span></dt><dd><p>The first orbital object containing its coordinates, atom type, orbital type, and atom identifier.</p>
+</dd>
+<dt><strong>orbital2</strong><span class="classifier">Orbital</span></dt><dd><p>The second orbital object containing its coordinates, atom type, orbital type, and atom identifier.</p>
+</dd>
+<dt><strong>connection</strong><span class="classifier">str</span></dt><dd><p>The type of connection between the orbitals, either “interbase” or “intrabase”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The calculated overlap between the two orbitals. Returns 0 if the distance between orbitals is zero,
+if the orbitals belong to the same atom in an intrabase connection, or if the distance exceeds the cutoff radius.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The directional cosines are used as projections on the coordinate axis rather than actual cosine values.
+The function includes a hydrogen correction factor obtained by optimization.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.calc_tb_energies_monomers">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">calc_tb_energies_monomers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.calc_tb_energies_monomers" title="Link to this definition"></a></dt>
+<dd><p>Calculate the tight-binding energies for monomers in a given directory.
+This function searches for XYZ files in the specified directory, loads the data,
+and calculates the HOMO and LUMO energies for each monomer. The results are
+returned as dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directory</strong><span class="classifier">str</span></dt><dd><p>The directory containing the XYZ files.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>HOMO_dict</strong><span class="classifier">dict</span></dt><dd><p>A dictionary where the keys are identifiers of the form ‘E_&lt;base_identifier&gt;’
+and the values are the HOMO energies in eV rounded to two decimal places.</p>
+</dd>
+<dt><strong>LUMO_dict</strong><span class="classifier">dict</span></dt><dd><p>A dictionary where the keys are identifiers of the form ‘E_&lt;base_identifier&gt;’
+and the values are the LUMO energies in eV rounded to two decimal places.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.calc_tb_params">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">calc_tb_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_stranded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.calc_tb_params" title="Link to this definition"></a></dt>
+<dd><p>Calculate tight-binding parameters in meV for a set of DNA base pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directories</strong><span class="classifier">list of str</span></dt><dd><p>List of directories containing the XYZ files for the DNA bases.</p>
+</dd>
+<dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>Name of the tight-binding model to be used.</p>
+</dd>
+<dt><strong>double_stranded</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, consider the DNA as double-stranded. If False, consider it as single-stranded. Default is True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>HOMO_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the Highest Occupied Molecular Orbital (HOMO) parameters for each dimer.</p>
+</dd>
+<dt><strong>LUMO_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the Lowest Unoccupied Molecular Orbital (LUMO) parameters for each dimer.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.calc_tb_params_dimer">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">calc_tb_params_dimer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_stranded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.calc_tb_params_dimer" title="Link to this definition"></a></dt>
+<dd><p>Calculate tight-binding (TB) parameters for a dimer in meV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bases</strong><span class="classifier">list</span></dt><dd><p>List of base objects representing the bases in the dimer.</p>
+</dd>
+<dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>Name of the tight-binding model. Can be “WM”, “LM”, or “ELM”.</p>
+</dd>
+<dt><strong>double_stranded</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag indicating whether the dimer is double-stranded (default is True).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing two dictionaries:
+- HOMO_dict: Dictionary with HOMO (Highest Occupied Molecular Orbital) parameters.
+- LUMO_dict: Dictionary with LUMO (Lowest Unoccupied Molecular Orbital) parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AssertionError</dt><dd><p>If <cite>tb_model_name</cite> is not “WM” for single-stranded mode.
+If the length of <cite>bases</cite> is not 2 for single-stranded mode.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.convert_json_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">convert_json_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.convert_json_to_xyz" title="Link to this definition"></a></dt>
+<dd><p>Converts a JSON file to an XYZ file, e.g., from Pubchem <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/">https://pubchem.ncbi.nlm.nih.gov/</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The name of the JSON file (without extension) to be converted.</p>
+</dd>
+<dt><strong>directory</strong><span class="classifier">str</span></dt><dd><p>The directory where the JSON file is located and where the XYZ file will be saved.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>FileNotFoundError</dt><dd><p>If the JSON file does not exist in the specified directory.</p>
+</dd>
+<dt>KeyError</dt><dd><p>If the expected keys are not found in the JSON file.</p>
+</dd>
+<dt>ValueError</dt><dd><p>If the JSON file contains invalid data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The JSON file is expected to follow a specific structure with atomic data under
+“PC_Compounds” -&gt; “atoms” and coordinates under “coords” -&gt; “conformers”.
+The atomic symbols are mapped from atomic numbers using a predefined dictionary.
+The JSON file is removed after conversion.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_json_to_xyz</span><span class="p">(</span><span class="s2">&quot;molecule&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/directory&quot;</span><span class="p">)</span>
+<span class="go">File successfully converted and saved at /path/to/directory/molecule.xyz</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.convert_pdb_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">convert_pdb_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_pdb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.convert_pdb_to_xyz" title="Link to this definition"></a></dt>
+<dd><p>Converts a PDB file to multiple XYZ files, one for each base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath_pdb</strong><span class="classifier">str</span></dt><dd><p>The path to the input PDB file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The function creates a directory named after the input PDB file (without extension)
+to store the generated XYZ files.</p></li>
+<li><p>Each base in the PDB file is written to a separate XYZ file.</p></li>
+<li><p>If the chain identifier changes, the base numbering is adjusted to continue from
+the previous chain’s last base number.</p></li>
+<li><p>The function assumes that the base counter starts from one if the chain changes.</p></li>
+<li><p>The function prints the directory where the XYZ files are created if the verbose
+mode is enabled in the DEFAULTS dictionary.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qDNA.lcao.load_xyz">
+<span class="sig-prename descclassname"><span class="pre">qDNA.lcao.</span></span><span class="sig-name descname"><span class="pre">load_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C:\\Users\\Dennis</span> <span class="pre">Herb\\OneDrive\\2_Uni\\Doktor\\python_projects\\QuantumDNA\\qDNA\\data\\geometries'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.lcao.load_xyz" title="Link to this definition"></a></dt>
+<dd><p>Load atomic coordinates from an XYZ file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The name of the XYZ file (without the .xyz extension).</p>
+</dd>
+<dt><strong>directory</strong><span class="classifier">str, optional</span></dt><dd><p>The directory where the XYZ file is located. Default is a subdirectory “geometries” within DATA_DIR.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing the identifier from the second line of the XYZ file and a
+DataFrame containing the atomic coordinates with columns [“Atom”, “X”, “Y”, “Z”].</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>The XYZ file is expected to have the following format:</dt><dd><ul>
+<li><p>The first line contains the number of atoms (ignored).</p></li>
+<li><p>The second line contains a comment or identifier.</p></li>
+<li><p>Subsequent lines contain atomic coordinates in the format: Atom X Y Z.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</section>
 <section id="tight-binding-basis">
-<h2>Tight-binding basis<a class="headerlink" href="#tight-binding-basis" title="Link to this heading"></a></h2>
+<h2>Tight-binding Basis<a class="headerlink" href="#tight-binding-basis" title="Link to this heading"></a></h2>
 <p>There are three relevant bases:</p>
 <ul class="simple">
 <li><p>The <cite>tight-binding basis</cite> or one-particle basis, which is the basis in which the tight-binding Hamiltonian is defined.</p></li>
@@ -147,7 +391,7 @@
 </dd>
 <dt><strong>states: ndarray</strong></dt><dd><p>The old basis expressed as a vector in the new basis.</p>
 </dd>
-<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.</p>
+<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension <span class="math notranslate nohighlight">\(N^2\)</span> instead of <span class="math notranslate nohighlight">\(N\)</span>.</p>
 </dd>
 </dl>
 </dd>
@@ -191,7 +435,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_eh_distance">
 <span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_eh_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_eh_distance" title="Link to this definition"></a></dt>
-<dd><p>Calculates the distance between electron and hole for each state in the basis (in multiples of the lattice spacing).</p>
+<dd><p>Calculates the distance between electron and hole for each state in the basis (in
+multiples of the lattice spacing).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -216,7 +461,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_particle_eh_states">
 <span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_particle_eh_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_particle_eh_states" title="Link to this definition"></a></dt>
-<dd><p>Generates a list of electron-hole states for a given particle and site basis element.</p>
+<dd><p>Generates a list of electron-hole states for a given particle and site basis
+element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -245,8 +491,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.model.get_tb_basis">
 <span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.model.get_tb_basis" title="Link to this definition"></a></dt>
-<dd><p>Generates a symbolic string representation of the indices ‘(i, j)’ where i indicates the strand
-number and j the site number inside the strand.</p>
+<dd><p>Generates a symbolic string representation of the indices ‘(i, j)’ where i
+indicates the strand number and j the site number inside the strand.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -279,7 +525,7 @@ number and j the site number inside the strand.</p>
 </dd>
 <dt><strong>eigs: ndarray</strong></dt><dd><p>The eigenbasis (old) expressed in the site basis (new).</p>
 </dd>
-<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension :math`N^2` instead of :math`N`.</p>
+<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension <span class="math notranslate nohighlight">\(N^2\)</span> instead of <span class="math notranslate nohighlight">\(N\)</span>.</p>
 </dd>
 </dl>
 </dd>
@@ -303,7 +549,7 @@ number and j the site number inside the strand.</p>
 </dd>
 <dt><strong>eigs: ndarray</strong></dt><dd><p>The site basis (old) expressed in the eigenbasis (new).</p>
 </dd>
-<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension <span class="math notranslate nohighlight">\(N^2\)</span> instead of :math`N`.</p>
+<dt><strong>liouville: bool</strong></dt><dd><p>Set to True for an open quantum system. The matrix must have dimension <span class="math notranslate nohighlight">\(N^2\)</span> instead of <span class="math notranslate nohighlight">\(N\)</span>.</p>
 </dd>
 </dl>
 </dd>
@@ -318,7 +564,7 @@ number and j the site number inside the strand.</p>
 
 </section>
 <section id="tight-binding-configuration">
-<h2>Tight-binding configuration<a class="headerlink" href="#tight-binding-configuration" title="Link to this heading"></a></h2>
+<h2>Tight-binding Configuration<a class="headerlink" href="#tight-binding-configuration" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.model.</span></span><span class="sig-name descname"><span class="pre">get_tb_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_dims</span></span></em><span class="sig-paren">)</span></dt>
@@ -383,7 +629,8 @@ number and j the site number inside the strand.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.hamiltonian.</span></span><span class="sig-name descname"><span class="pre">add_interaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eh_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Adds interaction terms to the Hamiltonian based on the distance between electron and hole.</p>
+<dd><p>Adds interaction terms to the Hamiltonian based on the distance between electron
+and hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -555,7 +802,7 @@ number and j the site number inside the strand.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>info_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with metadata, e.g., <cite>source</cite>, <cite>particle</cite>, and <cite>tb_model_name</cite>.</p>
+<dt><strong>metadata</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with metadata, e.g., <cite>source</cite>, <cite>particle</cite>, and <cite>tb_model_name</cite>.</p>
 </dd>
 <dt><strong>directory</strong><span class="classifier">str, optional</span></dt><dd><p>Directory to load the file from, by default <cite>data/raw/tb_params</cite>.</p>
 </dd>
@@ -583,13 +830,11 @@ number and j the site number inside the strand.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>tb_param_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the tight-binding parameters.</p>
+<dt><strong>tb_params</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the tight-binding parameters.</p>
 </dd>
-<dt><strong>info_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with metadata, e.g., <cite>source</cite>, <cite>particle</cite>, and <cite>tb_model_name</cite>.</p>
+<dt><strong>metadata</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with metadata, e.g., <cite>source</cite>, <cite>particle</cite>, and <cite>tb_model_name</cite>.</p>
 </dd>
 <dt><strong>directory</strong><span class="classifier">str, optional</span></dt><dd><p>Directory to save the file, by default <cite>data/raw/tb_params</cite>.</p>
-</dd>
-<dt><strong>notes</strong><span class="classifier">str, optional</span></dt><dd><p>Additional notes to include in the info_dict, by default None.</p>
 </dd>
 </dl>
 </dd>
@@ -637,7 +882,7 @@ number and j the site number inside the strand.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>tb_param_dict</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the tight-binding parameters.</p>
+<dt><strong>tb_params</strong><span class="classifier">dict</span></dt><dd><p>Dictionary containing the tight-binding parameters.</p>
 </dd>
 <dt><strong>source</strong><span class="classifier">str</span></dt><dd><p>Source of the parameters, e.g., <cite>Hawke2010</cite>.</p>
 </dd>
@@ -701,7 +946,8 @@ number and j the site number inside the strand.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.dynamics.get_reduced_dm_eigs">
 <span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">get_reduced_dm_eigs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenstate_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.dynamics.get_reduced_dm_eigs" title="Link to this definition"></a></dt>
-<dd><p>Reduces the density matrix of a selected eigenstate of the Hamiltonian for a specific particle type.</p>
+<dd><p>Reduces the density matrix of a selected eigenstate of the Hamiltonian for a
+specific particle type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -774,6 +1020,11 @@ number and j the site number inside the strand.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_lifetime</span><span class="p">(</span><span class="s2">&quot;GCG&quot;</span><span class="p">,</span> <span class="s2">&quot;ELM&quot;</span><span class="p">,</span> <span class="n">relax_rate</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;rad/ps&quot;</span><span class="p">)</span>
+<span class="go">775.5511022044088</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -788,6 +1039,8 @@ number and j the site number inside the strand.</p>
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the tight-binding model.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The filename to save the lifetime dictionary.</p>
+</dd>
+<dt><strong>directory</strong><span class="classifier">str</span></dt><dd><p>The directory where the lifetime dictionary is located.</p>
 </dd>
 <dt><strong>num_cpu</strong><span class="classifier">int, optional</span></dt><dd><p>The number of CPU cores to use. Defaults to the total number of CPUs minus one.</p>
 </dd>
@@ -831,18 +1084,26 @@ number and j the site number inside the strand.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">calc_dipole</span><span class="p">(</span><span class="s2">&quot;GCG&quot;</span><span class="p">,</span> <span class="s2">&quot;ELM&quot;</span><span class="p">)</span>
+<span class="go">2.951734389657976</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.evaluation.</span></span><span class="sig-name descname"><span class="pre">calc_dipole_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculates the average charge separation for multiple upper strands using multiprocessing.</p>
+<dd><p>Calculates the average charge separation for multiple upper strands using
+multiprocessing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tb_model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the tight-binding model.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>The filename to load the lifetime dictionary from.</p>
+</dd>
+<dt><strong>directory</strong><span class="classifier">str</span></dt><dd><p>The directory where the lifetime dictionary is located.</p>
 </dd>
 <dt><strong>num_cpu</strong><span class="classifier">int, optional</span></dt><dd><p>The number of CPU cores to use. Defaults to the total number of CPUs minus one.</p>
 </dd>
@@ -940,7 +1201,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.create_upper_strands">
 <span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">create_upper_strands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_dna_bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dna_bases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.create_upper_strands" title="Link to this definition"></a></dt>
-<dd><p>Generate all possible upper DNA strands of a given length using specified DNA bases.</p>
+<dd><p>Generate all possible upper DNA strands of a given length using specified DNA
+bases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1077,7 +1339,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py" id="qDNA.environment.get_tb_observable">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_tb_observable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qDNA.environment.get_tb_observable" title="Link to this definition"></a></dt>
-<dd><p>Wrapper function of get_observable. Creates a matrix element for the transition between a given start and end state in the provided basis.</p>
+<dd><p>Wrapper function of get_observable. Creates a matrix element for the transition
+between a given start and end state in the provided basis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1158,7 +1421,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">dephasing_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cutoff_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reorg_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculates the dephasing rate in the limit of the Redfield rate equation as the frequency approaches zero.</p>
+<dd><p>Calculates the dephasing rate in the limit of the Redfield rate equation as the
+frequency approaches zero.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1211,7 +1475,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Global dephasing operators. In total <span class="math notranslate nohighlight">\(N^2\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is the number of eigenstates).</p>
+<dd><p>Global dephasing operators. In total <span class="math notranslate nohighlight">\(N^2\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is
+the number of eigenstates).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1235,7 +1500,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_glob_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Global dephasing operators for particle description. In total <span class="math notranslate nohighlight">\(N\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is the number of eigenstates).</p>
+<dd><p>Global dephasing operators for particle description. In total <span class="math notranslate nohighlight">\(N\)</span> operators
+(where <span class="math notranslate nohighlight">\(N\)</span> is the number of eigenstates).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1321,7 +1587,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relaxation</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Local dephasing operators. In total <span class="math notranslate nohighlight">\(2N\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is the number of tight-binding sites).</p>
+<dd><p>Local dephasing operators. In total <span class="math notranslate nohighlight">\(2N\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is the
+number of tight-binding sites).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1345,7 +1612,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_loc_deph_p_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dephasing_rate</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Local dephasing operators for particle description. In total <span class="math notranslate nohighlight">\(N\)</span> operators (where <span class="math notranslate nohighlight">\(N\)</span> is the number of tight-binding sites).</p>
+<dd><p>Local dephasing operators for particle description. In total <span class="math notranslate nohighlight">\(N\)</span> operators
+(where <span class="math notranslate nohighlight">\(N\)</span> is the number of tight-binding sites).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1433,7 +1701,8 @@ normalizes them, and transforms the resulting diagonal matrix to the local basis
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">get_relax_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_site</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Annihilation operator of an exciton on a given tight-binding site. Relaxation of the DNA to its ground state.</p>
+<dd><p>Annihilation operator of an exciton on a given tight-binding site. Relaxation of
+the DNA to its ground state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

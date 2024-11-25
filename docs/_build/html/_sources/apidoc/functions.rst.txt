@@ -1,8 +1,15 @@
 Functions
 =========
 
+Linear Combination of Atomic Orbitals (LCAO)
+--------------------------------------------
 
-Tight-binding basis
+.. automodule:: qDNA.lcao
+   :members: calc_orbital_energy, calc_orbital_overlap, load_xyz, convert_json_to_xyz, convert_pdb_to_xyz, calc_tb_energies_monomers, calc_tb_params_dimer, calc_tb_params
+   :show-inheritance: False
+
+
+Tight-binding Basis
 -------------------
 
 There are three relevant bases:
@@ -17,7 +24,7 @@ The first two are refered to as `local` bases, the third as the `global` basis. 
    :members: get_tb_basis, get_eh_basis, get_eh_distance, get_particle_eh_states, basis_change, local_to_global, global_to_local
    :show-inheritance: False
 
-Tight-binding configuration
+Tight-binding Configuration
 ---------------------------
 
 .. automodule:: qDNA.model

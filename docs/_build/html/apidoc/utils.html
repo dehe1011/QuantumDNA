@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utilities &mdash; QuantumDNA 0.1.5 documentation</title>
+  <title>Utilities &mdash; QuantumDNA 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
 
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../_static/documentation_options.js?v=22607128"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -46,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="classes.html">Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="functions.html">Functions</a></li>
@@ -193,7 +193,8 @@ and the values are the conversion factors.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_average_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculates the time-averaged/ static population of the end state when initially in the initial state.</p>
+<dd><p>Calculates the time-averaged/ static population of the end state when initially
+in the initial state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -237,7 +238,8 @@ and the values are the conversion factors.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_ipr_hamiltonian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.</p>
+<dd><p>Calculates the inverse participation ratio (IPR) for each eigenstate of the
+Hamiltonian.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -371,10 +373,10 @@ distinguish between localized and delocalized eigenstates.</p>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">qDNA.utils.</span></span><span class="sig-name descname"><span class="pre">calc_trace_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm_2</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculate the trace distance between two density matrices.
-The trace distance is a measure of the distinguishability between two quantum states
-represented by their density matrices. It is defined as half the trace of the absolute
-difference between the two density matrices.</p>
+<dd><p>Calculate the trace distance between two density matrices. The trace distance is
+a measure of the distinguishability between two quantum states represented by their
+density matrices. It is defined as half the trace of the absolute difference between
+the two density matrices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Classes &mdash; QuantumDNA 0.1.5 documentation</title>
+  <title>Classes &mdash; QuantumDNA 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
 
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../_static/documentation_options.js?v=22607128"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -98,7 +98,8 @@
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.</span></span><span class="sig-name descname"><span class="pre">DNA_Seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upper_strand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methylated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_strand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>A class to represent a DNA sequence and its properties based on a tight-binding model.</p>
+<dd><p>A class to represent a DNA sequence and its properties based on a tight- binding
+model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -277,7 +278,8 @@
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_backbone_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculate the population of particles on the backbone sites of a Fishbone model.</p>
+<dd><p>Calculate the population of particles on the backbone sites of a Fishbone
+model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -304,11 +306,10 @@ of each particle on the backbone sites.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_eigensystem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Compute the eigenvalues and eigenvectors of the matrix.
-This method computes the eigenvalues and eigenvectors of the matrix
-associated with the instance. If the description is “2P” and relaxation
-is enabled, the ground state is deleted from the matrix before computing
-the eigensystem.</p>
+<dd><p>Compute the eigenvalues and eigenvectors of the matrix. This method computes
+the eigenvalues and eigenvectors of the matrix associated with the instance. If
+the description is “2P” and relaxation is enabled, the ground state is deleted
+from the matrix before computing the eigensystem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -330,7 +331,8 @@ the eigensystem.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_fourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantities</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Calculate the Fourier components of the transition between initial and end states.</p>
+<dd><p>Calculate the Fourier components of the transition between initial and end
+states.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -365,7 +367,8 @@ If <cite>init_state</cite> is not in <cite>self.eh_basis</cite> or <cite>self.tb
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Generate the tight-binding Hamiltonian matrix based on the system description.</p>
+<dd><p>Generate the tight-binding Hamiltonian matrix based on the system
+description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -393,10 +396,10 @@ If <cite>init_state</cite> is not in <cite>self.eh_basis</cite> or <cite>self.tb
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_param_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Retrieves the tight-binding parameters for electrons and holes.
-This method loads the tight-binding parameters for both electrons and holes
-from the specified source and model name. If the unit of the loaded parameters
-does not match the expected unit, it converts the parameters to the expected unit.</p>
+<dd><p>Retrieves the tight-binding parameters for electrons and holes. This method
+loads the tight-binding parameters for both electrons and holes from the
+specified source and model name. If the unit of the loaded parameters does not
+match the expected unit, it converts the parameters to the expected unit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -423,7 +426,8 @@ does not match the expected unit, it converts the parameters to the expected uni
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.dynamics.</span></span><span class="sig-name descname"><span class="pre">ME_Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lindblad_diss</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">me_kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.</p>
+<dd><p>A class used to solve master equations using the tight-binding Hamiltonian and
+Lindblad dissipator.</p>
 <p>This class provides methods to initialize the solver, set up the Hamiltonian and Lindblad dissipator,
 and compute various properties such as populations, coherences, and ground state populations over time.</p>
 <dl class="field-list simple">
@@ -525,10 +529,10 @@ the computed coherence values.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_groundstate_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Calculate and return the ground state population.
-This function computes the ground state population of a system described
-by a two-particle (2P) Hamiltonian with relaxation. If the ground state
-population has already been computed, it returns the cached result.</p>
+<dd><p>Calculate and return the ground state population. This function computes the
+ground state population of a system described by a two- particle (2P)
+Hamiltonian with relaxation. If the ground state population has already been
+computed, it returns the cached result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -551,11 +555,12 @@ population has already been computed, it returns the cached result.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_init_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Generate the initial state matrix for the quantum system based on the Hamiltonian description.
-The method supports two types of descriptions for the tight-binding Hamiltonian (tb_ham):
-“2P” (two-particle) and “1P” (one-particle). Depending on the description and the
-initialization parameters, the initial state matrix is constructed either as a delocalized
-state over all exciton states or as a localized state on a single exciton state.</p>
+<dd><p>Generate the initial state matrix for the quantum system based on the
+Hamiltonian description. The method supports two types of descriptions for the
+tight-binding Hamiltonian (tb_ham): “2P” (two- particle) and “1P” (one-
+particle). Depending on the description and the initialization parameters, the
+initial state matrix is constructed either as a delocalized state over all
+exciton states or as a localized state on a single exciton state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -575,11 +580,10 @@ state over all exciton states or as a localized state on a single exciton state.
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Calculate and return the population of particles in the system.
-This method computes the population of particles based on the Hamiltonian
-description and the Lindblad dissipation operators. It uses the QuTiP
-library to solve the master equation and obtain the expectation values
-of the population operators.</p>
+<dd><p>Calculate and return the population of particles in the system. This method
+computes the population of particles based on the Hamiltonian description and
+the Lindblad dissipation operators. It uses the QuTiP library to solve the
+master equation and obtain the expectation values of the population operators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -605,10 +609,10 @@ values are the corresponding population expectation values.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Calculate and return the result of the master equation solver.
-This method checks if the result has already been calculated. If not, it
-constructs the Hamiltonian matrix and solves the master equation using
-QuTiP’s <cite>mesolve</cite> function. The result is then stored and returned.</p>
+<dd><p>Calculate and return the result of the master equation solver. This method
+checks if the result has already been calculated. If not, it constructs the
+Hamiltonian matrix and solves the master equation using QuTiP’s <cite>mesolve</cite>
+function. The result is then stored and returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -623,11 +627,11 @@ equation at different time points.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">get_result_particle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">particle</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Retrieve the reduced density matrix for a specified particle.
-This method checks if the result has already been calculated. If not, it
-calculates the result. Then, it checks if the reduced density matrix for
-the specified particle has been calculated. If not, it calculates the
-reduced density matrix for the specified particle and stores it.</p>
+<dd><p>Retrieve the reduced density matrix for a specified particle. This method
+checks if the result has already been calculated. If not, it calculates the
+result. Then, it checks if the reduced density matrix for the specified particle
+has been calculated. If not, it calculates the reduced density matrix for the
+specified particle and stores it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -647,7 +651,8 @@ reduced density matrix for the specified particle and stores it.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Resets the solver’s state by clearing results and initializing dictionaries for populations and coherences.</p>
+<dd><p>Resets the solver’s state by clearing results and initializing dictionaries
+for populations and coherences.</p>
 <p class="rubric">Notes</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -666,7 +671,8 @@ reduced density matrix for the specified particle and stores it.</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qDNA.environment.</span></span><span class="sig-name descname"><span class="pre">Lindblad_Diss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb_ham</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">diss_kwargs</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Provides the operators of the form <span class="math notranslate nohighlight">\(\sqrt{\gamma} a\)</span> that are used in the Lindblad dissipator of the master equation.</p>
+<dd><p>Provides the operators of the form <span class="math notranslate nohighlight">\(\sqrt{\gamma} a\)</span> that are used in the
+Lindblad dissipator of the master equation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

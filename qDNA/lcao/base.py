@@ -372,9 +372,9 @@ class Base:
 
         Parameters
         ----------
-        MO_1 : array-like, optional
+        MO_1 : numpy.ndarray, optional
             Molecular orbital coefficients for the first orbital. If None, defaults to HOMO.
-        MO_2 : array-like, optional
+        MO_2 : numpy.ndarray, optional
             Molecular orbital coefficients for the second orbital. If None, defaults to LUMO.
         unit : str, optional
             Unit of the dipole moment. Options are "Coulomb*Angstrom", "Debye", and "atomic_units".

@@ -29,19 +29,20 @@ def get_relax_op(tb_basis, tb_site):
 
 
 def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
-    """Generate relaxation operators based on the provided relaxation rates and tight-
-    binding Hamiltonian.
-
+    """
+    Generate relaxation operators for a given tight-binding basis.
     Parameters
     ----------
+    tb_basis : list
+        List of tight-binding basis states.
+    tb_basis_sites_dict : dict
+        Dictionary mapping tight-binding basis states to site indices.
     relax_rates : dict
-        A dictionary where keys are site indices and values are relaxation rates for each site.
-    tb_ham : object
-        An instance of a tight-binding Hamiltonian class that contains the basis and relaxation information.
+        Dictionary mapping site indices to relaxation rates.
     Returns
     -------
-    list
-        A list of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
+    relax_ops : list
+        List of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
     """
 
     relax_ops = []
