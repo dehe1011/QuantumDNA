@@ -1,5 +1,4 @@
-"""
-Module for solving master equations using the ME_Solver class.
+"""Module for solving master equations using the ME_Solver class.
 
 Shortcuts
 ---------
@@ -30,8 +29,8 @@ __all__ = ["ME_Solver", "get_me_solver"]
 
 
 class ME_Solver:
-    """
-    A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.
+    """A class used to solve master equations using the tight-binding Hamiltonian and
+    Lindblad dissipator.
 
     This class provides methods to initialize the solver, set up the Hamiltonian and Lindblad dissipator,
     and compute various properties such as populations, coherences, and ground state populations over time.
@@ -157,27 +156,21 @@ class ME_Solver:
             print("Successfully initialized the ME_Solver instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the ME_Solver instance.
-        """
+        """Returns a string representation of the ME_Solver instance."""
         return f"ME_Solver({self.tb_ham}, {self.lindblad_diss}, {self.me_kwargs})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two ME_Solver instances for equality.
-        """
+        """Compares two ME_Solver instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------
 
     @property
-    def t_end(self):
+    def t_end(self):  # pylint: disable=missing-function-docstring
         return self._t_end
 
     @t_end.setter
@@ -191,7 +184,7 @@ class ME_Solver:
             self.reset()
 
     @property
-    def t_steps(self):
+    def t_steps(self):  # pylint: disable=missing-function-docstring
         return self._t_steps
 
     @t_steps.setter
@@ -207,8 +200,8 @@ class ME_Solver:
     # --------------------------------------------------------------------
 
     def reset(self):
-        """
-        Resets the solver's state by clearing results and initializing dictionaries for populations and coherences.
+        """Resets the solver's state by clearing results and initializing dictionaries
+        for populations and coherences.
 
         Notes
         -----
@@ -226,12 +219,12 @@ class ME_Solver:
             vars(self)["result_" + particle] = []
 
     def get_init_matrix(self):
-        """
-        Generate the initial state matrix for the quantum system based on the Hamiltonian description.
-        The method supports two types of descriptions for the tight-binding Hamiltonian (tb_ham):
-        "2P" (two-particle) and "1P" (one-particle). Depending on the description and the
-        initialization parameters, the initial state matrix is constructed either as a delocalized
-        state over all exciton states or as a localized state on a single exciton state.
+        """Generate the initial state matrix for the quantum system based on the
+        Hamiltonian description. The method supports two types of descriptions for the
+        tight-binding Hamiltonian (tb_ham): "2P" (two- particle) and "1P" (one-
+        particle). Depending on the description and the initialization parameters, the
+        initial state matrix is constructed either as a delocalized state over all
+        exciton states or as a localized state on a single exciton state.
 
         Returns
         -------
@@ -243,6 +236,8 @@ class ME_Solver:
         ValueError
             If the Hamiltonian description is not recognized.
         """
+
+        init_state = None
 
         # 2P description
         if self.tb_ham.description == "2P":
@@ -271,14 +266,15 @@ class ME_Solver:
         elif self.tb_ham.description == "1P":
             init_state_idx = self.tb_ham.tb_basis.index(self.init_state)
             init_state = q.fock_dm(self.tb_ham.matrix_dim, init_state_idx)
+
+        assert init_state is not None, "Initial state is not defined."
         return init_state
 
     def get_result(self):
-        """
-        Calculate and return the result of the master equation solver.
-        This method checks if the result has already been calculated. If not, it
-        constructs the Hamiltonian matrix and solves the master equation using
-        QuTiP's `mesolve` function. The result is then stored and returned.
+        """Calculate and return the result of the master equation solver. This method
+        checks if the result has already been calculated. If not, it constructs the
+        Hamiltonian matrix and solves the master equation using QuTiP's `mesolve`
+        function. The result is then stored and returned.
 
         Returns
         -------
@@ -288,7 +284,6 @@ class ME_Solver:
         """
 
         # check if the result is already calculated
-        # TODO: upgrade to qutip 5.x solvers
         if not self.result:
             # observables
             e_ops = []
@@ -305,16 +300,15 @@ class ME_Solver:
             ).states
 
             # store the result
-            self.result = result
+            self.result = result  # pylint: disable=attribute-defined-outside-init
         return self.result
 
     def get_result_particle(self, particle):
-        """
-        Retrieve the reduced density matrix for a specified particle.
-        This method checks if the result has already been calculated. If not, it
-        calculates the result. Then, it checks if the reduced density matrix for
-        the specified particle has been calculated. If not, it calculates the
-        reduced density matrix for the specified particle and stores it.
+        """Retrieve the reduced density matrix for a specified particle. This method
+        checks if the result has already been calculated. If not, it calculates the
+        result. Then, it checks if the reduced density matrix for the specified particle
+        has been calculated. If not, it calculates the reduced density matrix for the
+        specified particle and stores it.
 
         Parameters
         ----------
@@ -344,12 +338,10 @@ class ME_Solver:
         return vars(self)["result_" + particle]
 
     def get_pop(self):
-        """
-        Calculate and return the population of particles in the system.
-        This method computes the population of particles based on the Hamiltonian
-        description and the Lindblad dissipation operators. It uses the QuTiP
-        library to solve the master equation and obtain the expectation values
-        of the population operators.
+        """Calculate and return the population of particles in the system. This method
+        computes the population of particles based on the Hamiltonian description and
+        the Lindblad dissipation operators. It uses the QuTiP library to solve the
+        master equation and obtain the expectation values of the population operators.
 
         Returns
         -------
@@ -366,15 +358,15 @@ class ME_Solver:
             - For "2P" description, it uses the population operators from `self.lindblad_diss.pop_ops`.
             - For "1P" description, it constructs the population operators based on the tight-binding basis (`self.tb_ham.tb_basis`).
             - The master equation is solved using `qutip.mesolve` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
-
         """
 
         # check if the population is already calculated
         if not self.pop:
             # observables for the population
+            e_ops = None
             if self.tb_ham.description == "2P":
                 e_ops = self.lindblad_diss.pop_ops
-            if self.tb_ham.description == "1P":
+            elif self.tb_ham.description == "1P":
                 keys = [
                     self.tb_ham.particles[0] + "_" + tb_site
                     for tb_site in self.tb_ham.tb_basis
@@ -384,6 +376,7 @@ class ME_Solver:
                     for i in range(self.tb_ham.matrix_dim)
                 ]
                 e_ops = dict(zip(keys, values))
+            assert e_ops is not None, "Population operators are not defined."
 
             # solve the master equation with observables
             result = q.mesolve(
@@ -426,6 +419,7 @@ class ME_Solver:
         # check if the coherence is already calculated
         if not self.coh:
             # observables for the coherence
+            e_ops = None
             if self.tb_ham.description == "2P":
                 e_ops = self.lindblad_diss.coh_ops
             if self.tb_ham.description == "1P":
@@ -439,6 +433,7 @@ class ME_Solver:
                     for i, j in permutations(self.tb_ham.matrix_dim, 2)
                 ]
                 e_ops = dict(zip(keys, values))
+            assert e_ops is not None, "Coherence operators are not defined."
 
             # solve the master equation with observables
             result = q.mesolve(
@@ -461,11 +456,10 @@ class ME_Solver:
         return self.coh
 
     def get_groundstate_pop(self):
-        """
-        Calculate and return the ground state population.
-        This function computes the ground state population of a system described
-        by a two-particle (2P) Hamiltonian with relaxation. If the ground state
-        population has already been computed, it returns the cached result.
+        """Calculate and return the ground state population. This function computes the
+        ground state population of a system described by a two- particle (2P)
+        Hamiltonian with relaxation. If the ground state population has already been
+        computed, it returns the cached result.
 
         Returns
         -------
@@ -510,8 +504,7 @@ class ME_Solver:
 
 
 def get_me_solver(upper_strand, tb_model_name, **kwargs):
-    """
-    Creates an instance of ME_Solver.
+    """Creates an instance of ME_Solver.
 
     Parameters
     ----------

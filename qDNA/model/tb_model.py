@@ -17,8 +17,7 @@ __all__ = ["Custom_TB_Model", "TB_Model"]
 
 
 class Custom_TB_Model:
-    """
-    A class to define a custom tight-binding model.
+    """A class to define a custom tight-binding model.
 
     Parameters
     ----------
@@ -58,18 +57,16 @@ class Custom_TB_Model:
             isinstance(tb_dims, tuple) and len(tb_dims) == 2
         ), "tb_dims must be of type tuple and of length two"
         assert all(
-            [isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims]
+            isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims
         ), "elements of tb_dim must be of type int and > 0"
         assert isinstance(tb_basis, list), "tb_basis must be of type list"
         assert all(
-            [isinstance(tb_basis_element, str) for tb_basis_element in tb_basis]
+            isinstance(tb_basis_element, str) for tb_basis_element in tb_basis
         ), "elements of tb_basis must be strings"
         assert isinstance(tb_config, list), "tb_config must be of type list"
         assert all(
-            [
-                isinstance(tb_config_element, tuple) and len(tb_config_element) == 3
-                for tb_config_element in tb_config
-            ]
+            isinstance(tb_config_element, tuple) and len(tb_config_element) == 3
+            for tb_config_element in tb_config
         ), "elements of tb_config must be of type tuple and of length three"
 
         self.verbose = DEFAULTS["verbose"]
@@ -88,21 +85,15 @@ class Custom_TB_Model:
             print("Successfully initialized the Custom_TB_Model instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the Custom_TB_Model instance.
-        """
+        """Returns a string representation of the Custom_TB_Model instance."""
         return f"Custom_TB_Model({self.tb_model_name}, {self.tb_dims}, {self.tb_basis}, {self.tb_config})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two Custom_TB_Model instances for equality.
-        """
+        """Compares two Custom_TB_Model instances for equality."""
         return self.__repr__() == other.__repr__()
 
 
@@ -110,8 +101,7 @@ class Custom_TB_Model:
 
 
 class TB_Model:
-    """
-    A class to define a predefined tight-binding model.
+    """A class to define a predefined tight-binding model.
 
     Parameters
     ----------
@@ -151,7 +141,7 @@ class TB_Model:
             isinstance(tb_dims, tuple) and len(tb_dims) == 2
         ), "tb_dims must be of type tuple and of length two"
         assert all(
-            [isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims]
+            isinstance(tb_dim, int) and tb_dim > 0 for tb_dim in tb_dims
         ), "elements of tb_dim must be of type int and > 0"
         self.verbose = DEFAULTS["verbose"]
         if self.verbose:
@@ -181,19 +171,13 @@ class TB_Model:
             print("Successfully initialized the TB_Model instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the TB_Model instance.
-        """
+        """Returns a string representation of the TB_Model instance."""
         return f"TB_Model({self.tb_model_name}, {self.tb_dims})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two TB_Model instances for equality.
-        """
+        """Compares two TB_Model instances for equality."""
         return self.__repr__() == other.__repr__()

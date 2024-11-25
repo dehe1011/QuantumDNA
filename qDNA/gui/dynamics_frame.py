@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 # --------------------------------------------------
@@ -57,9 +59,7 @@ class DynamicsFrame(ctk.CTkFrame):
         self.me_init_h_state_combo.set(self.me_kwargs_default["init_h_state"])
 
     def get_me_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
 
         me_kwargs = {
             "t_steps": float(self.me_t_steps_entry.get()),

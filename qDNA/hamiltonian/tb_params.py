@@ -1,7 +1,9 @@
-"""
-This module provides utility functions to save and load tight-binding parameters as JSON files.
-By default, the parameters are stored in the "qDNA/data/raw/tb_params" directory.
-The module includes functions to handle metadata associated with the parameters, ensuring that the data is well-organized and easily retrievable.
+"""This module provides utility functions to save and load tight-binding parameters as
+JSON files.
+
+By default, the parameters are stored in the "qDNA/data/raw/tb_params" directory. The
+module includes functions to handle metadata associated with the parameters, ensuring
+that the data is well-organized and easily retrievable.
 """
 
 import os
@@ -23,8 +25,7 @@ def save_tb_params(
     metadata,
     directory,
 ):
-    """
-    Save tight-binding parameters to a file.
+    """Save tight-binding parameters to a file.
 
     Parameters
     ----------
@@ -51,8 +52,7 @@ def load_tb_params(
     directory,
     load_metadata=False,
 ):
-    """
-    Load tight-binding parameters from a file.
+    """Load tight-binding parameters from a file.
 
     Parameters
     ----------
@@ -87,8 +87,7 @@ def wrap_save_tb_params(
     unit=None,
     notes=None,
 ):
-    """
-    Wrapper function for save_tb_params().
+    """Wrapper function for save_tb_params().
 
     Parameters
     ----------
@@ -127,8 +126,7 @@ def wrap_load_tb_params(
     tb_model_name,
     load_metadata=False,
 ):
-    """
-    Wrapper function for load_tb_params().
+    """Wrapper function for load_tb_params().
 
     Parameters
     ----------

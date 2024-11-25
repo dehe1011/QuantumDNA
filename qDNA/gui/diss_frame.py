@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 # --------------------------------------------------
@@ -153,9 +155,7 @@ class DissFrame(ctk.CTkFrame):
             self.diss_relax_rates_entry.configure(state="normal")
 
     def get_diss_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
 
         diss_kwargs = {
             "loc_deph_rate": float(self.diss_loc_deph_rate_entry.get()),

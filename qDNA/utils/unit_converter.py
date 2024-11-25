@@ -1,8 +1,9 @@
-"""
-This module provides utility functions for unit conversion, particularly for converting physical quantities
-to different units of measurement. It includes functions to convert charge separation to dipole moments,
-convert between various units, generate all possible conversion factors, and convert all values in a dictionary
-from one unit to another.
+"""This module provides utility functions for unit conversion, particularly for
+converting physical quantities to different units of measurement.
+
+It includes functions to convert charge separation to dipole moments, convert between
+various units, generate all possible conversion factors, and convert all values in a
+dictionary from one unit to another.
 """
 
 from itertools import permutations
@@ -24,8 +25,8 @@ __all__ = [
 
 
 def convert_to_debye(charge_separation):
-    """
-    Converts the charge separation of two particles with elementary charge in Angstrom to a dipole moment in Debye.
+    """Converts the charge separation of two particles with elementary charge in
+    Angstrom to a dipole moment in Debye.
 
     Parameters
     ----------
@@ -43,8 +44,7 @@ def convert_to_debye(charge_separation):
 
 
 def get_conversion(start_unit, end_unit):
-    """
-    Converts a value from the start_unit to the end_unit.
+    """Converts a value from the start_unit to the end_unit.
 
     Parameters
     ----------
@@ -88,8 +88,7 @@ def get_conversion(start_unit, end_unit):
 
 
 def get_all_conversions():
-    """
-    Generates a dictionary with all possible conversions between units.
+    """Generates a dictionary with all possible conversions between units.
 
     Returns
     -------
@@ -107,8 +106,7 @@ def get_all_conversions():
 
 
 def get_conversion_dict(param_dict, start_unit, end_unit):
-    """
-    Convert the values in a dictionary from one unit to another.
+    """Convert the values in a dictionary from one unit to another.
 
     Parameters
     ----------

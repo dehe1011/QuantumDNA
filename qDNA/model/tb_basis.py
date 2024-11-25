@@ -1,8 +1,7 @@
-"""
-This module provides functions for working with tight-binding (tb) basis and
-electron-hole (eh) basis in quantum systems. It includes functions to generate
-symbolic representations of basis indices, convert between different
-representations, and perform basis changes.
+"""This module provides functions for working with tight-binding (tb) basis and
+electron-hole (eh) basis in quantum systems. It includes functions to generate symbolic
+representations of basis indices, convert between different representations, and perform
+basis changes.
 
 Shortcuts
 ---------
@@ -20,9 +19,8 @@ import numpy as np
 
 
 def get_tb_basis(tb_dims):
-    """
-    Generates a symbolic string representation of the indices '(i, j)' where i indicates the strand
-    number and j the site number inside the strand.
+    """Generates a symbolic string representation of the indices '(i, j)' where i
+    indicates the strand number and j the site number inside the strand.
 
     Parameters
     ----------
@@ -46,8 +44,7 @@ def get_tb_basis(tb_dims):
 
 
 def str_to_int(tb_dims, tb_basis_str):
-    """
-    Converts a string representation of a site index to an integer representation.
+    """Converts a string representation of a site index to an integer representation.
 
     Parameters
     ----------
@@ -71,8 +68,8 @@ def str_to_int(tb_dims, tb_basis_str):
 
 
 def int_to_str(tb_dims, tb_basis_int):
-    """
-    Converts the integer representation of a basis state to the string representation.
+    """Converts the integer representation of a basis state to the string
+    representation.
 
     Parameters
     ----------
@@ -91,8 +88,7 @@ def int_to_str(tb_dims, tb_basis_int):
 
 
 def str_to_tuple(tb_basis_str):
-    """
-    Converts the string representation of a basis state to the tuple representation.
+    """Converts the string representation of a basis state to the tuple representation.
 
     Parameters
     ----------
@@ -109,8 +105,7 @@ def str_to_tuple(tb_basis_str):
 
 
 def tuple_to_str(tb_basis_tuple):
-    """
-    Converts the tuple representation of a basis state to the string representation.
+    """Converts the tuple representation of a basis state to the string representation.
 
     Parameters
     ----------
@@ -127,8 +122,7 @@ def tuple_to_str(tb_basis_tuple):
 
 
 def int_to_tuple(tb_dims, tb_basis_int):
-    """
-    Converts the integer representation of a basis state to the tuple representation.
+    """Converts the integer representation of a basis state to the tuple representation.
 
     Parameters
     ----------
@@ -148,8 +142,7 @@ def int_to_tuple(tb_dims, tb_basis_int):
 
 
 def tuple_to_int(tb_dims, tb_basis_tuple):
-    """
-    Converts the tuple representation of a basis state to the integer representation.
+    """Converts the tuple representation of a basis state to the integer representation.
 
     Parameters
     ----------
@@ -173,8 +166,7 @@ def tuple_to_int(tb_dims, tb_basis_tuple):
 
 
 def get_eh_basis(tb_dims):
-    """
-    Generates a symbolic string representation of electron-hole basis indices.
+    """Generates a symbolic string representation of electron-hole basis indices.
 
     Parameters
     ----------
@@ -201,8 +193,8 @@ def get_eh_basis(tb_dims):
 
 
 def get_eh_distance(eh_basis):
-    """
-    Calculates the distance between electron and hole for each state in the basis (in multiples of the lattice spacing).
+    """Calculates the distance between electron and hole for each state in the basis (in
+    multiples of the lattice spacing).
 
     Parameters
     ----------
@@ -235,8 +227,8 @@ def get_eh_distance(eh_basis):
 
 
 def get_particle_eh_states(particle, tb_basis_element, tb_basis):
-    """
-    Generates a list of electron-hole states for a given particle and site basis element.
+    """Generates a list of electron-hole states for a given particle and site basis
+    element.
 
     Parameters
     ----------
@@ -277,8 +269,7 @@ def get_particle_eh_states(particle, tb_basis_element, tb_basis):
 
 
 def basis_change(matrix, states, liouville=False):
-    """
-    Performs a basis change of the given matrix.
+    """Performs a basis change of the given matrix.
 
     Parameters
     ----------
@@ -301,8 +292,7 @@ def basis_change(matrix, states, liouville=False):
 
 
 def global_to_local(matrix, eigs, liouville=False):
-    """
-    Performs a basis change from the eigenbasis to the site basis.
+    """Performs a basis change from the eigenbasis to the site basis.
 
     Parameters
     ----------
@@ -323,8 +313,7 @@ def global_to_local(matrix, eigs, liouville=False):
 
 
 def local_to_global(matrix, eigs, liouville=False):
-    """
-    Performs a basis change from the site basis to the eigenbasis.
+    """Performs a basis change from the site basis to the eigenbasis.
 
     Parameters
     ----------

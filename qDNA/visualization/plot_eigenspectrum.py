@@ -1,6 +1,5 @@
-"""
-This module provides functions to plot eigenenergies and eigenstates for quantum DNA models.
-"""
+"""This module provides functions to plot eigenenergies and eigenstates for quantum DNA
+models."""
 
 import numpy as np
 
@@ -15,8 +14,7 @@ __all__ = ["PARTICLES", "COLORS_PARTICLES", "plot_eigv", "plot_eigs"]
 
 
 def plot_eigv(ax, tb_ham, energy_unit="100meV"):
-    """
-    Plots the eigenenergies.
+    """Plots the eigenenergies.
 
     Parameters
     ----------
@@ -39,8 +37,7 @@ def plot_eigv(ax, tb_ham, energy_unit="100meV"):
 
 
 def plot_eigs(ax, tb_ham, eigenstate_idx):
-    """
-    Plots the distribution of eigenstates over tight-binding sites.
+    """Plots the distribution of eigenstates over tight-binding sites.
 
     Parameters
     ----------

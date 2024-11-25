@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import sys
 from tkinter.scrolledtext import ScrolledText
 

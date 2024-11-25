@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import webbrowser
 
 import customtkinter as ctk
@@ -128,9 +130,7 @@ class qDNA_app(ctk.CTk):
     # -----------------------------------------
 
     def press_first_confirm(self):
-        """
-        Event of the initial_frame.
-        """
+        """Event of the initial_frame."""
 
         self.get_init_kwargs()
         # update the options_frame
@@ -162,9 +162,7 @@ class qDNA_app(ctk.CTk):
         )
 
     def press_second_confirm(self):
-        """
-        Event of the options_frame.
-        """
+        """Event of the options_frame."""
 
         self.get_options_kwargs()
         # update the plot_options_frame
@@ -176,9 +174,7 @@ class qDNA_app(ctk.CTk):
         # TODO: configure some widgets using the kwargs
 
     def submit(self):
-        """
-        Event of the plot_options_frame.
-        """
+        """Event of the plot_options_frame."""
 
         self.get_plot_options_kwargs()
         self.plotting_window = PlottingWindow(self)

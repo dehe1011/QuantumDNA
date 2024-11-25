@@ -15,6 +15,9 @@ htmlcov/
 __pycache__
 .pytest_cache/
 
+# pylint
+.pylintrc
+
 # created by coverage
 *.egg-info/
 .coverage

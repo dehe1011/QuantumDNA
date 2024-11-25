@@ -1,6 +1,6 @@
-"""
-This module provides functions for analyzing Hamiltonians in quantum systems, including calculations of average population,
-amplitudes, frequencies, population using Fourier series, and inverse participation ratio (IPR).
+"""This module provides functions for analyzing Hamiltonians in quantum systems,
+including calculations of average population, amplitudes, frequencies, population using
+Fourier series, and inverse participation ratio (IPR).
 
 Notes
 -----
@@ -29,8 +29,8 @@ __all__ = [
 
 
 def calc_average_pop(eigs, init_state, end_state):
-    """
-    Calculates the time-averaged/ static population of the end state when initially in the initial state.
+    """Calculates the time-averaged/ static population of the end state when initially
+    in the initial state.
 
     Parameters
     ----------
@@ -51,8 +51,7 @@ def calc_average_pop(eigs, init_state, end_state):
 
 
 def calc_amplitudes(eigs, init_state, end_state):
-    """
-    Calculates the amplitudes for transitions between states.
+    """Calculates the amplitudes for transitions between states.
 
     Parameters
     ----------
@@ -82,8 +81,7 @@ def calc_amplitudes(eigs, init_state, end_state):
 
 
 def calc_frequencies(eigv):
-    """
-    Calculates the frequencies corresponding to energy level differences.
+    """Calculates the frequencies corresponding to energy level differences.
 
     Parameters
     ----------
@@ -105,8 +103,7 @@ def calc_frequencies(eigv):
 
 
 def get_pop_fourier(t, average_pop, amplitudes, frequencies):
-    """
-    Calculates the population using Fourier series.
+    """Calculates the population using Fourier series.
 
     Parameters
     ----------
@@ -131,8 +128,8 @@ def get_pop_fourier(t, average_pop, amplitudes, frequencies):
 
 
 def calc_ipr_hamiltonian(eigs):
-    r"""
-    Calculates the inverse participation ratio (IPR) for each eigenstate of the Hamiltonian.
+    r"""Calculates the inverse participation ratio (IPR) for each eigenstate of the
+    Hamiltonian.
 
     Parameters
     ----------

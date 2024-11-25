@@ -1,6 +1,4 @@
-"""
-Module for reducing density matrices to the electron, hole or exciton subspace.
-"""
+"""Module for reducing density matrices to the electron, hole or exciton subspace."""
 
 from itertools import product
 import numpy as np
@@ -14,8 +12,7 @@ __all__ = ["get_reduced_dm", "get_reduced_dm_eigs"]
 
 
 def get_reduced_dm(dm, particle, tb_basis):
-    """
-    Reduces the density matrix for a specific particle type.
+    """Reduces the density matrix for a specific particle type.
 
     Parameters
     ----------
@@ -62,8 +59,8 @@ def get_reduced_dm(dm, particle, tb_basis):
 
 
 def get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx):
-    """
-    Reduces the density matrix of a selected eigenstate of the Hamiltonian for a specific particle type.
+    """Reduces the density matrix of a selected eigenstate of the Hamiltonian for a
+    specific particle type.
 
     Parameters
     ----------

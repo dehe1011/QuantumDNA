@@ -5,8 +5,8 @@ import qutip as q
 
 
 def get_relax_op(tb_basis, tb_site):
-    """
-    Annihilation operator of an exciton on a given tight-binding site. Relaxation of the DNA to its ground state.
+    """Annihilation operator of an exciton on a given tight-binding site. Relaxation of
+    the DNA to its ground state.
 
     Parameters
     ----------
@@ -29,8 +29,8 @@ def get_relax_op(tb_basis, tb_site):
 
 
 def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
-    """
-    Generate relaxation operators based on the provided relaxation rates and tight-binding Hamiltonian.
+    """Generate relaxation operators based on the provided relaxation rates and tight-
+    binding Hamiltonian.
 
     Parameters
     ----------

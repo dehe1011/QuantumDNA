@@ -1,5 +1,5 @@
-"""
-This module provides functions to generate configurations for different tight-binding models.
+"""This module provides functions to generate configurations for different tight-binding
+models.
 
 Shortcuts
 ---------
@@ -19,8 +19,7 @@ __all__ = ["get_tb_config", "TB_MODELS_PROPS"]
 
 
 def get_wm_config(num_sites_per_strand, strand=0, reversed_direction=False):
-    """
-    Generate the configuration for the Wire Model (WM).
+    """Generate the configuration for the Wire Model (WM).
 
     Parameters
     ----------
@@ -53,8 +52,7 @@ def get_wm_config(num_sites_per_strand, strand=0, reversed_direction=False):
 
 
 def get_lm_config(num_sites_per_strand, strand1=0, strand2=1):
-    """
-    Generate the configuration for the Ladder Model (LM).
+    """Generate the configuration for the Ladder Model (LM).
 
     Parameters
     ----------
@@ -83,8 +81,7 @@ def get_lm_config(num_sites_per_strand, strand1=0, strand2=1):
 
 
 def get_elm_config(num_sites_per_strand, strand1=0, strand2=1):
-    """
-    Generate the configuration for the Extended Ladder Model (ELM).
+    """Generate the configuration for the Extended Ladder Model (ELM).
 
     Parameters
     ----------
@@ -114,8 +111,7 @@ def get_elm_config(num_sites_per_strand, strand1=0, strand2=1):
 
 
 def get_f_config(num_sites_per_strand, strand1=0, strand2=2):
-    """
-    Generate the configuration for the Fishbone Model (F).
+    """Generate the configuration for the Fishbone Model (F).
 
     Parameters
     ----------
@@ -152,8 +148,7 @@ def get_f_config(num_sites_per_strand, strand1=0, strand2=2):
 
 
 def get_fwm_config(num_sites_per_strand):
-    """
-    Generate the configuration for the Fishbone Wire Model (FWM).
+    """Generate the configuration for the Fishbone Wire Model (FWM).
 
     Parameters
     ----------
@@ -171,8 +166,7 @@ def get_fwm_config(num_sites_per_strand):
 
 
 def get_flm_config(num_sites_per_strand):
-    """
-    Generate the configuration for the Fishbone Ladder Model (FLM).
+    """Generate the configuration for the Fishbone Ladder Model (FLM).
 
     Parameters
     ----------
@@ -190,8 +184,7 @@ def get_flm_config(num_sites_per_strand):
 
 
 def get_felm_config(num_sites_per_strand):
-    """
-    Generate the configuration for the Fishbone Extended Ladder Model (FELM).
+    """Generate the configuration for the Fishbone Extended Ladder Model (FELM).
 
     Parameters
     ----------
@@ -209,8 +202,7 @@ def get_felm_config(num_sites_per_strand):
 
 
 def get_fc_config(num_sites_per_strand):
-    """
-    Generate the configuration for the Fully Connected Model (FC).
+    """Generate the configuration for the Fully Connected Model (FC).
 
     Parameters
     ----------
@@ -253,8 +245,7 @@ TB_CONFIGS = dict(
 
 
 def get_tb_config(tb_model_name, tb_dims):
-    """
-    Get the tight-binding configuration for a specified model.
+    """Get the tight-binding configuration for a specified model.
 
     Parameters
     ----------

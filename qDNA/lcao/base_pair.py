@@ -10,6 +10,126 @@ from .slater_koster import calc_orbital_overlap
 
 
 class BasePair:
+    """
+    A class to represent a base pair in a DNA molecule.
+
+    Attributes
+    ----------
+    base1 : object
+        The first base in the pair.
+    base2 : object
+        The second base in the pair.
+    identifier : str, optional
+        An identifier for the base pair (default is None).
+    atoms : list
+        List of atoms in the base pair.
+    num_atoms : int
+        Total number of atoms in the base pair.
+    atom_identifiers : list
+        List of atom identifiers in the base pair.
+    atom_coordinates : ndarray
+        Coordinates of atoms in the base pair.
+    atom_distance_matrix : ndarray
+        Matrix of distances between atoms in the base pair.
+    orbitals : list
+        List of orbitals in the base pair.
+    num_orbitals : int
+        Total number of orbitals in the base pair.
+    orbital_identifiers : list
+        List of orbital identifiers in the base pair.
+    orbital_coordinates : ndarray
+        Coordinates of orbitals in the base pair.
+    orbital_distance_matrix : ndarray
+        Matrix of distances between orbitals in the base pair.
+    mass : float
+        Mass of the base pair.
+    center_of_mass : ndarray
+        Center of mass of the base pair.
+    relative_atom_coordinates : ndarray
+        Atom coordinates relative to the center of mass.
+    relative_orbital_coordinates : ndarray
+        Orbital coordinates relative to the center of mass.
+    num_electrons : int
+        Total number of valence electrons in the base pair.
+    H : ndarray
+        LCAO Hamiltonian matrix for the base pair.
+    eigv : ndarray
+        Eigenvalues of the Hamiltonian matrix.
+    eigs : ndarray
+        Eigenvectors of the Hamiltonian matrix.
+    E_HOMO : float
+        Energy of the highest occupied molecular orbital (HOMO).
+    HOMO : ndarray
+        Highest occupied molecular orbital (HOMO).
+    HOMO_occupation : ndarray
+        Occupation of the HOMO.
+    HOMO_type : str
+        Type of the HOMO (sigma, pi, or n).
+    HOMO_type_occupation : list
+        Occupation of the HOMO by type.
+    E_HOMO_1 : float
+        Energy of the HOMO-1.
+    HOMO_1 : ndarray
+        HOMO-1.
+    HOMO_occupation_1 : ndarray
+        Occupation of the HOMO-1.
+    HOMO_type_1 : str
+        Type of the HOMO-1 (sigma, pi, or n).
+    HOMO_type_occupation_1 : list
+        Occupation of the HOMO-1 by type.
+    E_HOMO_2 : float
+        Energy of the HOMO-2.
+    HOMO_2 : ndarray
+        HOMO-2.
+    HOMO_occupation_2 : ndarray
+        Occupation of the HOMO-2.
+    HOMO_type_2 : str
+        Type of the HOMO-2 (sigma, pi, or n).
+    HOMO_type_occupation_2 : list
+        Occupation of the HOMO-2 by type.
+    E_LUMO : float
+        Energy of the lowest unoccupied molecular orbital (LUMO).
+    LUMO : ndarray
+        Lowest unoccupied molecular orbital (LUMO).
+    LUMO_occupation : ndarray
+        Occupation of the LUMO.
+    LUMO_type : str
+        Type of the LUMO (sigma, pi, or n).
+    LUMO_type_occupation : list
+        Occupation of the LUMO by type.
+    E_LUMO_1 : float
+        Energy of the LUMO+1.
+    LUMO_1 : ndarray
+        LUMO+1.
+    LUMO_occupation_1 : ndarray
+        Occupation of the LUMO+1.
+    LUMO_type_1 : str
+        Type of the LUMO+1 (sigma, pi, or n).
+    LUMO_type_occupation_1 : list
+        Occupation of the LUMO+1 by type.
+    E_LUMO_2 : float
+        Energy of the LUMO+2.
+    LUMO_2 : ndarray
+        LUMO+2.
+    LUMO_occupation_2 : ndarray
+        Occupation of the LUMO+2.
+    LUMO_type_2 : str
+        Type of the LUMO+2 (sigma, pi, or n).
+    LUMO_type_occupation_2 : list
+        Occupation of the LUMO+2 by type.
+    MO_types : dict
+        Dictionary of molecular orbital types.
+    E_exc : float
+        Excitation energy (HOMO-LUMO gap).
+
+    Methods
+    -------
+    save_results(directory="results"):
+        Saves the results to a JSON file.
+    calc_MO(identifier, deviation=0):
+        Returns properties of the molecular orbital (MO).
+    """
+
     def __init__(self, base1, base2, identifier=None):
         self.base1 = base1
         self.base2 = base2
@@ -127,27 +247,65 @@ class BasePair:
         return f'BasePair({self.base1}, {self.base2}, identifier = "{self.identifier}")'
 
     def save_results(self, directory="results"):
-        dict = {
+        """
+        Save the calculation results to a JSON file.
+
+        Parameters
+        ----------
+        directory : str, optional
+            The directory where the results file will be saved. Default is "results".
+
+        Notes
+        -----
+        The results are saved in a JSON file named "results_<identifier>.json" where <identifier>
+        is a unique identifier for the calculation. The file contains the following keys:
+        - "E_HOMO": The energy of the highest occupied molecular orbital (HOMO), rounded to 4 decimal places.
+        - "E_LUMO": The energy of the lowest unoccupied molecular orbital (LUMO), rounded to 4 decimal places.
+        - "HOMO": The list of HOMO values.
+        - "LUMO": The list of LUMO values.
+        """
+
+        dictionary = {
             "E_HOMO": round(float(self.E_HOMO), 4),
             "E_LUMO": round(float(self.E_LUMO), 4),
             "HOMO": list(self.HOMO),
             "LUMO": list(self.LUMO),
-            "dipole_moment": round(float(self.dipole_moment), 4),
-            "oscillator_strength": round(float(self.calc_oscillator_strength), 4),
         }
 
         filename = "results_" + self.identifier + ".json"
         filepath = os.path.join(directory, filename)
 
-        with open(filepath, "w") as f:
-            json.dump(dict, f, indent=2)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(dictionary, f, indent=2)
         print("Results saved at" + filepath)
 
     def calc_MO(self, identifier, deviation=0):
-        """Returns properties of the MO.
-        Note: deviation indicates lower levels than the MO (lower levels for HOMO, higher levels for the LUMO).
+        """
+        Calculate the Molecular Orbital (MO) properties.
+
+        Parameters
+        ----------
+        identifier : str
+            The identifier for the MO to calculate. Should be either "HOMO" (Highest Occupied Molecular Orbital)
+            or "LUMO" (Lowest Unoccupied Molecular Orbital).
+        deviation : int, optional
+            The deviation from the HOMO or LUMO level to calculate. Default is 0.
+
+        Returns
+        -------
+        E_MO : float
+            The energy of the specified MO.
+        MO : numpy.ndarray
+            The molecular orbital eigenvector.
+        MO_occupation : numpy.ndarray
+            The occupation of the molecular orbital.
+        MO_type : str
+            The type of the molecular orbital.
+        MO_type_occupation : float
+            The occupation of the molecular orbital type.
         """
 
+        start = 0
         if identifier == "HOMO":
             start = -1 - deviation
         if identifier == "LUMO":

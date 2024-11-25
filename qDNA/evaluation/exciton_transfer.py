@@ -1,6 +1,5 @@
-"""
-This module provides functions to calculate the average exciton population for quantum DNA models.
-"""
+"""This module provides functions to calculate the average exciton population for
+quantum DNA models."""
 
 import multiprocessing
 from functools import partial
@@ -23,8 +22,7 @@ __all__ = [
 
 
 def calc_average_transfer(tb_sites, me_solver, average=True):
-    """
-    Calculates the average populations on the given TB sites in a given time period.
+    """Calculates the average populations on the given TB sites in a given time period.
 
     Parameters
     ----------
@@ -55,8 +53,7 @@ def calc_average_transfer(tb_sites, me_solver, average=True):
 
 
 def calc_backbone_transfer(upper_strand, tb_model_name, **kwargs):
-    """
-    Calculates the average population of the backbone sites in a given time period.
+    """Calculates the average population of the backbone sites in a given time period.
 
     Parameters
     ----------
@@ -89,8 +86,7 @@ def calc_backbone_transfer(upper_strand, tb_model_name, **kwargs):
 
 
 def calc_exciton_transfer(upper_strand, tb_model_name, average=True, **kwargs):
-    """
-    Calculates the average exciton population on the upper and lower strand.
+    """Calculates the average exciton population on the upper and lower strand.
 
     Parameters
     ----------
@@ -141,8 +137,7 @@ def calc_exciton_transfer(upper_strand, tb_model_name, average=True, **kwargs):
 def calc_backbone_transfer_wrapper(
     upper_strand, tb_model_name, lifetime_dict, **kwargs
 ):
-    """
-    Calculates the average backbone population on the upper and lower strand.
+    """Calculates the average backbone population on the upper and lower strand.
 
     Parameters
     ----------
@@ -165,8 +160,7 @@ def calc_backbone_transfer_wrapper(
 
 
 def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
-    """
-    Calculates the average exciton population on the upper and lower strand.
+    """Calculates the average exciton population on the upper and lower strand.
 
     Parameters
     ----------
@@ -189,8 +183,8 @@ def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **
 
 
 def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None):
-    """
-    Calculates the average exciton population for multiple upper strands using multiprocessing.
+    """Calculates the average exciton population for multiple upper strands using
+    multiprocessing.
 
     Parameters
     ----------
@@ -212,8 +206,8 @@ def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None)
             directory,
             load_metadata=True,
         )
-    except:
-        print("Could not load lifetime_dict")
+    except FileNotFoundError as e:
+        print(f"Could not load lifetime_dict: {e}")
 
     if not num_cpu:
         num_cpu = multiprocessing.cpu_count() - 1

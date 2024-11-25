@@ -1,7 +1,6 @@
-"""
-This module provides functions to calculate the frequency of DNA bases in a given set of DNA sequences
-and to plot the frequency of these bases against the exciton lifetime.
-"""
+"""This module provides functions to calculate the frequency of DNA bases in a given set
+of DNA sequences and to plot the frequency of these bases against the exciton
+lifetime."""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,8 +11,8 @@ from . import COLORS_DNA_BASES
 
 
 def dna_base_counter(dna_base, dna_dict):
-    """
-    Calculates the frequency of a specific DNA base in a given dictionary of DNA sequences.
+    """Calculates the frequency of a specific DNA base in a given dictionary of DNA
+    sequences.
 
     Parameters
     ----------
@@ -40,8 +39,7 @@ def dna_base_counter(dna_base, dna_dict):
 
 
 def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
-    """
-    Plots the frequency of A-T and G-C base pairs against the exciton lifetime.
+    """Plots the frequency of A-T and G-C base pairs against the exciton lifetime.
 
     Parameters
     ----------

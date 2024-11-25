@@ -1,6 +1,5 @@
-"""
-This module provides functions to calculate the estimated exciton lifetime for quantum DNA models.
-"""
+"""This module provides functions to calculate the estimated exciton lifetime for
+quantum DNA models."""
 
 import multiprocessing
 import time
@@ -18,8 +17,7 @@ __all__ = ["calc_lifetime", "calc_lifetime_dict"]
 
 
 def calc_lifetime(upper_strand, tb_model_name, **kwargs):
-    """
-    Calculates the exciton lifetime in femtoseconds (fs).
+    """Calculates the exciton lifetime in femtoseconds (fs).
 
     Parameters
     ----------
@@ -59,8 +57,7 @@ def calc_lifetime(upper_strand, tb_model_name, **kwargs):
 def calc_lifetime_dict(
     upper_strands, tb_model_name, filename, directory, num_cpu=None, **kwargs
 ):
-    """
-    Calculates the exciton lifetime for multiple upper strands using multiprocessing.
+    """Calculates the exciton lifetime for multiple upper strands using multiprocessing.
 
     Parameters
     ----------

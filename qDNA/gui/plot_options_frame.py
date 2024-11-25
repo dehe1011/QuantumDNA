@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 from ..evaluation import (
@@ -105,9 +107,7 @@ class PopFrame(ctk.CTkFrame):
         self.tb_site_combo.set("All")
 
     def get_pop_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
         pop_kwargs = {
             "init_tb_site": self.tb_site_combo.get(),
         }
@@ -129,9 +129,7 @@ class CohFrame(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
 
     def get_coh_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
         coh_kwargs = {}
         return coh_kwargs
 
@@ -181,9 +179,7 @@ class FourierFrame(ctk.CTkFrame):
         self.average_pop_check.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 
     def get_fourier_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
 
         if self.kwargs["description"] == "1P":
             if self.kwargs["particles"] == ["electron"]:
@@ -256,9 +252,7 @@ class PlotOptionsFrame(ctk.CTkFrame):
         self.submit_button.grid(row=3, column=1, pady=10, padx=10)
 
     def change_state(self, state):
-        """
-        Changes the state of certain widgets (between 'normal' and 'disabled').
-        """
+        """Changes the state of certain widgets (between 'normal' and 'disabled')."""
         change_state_all_widgets(self.plot_options_tab.pop_frame, state=state)
         change_state_all_widgets(self.plot_options_tab.coh_frame, state=state)
         change_state_all_widgets(self.plot_options_tab.fourier_frame, state=state)

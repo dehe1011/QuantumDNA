@@ -7,7 +7,26 @@ from .dimer import Dimer
 
 
 def calc_tb_energies_monomers(directory):
-    """Notes: all parameters are given in eV."""
+    """
+    Calculate the tight-binding energies for monomers in a given directory.
+    This function searches for XYZ files in the specified directory, loads the data,
+    and calculates the HOMO and LUMO energies for each monomer. The results are
+    returned as dictionaries.
+
+    Parameters
+    ----------
+    directory : str
+        The directory containing the XYZ files.
+
+    Returns
+    -------
+    HOMO_dict : dict
+        A dictionary where the keys are identifiers of the form 'E_<base_identifier>'
+        and the values are the HOMO energies in eV rounded to two decimal places.
+    LUMO_dict : dict
+        A dictionary where the keys are identifiers of the form 'E_<base_identifier>'
+        and the values are the LUMO energies in eV rounded to two decimal places.
+    """
 
     filenames = find_xyz_files(directory)  # e.g., ['A1', 'A2', 'T3', 'T4']
 
@@ -24,7 +43,31 @@ def calc_tb_energies_monomers(directory):
 
 
 def calc_tb_params_dimer(bases, tb_model_name, double_stranded=True):
-    """Notes: all parameters are given in meV."""
+    """
+    Calculate tight-binding (TB) parameters for a dimer in meV.
+
+    Parameters
+    ----------
+    bases : list
+        List of base objects representing the bases in the dimer.
+    tb_model_name : str
+        Name of the tight-binding model. Can be "WM", "LM", or "ELM".
+    double_stranded : bool, optional
+        Flag indicating whether the dimer is double-stranded (default is True).
+
+    Returns
+    -------
+    tuple
+        A tuple containing two dictionaries:
+        - HOMO_dict: Dictionary with HOMO (Highest Occupied Molecular Orbital) parameters.
+        - LUMO_dict: Dictionary with LUMO (Lowest Unoccupied Molecular Orbital) parameters.
+
+    Raises
+    ------
+    AssertionError
+        If `tb_model_name` is not "WM" for single-stranded mode.
+        If the length of `bases` is not 2 for single-stranded mode.
+    """
 
     HOMO_dict, LUMO_dict = {}, {}
 
@@ -89,7 +132,25 @@ def calc_tb_params_dimer(bases, tb_model_name, double_stranded=True):
 
 
 def calc_tb_params(directories, tb_model_name, double_stranded=True):
-    """Notes: all parameters are given in meV."""
+    """
+    Calculate tight-binding parameters in meV for a set of DNA base pairs.
+
+    Parameters
+    ----------
+    directories : list of str
+        List of directories containing the XYZ files for the DNA bases.
+    tb_model_name : str
+        Name of the tight-binding model to be used.
+    double_stranded : bool, optional
+        If True, consider the DNA as double-stranded. If False, consider it as single-stranded. Default is True.
+
+    Returns
+    -------
+    HOMO_dict : dict
+        Dictionary containing the Highest Occupied Molecular Orbital (HOMO) parameters for each dimer.
+    LUMO_dict : dict
+        Dictionary containing the Lowest Unoccupied Molecular Orbital (LUMO) parameters for each dimer.
+    """
 
     HOMO_dict, LUMO_dict = {}, {}
     for directory in directories:
@@ -101,6 +162,7 @@ def calc_tb_params(directories, tb_model_name, double_stranded=True):
             xyz_identifier, xyz_data = load_xyz(filename, directory)
             bases.append(Base(xyz_identifier, xyz_data))
 
+        dimers = None
         if not double_stranded:
             dimers = [[bases[i], bases[i + 1]] for i in range(num_bases - 1)]
 
@@ -114,6 +176,9 @@ def calc_tb_params(directories, tb_model_name, double_stranded=True):
                 ]
                 for i in range(num_bases // 2 - 1)
             ]
+        assert (
+            dimers is not None
+        ), "No dimers found. Check the input directories and files."
 
         for dimer in dimers:
             HOMO_dict_new, LUMO_dict_new = calc_tb_params_dimer(

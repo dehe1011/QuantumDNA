@@ -20,8 +20,7 @@ def set_matrix_element(
     old_state,
     basis,
 ):
-    """
-    Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.
+    """Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.
 
     Parameters
     ----------
@@ -62,8 +61,7 @@ def tb_ham_1P(
     tb_param_dict,
     tb_basis_sites_dict,
 ):
-    """
-    Constructs the particle tight-binding Hamiltonian matrix.
+    """Constructs the particle tight-binding Hamiltonian matrix.
 
     Parameters
     ----------
@@ -116,8 +114,7 @@ def tb_ham_2P(
     tb_param_dict_hole,
     tb_basis_sites_dict,
 ):
-    """
-    Constructs the electron-hole tight-binding Hamiltonian matrix.
+    """Constructs the electron-hole tight-binding Hamiltonian matrix.
 
     Parameters
     ----------
@@ -156,8 +153,7 @@ def tb_ham_2P(
 
 
 def add_groundstate(matrix):
-    """
-    Adds a dimension to the matrix to include the ground state.
+    """Adds a dimension to the matrix to include the ground state.
 
     Parameters
     ----------
@@ -184,8 +180,7 @@ def add_groundstate(matrix):
 
 
 def delete_groundstate(matrix):
-    """
-    Removes the ground state dimension from the matrix.
+    """Removes the ground state dimension from the matrix.
 
     Parameters
     ----------
@@ -213,8 +208,8 @@ def add_interaction(
     interaction_param,
     nn_cutoff=False,
 ):
-    """
-    Adds interaction terms to the Hamiltonian based on the distance between electron and hole.
+    """Adds interaction terms to the Hamiltonian based on the distance between electron
+    and hole.
 
     Parameters
     ----------

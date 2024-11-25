@@ -1,5 +1,5 @@
-"""
-This module provides functionality for representing and manipulating DNA sequences with optional methylation and backbone properties.
+"""This module provides functionality for representing and manipulating DNA sequences
+with optional methylation and backbone properties.
 
 Shortcuts:
 ----------
@@ -24,8 +24,8 @@ __all__ = ["DNA_Seq", "create_upper_strands"]
 
 
 class DNA_Seq:
-    """
-    A class to represent a DNA sequence and its properties based on a tight-binding model.
+    """A class to represent a DNA sequence and its properties based on a tight- binding
+    model.
 
     Parameters
     ----------
@@ -94,29 +94,22 @@ class DNA_Seq:
         self.dna_seq = self._create_dna_seq()
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the DNA_Seq instance.
-        """
+        """Returns a string representation of the DNA_Seq instance."""
         return f"DNA_Seq({self.upper_strand}, {self.tb_model_name}, methylated={self.methylated})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two DNA_Seq instances for equality.
-        """
+        """Compares two DNA_Seq instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------------
 
     def _create_dna_seq(self):
-        """
-        Create the DNA sequence based on the object's attributes.
-        This method generates the DNA sequence considering whether it is double-stranded,
+        """Create the DNA sequence based on the object's attributes. This method
+        generates the DNA sequence considering whether it is double- stranded,
         methylated, and/or has a backbone. It uses the `upper_strand` attribute as the
         primary sequence and generates the `lower_strand` if the DNA is double-stranded.
 
@@ -160,11 +153,11 @@ class DNA_Seq:
         return (self.upper_strand,)
 
     def _add_methylation(self):
-        """
-        Adds methylation to the lower DNA strand according to the fragile X syndrome.
-        This method searches for occurrences of the sequence "FG" in the upper DNA strand.
-        For each occurrence, it modifies the corresponding position in the lower DNA strand
-        by changing the character following the match to "F".
+        """Adds methylation to the lower DNA strand according to the fragile X syndrome.
+
+        This method searches for occurrences of the sequence "FG" in the upper DNA
+        strand. For each occurrence, it modifies the corresponding position in the lower
+        DNA strand by changing the character following the match to "F".
         """
         # Find all occurrences of "cG" in the upper DNA strand
         matches = [match.start() for match in re.finditer("FG", self.upper_strand)]
@@ -177,8 +170,8 @@ class DNA_Seq:
 
 
 def create_upper_strands(num_dna_bases, dna_bases):
-    """
-    Generate all possible upper DNA strands of a given length using specified DNA bases.
+    """Generate all possible upper DNA strands of a given length using specified DNA
+    bases.
 
     Parameters
     ----------
@@ -198,13 +191,15 @@ def create_upper_strands(num_dna_bases, dna_bases):
         If any element of `dna_bases` is not in the configured DNA bases.
     """
 
-    # Check that the DNA bases are valid
+    # Ensure that all provided DNA bases are valid
     assert all(
-        [dna_base in DNA_BASES for dna_base in dna_bases]
+        dna_base in DNA_BASES for dna_base in dna_bases
     ), f"Elements of dna_bases must be in {DNA_BASES}"
 
-    # Generate all possible upper DNA strands
-    return list(
+    # Generate all possible upper DNA strands of the specified length
+    upper_strands = [
         "".join(upper_strand)
         for upper_strand in product(dna_bases, repeat=num_dna_bases)
-    )
+    ]
+
+    return upper_strands

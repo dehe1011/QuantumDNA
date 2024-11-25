@@ -1,6 +1,7 @@
-"""
-This module provides utility functions for analyzing density matrices.
-The functions include calculations for trace distance, purity, coherence, and inverse participation ratio (IPR).
+"""This module provides utility functions for analyzing density matrices.
+
+The functions include calculations for trace distance, purity, coherence, and inverse
+participation ratio (IPR).
 """
 
 import numpy as np
@@ -11,11 +12,10 @@ __all__ = ["calc_trace_distance", "calc_purity", "calc_coherence", "calc_ipr_dm"
 
 
 def calc_trace_distance(dm_1, dm_2):
-    """
-    Calculate the trace distance between two density matrices.
-    The trace distance is a measure of the distinguishability between two quantum states
-    represented by their density matrices. It is defined as half the trace of the absolute
-    difference between the two density matrices.
+    """Calculate the trace distance between two density matrices. The trace distance is
+    a measure of the distinguishability between two quantum states represented by their
+    density matrices. It is defined as half the trace of the absolute difference between
+    the two density matrices.
 
     Parameters
     ----------
@@ -46,8 +46,7 @@ def calc_trace_distance(dm_1, dm_2):
 
 
 def calc_purity(dm):
-    """
-    Calculates the purity of a density matrix.
+    """Calculates the purity of a density matrix.
 
     Parameters
     ----------
@@ -64,8 +63,7 @@ def calc_purity(dm):
 
 
 def calc_coherence(dm):
-    """
-    Calculates the coherence (absolute sum of the off-diagonals) of a density matrix.
+    """Calculates the coherence (absolute sum of the off-diagonals) of a density matrix.
 
     Parameters
     ----------
@@ -83,8 +81,7 @@ def calc_coherence(dm):
 
 
 def calc_ipr_dm(dm):
-    r"""
-    Calculate the inverse participation ratio (IPR) of a density matrix.
+    r"""Calculate the inverse participation ratio (IPR) of a density matrix.
 
     Parameters
     ----------
@@ -109,7 +106,6 @@ def calc_ipr_dm(dm):
         - Localized state: :math:`IPR = 1/N`, where `N` is the dimension of the density matrix.
         - Delocalized (coherent) state: :math:`IPR = N`, indicating full coherence.
         - Maximally mixed state: :math:`IPR = 1`, representing maximal mixing.
-
     """
 
     dims = dm.shape[0]

@@ -1,9 +1,11 @@
 black
-pytest
-pylint
+build
 coverage
 coveralls
+docformatter
+mypy
 pre-commit
-build
-wheel
+pylint
+pytest
 twine
+wheel

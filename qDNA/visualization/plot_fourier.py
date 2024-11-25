@@ -1,6 +1,5 @@
-"""
-This module provides functions to plot the Fourier transform and the average population for quantum DNA models.
-"""
+"""This module provides functions to plot the Fourier transform and the average
+population for quantum DNA models."""
 
 import numpy as np
 
@@ -18,8 +17,7 @@ __all__ = [
 
 
 def plot_fourier(ax, tb_ham, init_state, end_state, x_axis):
-    """
-    Plots the Fourier transform of the transition amplitudes.
+    """Plots the Fourier transform of the transition amplitudes.
 
     Parameters
     ----------
@@ -86,8 +84,7 @@ def plot_fourier(ax, tb_ham, init_state, end_state, x_axis):
 
 
 def get_cumulative_average_pop(tb_ham, J_list):
-    """
-    Computes the cumulative average population.
+    """Computes the cumulative average population.
 
     Parameters
     ----------
@@ -141,8 +138,7 @@ def get_cumulative_average_pop(tb_ham, J_list):
 
 
 def get_frame_average_pop(ax, dna_seq, J_list, J_unit):
-    """
-    Sets up the frame for the average population plot.
+    """Sets up the frame for the average population plot.
 
     Parameters
     ----------
@@ -177,8 +173,7 @@ def get_frame_average_pop(ax, dna_seq, J_list, J_unit):
 
 
 def plot_average_pop(ax, tb_ham, J_list, J_unit):
-    """
-    Plots the average population for each interaction parameter.
+    """Plots the average population for each interaction parameter.
 
     Parameters
     ----------

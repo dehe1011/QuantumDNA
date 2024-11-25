@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 # --------------------------------------------------
@@ -45,9 +47,7 @@ class InitialFrame(ctk.CTkFrame):
         self.first_confirm_button.grid(row=5, column=0, pady=10, padx=10)
 
     def change_state(self, state):
-        """
-        Changes the state of certain widgets (between 'normal' and 'disabled').
-        """
+        """Changes the state of certain widgets (between 'normal' and 'disabled')."""
         self.upper_strand_entry.configure(state=state)
         self.tb_model_combo.configure(state=state)
         self.first_confirm_button.configure(state=state)

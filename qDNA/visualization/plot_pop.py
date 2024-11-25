@@ -1,6 +1,5 @@
-"""
-This module provides functions to plot population and coherence for quantum DNA models.
-"""
+"""This module provides functions to plot population and coherence for quantum DNA
+models."""
 
 import matplotlib.pyplot as plt
 
@@ -13,8 +12,7 @@ __all__ = ["plot_pop_fourier", "plot_pop", "plot_pops", "plot_coh", "plot_test_f
 
 
 def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
-    """
-    Plots population using the Fourier decomposition.
+    """Plots population using the Fourier decomposition.
 
     Parameters
     ----------
@@ -59,8 +57,7 @@ def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
 
 
 def plot_pop(ax, tb_site, me_solver, add_legend=True):
-    """
-    Plots population of one base.
+    """Plots population of one base.
 
     Parameters
     ----------
@@ -110,8 +107,7 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
 
 
 def plot_pops(me_solver):
-    """
-    Plots populations of all bases.
+    """Plots populations of all bases.
 
     Parameters
     ----------
@@ -145,8 +141,8 @@ def plot_pops(me_solver):
 
 
 def plot_coh(ax, me_solver):
-    """
-    Plots a measure of coherence as the sum of absolute values of the off-diagonal elements.
+    """Plots a measure of coherence as the sum of absolute values of the off- diagonal
+    elements.
 
     Parameters
     ----------
@@ -182,8 +178,8 @@ def plot_coh(ax, me_solver):
 
 
 def plot_test_fourier(ax, tb_site, me_solver):
-    """
-    Plots a comparison of the result obtained by Fourier decomposition and the result obtained solving the Schrödinger equation with the qutip mesolver.
+    """Plots a comparison of the result obtained by Fourier decomposition and the result
+    obtained solving the Schrödinger equation with the qutip mesolver.
 
     Parameters
     ----------

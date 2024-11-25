@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 # --------------------------------------------------
@@ -79,9 +81,7 @@ class HamFrame(ctk.CTkFrame):
         self.ham_nn_cutoff_check.grid(row=13, column=0, padx=10, pady=10, columnspan=2)
 
     def get_ham_kwargs(self):
-        """
-        Returns the values of widgets with get() method in dictionary format.
-        """
+        """Returns the values of widgets with get() method in dictionary format."""
 
         ham_kwargs = {
             "source": self.ham_source_combo.get(),

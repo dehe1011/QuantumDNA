@@ -9,8 +9,8 @@ from .observables import get_pop_particle
 
 
 def get_loc_deph_ops(tb_basis, dephasing_rate, relaxation):
-    """
-    Local dephasing operators. In total :math:`2N` operators (where :math:`N` is the number of tight-binding sites).
+    """Local dephasing operators. In total :math:`2N` operators (where :math:`N` is the
+    number of tight-binding sites).
 
     Parameters
     ----------
@@ -40,8 +40,8 @@ def get_loc_deph_ops(tb_basis, dephasing_rate, relaxation):
 
 
 def get_glob_deph_ops(eigs, dephasing_rate, relaxation):
-    """
-    Global dephasing operators. In total :math:`N^2` operators (where :math:`N` is the number of eigenstates).
+    """Global dephasing operators. In total :math:`N^2` operators (where :math:`N` is
+    the number of eigenstates).
 
     Parameters
     ----------
@@ -70,8 +70,8 @@ def get_glob_deph_ops(eigs, dephasing_rate, relaxation):
 
 
 def get_loc_deph_p_ops(tb_basis, dephasing_rate):
-    """
-    Local dephasing operators for particle description. In total :math:`N` operators (where :math:`N` is the number of tight-binding sites).
+    """Local dephasing operators for particle description. In total :math:`N` operators
+    (where :math:`N` is the number of tight-binding sites).
 
     Parameters
     ----------
@@ -95,8 +95,8 @@ def get_loc_deph_p_ops(tb_basis, dephasing_rate):
 
 
 def get_glob_deph_p_ops(eigs, dephasing_rate):
-    """
-    Global dephasing operators for particle description. In total :math:`N` operators (where :math:`N` is the number of eigenstates).
+    """Global dephasing operators for particle description. In total :math:`N` operators
+    (where :math:`N` is the number of eigenstates).
 
     Parameters
     ----------

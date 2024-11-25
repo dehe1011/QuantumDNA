@@ -1,7 +1,8 @@
-"""
-This module provides the implementation of a tight-binding Hamiltonian for DNA sequences.
-It includes the `TB_Ham` class, which represents the Hamiltonian and provides methods for its construction, manipulation, and analysis.
-The module also includes several utility functions for setting matrix elements, constructing Hamiltonian matrices for single and two-particle systems, and adding interaction terms.
+"""This module provides the implementation of a tight-binding Hamiltonian for DNA
+sequences. It includes the `TB_Ham` class, which represents the Hamiltonian and provides
+methods for its construction, manipulation, and analysis. The module also includes
+several utility functions for setting matrix elements, constructing Hamiltonian matrices
+for single and two-particle systems, and adding interaction terms.
 
 Shortcuts
 ---------
@@ -10,7 +11,6 @@ Shortcuts
 - ham: hamiltonian
 - param: parameter
 - dim: dimension
-
 """
 
 from itertools import chain
@@ -45,8 +45,7 @@ __all__ = ["TB_Ham"]
 
 
 class TB_Ham:
-    """
-    A class used to represent the tight-binding Hamiltonian for DNA sequences.
+    """A class used to represent the tight-binding Hamiltonian for DNA sequences.
 
     Parameters
     ----------
@@ -156,45 +155,39 @@ class TB_Ham:
 
         self.matrix = self.get_matrix()
         self.matrix_dim = self.matrix.shape[0]
-        self.backbone = True if self.tb_model.num_strands in (3, 4) else False
+        self.backbone = self.tb_model.num_strands in (3, 4)
 
         if self.verbose:
             print("Successfully initialized the TB_Ham instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the TB_Ham instance.
-        """
+        """Returns a string representation of the TB_Ham instance."""
         return f"TB_Ham({self.dna_seq}, {self.ham_kwargs})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two TB_Ham instances for equality.
-        """
+        """Compares two TB_Ham instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------------
 
     @property
-    def particles(self):
+    def particles(self):  # pylint: disable=missing-function-docstring
         return self._particles
 
     @particles.setter
     def particles(self, new_particles):
         assert isinstance(new_particles, list), "new_particles must be of type list"
         assert all(
-            [isinstance(new_particle, str) for new_particle in new_particles]
+            isinstance(new_particle, str) for new_particle in new_particles
         ), "elements of new_particles must be of type str"
         self._particles = new_particles
 
     @property
-    def interaction_param(self):
+    def interaction_param(self):  # pylint: disable=missing-function-docstring
         return self._interaction_param
 
     @interaction_param.setter
@@ -210,7 +203,7 @@ class TB_Ham:
             self.matrix = self.get_matrix()
 
     @property
-    def relaxation(self):
+    def relaxation(self):  # pylint: disable=missing-function-docstring
         return self._relaxation
 
     @relaxation.setter
@@ -230,7 +223,7 @@ class TB_Ham:
             self.matrix_dim = self.matrix.shape[0]
 
     @property
-    def nn_cutoff(self):
+    def nn_cutoff(self):  # pylint: disable=missing-function-docstring
         return self._nn_cutoff
 
     @nn_cutoff.setter
@@ -243,7 +236,7 @@ class TB_Ham:
             self.matrix = self.get_matrix()
 
     @property
-    def unit(self):
+    def unit(self):  # pylint: disable=missing-function-docstring
         return self._unit
 
     @unit.setter
@@ -259,7 +252,7 @@ class TB_Ham:
             self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
 
     @property
-    def source(self):
+    def source(self):  # pylint: disable=missing-function-docstring
         return self._source
 
     @source.setter
@@ -277,11 +270,10 @@ class TB_Ham:
     # ---------------------------------------------------------------
 
     def get_param_dicts(self):
-        """
-        Retrieves the tight-binding parameters for electrons and holes.
-        This method loads the tight-binding parameters for both electrons and holes
-        from the specified source and model name. If the unit of the loaded parameters
-        does not match the expected unit, it converts the parameters to the expected unit.
+        """Retrieves the tight-binding parameters for electrons and holes. This method
+        loads the tight-binding parameters for both electrons and holes from the
+        specified source and model name. If the unit of the loaded parameters does not
+        match the expected unit, it converts the parameters to the expected unit.
 
         Returns
         -------
@@ -314,12 +306,10 @@ class TB_Ham:
         return tb_params_electron, tb_params_hole
 
     def get_eigensystem(self):
-        """
-        Compute the eigenvalues and eigenvectors of the matrix.
-        This method computes the eigenvalues and eigenvectors of the matrix
-        associated with the instance. If the description is "2P" and relaxation
-        is enabled, the ground state is deleted from the matrix before computing
-        the eigensystem.
+        """Compute the eigenvalues and eigenvectors of the matrix. This method computes
+        the eigenvalues and eigenvectors of the matrix associated with the instance. If
+        the description is "2P" and relaxation is enabled, the ground state is deleted
+        from the matrix before computing the eigensystem.
 
         Returns
         -------
@@ -341,8 +331,8 @@ class TB_Ham:
         return np.linalg.eigh(matrix)
 
     def get_matrix(self):
-        """
-        Generate the tight-binding Hamiltonian matrix based on the system description.
+        """Generate the tight-binding Hamiltonian matrix based on the system
+        description.
 
         Returns
         -------
@@ -400,8 +390,8 @@ class TB_Ham:
         return matrix
 
     def get_fourier(self, init_state, end_state, quantities):
-        """
-        Calculate the Fourier components of the transition between initial and end states.
+        """Calculate the Fourier components of the transition between initial and end
+        states.
 
         Parameters
         ----------
@@ -503,18 +493,24 @@ class TB_Ham:
                     )
         return amplitudes_dict, frequencies_dict, average_pop_dict
 
-    def get_amplitudes(self, init_state, end_state):
+    def get_amplitudes(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["amplitude"])[0]
 
-    def get_frequencies(self, init_state, end_state):
+    def get_frequencies(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["frequency"])[1]
 
-    def get_average_pop(self, init_state, end_state):
+    def get_average_pop(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["average_pop"])[2]
 
     def get_backbone_pop(self, init_state):
-        """
-        Calculate the population of particles on the backbone sites of a Fishbone model.
+        """Calculate the population of particles on the backbone sites of a Fishbone
+        model.
 
         Parameters
         ----------

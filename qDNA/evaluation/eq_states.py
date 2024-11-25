@@ -1,6 +1,5 @@
-"""
-This module provides functions to compute equilibrium states for quantum DNA models.
-"""
+"""This module provides functions to compute equilibrium states for quantum DNA
+models."""
 
 import numpy as np
 import scipy.constants as c
@@ -15,8 +14,7 @@ __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
 
 def get_therm_eq_state(me_solver):
-    """
-    Calculate the thermal equilibrium state.
+    """Calculate the thermal equilibrium state.
 
     Parameters
     ----------
@@ -62,8 +60,7 @@ def get_therm_eq_state(me_solver):
 
 
 def get_deph_eq_state(me_solver):
-    """
-    Calculate the dephasing equilibrium state.
+    """Calculate the dephasing equilibrium state.
 
     Parameters
     ----------
@@ -75,6 +72,7 @@ def get_deph_eq_state(me_solver):
     numpy.ndarray
         The dephasing equilibrium state as a density matrix.
     """
+    deph_eq_state = None
 
     # Local dephasing
     if me_solver.lindblad_diss.loc_deph_rate:
@@ -82,7 +80,7 @@ def get_deph_eq_state(me_solver):
         dim = me_solver.tb_ham.matrix_dim
         if me_solver.tb_ham.relaxation:
             dim -= 1
-        return np.eye(dim) / dim
+        deph_eq_state = np.eye(dim) / dim
 
     # Global dephasing
     if me_solver.lindblad_diss.glob_deph_rate:
@@ -95,4 +93,7 @@ def get_deph_eq_state(me_solver):
         # cancel all off-diagonal elements
         glob_init_matrix = np.diag(np.diag(glob_init_matrix))
         loc_init_matrix = global_to_local(glob_init_matrix, eigs)
-        return loc_init_matrix
+        deph_eq_state = loc_init_matrix
+
+    assert deph_eq_state is not None, "Dephasing equilibrium state not calculated."
+    return deph_eq_state

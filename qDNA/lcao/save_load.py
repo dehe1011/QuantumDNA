@@ -5,24 +5,31 @@ import pandas as pd
 
 from .. import DATA_DIR, DEFAULTS
 
-__all__ = ["load_xyz", "convert_pdb_to_xyz", "convert_json_to_xyz"]
+__all__ = [
+    "load_xyz",
+    "PARAMETRIZATION",
+    "find_xyz_files",
+    "lcao_load_json",
+    "convert_json_to_xyz",
+    "convert_pdb_to_xyz",
+]
 
 # ----------------------------- JSON -----------------------------
 
 
-def load_json(filepath):
+def lcao_load_json(filepath):
     """Loads a JSON file."""
     try:
-        with open(filepath, "r") as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return data
     except FileNotFoundError:
         message = f"File {filepath} does not exist."
         if DEFAULTS["verbose"]:
             print(message)
+    return data
 
 
-PARAMETRIZATION = load_json(
+PARAMETRIZATION = lcao_load_json(
     os.path.join(
         DATA_DIR,
         "raw",
@@ -35,23 +42,63 @@ PARAMETRIZATION = load_json(
 
 
 def find_xyz_files(directory):
-    """List all .xyz files in the given directory."""
+    """
+    Find all .xyz files in the given directory.
+    Parameters
+    ----------
+    directory : str
+        The path to the directory where .xyz files are to be searched.
+    Returns
+    -------
+    list of str
+        A list of filenames (without extensions) of all .xyz files found in the directory.
+    Raises
+    ------
+    Exception
+        If an error occurs while accessing the directory or reading its contents.
+    """
+
     try:
         files = os.listdir(directory)
         xyz_files = [
             os.path.splitext(file)[0] for file in files if file.endswith(".xyz")
         ]
-        return xyz_files
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    except FileNotFoundError as e:
+        print(f"File not found: {e}")
+    return xyz_files
 
 
 def load_xyz(filename, directory=os.path.join(DATA_DIR, "geometries")):
-    """Loads a XYZ file."""
+    """
+    Load atomic coordinates from an XYZ file.
+
+    Parameters
+    ----------
+    filename : str
+        The name of the XYZ file (without the .xyz extension).
+    directory : str, optional
+        The directory where the XYZ file is located. Default is a subdirectory "geometries" within DATA_DIR.
+
+    Returns
+    -------
+    tuple
+        A tuple containing:
+        - xyz_identifier : str
+            The identifier from the second line of the XYZ file.
+        - xyz_data : pandas.DataFrame
+            A DataFrame containing the atomic coordinates with columns ["Atom", "X", "Y", "Z"].
+
+    Notes
+    -----
+    The XYZ file is expected to have the following format:
+    - The first line contains the number of atoms (ignored).
+    - The second line contains a comment or identifier.
+    - Subsequent lines contain atomic coordinates in the format: Atom X Y Z.
+    """
 
     filepath = os.path.join(directory, filename + ".xyz")
 
-    with open(filepath, "r") as file:
+    with open(filepath, "r", encoding="utf-8") as file:
         # Skip the first line (number of atoms) and second line (comment)
         lines = file.readlines()
 
@@ -66,7 +113,25 @@ def load_xyz(filename, directory=os.path.join(DATA_DIR, "geometries")):
 
 
 def convert_pdb_to_xyz(filepath_pdb):
-    """Split a PDB file into multiple XYZ files based on unique bases."""
+    """
+    Converts a PDB file to multiple XYZ files, one for each base.
+
+    Parameters
+    ----------
+    filepath_pdb : str
+        The path to the input PDB file.
+
+    Notes
+    -----
+    - The function creates a directory named after the input PDB file (without extension)
+      to store the generated XYZ files.
+    - Each base in the PDB file is written to a separate XYZ file.
+    - If the chain identifier changes, the base numbering is adjusted to continue from
+      the previous chain's last base number.
+    - The function assumes that the base counter starts from one if the chain changes.
+    - The function prints the directory where the XYZ files are created if the verbose
+      mode is enabled in the DEFAULTS dictionary.
+    """
 
     # Extract the filename without extension to create a folder
     filename = os.path.splitext(os.path.basename(filepath_pdb))[0]
@@ -82,7 +147,11 @@ def convert_pdb_to_xyz(filepath_pdb):
     current_base_number = 0
 
     # Read the PDB file
-    with open(filepath_pdb, "r") as file:
+    lower_strand = False
+    start_from_one = False
+    num_bases_per_strand = 0
+
+    with open(filepath_pdb, "r", encoding="utf-8") as file:
         for line in file:
             if line.startswith("ATOM") or line.startswith("HETATM"):
                 # Parse element symbol and coordinates
@@ -133,7 +202,24 @@ def convert_pdb_to_xyz(filepath_pdb):
 
 
 def write_xyz_file(output_dir, base_identifier, elements, coordinates):
-    """Write a single .xyz file for a specific base."""
+    """
+    Write atomic coordinates to an XYZ file.
+
+    Parameters
+    ----------
+    output_dir : str
+        The directory where the XYZ file will be saved.
+    base_identifier : str
+        The base name for the XYZ file.
+    elements : list of str
+        A list of atomic element symbols.
+    coordinates : list of tuple of float
+        A list of tuples, each containing the x, y, and z coordinates of an atom.
+
+    Returns
+    -------
+    None
+    """
 
     filepath_xyz = os.path.join(output_dir, f"{base_identifier}.xyz")
     num_atoms = len(elements)
@@ -144,18 +230,48 @@ def write_xyz_file(output_dir, base_identifier, elements, coordinates):
         xyz_content += f"{element} {x:.4f} {y:.4f} {z:.4f}\n"
 
     # Write the content to the file
-    with open(filepath_xyz, "w") as file:
+    with open(filepath_xyz, "w", encoding="utf-8") as file:
         file.write(xyz_content)
 
 
 def convert_json_to_xyz(filename, directory):
-    """Converts a JSON file from Pubchem https://pubchem.ncbi.nlm.nih.gov/ to an XYZ file."""
+    """
+    Converts a JSON file to an XYZ file, e.g., from Pubchem https://pubchem.ncbi.nlm.nih.gov/.
+
+    Parameters
+    ----------
+    filename : str
+        The name of the JSON file (without extension) to be converted.
+    directory : str
+        The directory where the JSON file is located and where the XYZ file will be saved.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the JSON file does not exist in the specified directory.
+    KeyError
+        If the expected keys are not found in the JSON file.
+    ValueError
+        If the JSON file contains invalid data.
+
+    Notes
+    -----
+    The JSON file is expected to follow a specific structure with atomic data under
+    "PC_Compounds" -> "atoms" and coordinates under "coords" -> "conformers".
+    The atomic symbols are mapped from atomic numbers using a predefined dictionary.
+    The JSON file is removed after conversion.
+
+    Examples
+    --------
+    >>> convert_json_to_xyz("molecule", "/path/to/directory")
+    File successfully converted and saved at /path/to/directory/molecule.xyz
+    """
 
     # Input file path
     filepath_json = os.path.join(directory, filename + ".json")
 
     # Read the JSON file
-    json_file = load_json(filepath_json)
+    json_file = lcao_load_json(filepath_json)
 
     num_atoms = len(json_file["PC_Compounds"][0]["atoms"]["aid"])
     elements = json_file["PC_Compounds"][0]["atoms"]["element"]
@@ -183,7 +299,7 @@ def convert_json_to_xyz(filename, directory):
     filepath_xyz = os.path.join(directory, filename + ".xyz")
 
     # Write the XYZ file
-    with open(filepath_xyz, "w") as file:
+    with open(filepath_xyz, "w", encoding="utf-8") as file:
         file.write(xyz_content)
 
     if DEFAULTS["verbose"]:

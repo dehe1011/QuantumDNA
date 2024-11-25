@@ -9,6 +9,47 @@ from .slater_koster import calc_orbital_overlap
 
 
 class Dimer:
+    """
+    A class to represent a dimer consisting of two molecules.
+
+    Parameters
+    ----------
+    molecule1 : Molecule
+        The first molecule in the dimer.
+    molecule2 : Molecule
+        The second molecule in the dimer.
+    identifier : str, optional
+        An identifier for the dimer. If not provided, it is generated from the identifiers of the two molecules.
+
+    Attributes
+    ----------
+    molecule1 : Molecule
+        The first molecule in the dimer.
+    molecule2 : Molecule
+        The second molecule in the dimer.
+    identifier : str, optional
+        An identifier for the dimer. If not provided, it is generated from the identifiers of the two molecules.
+    H_int : numpy.ndarray
+        The interaction Hamiltonian matrix between the two molecules.
+    t_HOMO : float
+        The hopping parameter for the highest occupied molecular orbital (HOMO).
+    t_HOMO_1 : float
+        The hopping parameter for the first HOMO-1.
+    t_HOMO_2 : float
+        The hopping parameter for the second HOMO-2.
+    t_LUMO : float
+        The hopping parameter for the lowest unoccupied molecular orbital (LUMO).
+    t_LUMO_1 : float
+        The hopping parameter for the first LUMO-1.
+    t_LUMO_2 : float
+        The hopping parameter for the second LUMO-2.
+
+    Methods
+    -------
+    save_results(directory="results"):
+        Saves the results of the calculation to a JSON file.
+    """
+
     def __init__(self, molecule1, molecule2, identifier=None):
         self.molecule1 = molecule1
         self.molecule2 = molecule2
@@ -33,7 +74,21 @@ class Dimer:
         return f'BasePair({self.molecule1}, {self.molecule2}, identifier = "{self.identifier}")'
 
     def save_results(self, directory="results"):
-        dict = {
+        """
+        Save the results of the calculation to a JSON file.
+
+        Parameters
+        ----------
+        directory : str, optional
+            The directory where the results file will be saved (default is "results").
+
+        Notes
+        -----
+        The results include the HOMO and LUMO energies of two molecules and their coupling terms.
+        The results are saved in a JSON file named after the identifier of the object.
+        """
+
+        dictionary = {
             "E1_HOMO": round(float(self.molecule1.E_HOMO), 4),
             "E2_HOMO": round(float(self.molecule2.E_HOMO), 4),
             "t_HOMO": round(float(self.t_HOMO), 4),
@@ -45,8 +100,8 @@ class Dimer:
         filename = self.identifier + ".json"
         filepath = os.path.join(directory, filename)
 
-        with open(filepath, "w") as f:
-            json.dump(dict, f, indent=2)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(dictionary, f, indent=2)
         print("Results saved at" + filepath)
 
     def _calc_H_int(self):

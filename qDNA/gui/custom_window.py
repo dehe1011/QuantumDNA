@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 from ..hamiltonian import wrap_save_tb_params
@@ -83,9 +85,7 @@ class CustomWindow(ctk.CTkToplevel):
         )
 
     def get_custom_frame_params(self):
-        """
-        Makes all parameters of custom_frame available in this window.
-        """
+        """Makes all parameters of custom_frame available in this window."""
         self.tb_param_dict = self.custom_frame.tb_params_entry.get()
         self.source = self.custom_frame.source_entry.get()
         self.particle = self.custom_frame.particle_combobox.get()
@@ -94,9 +94,7 @@ class CustomWindow(ctk.CTkToplevel):
         self.methylated = self.custom_frame.methylation_checkbox.get()
 
     def save(self):
-        """
-        Saves the tight-binding parameters and closes the window.
-        """
+        """Saves the tight-binding parameters and closes the window."""
         self.get_custom_frame_params()
         notes = f"methlation {self.methylated}"
         wrap_save_tb_params(
@@ -110,7 +108,5 @@ class CustomWindow(ctk.CTkToplevel):
         self.destroy()
 
     def cancel(self):
-        """
-        Closes the window.
-        """
+        """Closes the window."""
         self.destroy()

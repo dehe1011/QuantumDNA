@@ -1,16 +1,15 @@
-"""
-This module provides functions to validate keyword arguments for various configurations
-related to Hamiltonian, dissipation parameters, and other miscellaneous parameters.
-"""
+"""This module provides functions to validate keyword arguments for various
+configurations related to Hamiltonian, dissipation parameters, and other miscellaneous
+parameters."""
 
-from . import CONFIG, DEFAULTS
+from . import CONFIG
 
 # --------------------------------------------------
 
 
 def check_ham_kwargs(**ham_kwargs):
-    """
-    Validates the keyword arguments for Hamiltonian configuration.
+    """Validates the keyword arguments for Hamiltonian configuration.
+
     Parameters
     ----------
     **ham_kwargs : dict
@@ -59,7 +58,7 @@ def check_ham_kwargs(**ham_kwargs):
 
     # check values
     assert all(
-        [particle in CONFIG["PARTICLES"] for particle in kwargs["particles"]]
+        particle in CONFIG["PARTICLES"] for particle in kwargs["particles"]
     ), f"all particles must be in {CONFIG['PARTICLES']}"
     if kwargs["description"] == "1P":
         assert kwargs["particles"] in [
@@ -79,8 +78,8 @@ def check_ham_kwargs(**ham_kwargs):
 
 
 def check_diss_kwargs(**diss_kwargs):
-    """
-    Validates the keyword arguments for dissipation parameters.
+    """Validates the keyword arguments for dissipation parameters.
+
     Parameters
     ----------
     **diss_kwargs : dict
@@ -136,7 +135,7 @@ def check_diss_kwargs(**diss_kwargs):
     bool_keys = ["loc_therm", "glob_therm", "uniform_relaxation"]
     for key in bool_keys:
         assert isinstance(kwargs.get(key), bool), f"{key} must be of type bool"
-    assert isinstance(kwargs["relax_rates"], dict), f"relax_rates must be of form dict"
+    assert isinstance(kwargs["relax_rates"], dict), "relax_rates must be of form dict"
 
     # check values
     assert (
@@ -154,8 +153,9 @@ def check_diss_kwargs(**diss_kwargs):
 
 
 def check_me_kwargs(**me_kwargs):
-    """
-    Validates the keyword arguments provided to ensure they meet the required criteria.
+    """Validates the keyword arguments provided to ensure they meet the required
+    criteria.
+
     Parameters
     ----------
     **me_kwargs : dict

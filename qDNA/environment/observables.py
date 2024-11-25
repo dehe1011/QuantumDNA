@@ -1,7 +1,9 @@
-"""
-This module provides functions to calculate various observables.
-It includes utilities to construct observables for different particle types (electrons, holes, and excitons) as transitions between states in a given basis,
-especially their populations and coherences. The observables are represented in a specified basis of tight-binding site states.
+"""This module provides functions to calculate various observables.
+
+It includes utilities to construct observables for different particle types (electrons,
+holes, and excitons) as transitions between states in a given basis, especially their
+populations and coherences. The observables are represented in a specified basis of
+tight-binding site states.
 """
 
 import numpy as np
@@ -17,8 +19,8 @@ __all__ = [
 
 
 def get_observable(basis, start_state, end_state):
-    """
-    Creates a matrix element for the transition between a given start and end state in the provided basis.
+    """Creates a matrix element for the transition between a given start and end state
+    in the provided basis.
 
     Parameters
     ----------
@@ -57,8 +59,8 @@ def get_observable(basis, start_state, end_state):
 
 
 def get_tb_observable(tb_basis, start_state, end_state):
-    """
-    Wrapper function of get_observable. Creates a matrix element for the transition between a given start and end state in the provided basis.
+    """Wrapper function of get_observable. Creates a matrix element for the transition
+    between a given start and end state in the provided basis.
 
     Parameters
     ----------
@@ -86,8 +88,7 @@ def get_tb_observable(tb_basis, start_state, end_state):
 
 
 def get_eh_observable(tb_basis, particle, start_state, end_state):
-    """
-    Creates a electron-hole matrix element for the given particle type.
+    """Creates a electron-hole matrix element for the given particle type.
 
     Parameters
     ----------
@@ -119,6 +120,7 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
            [0., 0., 0., 0.]])
     """
     num_sites = len(tb_basis)
+    eh_observable = None
 
     # Create the electron observable
     if particle == "electron":
@@ -142,8 +144,7 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
 
 
 def get_pop_particle(tb_basis, particle, state):
-    """
-    Creates the population observable for a specific particle and state.
+    """Creates the population observable for a specific particle and state.
 
     Parameters
     ----------
@@ -172,8 +173,7 @@ def get_pop_particle(tb_basis, particle, state):
 
 
 def get_coh_particle(tb_basis, particle, state1, state2):
-    """
-    Creates the coherence observable for a specific particle and pair of states.
+    """Creates the coherence observable for a specific particle and pair of states.
 
     Parameters
     ----------

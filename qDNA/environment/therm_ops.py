@@ -1,6 +1,5 @@
-import numpy as np
-import scipy.constants as c
 from itertools import permutations, product
+import numpy as np
 import qutip as q
 
 from ..model import global_to_local
@@ -11,8 +10,7 @@ from .therm_rates import rate_constant_redfield
 
 
 def get_glob_therm_op(eigs, eigenstate_i, eigenstate_j, relaxation, matrix_dim):
-    """
-    Global thermalizing operator.
+    """Global thermalizing operator.
 
     Parameters
     ----------
@@ -52,8 +50,7 @@ def get_glob_therm_ops(
     spectral_density="debye",
     exponent=1,
 ):
-    """
-    Generate global thermalizing operators.
+    """Generate global thermalizing operators.
 
     Parameters
     ----------
@@ -107,8 +104,7 @@ def get_glob_therm_ops(
 
 
 def get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim):
-    """
-    Local thermalizing operator.
+    """Local thermalizing operator.
 
     Parameters
     ----------
@@ -158,8 +154,7 @@ def get_loc_therm_ops(
     spectral_density="debye",
     exponent=1,
 ):
-    """
-    Generate local thermalizing operators.
+    """Generate local thermalizing operators.
 
     Parameters
     ----------
