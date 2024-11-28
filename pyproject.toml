@@ -20,14 +20,13 @@ authors = [
 dynamic = ["version"]
 
 dependencies = [
-    "pandas==2.1.4",
-    "qutip==4.7.5",
-    "pyyaml==6.0.1",
-    "seaborn==0.12.2",
-    "tqdm==4.66.4",
-    "customtkinter==5.2.2",
-    "scipy==1.11.4",
-    "openpyxl==3.1.5",
+    "pandas",
+    "qutip",
+    "pyyaml",
+    "seaborn",
+    "tqdm",
+    "customtkinter",
+    "openpyxl",
 ]
 
 [project.urls]

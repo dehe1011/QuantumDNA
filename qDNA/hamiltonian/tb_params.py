@@ -8,7 +8,7 @@ that the data is well-organized and easily retrievable.
 
 import os
 from .. import DATA_DIR
-from ..tools import load_json, save_json
+from ..tools import load_json, save_json, modify_json
 
 __all__ = [
     "save_tb_params",
@@ -44,6 +44,7 @@ def save_tb_params(
     filename = "_".join(
         [metadata[key] for key in ["source", "particle", "tb_model_name"]]
     )
+    modify_json("config", os.path.join(DATA_DIR, "raw"), "SOURCES", metadata["source"])
     save_json(tb_params, metadata, filename, directory)
 
 

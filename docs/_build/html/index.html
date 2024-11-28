@@ -16,12 +16,14 @@
       <script src="_static/documentation_options.js?v=22607128"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="copyright" title="Copyright" href="copyright.html" />
-    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="next" title="Installation Guide" href="installation.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -45,9 +47,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc/apidoc.html">API documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Users Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Jupyter Notebook Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copyright.html">Copyright and Licensing</a></li>
 </ul>
@@ -99,10 +101,23 @@ Furthermore, QuantumDNA enables users to define unique models, making it highly 
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-pypi">Installation via PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-cloning-the-github-repository">Installation via Cloning the GitHub Repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-pypi">Installation via PyPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#steps">Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installation-via-cloning-the-github-repository">Installation via Cloning the GitHub Repository</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#id1">Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#platform-specific-instructions-for-activation">Platform-Specific Instructions for Activation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#windows"><strong>Windows</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#macos"><strong>macOS</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#linux"><strong>Linux</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#post-installation-and-usage">Post-Installation and Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#uninstallation">Uninstallation</a></li>
 </ul>
 </li>
@@ -147,8 +162,22 @@ Furthermore, QuantumDNA enables users to define unique models, making it highly 
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Users Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guide/guide-tb_model.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/guide.html">Jupyter Notebook Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guide/guide.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/guide.html#tutorials">Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/PRE_2024.html">PRE_2024</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/1_Tight_Binding_Parameters.html">Tight Binding Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/2_Tight_Binding_Method.html">Tight Binding Method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/3_Environment_Simulation.html">Environment Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/4_Visualization.html">Visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/tutorials/5_Evaluation.html">Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="guide/guide.html#descriptions">Descriptions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="guide/guide.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="guide/guide.html#tips-for-using-the-tutorials">Tips for Using the Tutorials</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="biblio.html">Bibliography</a></li>
@@ -174,7 +203,7 @@ Furthermore, QuantumDNA enables users to define unique models, making it highly 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

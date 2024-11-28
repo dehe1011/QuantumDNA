@@ -8,6 +8,11 @@ TODO.txt
 main.py
 qDNA/data/raw/geometries/
 
+# documentation
+docs/_build
+docs/_static
+docs/_templates
+
 # created by coverage
 htmlcov/
 
@@ -17,6 +22,9 @@ __pycache__
 
 # pylint
 .pylintrc
+
+# mypy
+.mypy_cache/
 
 # created by coverage
 *.egg-info/

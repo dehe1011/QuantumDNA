@@ -147,10 +147,12 @@ class ME_Solver:
         self.init_matrix = self.get_init_matrix()
 
         # set options for the solver
-        self.options = None
+        self.options = {}
 
         # empty lists to store results
         self.reset()
+
+        self.qutip_version = q.__version__.split(".", maxsplit=1)[0]
 
         if self.verbose:
             print("Successfully initialized the ME_Solver instance.")
@@ -270,6 +272,39 @@ class ME_Solver:
         assert init_state is not None, "Initial state is not defined."
         return init_state
 
+    def _run_mesolve(self, **kwargs):
+        """
+        Run the mesolve function with the given arguments.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Keyword arguments to be passed to the mesolve function. The keys and values
+            depend on the version of qutip being used.
+
+        Returns
+        -------
+        list
+            List of states resulting from the mesolve function.
+        """
+
+        if self.qutip_version == "5":
+            kwargs["H"] = kwargs["H"].to(data_type="CSR")
+            kwargs["rho0"] = kwargs["rho0"].to(data_type="CSR")
+            kwargs["c_ops"] = [c_op.to(data_type="CSR") for c_op in kwargs["c_ops"]]
+            kwargs["e_ops"] = {
+                key: e_op.to(data_type="CSR") for key, e_op in kwargs["e_ops"].items()
+            }
+            kwargs["options"]["normalize_output"] = False
+            kwargs["options"]["progress_bar"] = False
+
+        if self.qutip_version == "4":
+            kwargs["options"] = None
+
+        if kwargs["e_ops"] == {}:
+            return q.mesolve(**kwargs).states
+        return q.mesolve(**kwargs)
+
     def get_result(self):
         """Calculate and return the result of the master equation solver. This method
         checks if the result has already been calculated. If not, it constructs the
@@ -286,21 +321,20 @@ class ME_Solver:
         # check if the result is already calculated
         if not self.result:
             # observables
-            e_ops = []
-
-            # solve the master equation
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                progress_bar=None,
-                options=self.options,
-            ).states
+            e_ops = {}
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
 
             # store the result
-            self.result = result  # pylint: disable=attribute-defined-outside-init
+            self.result = self._run_mesolve(
+                **kwargs
+            )  # pylint: disable=attribute-defined-outside-init
         return self.result
 
     def get_result_particle(self, particle):
@@ -379,26 +413,29 @@ class ME_Solver:
             assert e_ops is not None, "Population operators are not defined."
 
             # solve the master equation with observables
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the population values
             for particle in self.tb_ham.particles:
                 for tb_site in self.tb_ham.tb_basis:
-                    self.pop[particle + "_" + tb_site] = result.expect[
-                        particle + "_" + tb_site
-                    ]
+                    value = 0
+                    if self.qutip_version == "5":
+                        value = result.e_data[particle + "_" + tb_site]
+                    if self.qutip_version == "4":
+                        value = result.expect[particle + "_" + tb_site]
+                    self.pop[particle + "_" + tb_site] = value
         return self.pop
 
     def get_coh(self):
-        """
-        Calculate and return the coherence of the system.
+        """Calculate and return the coherence of the system.
         This method computes the coherence of the system based on the Hamiltonian
         description and the Lindblad dissipation operators. It supports two types
         of Hamiltonian descriptions: "2P" and "1P".
@@ -436,22 +473,30 @@ class ME_Solver:
             assert e_ops is not None, "Coherence operators are not defined."
 
             # solve the master equation with observables
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the coherence values
             for particle in self.tb_ham.particles:
                 self.coh[particle] = 0
                 for tb_site1, tb_site2 in permutations(self.tb_ham.tb_basis, 2):
-                    self.coh[particle] += abs(
-                        result.expect[particle + "_" + tb_site1 + "_" + tb_site2]
-                    )
+                    value = 0
+                    if self.qutip_version == "5":
+                        value = result.e_data[
+                            particle + "_" + tb_site1 + "_" + tb_site2
+                        ]
+                    if self.qutip_version == "4":
+                        value = result.expect[
+                            particle + "_" + tb_site1 + "_" + tb_site2
+                        ]
+                    self.coh[particle] += abs(value)
 
         return self.coh
 
@@ -480,23 +525,28 @@ class ME_Solver:
 
         # check if the ground state population is already calculated
         if not self.groundstate_pop:
-            ham_matrix = q.Qobj(self.tb_ham.matrix)
 
             # observables for the ground state population
             e_ops = self.lindblad_diss.groundstate_pop_ops
 
             # solve the master equation with observables
-            result = q.mesolve(
-                ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the ground state population values
-            self.groundstate_pop["groundstate"] = result.expect["groundstate"]
+            value = 0
+            if self.qutip_version == "5":
+                value = result.e_data["groundstate"]
+            if self.qutip_version == "4":
+                value = result.expect["groundstate"]
+            self.groundstate_pop["groundstate"] = value
         return self.groundstate_pop
 
 

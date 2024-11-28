@@ -65,9 +65,9 @@ def check_ham_kwargs(**ham_kwargs):
             ["electron"],
             ["hole"],
         ], "in the one particle description the particles must be either ['electron'] or ['hole']"
-    assert (
-        kwargs["source"] in CONFIG["SOURCES"]
-    ), f"source must be in {CONFIG['SOURCES']}"
+    # assert (
+    #     kwargs["source"] in CONFIG["SOURCES"]
+    # ), f"source must be in {CONFIG['SOURCES']}"
     assert (
         kwargs["description"] in CONFIG["DESCRIPTIONS"]
     ), f"description must be in {CONFIG['DESCRIPTIONS']}"

@@ -90,12 +90,12 @@ def save_yaml(filepath, data):
 
     with open(filepath, "w", encoding="utf-8") as file:
         try:
-            yaml.safe_dump(data, file, default_flow_style=False)
+            yaml.safe_dump(data, file, indent=4, default_flow_style=False)
         except yaml.YAMLError as exc:
             print(f"Error saving YAML file: {exc}")
 
 
-def modify_yaml(filepath, key, value):
+def modify_yaml(filepath, key, value, override=False):
     """Modify a specific key-value pair in a YAML file.
 
     Parameters
@@ -106,6 +106,8 @@ def modify_yaml(filepath, key, value):
         The key whose value needs to be modified.
     value : any
         The new value to be assigned to the specified key.
+    override : bool, optional
+        If True, override the existing value of the key. Default is False.
 
     Raises
     ------
@@ -115,7 +117,11 @@ def modify_yaml(filepath, key, value):
 
     data = load_yaml(filepath)
     if data is not None:
-        data[key] = value
+        if override:
+            data[key] = value
+        else:
+            if not value in data[key]:
+                data[key].append(value)
         save_yaml(filepath, data)
 
 
@@ -137,7 +143,7 @@ DEFAULTS: dict = get_defaults()
 # ----------------------------- JSON -----------------------------
 
 
-def modify_json(filename, directory, key, value):
+def modify_json(filename, directory, key, value, override=False):
     """Modify a JSON file by adding a value to a specified key.
 
     Parameters
@@ -150,12 +156,18 @@ def modify_json(filename, directory, key, value):
         The key in the JSON file whose value will be modified.
     value : int or float
         The value to add to the specified key's current value.
+    override : bool, optional
+        If True, override the existing value of the key. Default is False.
     """
 
     data, metadata = load_json(filename, directory, load_metadata=True)
 
     if data is not None:
-        data[key] = value
+        if override:
+            data[key] = value
+        else:
+            if not value in data[key]:
+                data[key].append(value)
         save_json(data, metadata, filename, directory, override=True)
         logger.info("Value %s added to key %s in %s.json", value, key, filename)
 
@@ -196,7 +208,7 @@ def save_json(data, metadata, filename, directory, override=False):
     # save the data and metadata to a JSON file
     combined_data = {"data": data, "metadata": metadata}
     with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(combined_data, f)
+        json.dump(combined_data, f, indent=4)
 
     # log the saving process
     logger.info("Data saved as %s", filepath)
