@@ -23,7 +23,7 @@ dependencies = [
     "pandas",
     "qutip",
     "pyyaml",
-    "seaborn",
+    "matplotlib",
     "tqdm",
     "customtkinter",
     "openpyxl",

@@ -19,43 +19,53 @@ class DynamicsFrame(ctk.CTkFrame):
         self.me_kwargs_default = self.configs["me_kwargs_default"]
 
         # widgets
+        self.time_label = ctk.CTkLabel(
+            self, text="Simulated Time", font=ctk.CTkFont(size=15, weight="bold")
+        )
+        self.time_label.grid(row=0, column=0, pady=10, padx=10)
+
         self.me_t_steps_label = ctk.CTkLabel(self, text="Time Steps:")
-        self.me_t_steps_label.grid(row=0, column=0, padx=10, pady=10)
+        self.me_t_steps_label.grid(row=1, column=0, padx=10, pady=10)
 
         self.me_t_steps_entry = ctk.CTkEntry(self)
         self.me_t_steps_entry.insert(0, str(self.me_kwargs_default["t_steps"]))
-        self.me_t_steps_entry.grid(row=0, column=1, padx=10, pady=10)
+        self.me_t_steps_entry.grid(row=1, column=1, padx=10, pady=10)
 
         self.me_t_end_label = ctk.CTkLabel(self, text="Time End:")
-        self.me_t_end_label.grid(row=1, column=0, padx=10, pady=10)
+        self.me_t_end_label.grid(row=2, column=0, padx=10, pady=10)
 
         self.me_t_end_entry = ctk.CTkEntry(self)
         self.me_t_end_entry.insert(0, str(self.me_kwargs_default["t_end"]))
-        self.me_t_end_entry.grid(row=1, column=1, padx=10, pady=10)
+        self.me_t_end_entry.grid(row=2, column=1, padx=10, pady=10)
 
         self.me_t_unit_label = ctk.CTkLabel(self, text="Time Unit:")
-        self.me_t_unit_label.grid(row=2, column=0, padx=10, pady=10)
+        self.me_t_unit_label.grid(row=3, column=0, padx=10, pady=10)
 
         self.me_t_unit_combo = ctk.CTkComboBox(self, values=self.configs["T_UNITS"])
         self.me_t_unit_combo.set(self.me_kwargs_default["t_unit"])
-        self.me_t_unit_combo.grid(row=2, column=1, padx=10, pady=10)
+        self.me_t_unit_combo.grid(row=3, column=1, padx=10, pady=10)
+
+        self.initial_state_label = ctk.CTkLabel(
+            self, text="Initial State", font=ctk.CTkFont(size=15, weight="bold")
+        )
+        self.initial_state_label.grid(row=4, column=0, pady=10, padx=10)
 
         self.me_init_e_state_label = ctk.CTkLabel(self, text="Initial Electron State:")
-        self.me_init_e_state_label.grid(row=3, column=0, padx=10, pady=10)
+        self.me_init_e_state_label.grid(row=5, column=0, padx=10, pady=10)
 
         self.me_init_e_state_combo = ctk.CTkComboBox(
             self, values=self.me_kwargs_default["init_e_state"]
         )
-        self.me_init_e_state_combo.grid(row=3, column=1, padx=10, pady=10)
+        self.me_init_e_state_combo.grid(row=5, column=1, padx=10, pady=10)
         self.me_init_e_state_combo.set(self.me_kwargs_default["init_e_state"])
 
         self.me_init_h_state_label = ctk.CTkLabel(self, text="Initial Hole State:")
-        self.me_init_h_state_label.grid(row=4, column=0, padx=10, pady=10)
+        self.me_init_h_state_label.grid(row=6, column=0, padx=10, pady=10)
 
         self.me_init_h_state_combo = ctk.CTkComboBox(
             self, values=self.me_kwargs_default["init_h_state"]
         )
-        self.me_init_h_state_combo.grid(row=4, column=1, padx=10, pady=10)
+        self.me_init_h_state_combo.grid(row=6, column=1, padx=10, pady=10)
         self.me_init_h_state_combo.set(self.me_kwargs_default["init_h_state"])
 
     def get_me_kwargs(self):

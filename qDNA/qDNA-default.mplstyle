@@ -1,0 +1,39 @@
+
+# LaTeX rendering
+# text.usetex: True
+# text.latex.preamble: \usepackage{amsmath}\usepackage{siunitx}
+
+# Font settings
+font.family: serif
+# font.serif: Times New Roman  # Used in elsarticle (Elsevier)
+font.serif: Computer Modern Roman  # Used in revtex4-2 (APS)
+font.size: 15
+
+# Figure size
+# revtex4-2 (APS) one-column: [8.64468/2.54, 8.64468/2.54 * 3/4]
+# elsarticle (Elsevier) one-column: [8.85553/2.54, 8.85553/2.54 * 3/4]
+figure.figsize: 6.4, 4.8  # Default ratio 4:3
+
+# Axes, labels, and legend
+axes.titlesize: large  # Font size for title
+axes.labelsize: medium  # Font size for axis labels
+legend.fontsize: small  # Font size for legend
+xtick.labelsize: small  # Font size for x-tick labels
+ytick.labelsize: small  # Font size for y-tick labels
+
+# Lines and markers
+lines.linewidth: 2.0  # Default line width
+lines.markersize: 8.0  # Default marker size
+
+# Grid and layout
+axes.grid: True  # Always show grid
+grid.linestyle: --  # Grid line style
+# grid.color: lightgray
+grid.alpha: 0.7  # Grid transparency
+figure.autolayout: True  # Automatically apply tight_layout
+
+# Define the color cycle using the full seaborn deep palette
+axes.prop_cycle: cycler('color', ['4C72B0', '55A868', 'C44E52', '8172B2', 'CCB974', '64B5CD'])
+
+# Define the color cycle using the tab10 palette
+# axes.prop_cycle: cycler('color', ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'])

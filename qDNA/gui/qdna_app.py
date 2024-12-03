@@ -12,8 +12,8 @@ from ..model import TB_Model
 from ..tools import CONFIG
 
 from .initial_frame import InitialFrame
-from .config_frame import ConfigFrame
-from .custom_window import CustomWindow
+from .config_frame import ConfigFrame, HelpFrame
+from .pdb_window import PDBWindow
 from .options_frame import OptionsFrame
 from .plot_options_frame import PlotOptionsFrame
 from .plotting_window import PlottingWindow
@@ -39,36 +39,56 @@ class qDNA_app(ctk.CTk):
         self.kwargs = dict()
         self.tb_basis = ["(0, 0)"]
 
+        # Configure the grid layout for the root window
+        self.grid_columnconfigure(0, weight=1)  # Column 0 takes 1 part
+        self.grid_columnconfigure(1, weight=3)  # Column 1 takes 2 parts
+        self.grid_columnconfigure(2, weight=1)  # Column 2 takes 1 part
+
+        self.grid_rowconfigure(0, weight=5)  # Row 0 takes 2 parts
+        self.grid_rowconfigure(1, weight=1)  # Row 1 takes 1 part
+        self.grid_rowconfigure(2, weight=2)  # Row 2 takes 3 parts
+
         # frames
         self.initial_frame = InitialFrame(self)
-        self.initial_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.initial_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
         self.config_frame = ConfigFrame(self, **self.kwargs)
-        self.config_frame.grid(row=1, column=0, padx=20, pady=20, sticky="nsew")
+        self.config_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+
+        self.help_frame = HelpFrame(self, **self.kwargs)
+        self.help_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
         self.options_frame = OptionsFrame(self, self.configs, **self.kwargs)
         self.options_frame.grid(
-            row=0, column=1, rowspan=2, padx=20, pady=20, sticky="nsew"
+            row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
         )
 
         self.scrollable_console_frame = ScrollableConsoleFrame(self)
         self.scrollable_console_frame.grid(
-            row=1, column=2, padx=20, pady=20, sticky="nsew"
+            row=1, column=2, padx=10, pady=10, rowspan=2, sticky="nsew"
         )
 
         self.plot_options_frame = PlotOptionsFrame(self, self.tb_basis, **self.kwargs)
-        self.plot_options_frame.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+        self.plot_options_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
         # the options_frame and plot_options_frame can not be manipulated when the window opens
         # (because at first the inputs in the initial_frame must be confirmed and is used to update these frames)
         self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("disabled")
 
+    # ------------------------------------------
+
     def open_github(self):
         webbrowser.open("https://github.com/dehe1011/QuantumDNA")
 
-    def open_custom_window(self):
-        self.custom_window = CustomWindow(self, self.configs)
+    def open_documentation(self):
+        webbrowser.open("https://quantumdna.readthedocs.io/en/latest/")
+
+    def open_tutorials(self):
+        webbrowser.open("https://github.com/dehe1011/QuantumDNA-notebooks")
+
+    def open_pdb_window(self):
+        self.pdb_window = PDBWindow(self, self.configs)
 
     def open_fasta_window(self):
         self.fasta_window = FastaWindow(self)
@@ -78,6 +98,13 @@ class qDNA_app(ctk.CTk):
     def get_init_kwargs(self):
         # get the values from the initial_frame
         self.upper_strand = self.initial_frame.upper_strand_entry.get()
+        self.upper_strand = self.upper_strand.split("_")
+        self.lower_strand = self.initial_frame.lower_strand_entry.get()
+        if self.lower_strand == "auto complete":
+            self.lower_strand = None
+        else:
+            self.lower_strand = self.lower_strand.split("_")
+
         self.tb_model_name = self.initial_frame.tb_model_combo.get()
         self.init_kwargs = {
             "upper_strand": self.upper_strand,
@@ -86,7 +113,9 @@ class qDNA_app(ctk.CTk):
         self.kwargs.update(self.init_kwargs)
 
         # initialize dna_seq, tb_model and tb_basis
-        self.dna_seq = DNA_Seq(self.upper_strand, self.tb_model_name)
+        self.dna_seq = DNA_Seq(
+            self.upper_strand, self.tb_model_name, lower_strand=self.lower_strand
+        )
         self.tb_model = TB_Model(self.dna_seq.tb_model_name, self.dna_seq.tb_dims)
         self.tb_basis = self.tb_model.tb_basis
 
@@ -136,7 +165,7 @@ class qDNA_app(ctk.CTk):
         # update the options_frame
         self.options_frame = OptionsFrame(self, self.configs, **self.kwargs)
         self.options_frame.grid(
-            row=0, column=1, rowspan=2, padx=20, pady=20, sticky="nsew"
+            row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
         )
         # enable the options_frame
         self.enable_options_frame()
@@ -167,7 +196,7 @@ class qDNA_app(ctk.CTk):
         self.get_options_kwargs()
         # update the plot_options_frame
         self.plot_options_frame = PlotOptionsFrame(self, self.tb_basis, **self.kwargs)
-        self.plot_options_frame.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+        self.plot_options_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
         # enable the plot_options_frame
         self.enable_plotting_frame()
 

@@ -28,24 +28,30 @@ class LifetimeFrame(ctk.CTkFrame):
 
         # widgets
         self.lifetime_button = ctk.CTkButton(
-            self, text="Calculate exciton lifetime", command=self._calc_lifetime
+            self, text="Calculate Exciton Lifetime", command=self._calc_lifetime
         )
-        self.lifetime_button.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.lifetime_button.grid(
+            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
+        )
         self.dipole_button = ctk.CTkButton(
-            self, text="Calculate average charge separation", command=self._calc_dipole
+            self, text="Calculate Charge Separation", command=self._calc_dipole
         )
-        self.dipole_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.dipole_button.grid(
+            row=1, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
+        )
         self.dipole_moment_button = ctk.CTkButton(
-            self, text="Calculate dipole moment", command=self._calc_dipole_moment
+            self, text="Calculate Dipole Moment", command=self._calc_dipole_moment
         )
-        self.dipole_moment_button.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        self.dipole_moment_button.grid(
+            row=2, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
+        )
         self.exciton_transfer_button = ctk.CTkButton(
             self,
-            text="Calculate average exciton population",
+            text="Calculate Exciton Population",
             command=self._calc_exciton_transfer,
         )
         self.exciton_transfer_button.grid(
-            row=3, column=0, padx=10, pady=10, sticky="ew"
+            row=3, column=0, padx=10, pady=10, columnspan=2, sticky="ew"
         )
 
     def _calc_lifetime(self):
@@ -62,13 +68,13 @@ class LifetimeFrame(ctk.CTkFrame):
     def _calc_dipole(self):
         dipole = calc_dipole(**self.kwargs)
         print("---------------------------")
-        print(f"Charge separation: {dipole} A")
+        print(f"Charge Separation: {dipole} A")
         print("---------------------------")
 
     def _calc_dipole_moment(self):
         dipole_moment = calc_dipole_moment(**self.kwargs)
         print("---------------------------")
-        print(f"Dipole moment: {dipole_moment} D")
+        print(f"Dipole Moment: {dipole_moment} D")
         print("---------------------------")
 
     def _calc_exciton_transfer(self):
@@ -80,8 +86,8 @@ class LifetimeFrame(ctk.CTkFrame):
             avg_pop_lower_strand["exciton"],
         )
         print("---------------------------")
-        print(f"Average exciton population of the upper strand: {avg_pop_upper_strand}")
-        print(f"Average exciton population of the lower strand: {avg_pop_lower_strand}")
+        print(f"Average Exciton Population (upper strand): {avg_pop_upper_strand}")
+        print(f"Average Exciton Population (lower strand): {avg_pop_lower_strand}")
         print("---------------------------")
 
 
@@ -99,12 +105,17 @@ class PopFrame(ctk.CTkFrame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
 
-        self.tb_site_label = ctk.CTkLabel(self, text="TB site:")
-        self.tb_site_label.grid(row=0, column=0, padx=10, pady=10)
+        self.explain_label = ctk.CTkLabel(
+            self, text="Calculate the population of each \nbase of the DNA sequence."
+        )
+        self.explain_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
-        self.tb_site_combo = ctk.CTkComboBox(self, values=["All"] + tb_basis)
-        self.tb_site_combo.grid(row=0, column=1, padx=10, pady=10)
-        self.tb_site_combo.set("All")
+        self.tb_site_label = ctk.CTkLabel(self, text="TB site:")
+        self.tb_site_label.grid(row=1, column=0, padx=10, pady=10)
+
+        self.tb_site_combo = ctk.CTkComboBox(self, values=["All DNA Bases"] + tb_basis)
+        self.tb_site_combo.grid(row=1, column=1, padx=10, pady=10)
+        self.tb_site_combo.set("All DNA Bases")
 
     def get_pop_kwargs(self):
         """Returns the values of widgets with get() method in dictionary format."""
@@ -127,6 +138,11 @@ class CohFrame(ctk.CTkFrame):
         # initialization of the ctk.CTkFrame class
         super().__init__(master)
         self.pack(fill="both", expand=True)
+
+        self.explain_label = ctk.CTkLabel(
+            self, text="Calculate the coherence of the DNA sequence."
+        )
+        self.explain_label.grid(row=0, column=0, padx=10, pady=10)
 
     def get_coh_kwargs(self):
         """Returns the values of widgets with get() method in dictionary format."""

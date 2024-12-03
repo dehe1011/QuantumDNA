@@ -9,9 +9,9 @@ main.py
 qDNA/data/raw/geometries/
 
 # documentation
-docs/_build
-docs/_static
-docs/_templates
+docs/_build/
+docs/_static/
+docs/_templates/
 
 # created by coverage
 htmlcov/

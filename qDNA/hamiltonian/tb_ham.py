@@ -82,8 +82,10 @@ class TB_Ham:
         Tight-binding parameters for holes.
     relaxation : bool
         Flag indicating if relaxation is considered.
-    interaction_param : float
-        Interaction parameter for the Hamiltonian.
+    coulomb_param : float
+        Coulomb interaction parameter for the Hamiltonian.
+    exchange_param : float
+        Exchange interaction parameter for the Hamiltonian.
     eh_basis : list
         Electron-hole basis states.
     nn_cutoff : bool
@@ -97,8 +99,8 @@ class TB_Ham:
 
     Methods
     -------
-    get_param_dicts()
-        Retrieves the tight-binding parameters for electrons and holes.
+    get_param_dict(particle)
+        Retrieves the tight-binding parameters.
     get_eigensystem()
         Computes and returns the eigenvalues and eigenvectors of the Hamiltonian.
     get_matrix()
@@ -144,11 +146,17 @@ class TB_Ham:
         self._unit = self.ham_kwargs.get("unit")
 
         # tight-binding parameters
-        self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+        if "electron" in self.particles:
+            self.tb_params_electron = self.get_param_dict("electron")
+        if "hole" in self.particles:
+            self.tb_params_hole = self.get_param_dict("hole")
+        if "exciton" in self.particles:
+            self.tb_params_exciton = self.get_param_dict("exciton")
 
         self._relaxation = False
         if self.description == "2P":
-            self._interaction_param = self.ham_kwargs.get("interaction_param")
+            self._coulomb_param = self.ham_kwargs.get("coulomb_param")
+            self._exchange_param = self.ham_kwargs.get("exchange_param")
             self._relaxation = self.ham_kwargs.get("relaxation")
             self.eh_basis = get_eh_basis(self.tb_model.tb_dims)
             self._nn_cutoff = self.ham_kwargs.get("nn_cutoff")
@@ -187,19 +195,35 @@ class TB_Ham:
         self._particles = new_particles
 
     @property
-    def interaction_param(self):  # pylint: disable=missing-function-docstring
-        return self._interaction_param
+    def coulomb_param(self):  # pylint: disable=missing-function-docstring
+        return self._coulomb_param
 
-    @interaction_param.setter
-    def interaction_param(self, new_interaction_param):
+    @coulomb_param.setter
+    def coulomb_param(self, new_coulomb_param):
         assert isinstance(
-            new_interaction_param, float
-        ), "interaction_param must be of type float"
-        old_interaction_param = self._interaction_param
-        self._interaction_param = new_interaction_param
+            new_coulomb_param, float
+        ), "coulomb_param must be of type float"
+        old_coulomb_param = self._coulomb_param
+        self._coulomb_param = new_coulomb_param
 
         # update the matrix
-        if old_interaction_param != new_interaction_param:
+        if old_coulomb_param != new_coulomb_param:
+            self.matrix = self.get_matrix()
+
+    @property
+    def exchange_param(self):  # pylint: disable=missing-function-docstring
+        return self._exchange_param
+
+    @exchange_param.setter
+    def exchange_param(self, new_exchange_param):
+        assert isinstance(
+            new_exchange_param, float
+        ), "exchange_param must be of type float"
+        old_exchange_param = self._exchange_param
+        self._coulomb_param = new_exchange_param
+
+        # update the matrix
+        if old_exchange_param != new_exchange_param:
             self.matrix = self.get_matrix()
 
     @property
@@ -249,7 +273,12 @@ class TB_Ham:
         # update the matrix and tight-binding parameters
         if new_unit != old_unit:
             self.matrix *= get_conversion(old_unit, new_unit)
-            self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+            if "electron" in self.particles:
+                self.tb_params_electron = self.get_param_dict("electron")
+            if "hole" in self.particles:
+                self.tb_params_hole = self.get_param_dict("hole")
+            if "exciton" in self.particles:
+                self.tb_params_exciton = self.get_param_dict("exciton")
 
     @property
     def source(self):  # pylint: disable=missing-function-docstring
@@ -264,46 +293,50 @@ class TB_Ham:
 
         # update the matrix and tight-binding parameters
         if new_source != old_source:
-            self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+            if "electron" in self.particles:
+                self.tb_params_electron = self.get_param_dict("electron")
+            if "hole" in self.particles:
+                self.tb_params_hole = self.get_param_dict("hole")
+            if "exciton" in self.particles:
+                self.tb_params_exciton = self.get_param_dict("exciton")
             self.matrix = self.get_matrix()
 
     # ---------------------------------------------------------------
 
-    def get_param_dicts(self):
-        """Retrieves the tight-binding parameters for electrons and holes. This method
-        loads the tight-binding parameters for both electrons and holes from the
-        specified source and model name. If the unit of the loaded parameters does not
-        match the expected unit, it converts the parameters to the expected unit.
+    def get_param_dict(self, particle):
+        """Retrieves the tight-binding parameters for the selected particle. This method
+        loads the tight-binding parameters from the specified source and model name. If
+        the unit of the loaded parameters does not match the expected unit, it converts
+        the parameters to the expected unit.
+
+        Parameters
+        ----------
+        particle : str
+            The particle for which to retrieve the tight-binding parameters.
 
         Returns
         -------
         tuple
             A tuple containing two dictionaries:
-              tb_params_electron : dict
-                The tight-binding parameters for electrons.
-              tb_params_hole : dict
-                The tight-binding parameters for holes.
+              tb_params : dict
+                The tight-binding parameters.
         """
 
         model_name = self.tb_model.tb_model_name
 
-        # load the tight-binding parameters for electrons
-        tb_params_electron, metadata = wrap_load_tb_params(
-            self.source, "electron", model_name, load_metadata=True
-        )
-        # load the tight-binding parameters for holes
-        tb_params_hole, metadata = wrap_load_tb_params(
-            self.source, "hole", model_name, load_metadata=True
-        )
-        # convert the parameters to the expected unit
-        if self.unit != metadata["unit"]:
-            tb_params_electron = get_conversion_dict(
-                tb_params_electron, metadata["unit"], self.unit
+        try:
+            # load the tight-binding parameters
+            tb_params, metadata = wrap_load_tb_params(
+                self.source, particle, model_name, load_metadata=True
             )
-            tb_params_hole = get_conversion_dict(
-                tb_params_hole, metadata["unit"], self.unit
-            )
-        return tb_params_electron, tb_params_hole
+
+            # convert the parameters to the expected unit
+            if self.unit != metadata["unit"]:
+                tb_params = get_conversion_dict(tb_params, metadata["unit"], self.unit)
+        except FileNotFoundError:
+            tb_params = {}
+
+        return tb_params
 
     def get_eigensystem(self):
         """Compute the eigenvalues and eigenvectors of the matrix. This method computes
@@ -358,15 +391,26 @@ class TB_Ham:
                 self.tb_model,
                 self.tb_params_electron,
                 self.tb_params_hole,
+                self.tb_params_exciton,
                 self.tb_basis_sites_dict,
             )
 
             # add interaction terms
-            if self.interaction_param:
+            if self.coulomb_param:
                 matrix = add_interaction(
                     matrix,
                     self.eh_basis,
-                    self.interaction_param,
+                    self.coulomb_param,
+                    "Coulomb",
+                    nn_cutoff=self.nn_cutoff,
+                )
+
+            if self.exchange_param:
+                matrix = add_interaction(
+                    matrix,
+                    self.eh_basis,
+                    self.exchange_param,
+                    "Exchange",
                     nn_cutoff=self.nn_cutoff,
                 )
 
@@ -385,6 +429,12 @@ class TB_Ham:
             if self.particles == ["hole"]:
                 matrix = tb_ham_1P(
                     self.tb_model, self.tb_params_hole, self.tb_basis_sites_dict
+                )
+
+            # generate the Hamiltonian matrix for the exciton
+            if self.particles == ["exciton"]:
+                matrix = tb_ham_1P(
+                    self.tb_model, self.tb_params_exciton, self.tb_basis_sites_dict
                 )
 
         return matrix

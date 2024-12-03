@@ -19,80 +19,69 @@ class DissFrame(ctk.CTkFrame):
         self.diss_kwargs_default = self.configs["diss_kwargs_default"]
 
         # widgets
+        self.dephasing_label = ctk.CTkLabel(
+            self, text="Dephasing", font=ctk.CTkFont(size=15, weight="bold")
+        )
+        self.dephasing_label.grid(row=0, column=0, pady=10, padx=10)
+
         self.diss_loc_deph_rate_label = ctk.CTkLabel(self, text="Local Dephasing Rate:")
-        self.diss_loc_deph_rate_label.grid(row=0, column=0, padx=10, pady=10)
+        self.diss_loc_deph_rate_label.grid(row=1, column=0, padx=10, pady=10)
 
         self.diss_loc_deph_rate_entry = ctk.CTkEntry(self)
         self.diss_loc_deph_rate_entry.insert(
             0, str(self.diss_kwargs_default["loc_deph_rate"])
         )
-        self.diss_loc_deph_rate_entry.grid(row=0, column=1, padx=10, pady=10)
+        self.diss_loc_deph_rate_entry.grid(row=1, column=1, padx=10, pady=10)
 
         self.diss_glob_deph_rate_label = ctk.CTkLabel(
             self, text="Global Dephasing Rate:"
         )
-        self.diss_glob_deph_rate_label.grid(row=1, column=0, padx=10, pady=10)
+        self.diss_glob_deph_rate_label.grid(row=2, column=0, padx=10, pady=10)
 
         self.diss_glob_deph_rate_entry = ctk.CTkEntry(self)
         self.diss_glob_deph_rate_entry.insert(
             0, str(self.diss_kwargs_default["glob_deph_rate"])
         )
-        self.diss_glob_deph_rate_entry.grid(row=1, column=1, padx=10, pady=10)
+        self.diss_glob_deph_rate_entry.grid(row=2, column=1, padx=10, pady=10)
 
         # -------------------------------
 
-        self.diss_uniform_relaxation_var = ctk.BooleanVar(
-            value=self.diss_kwargs_default["uniform_relaxation"]
+        self.relaxation_label = ctk.CTkLabel(
+            self, text="Relaxation", font=ctk.CTkFont(size=15, weight="bold")
         )
-        self.diss_uniform_relaxation_check = ctk.CTkCheckBox(
-            self,
-            text="Uniform Relaxation",
-            variable=self.diss_uniform_relaxation_var,
-            command=self.set_uniform_relax,
-        )
-        self.diss_uniform_relaxation_check.grid(
-            row=2, column=0, columnspan=2, padx=10, pady=10
-        )
+        self.relaxation_label.grid(row=3, column=0, pady=10, padx=10)
 
-        self.diss_relax_rate_label = ctk.CTkLabel(
-            self, text="Relaxation Rate \n (uniform):"
-        )
-        self.diss_relax_rate_label.grid(row=3, column=0, padx=10, pady=10)
+        self.diss_relax_rate_label = ctk.CTkLabel(self, text="Relaxation Rate:")
+        self.diss_relax_rate_label.grid(row=4, column=0, padx=10, pady=10)
 
         self.diss_relax_rate_entry = ctk.CTkEntry(self)
         self.diss_relax_rate_entry.insert(
             0, str(self.diss_kwargs_default["relax_rate"])
         )
-        self.diss_relax_rate_entry.grid(row=3, column=1, padx=10, pady=10)
-
-        self.diss_relax_rates_label = ctk.CTkLabel(
-            self, text="Relaxation Rates \n (non-uniform):"
-        )
-        self.diss_relax_rates_label.grid(row=4, column=0, padx=10, pady=10)
-
-        self.diss_relax_rates_entry = ctk.CTkEntry(self, state="disabled")
-        self.diss_relax_rates_entry.insert(
-            0, str(self.diss_kwargs_default["relax_rates"])
-        )
-        self.diss_relax_rates_entry.grid(row=4, column=1, padx=10, pady=10)
+        self.diss_relax_rate_entry.grid(row=4, column=1, padx=10, pady=10)
 
         # -----------------------------------
+
+        self.thermalizing_label = ctk.CTkLabel(
+            self, text="Thermalizing", font=ctk.CTkFont(size=15, weight="bold")
+        )
+        self.thermalizing_label.grid(row=5, column=0, pady=10, padx=10)
 
         self.diss_loc_therm_var = ctk.BooleanVar(
             value=self.diss_kwargs_default["loc_therm"]
         )
         self.diss_loc_therm_check = ctk.CTkCheckBox(
-            self, text="Local Thermalization", variable=self.diss_loc_therm_var
+            self, text="Local", variable=self.diss_loc_therm_var
         )
-        self.diss_loc_therm_check.grid(row=5, column=0, padx=10, pady=10)
+        self.diss_loc_therm_check.grid(row=6, column=0, padx=10, pady=10)
 
         self.diss_glob_therm_var = ctk.BooleanVar(
             value=self.diss_kwargs_default["glob_therm"]
         )
         self.diss_glob_therm_check = ctk.CTkCheckBox(
-            self, text="Global Thermalization", variable=self.diss_glob_therm_var
+            self, text="Global", variable=self.diss_glob_therm_var
         )
-        self.diss_glob_therm_check.grid(row=6, column=0, padx=10, pady=10)
+        self.diss_glob_therm_check.grid(row=6, column=1, padx=10, pady=10)
 
         self.diss_deph_rate_label = ctk.CTkLabel(self, text="Dephasing Rate:")
         self.diss_deph_rate_label.grid(row=7, column=0, padx=10, pady=10)
@@ -160,9 +149,8 @@ class DissFrame(ctk.CTkFrame):
         diss_kwargs = {
             "loc_deph_rate": float(self.diss_loc_deph_rate_entry.get()),
             "glob_deph_rate": float(self.diss_glob_deph_rate_entry.get()),
-            "uniform_relaxation": self.diss_uniform_relaxation_var.get(),
+            "uniform_relaxation": True,
             "relax_rate": float(self.diss_relax_rate_entry.get()),
-            "relax_rates": dict(self.diss_relax_rates_entry.get()),
             "loc_therm": self.diss_loc_therm_var.get(),
             "glob_therm": self.diss_glob_therm_var.get(),
             "deph_rate": float(self.diss_deph_rate_entry.get()),

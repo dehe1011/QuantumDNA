@@ -496,7 +496,7 @@ class ME_Solver:
                         value = result.expect[
                             particle + "_" + tb_site1 + "_" + tb_site2
                         ]
-                    self.coh[particle] += abs(value)
+                    self.coh[particle] += np.abs(value)
 
         return self.coh
 

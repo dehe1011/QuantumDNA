@@ -85,7 +85,6 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
             ax.plot(
                 me_solver.times,
                 me_solver.pop[particle + "_" + tb_site],
-                label=particle,
                 color=COLORS_PARTICLES[particle],
             )
         elif description == "1P":
@@ -94,7 +93,6 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
             ax.plot(
                 me_solver.times,
                 [dm[tb_site_idx, tb_site_idx].real for dm in me_solver.result],
-                label=particle,
                 color=COLORS_PARTICLES[particle],
             )
 
@@ -103,7 +101,8 @@ def plot_pop(ax, tb_site, me_solver, add_legend=True):
     if add_legend:
         ax.set_ylabel("Population")
         ax.set_xlabel("Time [" + me_solver.t_unit + "]")
-        ax.legend()
+        ax.legend(particles)
+    return ax
 
 
 def plot_pops(me_solver):
@@ -133,10 +132,9 @@ def plot_pops(me_solver):
         sharey=True,
     )
     axes = axes.flatten()
-    for ax, tb_site in zip(axes, tb_basis):
-        plot_pop(ax, tb_site, me_solver, add_legend=False)
-    axes[0].set_ylabel("Population")
-    axes[0].set_xlabel("Time [" + me_solver.t_unit + "]")
+    for i, tb_site in enumerate(tb_basis):
+        add_legend = i == 0
+        axes[i] = plot_pop(axes[i], tb_site, me_solver, add_legend=add_legend)
     return fig, axes
 
 
@@ -163,12 +161,18 @@ def plot_coh(ax, me_solver):
     particles = me_solver.tb_ham.particles
     for particle in particles:
         if description == "2P":
-            ax.plot(me_solver.times, me_solver.coh[particle], label=particle)
+            ax.plot(
+                me_solver.times,
+                me_solver.coh[particle],
+                label=particle,
+                color=COLORS_PARTICLES[particle],
+            )
         elif description == "1P":
             ax.plot(
                 me_solver.times,
                 [calc_coherence(dm.full()) for dm in me_solver.result],
                 label=particle,
+                color=COLORS_PARTICLES[particle],
             )
 
     # plot settings

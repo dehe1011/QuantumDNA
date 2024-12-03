@@ -7,5 +7,6 @@ mypy
 pre-commit
 pylint
 pytest
+setuptools
 twine
 wheel

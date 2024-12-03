@@ -1,7 +1,7 @@
 customtkinter
+matplotlib
 openpyxl
 pandas
 pyyaml
 qutip
-seaborn
 tqdm

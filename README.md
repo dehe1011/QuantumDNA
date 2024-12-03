@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="docs/figures/qDNA_logo.png">
+    <img src="docs/figures/qDNA_logo2.png">
 </p>
 <p align="center">
     <a href="https://opensource.org/licenses/BSD-3-Clause">

@@ -4,12 +4,38 @@ between datasets."""
 
 import time
 from functools import wraps
+import shutil
+import os
 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 
+from .. import ROOT_DIR
 from .save_load import load_json
 
 # ------------------------------------------------
+
+
+def install_style():
+    """
+    Install the custom Matplotlib style for the QuantumDNA project.
+    This function copies the custom Matplotlib style file `qDNA-default.mplstyle`
+    from the project's directory to the Matplotlib configuration directory's
+    `stylelib` folder. If the `stylelib` folder does not exist, it will be created.
+    After copying the style file, the Matplotlib style library is reloaded to
+    apply the new style.
+    """
+
+    config_dir = mpl.get_configdir()
+    stylelib_dir = os.path.join(config_dir, "stylelib")
+    os.makedirs(stylelib_dir, exist_ok=True)
+    mplstyle_path = os.path.join(ROOT_DIR, "qDNA", "qDNA-default.mplstyle")
+    shutil.copy(mplstyle_path, stylelib_dir)
+    plt.style.reload_library()
+
+
+install_style()
 
 
 def timeit(f):

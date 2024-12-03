@@ -29,6 +29,7 @@ Below is a list of available tutorials. Click on each to access the detailed not
    Environment Simulation <tutorials/3_Environment_Simulation>
    Visualization <tutorials/4_Visualization>
    Evaluation <tutorials/5_Evaluation>
+   Reproduce Papers <tutorials/6_Reproduce_Papers>
 
 Descriptions
 ------------
@@ -37,7 +38,7 @@ Descriptions
   Reproduces all the figures presented in the reference paper :cite:`Herb2024`.
   This serves as a comprehensive example of `qDNA`'s visualization and analysis features.
 
-**Tight_Binding_Parameters**
+**Tight Binding Parameters**
   Learn the Linear Combination of Atomic Orbitals (LCAO) approach using Slater–Koster two-center
   integrals and Harrison-type expressions. Ideal for tight-binding model parameterization.
 
@@ -57,6 +58,11 @@ Descriptions
 **Evaluation**
   Perform calculations for observables like exciton lifetimes, average charge separation, and dipole
   moments. Includes parallelization features for efficient computation.
+
+**Reproduce Papers**
+  Reproduce the plots from the papers :cite:`Giese1999`, :cite:`Giese2001`, :cite:`Bittner2006`,
+  :cite:`Bittner2007`, :cite:`Simserides2014` and :cite:`Mantela2023` using the `qDNA` package. This tutorial
+  demonstrates the package's capabilities in generating results that have already been published elsewhere.
 
 
 Getting Started

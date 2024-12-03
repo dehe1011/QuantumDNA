@@ -64,14 +64,14 @@ def plot_dna_base_frequency(lifetime_dict, cutoff_num=10):
         (base_freq_dict["G"] + base_freq_dict["C"]) * 100,
         "o--",
         markersize=4,
-        color=COLORS_DNA_BASES["C"],
+        color=COLORS_DNA_BASES["G"],
     )
     ax.plot(
         lifetimes,
         (base_freq_dict["A"] + base_freq_dict["T"]) * 100,
         "o--",
         markersize=4,
-        color=COLORS_DNA_BASES["T"],
+        color=COLORS_DNA_BASES["A"],
     )
 
     # plot settings

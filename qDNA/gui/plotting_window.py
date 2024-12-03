@@ -63,7 +63,7 @@ class PlottingWindow(ctk.CTkToplevel):
 
         self.plotting_frame = PlottingFrame(master=self)
         self.plotting_frame.grid(
-            row=0, column=0, columnspan=2, padx=20, pady=20, sticky="nsew"
+            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew"
         )
 
         self.plot_options_kwargs = master.plot_options_kwargs
@@ -73,7 +73,7 @@ class PlottingWindow(ctk.CTkToplevel):
 
         if self.plot_option == "Population":
             self.init_tb_site = self.plot_options_kwargs["init_tb_site"]
-            if self.init_tb_site == "All":
+            if self.init_tb_site == "All DNA Bases":
                 self.plot_pops()
             else:
                 self.plot_pop()

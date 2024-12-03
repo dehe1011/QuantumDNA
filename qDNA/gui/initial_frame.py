@@ -25,26 +25,35 @@ class InitialFrame(ctk.CTkFrame):
         )
         self.logo_label.grid(row=0, column=0, pady=10, padx=10)
 
-        self.upper_strand_label = ctk.CTkLabel(
-            self, text="DNA Sequence \n (upper strand):"
-        )
-        self.upper_strand_label.grid(row=1, column=0, pady=10, padx=10)
+        self.grid_rowconfigure(1, weight=1)
+
+        self.upper_strand_label = ctk.CTkLabel(self, text="Upper DNA Strand:")
+        self.upper_strand_label.grid(row=2, column=0, pady=0, padx=10)
 
         self.upper_strand_entry = ctk.CTkEntry(self)
-        self.upper_strand_entry.grid(row=2, column=0, pady=10, padx=10)
-        self.upper_strand_entry.insert(0, "GCG")
+        self.upper_strand_entry.grid(row=3, column=0, pady=10, padx=10)
+        self.upper_strand_entry.insert(0, "G_C_G")
+
+        self.lower_strand_label = ctk.CTkLabel(self, text="Lower DNA Strand:")
+        self.lower_strand_label.grid(row=4, column=0, pady=0, padx=10)
+
+        self.lower_strand_entry = ctk.CTkEntry(self)
+        self.lower_strand_entry.grid(row=5, column=0, pady=10, padx=10)
+        self.lower_strand_entry.insert(0, "auto complete")
 
         self.tb_model_label = ctk.CTkLabel(self, text="TB Model:")
-        self.tb_model_label.grid(row=3, column=0, pady=10, padx=10)
+        self.tb_model_label.grid(row=6, column=0, pady=0, padx=10)
 
         self.tb_model_combo = ctk.CTkComboBox(self, values=master.configs["TB_MODELS"])
-        self.tb_model_combo.grid(row=4, column=0, pady=10, padx=10)
+        self.tb_model_combo.grid(row=7, column=0, pady=10, padx=10)
         self.tb_model_combo.set("WM")
+
+        self.grid_rowconfigure(8, weight=1)
 
         self.first_confirm_button = ctk.CTkButton(
             self, text="Confirm", command=master.press_first_confirm
         )
-        self.first_confirm_button.grid(row=5, column=0, pady=10, padx=10)
+        self.first_confirm_button.grid(row=9, column=0, pady=10, padx=10)
 
     def change_state(self, state):
         """Changes the state of certain widgets (between 'normal' and 'disabled')."""
