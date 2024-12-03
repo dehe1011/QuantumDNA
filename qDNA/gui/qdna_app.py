@@ -73,8 +73,8 @@ class qDNA_app(ctk.CTk):
 
         # the options_frame and plot_options_frame can not be manipulated when the window opens
         # (because at first the inputs in the initial_frame must be confirmed and is used to update these frames)
-        self.options_frame.change_state("disabled")
-        self.plot_options_frame.change_state("disabled")
+        self.options_frame.change_state("normal")
+        self.plot_options_frame.change_state("normal")
 
     # ------------------------------------------
 
@@ -108,6 +108,7 @@ class qDNA_app(ctk.CTk):
         self.tb_model_name = self.initial_frame.tb_model_combo.get()
         self.init_kwargs = {
             "upper_strand": self.upper_strand,
+            "lower_strand": self.lower_strand,
             "tb_model_name": self.tb_model_name,
         }
         self.kwargs.update(self.init_kwargs)

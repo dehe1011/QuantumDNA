@@ -115,7 +115,7 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 * **Menu Window:** Access various functionalities from a centralized menu.
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/menu_1_light.png" alt="Screenshot of the menu of the user interface.">
+    <img src="docs/figures/1BNA_1.png" alt="Screenshot of the menu of the user interface.">
 </p>
 <blockquote><em>Screenshot of the menu of the user interface.</em></blockquote>
 
@@ -124,7 +124,7 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 </ul>
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/plot_1_light.png" width="60%" alt="Plot obtained after pressing the submit button on the menu.">
+    <img src="docs/figures/1BNA_2.png" width="60%" alt="Plot obtained after pressing the submit button on the menu.">
 </p>
 <blockquote><em>Plot obtained after pressing the submit button on the menu (see image above).</em></blockquote>
 
@@ -133,7 +133,7 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 </ul>
 
 <p align="center">
-    <img src="docs/figures/user_interface_figures/menu_2_light.png" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
+    <img src="docs/figures/1BNA_3.png" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
 </p>
 <blockquote><em>Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.</em></blockquote>
 
