@@ -1,6 +1,7 @@
 <p align="center">
-    <img src="docs/figures/qDNA_logo2.png">
+    <img src="docs/figures/qDNA_logo2.png" width="600">
 </p>
+
 <p align="center">
     <a href="https://opensource.org/licenses/BSD-3-Clause">
         <img src="https://img.shields.io/badge/license-New%20BSD-blue.svg"
