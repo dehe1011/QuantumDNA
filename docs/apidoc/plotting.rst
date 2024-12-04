@@ -1,14 +1,14 @@
-Plotting
-========
+Visualization
+=============
 
-Plot DNA base frequency
+Plot DNA Base Frequency
 -----------------------
 
 .. automodule:: qDNA.visualization
    :members: plot_dna_base_frequency
    :show-inheritance: False
 
-Plot eigenspectrum
+Plot Eigenspectrum
 ------------------
 
 .. automodule:: qDNA.visualization
@@ -16,7 +16,7 @@ Plot eigenspectrum
    :show-inheritance: False
    :noindex:
 
-Plot Fourier analysis
+Plot Fourier Analysis
 ---------------------
 
 .. automodule:: qDNA.visualization
@@ -25,7 +25,7 @@ Plot Fourier analysis
    :noindex:
 
 
-Plot poulations and coherences
+Plot Poulations and Coherences
 ------------------------------
 
 .. automodule:: qDNA.visualization

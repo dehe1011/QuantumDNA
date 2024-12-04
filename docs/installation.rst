@@ -197,4 +197,4 @@ To remove the package:
 If you cloned the GitHub repository, manually delete the `QuantumDNA` folder from your computer.
 
 
-🎉 **Congratulations!** You’ve successfully installed and set up `QuantumDNA`. Enjoy exploring the physics of DNA with this powerful tool.
+**Congratulations!** You've successfully installed and set up `QuantumDNA`. Enjoy exploring the physics of DNA with this powerful tool.

@@ -1,14 +1,14 @@
 Utilities
 =========
 
-Unit conversion
+Unit Conversion
 ---------------
 
 .. automodule:: qDNA.utils
    :members: get_conversion, get_all_conversions, get_conversion_dict
    :show-inheritance: False
 
-Hamiltonian analysis
+Hamiltonian Analysis
 --------------------
 
 .. automodule:: qDNA.utils
@@ -16,7 +16,7 @@ Hamiltonian analysis
    :show-inheritance: False
    :noindex:
 
-Density matrix analysis
+Density Matrix Analysis
 -----------------------
 
 .. automodule:: qDNA.utils
