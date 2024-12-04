@@ -1,6 +1,6 @@
-.. figure:: figures/qDNA_logo.png
+.. figure:: figures/qDNA_logo2.png
    :align: center
-   :width: 7in
+   :width: 6in
 
 QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA
 ==============================================================================

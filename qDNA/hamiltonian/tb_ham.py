@@ -317,8 +317,7 @@ class TB_Ham:
         Returns
         -------
         tuple
-            A tuple containing two dictionaries:
-              tb_params : dict
+            tb_params : dict
                 The tight-binding parameters.
         """
 
@@ -347,10 +346,9 @@ class TB_Ham:
         Returns
         -------
         tuple
-            A tuple containing:
-              eigenvalues : ndarray
+            eigenvalues : ndarray
                 The eigenvalues of the matrix.
-              eigenvectors : ndarray
+            eigenvectors : ndarray
                 The eigenvectors of the matrix.
         """
 
