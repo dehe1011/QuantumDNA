@@ -54,10 +54,10 @@ def plot_pops_heatmap(me_solver, heatmap_type="seaborn"):
         ax[i].set_yticks([])
 
         y_len, x_len = particle_pop.shape
-        ax[i].set_xlabel(r"Time [ps]")
+        ax[i].set_xlabel(f"Time [{me_solver.t_unit}]")
         ax[i].set_title(particle.capitalize())
         ax[i].set_xticks(
-            np.linspace(0, x_len, 7), np.round(np.linspace(0, me_solver.t_end, 7), 1)
+            np.linspace(0, x_len, 7), np.round(np.linspace(0, me_solver.t_end, 7), 0)
         )
         ax[i].set_yticks(
             np.arange(y_len) + 0.5, labels=me_solver.tb_ham.tb_sites_flattened

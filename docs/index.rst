@@ -1,18 +1,15 @@
-.. figure:: figures/qDNA_logo2.png
+.. figure:: figures/0_qDNA_logo.png
    :align: center
    :width: 6in
 
 QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA
 ==============================================================================
 
-Welcome to **QuantumDNA** -- a comprehensive tool for performing quantum mechanical calculations on DNA.
-QuantumDNA leverages the formalism of open quantum systems, utilizing tight-binding Hamiltonians to model DNA at a quantum level.
-This tool can handle a variety of tight-binding models and allows users to input custom parameters derived from *ab initio* calculations or experimental data.
-Furthermore, QuantumDNA enables users to define unique models, making it highly adaptable to a wide range of research needs.
-
-Designed with accessibility in mind, QuantumDNA includes a user-friendly interface to make quantum calculations accessible to researchers of all technical backgrounds.
+QuantumDNA is an open-source Python package for simulating charge transfer (CT) and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface (GUI)—perfect for researchers and students, even without extensive coding experience.
 
 Some of the core functionalities of QuantumDNA include the calculation of exciton lifetimes, average charge separation, and dipole moments for excited states along DNA strands :cite:`Herb2024`.
+
+Whether you're a scientist, student, or just curious, QuantumDNA is here to help you explore the fascinating world of DNA charge transfer. Dive in and start exploring today!
 
 About This Documentation
 ------------------------

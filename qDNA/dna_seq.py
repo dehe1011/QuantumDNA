@@ -71,6 +71,8 @@ class DNA_Seq:
         if isinstance(upper_strand, str):
             upper_strand = list(upper_strand)
         self.upper_strand = upper_strand
+        if isinstance(lower_strand, str):
+            lower_strand = list(lower_strand)
         self.lower_strand = lower_strand
         self.methylated = methylated
         self.tb_model_name = tb_model_name
@@ -129,16 +131,16 @@ class DNA_Seq:
         # Generate the lower strand if it is not provided and the model is double-stranded
         if self.double_stranded:
             if not self.lower_strand:
-                self.lower_strand = "".join(
+                self.lower_strand = [
                     self.complementary_base_dict[dna_base]
                     for dna_base in self.upper_strand
-                )
+                ]
                 if self.methylated:
                     self._add_methylation()
 
         # Generate the backbone strand if the model includes a backbone
         if self.backbone:
-            self.backbone_strand = "B" * len(self.upper_strand)
+            self.backbone_strand = ["B"] * len(self.upper_strand)
 
         # Return the DNA sequence based on the model properties
         if self.double_stranded and self.backbone:
@@ -162,13 +164,12 @@ class DNA_Seq:
         DNA strand by changing the character following the match to "F".
         """
         # Find all occurrences of "cG" in the upper DNA strand
-        matches = [match.start() for match in re.finditer("FG", self.upper_strand)]
+        upper_strand_string = "".join(self.upper_strand)
+        matches = [match.start() for match in re.finditer("FG", upper_strand_string)]
 
         # Modify the lower DNA strand based on the matches
-        lower_strand_list = list(self.lower_strand)
         for match in matches:
-            lower_strand_list[match + 1] = "F"
-        self.lower_strand = "".join(lower_strand_list)
+            self.lower_strand[match + 1] = "F"
 
 
 def create_upper_strands(num_dna_bases, dna_bases):

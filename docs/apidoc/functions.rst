@@ -107,7 +107,7 @@ Observables
 Lindblad rates
 --------------
 
-This module is adapted from the quantum_HEOM GitHub repository :cite:`quantum_HEOM`.
+This module is adapted from the quantum_HEOM GitHub repository :cite:`Abbott2020`.
 
 .. automodule:: qDNA.environment
    :members: debye_spectral_density, ohmic_spectral_density, bose_einstein_distrib, dephasing_rate
