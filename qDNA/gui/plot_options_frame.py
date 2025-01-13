@@ -14,7 +14,7 @@ from .user_interface_utils import change_state_all_widgets
 # --------------------------------------------------
 
 
-class LifetimeFrame(ctk.CTkFrame):
+class ExcitonFrame(ctk.CTkFrame):
     def __init__(self, master, **kwargs):
         """
         Notes:
@@ -59,23 +59,19 @@ class LifetimeFrame(ctk.CTkFrame):
         if isinstance(lifetime, str):
             print("---------------------------")
             print(f"Exciton Lifetime: {lifetime}")
-            print("---------------------------")
         else:
             print("---------------------------")
             print(f"Exciton Lifetime: {lifetime} fs")
-            print("---------------------------")
 
     def _calc_dipole(self):
         dipole = calc_dipole(**self.kwargs)
         print("---------------------------")
         print(f"Charge Separation: {dipole} A")
-        print("---------------------------")
 
     def _calc_dipole_moment(self):
         dipole_moment = calc_dipole_moment(**self.kwargs)
         print("---------------------------")
         print(f"Dipole Moment: {dipole_moment} D")
-        print("---------------------------")
 
     def _calc_exciton_transfer(self):
         avg_pop_upper_strand, avg_pop_lower_strand = calc_exciton_transfer(
@@ -88,7 +84,6 @@ class LifetimeFrame(ctk.CTkFrame):
         print("---------------------------")
         print(f"Average Exciton Population (upper strand): {avg_pop_upper_strand}")
         print(f"Average Exciton Population (lower strand): {avg_pop_lower_strand}")
-        print("---------------------------")
 
 
 # --------------------------------------------------
@@ -113,9 +108,11 @@ class PopFrame(ctk.CTkFrame):
         self.tb_site_label = ctk.CTkLabel(self, text="TB site:")
         self.tb_site_label.grid(row=1, column=0, padx=10, pady=10)
 
-        self.tb_site_combo = ctk.CTkComboBox(self, values=["All DNA Bases"] + tb_basis)
+        self.tb_site_combo = ctk.CTkComboBox(
+            self, values=["Heatmap", "All DNA Bases"] + tb_basis
+        )
         self.tb_site_combo.grid(row=1, column=1, padx=10, pady=10)
-        self.tb_site_combo.set("All DNA Bases")
+        self.tb_site_combo.set("Heatmap")
 
     def get_pop_kwargs(self):
         """Returns the values of widgets with get() method in dictionary format."""
@@ -236,7 +233,7 @@ class PlotOptionsTab(ctk.CTkTabview):
         self.pop_frame = PopFrame(self.pop_tab, tb_basis, **kwargs)
         self.coh_frame = CohFrame(self.coh_tab, **kwargs)
         self.fourier_frame = FourierFrame(self.fourier_tab, tb_basis, **kwargs)
-        self.lifetime_frame = LifetimeFrame(self.lifetime_tab, **kwargs)
+        self.exciton_frame = ExcitonFrame(self.lifetime_tab, **kwargs)
 
 
 class PlotOptionsFrame(ctk.CTkFrame):
@@ -272,6 +269,6 @@ class PlotOptionsFrame(ctk.CTkFrame):
         change_state_all_widgets(self.plot_options_tab.pop_frame, state=state)
         change_state_all_widgets(self.plot_options_tab.coh_frame, state=state)
         change_state_all_widgets(self.plot_options_tab.fourier_frame, state=state)
-        change_state_all_widgets(self.plot_options_tab.lifetime_frame, state=state)
+        change_state_all_widgets(self.plot_options_tab.exciton_frame, state=state)
         self.submit_button.configure(state=state)
         self.back_button.configure(state=state)

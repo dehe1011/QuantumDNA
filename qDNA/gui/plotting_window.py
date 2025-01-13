@@ -4,7 +4,13 @@ import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from ..visualization import plot_pop, plot_pops, plot_coh, plot_fourier
+from ..visualization import (
+    plot_pop,
+    plot_pops,
+    plot_coh,
+    plot_fourier,
+    plot_pops_heatmap,
+)
 from ..tools import save_figure
 
 # -----------------------------------------------------------------------------------------------------
@@ -73,7 +79,9 @@ class PlottingWindow(ctk.CTkToplevel):
 
         if self.plot_option == "Population":
             self.init_tb_site = self.plot_options_kwargs["init_tb_site"]
-            if self.init_tb_site == "All DNA Bases":
+            if self.init_tb_site == "Heatmap":
+                self.plot_pops_heatmap()
+            elif self.init_tb_site == "All DNA Bases":
                 self.plot_pops()
             else:
                 self.plot_pop()
@@ -103,16 +111,19 @@ class PlottingWindow(ctk.CTkToplevel):
     def plot_pops(self):
         self.fig, self.axes = plot_pops(self.me_solver)
 
+    def plot_pops_heatmap(self):
+        self.fig, self.ax = plot_pops_heatmap(self.me_solver)
+
     def plot_coh(self):
         self.fig, self.ax = plt.subplots()
-        plot_coh(self.ax, self.me_solver)
+        self.ax = plot_coh(self.ax, self.me_solver)
 
     def plot_fourier(self):
         self.fig, self.ax = plt.subplots()
         init_state = self.plot_options_kwargs["init_state"]
         end_state = self.plot_options_kwargs["end_state"]
         x_axis = self.plot_options_kwargs["x_axis"]
-        plot_fourier(self.ax, self.tb_ham, init_state, end_state, x_axis)
+        self.ax = plot_fourier(self.ax, self.tb_ham, init_state, end_state, x_axis)
 
     def save(self):
         self.filename = self.plotting_frame.filename_entry.get()

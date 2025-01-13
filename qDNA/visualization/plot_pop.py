@@ -1,14 +1,70 @@
 """This module provides functions to plot population and coherence for quantum DNA
 models."""
 
+import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from qDNA.utils import calc_coherence, get_pop_fourier
 from . import COLORS_PARTICLES
 
-__all__ = ["plot_pop_fourier", "plot_pop", "plot_pops", "plot_coh", "plot_test_fourier"]
+__all__ = [
+    "plot_pops_heatmap",
+    "plot_pop_fourier",
+    "plot_pop",
+    "plot_pops",
+    "plot_coh",
+    "plot_test_fourier",
+]
 
 # -------------------------------------------------------------------------------------
+
+
+def plot_pops_heatmap(me_solver, heatmap_type="seaborn"):
+    num_particles = len(me_solver.tb_ham.particles)
+    fig, ax = plt.subplots(
+        1, num_particles, figsize=(6.4 * num_particles, 4.8), sharey=False
+    )
+
+    pop_dict = me_solver.get_pop()
+    cmaps = ["Blues", "Reds", "Greys"]
+    for i, particle in enumerate(me_solver.tb_ham.particles):
+        particle_pop = np.array(
+            [value for key, value in pop_dict.items() if key.startswith(particle)]
+        )
+
+        # seaborn heatmap (looks prettier in my opinion)
+        if heatmap_type == "seaborn":
+            heatmap = sns.heatmap(
+                particle_pop,
+                xticklabels=[],
+                yticklabels=[],
+                cmap=cmaps[i],
+                ax=ax[i],
+                cbar=False,
+            )
+            heatmap.figure.colorbar(heatmap.collections[0], ax=ax[i])
+
+        # matplotlib heatmap
+        if heatmap_type == "matplotlib":
+            im = ax[i].imshow(particle_pop, cmap=cmaps[i], aspect="auto")
+            fig.colorbar(im, ax=ax[i])
+
+        ax[i].set_xticks([])
+        ax[i].set_yticks([])
+
+        y_len, x_len = particle_pop.shape
+        ax[i].set_xlabel(r"Time [ps]")
+        ax[i].set_title(particle.capitalize())
+        ax[i].set_xticks(
+            np.linspace(0, x_len, 7), np.round(np.linspace(0, me_solver.t_end, 7), 1)
+        )
+        ax[i].set_yticks(
+            np.arange(y_len) + 0.5, labels=me_solver.tb_ham.tb_sites_flattened
+        )
+
+    ax[0].set_ylabel("DNA Bases")
+    return fig, ax
 
 
 def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
@@ -54,6 +110,7 @@ def plot_pop_fourier(ax, tb_ham, init_state, end_state, times, t_unit):
     ax.set_ylabel("Population")
     ax.set_xlabel("Time [" + t_unit + "]")
     ax.legend()
+    return ax
 
 
 def plot_pop(ax, tb_site, me_solver, add_legend=True):
@@ -179,6 +236,7 @@ def plot_coh(ax, me_solver):
     ax.set_ylabel("Coherence")
     ax.set_xlabel("Time [" + me_solver.t_unit + "]")
     ax.legend()
+    return ax
 
 
 def plot_test_fourier(ax, tb_site, me_solver):
@@ -204,3 +262,4 @@ def plot_test_fourier(ax, tb_site, me_solver):
         me_solver.t_unit,
     )
     plot_pop(ax, tb_site, me_solver)
+    return ax

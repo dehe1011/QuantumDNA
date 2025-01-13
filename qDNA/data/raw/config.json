@@ -17,12 +17,13 @@
       "exciton"
     ],
     "SOURCES": [
+      "Endres2002",
+      "Bittner2007",
       "Hawke2010",
       "Simserides2014",
       "Mantela2021",
       "Simserides2024",
       "Herb2024",
-      "Bittner2007",
       "1BNA"
     ],
     "SPECTRAL_DENSITIES": [

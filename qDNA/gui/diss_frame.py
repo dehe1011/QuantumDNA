@@ -55,9 +55,10 @@ class DissFrame(ctk.CTkFrame):
         self.diss_relax_rate_label.grid(row=4, column=0, padx=10, pady=10)
 
         self.diss_relax_rate_entry = ctk.CTkEntry(self)
-        self.diss_relax_rate_entry.insert(
-            0, str(self.diss_kwargs_default["relax_rate"])
-        )
+        # self.diss_relax_rate_entry.insert(
+        #     0, str(self.diss_kwargs_default["relax_rate"])
+        # )
+        self.diss_relax_rate_entry.insert(0, 3.0)
         self.diss_relax_rate_entry.grid(row=4, column=1, padx=10, pady=10)
 
         # -----------------------------------

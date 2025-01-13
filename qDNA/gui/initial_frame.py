@@ -50,7 +50,7 @@ class InitialFrame(ctk.CTkFrame):
 
         self.tb_model_combo = ctk.CTkComboBox(self, values=master.configs["TB_MODELS"])
         self.tb_model_combo.grid(row=7, column=0, pady=10, padx=10)
-        self.tb_model_combo.set("WM")
+        self.tb_model_combo.set("ELM")
 
         self.grid_rowconfigure(8, weight=1)
 

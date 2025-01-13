@@ -68,6 +68,8 @@ class DNA_Seq:
 
     def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=None):
         # Initialize the DNA sequence
+        if isinstance(upper_strand, str):
+            upper_strand = list(upper_strand)
         self.upper_strand = upper_strand
         self.lower_strand = lower_strand
         self.methylated = methylated

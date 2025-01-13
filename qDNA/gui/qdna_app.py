@@ -34,6 +34,8 @@ class qDNA_app(ctk.CTk):
         # initialization of the ctk.CTk class
         super().__init__()
 
+        # self.tk.call('tk', 'scaling', 1.0)
+
         self.title("QuantumDNA")
         self.configs = CONFIG
         self.kwargs = dict()
@@ -213,15 +215,15 @@ class qDNA_app(ctk.CTk):
 
     def enable_initial_frame(self):
         self.initial_frame.change_state("normal")
-        self.options_frame.change_state("disabled")
-        self.plot_options_frame.change_state("disabled")
+        self.options_frame.change_state("normal")
+        self.plot_options_frame.change_state("normal")
 
     def enable_options_frame(self):
-        self.initial_frame.change_state("disabled")
+        self.initial_frame.change_state("normal")
         self.options_frame.change_state("normal")
-        self.plot_options_frame.change_state("disabled")
+        self.plot_options_frame.change_state("normal")
 
     def enable_plotting_frame(self):
-        self.initial_frame.change_state("disabled")
-        self.options_frame.change_state("disabled")
+        self.initial_frame.change_state("normal")
+        self.options_frame.change_state("normal")
         self.plot_options_frame.change_state("normal")
