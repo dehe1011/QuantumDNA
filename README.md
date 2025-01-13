@@ -151,7 +151,7 @@ The GUI allows you to easily explore and utilize the capabilities of the `qDNA` 
 </ul>
 
 <p align="center">
-    <img src="docs/figures/1BNA_3.png" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
+    <img src="docs/figures/1BNA_3.png" width="80%" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
 </p>
 
 Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.
