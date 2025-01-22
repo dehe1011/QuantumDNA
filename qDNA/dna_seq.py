@@ -36,7 +36,7 @@ class DNA_Seq:
     methylated : bool, optional
         Indicates whether the DNA sequence is methylated (default is True).
     lower_strand : str, optional
-        The lower strand of the DNA sequence (default is None).
+        The lower strand of the DNA sequence (default is 'auto_complete').
 
     Attributes
     ----------
@@ -66,12 +66,14 @@ class DNA_Seq:
         The generated DNA sequence.
     """
 
-    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=None):
+    def __init__(
+        self, upper_strand, tb_model_name, methylated=True, lower_strand="auto_complete"
+    ):
         # Initialize the DNA sequence
         if isinstance(upper_strand, str):
             upper_strand = list(upper_strand)
         self.upper_strand = upper_strand
-        if isinstance(lower_strand, str):
+        if lower_strand != "auto_complete":
             lower_strand = list(lower_strand)
         self.lower_strand = lower_strand
         self.methylated = methylated
@@ -130,7 +132,7 @@ class DNA_Seq:
 
         # Generate the lower strand if it is not provided and the model is double-stranded
         if self.double_stranded:
-            if not self.lower_strand:
+            if self.lower_strand == "auto_complete":
                 self.lower_strand = [
                     self.complementary_base_dict[dna_base]
                     for dna_base in self.upper_strand

@@ -75,8 +75,8 @@ class qDNA_app(ctk.CTk):
 
         # the options_frame and plot_options_frame can not be manipulated when the window opens
         # (because at first the inputs in the initial_frame must be confirmed and is used to update these frames)
-        self.options_frame.change_state("normal")
-        self.plot_options_frame.change_state("normal")
+        self.options_frame.change_state("disabled")
+        self.plot_options_frame.change_state("disabled")
 
     # ------------------------------------------
 
@@ -103,7 +103,7 @@ class qDNA_app(ctk.CTk):
         self.upper_strand = self.upper_strand.split("_")
         self.lower_strand = self.initial_frame.lower_strand_entry.get()
         if self.lower_strand == "auto complete":
-            self.lower_strand = None
+            self.lower_strand = "auto_complete"
         else:
             self.lower_strand = self.lower_strand.split("_")
 
@@ -215,15 +215,15 @@ class qDNA_app(ctk.CTk):
 
     def enable_initial_frame(self):
         self.initial_frame.change_state("normal")
-        self.options_frame.change_state("normal")
-        self.plot_options_frame.change_state("normal")
+        self.options_frame.change_state("disabled")
+        self.plot_options_frame.change_state("disabled")
 
     def enable_options_frame(self):
-        self.initial_frame.change_state("normal")
+        self.initial_frame.change_state("disabled")
         self.options_frame.change_state("normal")
-        self.plot_options_frame.change_state("normal")
+        self.plot_options_frame.change_state("disabled")
 
     def enable_plotting_frame(self):
-        self.initial_frame.change_state("normal")
-        self.options_frame.change_state("normal")
+        self.initial_frame.change_state("disabled")
+        self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("normal")
