@@ -124,6 +124,7 @@ def convert_pdb_to_xyz(filepath_pdb):
     -----
     .. note::
 
+        Information about the atomic elements and coordinates is extracted from the PDB file.
         - The function creates a directory named after the input PDB file (without extension)
         to store the generated XYZ files.
         - Each base in the PDB file is written to a separate XYZ file.
@@ -132,6 +133,7 @@ def convert_pdb_to_xyz(filepath_pdb):
         - The function assumes that the base counter starts from one if the chain changes.
         - The function prints the directory where the XYZ files are created if the verbose
         mode is enabled in the DEFAULTS dictionary.
+
     """
 
     # Extract the filename without extension to create a folder

@@ -32,9 +32,10 @@ def get_therm_eq_state(me_solver):
     -----
     .. note::
 
-        - The function first checks if the temperature is zero. If so, it returns the ground state.
-        - For non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the Hamiltonian,
-        normalizes them, and transforms the resulting diagonal matrix to the local basis.
+        The function first checks if the temperature is zero. If so, it returns the ground state. For
+        non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the
+        Hamiltonian, normalizes them, and transforms the resulting diagonal matrix to the local basis.
+
     """
 
     tb_ham = me_solver.tb_ham

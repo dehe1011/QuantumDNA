@@ -253,10 +253,12 @@ def add_interaction(
     np.ndarray
         Hamiltonian matrix with interaction terms added.
 
-    Note
-    ----
-    This works only for a Hamiltonian without the additional basis element accounting for relaxation.
-    Therefore the interaction should always be added before the relaxation.
+    Notes
+    -----
+    .. note::
+
+        This works only for a Hamiltonian without the additional basis element accounting for relaxation.
+        Therefore the interaction should always be added before the relaxation.
 
     Examples
     --------

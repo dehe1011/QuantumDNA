@@ -4,20 +4,25 @@ Utilities
 Unit Conversion
 ---------------
 
-.. automodule:: qDNA.utils
-   :members: get_conversion, get_all_conversions, get_conversion_dict
-   :show-inheritance: False
+.. autofunction:: qDNA.utils.get_conversion
+.. autofunction:: qDNA.utils.get_all_conversions
+.. autofunction:: qDNA.utils.get_conversion_dict
+
 
 Hamiltonian Analysis
 --------------------
 
-.. automodule:: qDNA.utils
-   :members: calc_average_pop, calc_amplitudes, calc_frequencies, get_pop_fourier, calc_ipr_hamiltonian
-   :show-inheritance: False
+.. autofunction:: qDNA.utils.calc_average_pop
+.. autofunction:: qDNA.utils.calc_amplitudes
+.. autofunction:: qDNA.utils.calc_frequencies
+.. autofunction:: qDNA.utils.get_pop_fourier
+.. autofunction:: qDNA.utils.calc_ipr_hamiltonian
+
 
 Density Matrix Analysis
 -----------------------
 
-.. automodule:: qDNA.utils
-   :members: calc_trace_distance, calc_purity, calc_coherence, calc_ipr_dm
-   :show-inheritance: False
+.. autofunction:: qDNA.utils.calc_trace_distance
+.. autofunction:: qDNA.utils.calc_purity
+.. autofunction:: qDNA.utils.calc_coherence
+.. autofunction:: qDNA.utils.calc_ipr_dm

@@ -4,27 +4,26 @@ Visualization
 Plot DNA Base Frequency
 -----------------------
 
-.. automodule:: qDNA.visualization
-   :members: plot_dna_base_frequency
-   :show-inheritance: False
+.. autofunction:: qDNA.visualization.plot_dna_base_frequency
 
 Plot Eigenspectrum
 ------------------
 
-.. automodule:: qDNA.visualization
-   :members: plot_eigv, plot_eigs
-   :show-inheritance: False
+.. autofunction:: qDNA.visualization.plot_eigv
+.. autofunction:: qDNA.visualization.plot_eigs
 
 Plot Fourier Analysis
 ---------------------
 
-.. automodule:: qDNA.visualization
-   :members: plot_fourier, plot_average_pop
-   :show-inheritance: False
+.. autofunction:: qDNA.visualization.plot_fourier
+.. autofunction:: qDNA.visualization.plot_average_pop
 
-Plot Poulations and Coherences
-------------------------------
+Plot Populations and Coherences
+-------------------------------
 
-.. automodule:: qDNA.visualization
-   :members: plot_pop_fourier, plot_pop, plot_pops,  plot_pops_heatmap, plot_coh, plot_test_fourier
-   :show-inheritance: False
+.. autofunction:: qDNA.visualization.plot_pop_fourier
+.. autofunction:: qDNA.visualization.plot_pop
+.. autofunction:: qDNA.visualization.plot_pops
+.. autofunction:: qDNA.visualization.plot_pops_heatmap
+.. autofunction:: qDNA.visualization.plot_coh
+.. autofunction:: qDNA.visualization.plot_test_fourier
