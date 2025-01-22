@@ -6,13 +6,13 @@ from qDNA import DNA_Seq, create_upper_strands
 @pytest.mark.parametrize(
     "seq, mode, methylated, lower_strand, expected",
     [
-        (list("GCG"), "ELM", True, None, (list("GCG"), list("CGC"))),
-        (list("GCG"), "WM", True, None, (list("GCG"),)),
+        (list("GCG"), "ELM", True, "auto_complete", (list("GCG"), list("CGC"))),
+        (list("GCG"), "WM", True, "auto_complete", (list("GCG"),)),
         (
             list("GCG"),
             "FLM",
             True,
-            None,
+            "auto_complete",
             (list("BBB"), list("GCG"), list("CGC"), list("BBB")),
         ),
         (list("GCGCG"), "LM", False, list("FGFGC"), (list("GCGCG"), list("FGFGC"))),

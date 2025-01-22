@@ -5,14 +5,14 @@ Jupyter Notebook Tutorials
 **************************
 
 Welcome to the **QuantumDNA Jupyter Notebook Tutorials**! These tutorials and demonstrations are designed to help users explore and
-understand the functionalities of the `qDNA` package through practical examples.
+understand the functionalities of the `QuantumDNA` package through practical examples.
 
 For a detailed description of the classes and functions used in these tutorials, visit the :ref:`API documentation <apidoc>`.
 
 Overview
 ========
 
-The Jupyter notebooks in the `tutorials` folder provide step-by-step demonstrations of various features and functionalities of the `qDNA` package.
+The Jupyter notebooks in the `tutorials` folder provide step-by-step demonstrations of various features and functionalities of the `QuantumDNA` package.
 Each tutorial focuses on a specific aspect, helping you get started with quantum physical description of DNA and applications of quantum biology.
 
 Tutorials
@@ -48,7 +48,7 @@ Descriptions
   and thermalization models inspired by Quantum Biology.
 
 **Visualization**
-  Use `qDNA`'s built-in plotting routines for effective result visualization. Learn to create custom
+  Use `QuantumDNA`'s built-in plotting routines for effective result visualization. Learn to create custom
   visualizations tailored to your data.
 
 **Evaluation**
@@ -57,7 +57,7 @@ Descriptions
 
 **Reproduce Papers**
   Reproduce the plots from the papers :cite:`Giese1999`, :cite:`Giese2001`, :cite:`Bittner2006`,
-  :cite:`Bittner2007`, :cite:`Simserides2014` and :cite:`Mantela2023` using the `qDNA` package. This tutorial
+  :cite:`Bittner2007`, :cite:`Simserides2014` and :cite:`Mantela2023` using the `QuantumDNA` package. This tutorial
   demonstrates the package's capabilities in generating results that have already been published elsewhere.
 
 **PRE2024**
