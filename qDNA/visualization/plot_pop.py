@@ -20,14 +20,42 @@ __all__ = [
 # -------------------------------------------------------------------------------------
 
 
-def plot_pops_heatmap(me_solver, heatmap_type="seaborn"):
+def plot_pops_heatmap(me_solver, vmax_list=[1, 1, 1], heatmap_type="seaborn"):
+    """
+    Plots a heatmap of populations for each particle in the system.
+
+    Parameters
+    ----------
+    me_solver : object
+        An instance of a solver that contains the time evolution data and Hamiltonian information.
+    vmax_list : list of float, optional
+        A list of maximum values for the color scale of each particle's heatmap. Default is [1, 1, 1].
+    heatmap_type : str, optional
+        The type of heatmap to plot. Options are "seaborn" or "matplotlib". Default is "seaborn".
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The figure object containing the heatmaps.
+    ax : numpy.ndarray of matplotlib.axes._subplots.AxesSubplot
+        An array of axes objects for each particle's heatmap.
+
+    Notes
+    -----
+    .. note::
+
+        - The function uses seaborn or matplotlib to generate heatmaps.
+        - The color maps used are "Blues", "Reds", and "Greens" for different particles.
+    """
+
     num_particles = len(me_solver.tb_ham.particles)
     fig, ax = plt.subplots(
         1, num_particles, figsize=(6.4 * num_particles, 4.8), sharey=False
     )
 
     pop_dict = me_solver.get_pop()
-    cmaps = ["Blues", "Reds", "Greys"]
+    cmaps = ["Blues", "Reds", "Greys"]  # grey scale for exciton
+    cmaps = ["Blues", "Reds", "Greens"]  # green scale for exciton
     for i, particle in enumerate(me_solver.tb_ham.particles):
         particle_pop = np.array(
             [value for key, value in pop_dict.items() if key.startswith(particle)]
@@ -42,12 +70,15 @@ def plot_pops_heatmap(me_solver, heatmap_type="seaborn"):
                 cmap=cmaps[i],
                 ax=ax[i],
                 cbar=False,
+                vmax=vmax_list[i],
             )
             heatmap.figure.colorbar(heatmap.collections[0], ax=ax[i])
 
         # matplotlib heatmap
         if heatmap_type == "matplotlib":
-            im = ax[i].imshow(particle_pop, cmap=cmaps[i], aspect="auto")
+            im = ax[i].imshow(
+                particle_pop, cmap=cmaps[i], aspect="auto", vmax=vmax_list[i]
+            )
             fig.colorbar(im, ax=ax[i])
 
         ax[i].set_xticks([])

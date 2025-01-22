@@ -210,7 +210,7 @@ class ME_Solver:
         .. note::
 
             - Clears the ``result`` list (for the full the all reduced density matrices).
-            - Initializes `groundstate_pop`, `pop`, and `coh` dictionaries.
+            - Initializes ``groundstate_pop``, ``pop``, and ``coh`` dictionaries.
         """
 
         self.result = []
@@ -308,7 +308,7 @@ class ME_Solver:
     def get_result(self):
         """Calculate and return the result of the master equation solver. This method
         checks if the result has already been calculated. If not, it constructs the
-        Hamiltonian matrix and solves the master equation using QuTiP's `mesolve`
+        Hamiltonian matrix and solves the master equation using QuTiP's ``qutip.mesolve``
         function. The result is then stored and returned.
 
         Returns
@@ -387,11 +387,11 @@ class ME_Solver:
         -----
         .. note::
 
-            - If the population (`self.pop`) is already computed, it returns the cached result.
+            - If the population ``self.pop`` is already computed, it returns the cached result.
             - The method supports two types of Hamiltonian descriptions: "2P" and "1P".
-            - For "2P" description, it uses the population operators from `self.lindblad_diss.pop_ops`.
-            - For "1P" description, it constructs the population operators based on the tight-binding basis (`self.tb_ham.tb_basis`).
-            - The master equation is solved using `qutip.mesolve` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
+            - For "2P" description, it uses the population operators from ``self.lindblad_diss.pop_ops``.
+            - For "1P" description, it constructs the population operators based on the tight-binding basis ``self.tb_ham.tb_basis``.
+            - The master equation is solved using ``qutip.mesolve`` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
         """
 
         # check if the population is already calculated
@@ -443,7 +443,7 @@ class ME_Solver:
         dissipation.
         For "1P" description, it constructs the coherence operators based on the
         tensor basis permutations.
-        The method then solves the master equation using the QuTiP `mesolve` function
+        The method then solves the master equation using the QuTiP ``qutip.mesolve`` function
         and calculates the coherence for each particle in the system.
 
         Returns

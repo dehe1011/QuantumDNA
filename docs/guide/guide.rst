@@ -23,20 +23,16 @@ Below is a list of available tutorials. Click on each to access the detailed not
 .. toctree::
    :maxdepth: 1
 
-   PRE_2024 <tutorials/PRE_2024>
    Tight Binding Parameters <tutorials/1_Tight_Binding_Parameters>
    Tight Binding Method <tutorials/2_Tight_Binding_Method>
    Environment Simulation <tutorials/3_Environment_Simulation>
    Visualization <tutorials/4_Visualization>
    Evaluation <tutorials/5_Evaluation>
    Reproduce Papers <tutorials/6_Reproduce_Papers>
+   PRE_2024 <tutorials/PRE_2024>
 
 Descriptions
 ------------
-
-**PRE2024**
-  Reproduces all the figures presented in the reference paper :cite:`Herb2024`.
-  This serves as a comprehensive example of `qDNA`'s visualization and analysis features.
 
 **Tight Binding Parameters**
   Learn the Linear Combination of Atomic Orbitals (LCAO) approach using Slater–Koster two-center
@@ -64,11 +60,15 @@ Descriptions
   :cite:`Bittner2007`, :cite:`Simserides2014` and :cite:`Mantela2023` using the `qDNA` package. This tutorial
   demonstrates the package's capabilities in generating results that have already been published elsewhere.
 
+**PRE2024**
+  Reproduces all the figures presented in the reference paper :cite:`Herb2024`.
+  This serves as a comprehensive example of `QuantumDNA`'s visualization and analysis features.
+
 
 Getting Started
 ===============
 
-These tutorials provide hands-on examples designed to guide you through using the `qDNA` package effectively. To get started:
+These tutorials provide hands-on examples designed to guide you through using the `QuantumDNA` package effectively. To get started:
 
 1. Navigate to the `tutorials` folder and open the desired `.ipynb` file in Jupyter Notebook or JupyterLab.
 2. Follow the instructions provided in the notebook to run the cells and explore the package's features interactively.
@@ -79,8 +79,8 @@ Tips for Using the Tutorials
 ----------------------------
 
 - **Run in a Jupyter Environment**: Ensure you have Jupyter Notebook or JupyterLab installed to execute the tutorials interactively.
-- **Dependencies**: Before starting, confirm that all dependencies for `qDNA` are installed. Check the `requirements.txt` file in the repository for details.
+- **Dependencies**: Before starting, confirm that all dependencies for `QuantumDNA` are installed. Check the `requirements.txt` file in the repository for details.
 - **Explore Further**: Modify and experiment with the code to deepen your understanding of the concepts.
 
 
-We hope these tutorials help you leverage the full potential of the `qDNA` package for your quantum biology research!
+We hope these tutorials help you leverage the full potential of the `QuantumDNA` package for your quantum biology research!

@@ -116,7 +116,7 @@ def get_cumulative_average_pop(tb_ham, J_list):
 
     # calculate the average population for each particle, J, and tb_site using tb_ham.get_average_pop
     for J_idx, J in enumerate(J_list):
-        tb_ham.interaction_param = J
+        tb_ham.coulomb_param = J
         for tb_site_idx, tb_site in enumerate(tb_ham.tb_basis):
             average_pop = tb_ham.get_average_pop(init_state, tb_site)
             for particle_idx, particle in enumerate(tb_ham.particles):

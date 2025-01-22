@@ -47,8 +47,10 @@ def calc_orbital_overlap(
 
     Notes
     -----
-    The directional cosines are used as projections on the coordinate axis rather than actual cosine values.
-    The function includes a hydrogen correction factor obtained by optimization.
+    .. note::
+
+        The directional cosines are used as projections on the coordinate axis rather than actual cosine values.
+        The function includes a hydrogen correction factor obtained by optimization.
     """
 
     vector = np.array(orbital2.coordinates) - np.array(orbital1.coordinates)

@@ -146,12 +146,17 @@ class TB_Ham:
         self._unit = self.ham_kwargs.get("unit")
 
         # tight-binding parameters
-        if "electron" in self.particles:
+        if self.description == "2P":
             self.tb_params_electron = self.get_param_dict("electron")
-        if "hole" in self.particles:
             self.tb_params_hole = self.get_param_dict("hole")
-        if "exciton" in self.particles:
             self.tb_params_exciton = self.get_param_dict("exciton")
+        else:
+            if "electron" in self.particles:
+                self.tb_params_electron = self.get_param_dict("electron")
+            if "hole" in self.particles:
+                self.tb_params_hole = self.get_param_dict("hole")
+            if "exciton" in self.particles:
+                self.tb_params_exciton = self.get_param_dict("exciton")
 
         self._relaxation = False
         if self.description == "2P":
@@ -273,12 +278,17 @@ class TB_Ham:
         # update the matrix and tight-binding parameters
         if new_unit != old_unit:
             self.matrix *= get_conversion(old_unit, new_unit)
-            if "electron" in self.particles:
+            if self.description == "2P":
                 self.tb_params_electron = self.get_param_dict("electron")
-            if "hole" in self.particles:
                 self.tb_params_hole = self.get_param_dict("hole")
-            if "exciton" in self.particles:
                 self.tb_params_exciton = self.get_param_dict("exciton")
+            else:
+                if "electron" in self.particles:
+                    self.tb_params_electron = self.get_param_dict("electron")
+                if "hole" in self.particles:
+                    self.tb_params_hole = self.get_param_dict("hole")
+                if "exciton" in self.particles:
+                    self.tb_params_exciton = self.get_param_dict("exciton")
 
     @property
     def source(self):  # pylint: disable=missing-function-docstring
@@ -293,12 +303,17 @@ class TB_Ham:
 
         # update the matrix and tight-binding parameters
         if new_source != old_source:
-            if "electron" in self.particles:
+            if self.description == "2P":
                 self.tb_params_electron = self.get_param_dict("electron")
-            if "hole" in self.particles:
                 self.tb_params_hole = self.get_param_dict("hole")
-            if "exciton" in self.particles:
                 self.tb_params_exciton = self.get_param_dict("exciton")
+            else:
+                if "electron" in self.particles:
+                    self.tb_params_electron = self.get_param_dict("electron")
+                if "hole" in self.particles:
+                    self.tb_params_hole = self.get_param_dict("hole")
+                if "exciton" in self.particles:
+                    self.tb_params_exciton = self.get_param_dict("exciton")
             self.matrix = self.get_matrix()
 
     # ---------------------------------------------------------------
@@ -467,6 +482,9 @@ class TB_Ham:
         """
 
         eigv, eigs = self.get_eigensystem()
+
+        if quantities == "all":
+            quantities = ["amplitude", "frequency", "average_pop"]
 
         # check if the end state is in the tight-binding basis
         assert (

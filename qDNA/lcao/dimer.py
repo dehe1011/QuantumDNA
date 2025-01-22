@@ -84,8 +84,10 @@ class Dimer:
 
         Notes
         -----
-        The results include the HOMO and LUMO energies of two molecules and their coupling terms.
-        The results are saved in a JSON file named after the identifier of the object.
+        .. note::
+
+            The results include the HOMO and LUMO energies of two molecules and their coupling terms.
+            The results are saved in a JSON file named after the identifier of the object.
         """
 
         dictionary = {

@@ -87,10 +87,12 @@ def load_xyz(filename, directory=os.path.join(DATA_DIR, "geometries")):
 
     Notes
     -----
-        - The XYZ file is expected to have the following format:
-            - The first line contains the number of atoms (ignored).
-            - The second line contains a comment or identifier.
-            - Subsequent lines contain atomic coordinates in the format: Atom X Y Z.
+    .. note::
+
+        The XYZ file is expected to have the following format:
+        - The first line contains the number of atoms (ignored).
+        - The second line contains a comment or identifier.
+        - Subsequent lines contain atomic coordinates in the format: Atom X Y Z.
     """
 
     filepath = os.path.join(directory, filename + ".xyz")
@@ -120,14 +122,16 @@ def convert_pdb_to_xyz(filepath_pdb):
 
     Notes
     -----
-    - The function creates a directory named after the input PDB file (without extension)
-      to store the generated XYZ files.
-    - Each base in the PDB file is written to a separate XYZ file.
-    - If the chain identifier changes, the base numbering is adjusted to continue from
-      the previous chain's last base number.
-    - The function assumes that the base counter starts from one if the chain changes.
-    - The function prints the directory where the XYZ files are created if the verbose
-      mode is enabled in the DEFAULTS dictionary.
+    .. note::
+
+        - The function creates a directory named after the input PDB file (without extension)
+        to store the generated XYZ files.
+        - Each base in the PDB file is written to a separate XYZ file.
+        - If the chain identifier changes, the base numbering is adjusted to continue from
+        the previous chain's last base number.
+        - The function assumes that the base counter starts from one if the chain changes.
+        - The function prints the directory where the XYZ files are created if the verbose
+        mode is enabled in the DEFAULTS dictionary.
     """
 
     # Extract the filename without extension to create a folder
@@ -249,10 +253,11 @@ def convert_json_to_xyz(filename, directory):
 
     Notes
     -----
-    The JSON file is expected to follow a specific structure with atomic data under
-    "PC_Compounds" -> "atoms" and coordinates under "coords" -> "conformers".
-    The atomic symbols are mapped from atomic numbers using a predefined dictionary.
-    The JSON file is removed after conversion.
+    .. note::
+        The JSON file is expected to follow a specific structure with atomic data under
+        "PC_Compounds" -> "atoms" and coordinates under "coords" -> "conformers".
+        The atomic symbols are mapped from atomic numbers using a predefined dictionary.
+        The JSON file is removed after conversion.
 
     Examples
     --------

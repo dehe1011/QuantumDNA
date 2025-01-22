@@ -181,7 +181,7 @@ class Base:
         Excitation energy (HOMO-LUMO gap).
     dipole_moment : float
         Dipole moment of the molecule.
-    calc_oscillator_strength : float
+    oscillator_strength : float
         Oscillator strength of the molecule.
 
     Methods
@@ -339,14 +339,17 @@ class Base:
 
         Notes
         -----
-        The results are saved in a JSON file named "results_<identifier>.json" where <identifier>
-        is a unique identifier for the calculation. The file contains the following keys:
-        - "E_HOMO": The energy of the highest occupied molecular orbital (HOMO), rounded to 4 decimal places.
-        - "E_LUMO": The energy of the lowest unoccupied molecular orbital (LUMO), rounded to 4 decimal places.
-        - "HOMO": The list of HOMO values.
-        - "LUMO": The list of LUMO values.
-        - "dipole_moment": The dipole moment, rounded to 4 decimal places.
-        - "oscillator_strength": The oscillator strength, rounded to 4 decimal places.
+        .. note::
+
+            The results are saved in a JSON file named "results_<identifier>.json" where <identifier>
+            is a unique identifier for the calculation. The file contains the following keys:
+
+            - "E_HOMO": The energy of the highest occupied molecular orbital (HOMO), rounded to 4 decimal places.
+            - "E_LUMO": The energy of the lowest unoccupied molecular orbital (LUMO), rounded to 4 decimal places.
+            - "HOMO": The list of HOMO values.
+            - "LUMO": The list of LUMO values.
+            - "dipole_moment": The dipole moment, rounded to 4 decimal places.
+            - "oscillator_strength": The oscillator strength, rounded to 4 decimal places.
         """
 
         dictionary = {
@@ -387,11 +390,13 @@ class Base:
 
         Notes
         -----
-        The dipole moment is calculated using the formula:
-            dipole = sqrt(dipole_x**2 + dipole_y**2 + dipole_z**2)
-        where dipole_x, dipole_y, and dipole_z are the components of the dipole moment
-        along the x, y, and z axes, respectively.
-        The conversion factors used are:
+        .. note::
+
+            The dipole moment is calculated using :math:`d = \sqrt{d_x^2 + d_y^2 + d_z^2}`
+            where dipole_x, dipole_y, and dipole_z are the components of the dipole moment
+            along the x, y, and z axes, respectively.
+            The conversion factors used are:
+
             - "Coulomb*Angstrom": No conversion needed.
             - "Debye": dipole * c.c / 1e-11
             - "atomic_units": dipole * 1e-10 / (c.physical_constants["Bohr radius"][0] * c.e)

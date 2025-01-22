@@ -19,8 +19,8 @@ def get_therm_eq_state(me_solver):
     Parameters
     ----------
     me_solver : object
-        An instance of a master equation solver which contains the tight-binding Hamiltonian (`tb_ham`)
-        and the Lindblad dissipation parameters (`lindblad_diss`).
+        An instance of a master equation solver which contains the tight-binding Hamiltonian ``tb_ham``
+        and the Lindblad dissipation parameters ``lindblad_diss``.
 
     Returns
     -------
@@ -30,9 +30,11 @@ def get_therm_eq_state(me_solver):
 
     Notes
     -----
-    - The function first checks if the temperature is zero. If so, it returns the ground state.
-    - For non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the Hamiltonian,
-      normalizes them, and transforms the resulting diagonal matrix to the local basis.
+    .. note::
+
+        - The function first checks if the temperature is zero. If so, it returns the ground state.
+        - For non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the Hamiltonian,
+        normalizes them, and transforms the resulting diagonal matrix to the local basis.
     """
 
     tb_ham = me_solver.tb_ham

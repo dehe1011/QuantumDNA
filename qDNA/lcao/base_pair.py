@@ -257,12 +257,15 @@ class BasePair:
 
         Notes
         -----
-        The results are saved in a JSON file named "results_<identifier>.json" where <identifier>
-        is a unique identifier for the calculation. The file contains the following keys:
-        - "E_HOMO": The energy of the highest occupied molecular orbital (HOMO), rounded to 4 decimal places.
-        - "E_LUMO": The energy of the lowest unoccupied molecular orbital (LUMO), rounded to 4 decimal places.
-        - "HOMO": The list of HOMO values.
-        - "LUMO": The list of LUMO values.
+        .. note::
+
+            The results are saved in a JSON file named "results_<identifier>.json" where <identifier>
+            is a unique identifier for the calculation. The file contains the following keys:
+
+            - "E_HOMO": The energy of the highest occupied molecular orbital (HOMO), rounded to 4 decimal places.
+            - "E_LUMO": The energy of the lowest unoccupied molecular orbital (LUMO), rounded to 4 decimal places.
+            - "HOMO": The list of HOMO values.
+            - "LUMO": The list of LUMO values.
         """
 
         dictionary = {

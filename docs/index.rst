@@ -2,12 +2,15 @@
    :align: center
    :width: 6in
 
-QuantumDNA: A Toolbox for Evaluating Excited States and Charge Transfer in DNA
-==============================================================================
 
-QuantumDNA is an open-source Python package for simulating charge transfer (CT) and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface (GUI)—perfect for researchers and students, even without extensive coding experience.
+Welcome to QuantumDNA's Documentation!
+======================================
 
-Some of the core functionalities of QuantumDNA include the calculation of exciton lifetimes, average charge separation, and dipole moments for excited states along DNA strands :cite:`Herb2024`.
+QuantumDNA is an open-source Python package for simulating charge transfer and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface—perfect for researchers and students, even without extensive coding experience.
+
+.. figure:: figures/2_qDNA_structure.png
+   :align: center
+   :width: 4in
 
 Whether you're a scientist, student, or just curious, QuantumDNA is here to help you explore the fascinating world of DNA charge transfer. Dive in and start exploring today!
 
@@ -21,7 +24,7 @@ This documentation includes:
 For additional resources and development information, visit the `QuantumDNA GitHub repository <https://github.com/dehe1011/QuantumDNA>`_. For hands-on learning, check out the `Tutorial Notebook GitHub repository <https://github.com/dehe1011/QuantumDNA-notebooks>`_, which contains examples and guided exercises.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
    installation
