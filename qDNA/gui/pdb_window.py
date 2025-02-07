@@ -51,6 +51,7 @@ class PDBFrame(ctk.CTkFrame):
 
         self.tb_model_combobox = ctk.CTkComboBox(self, values=self.configs["TB_MODELS"])
         self.tb_model_combobox.grid(row=3, column=1, padx=10, pady=10)
+        self.tb_model_combobox.set("ELM")
 
         self.notes_label = ctk.CTkLabel(self, text="Notes:")
         self.notes_label.grid(row=4, column=1, padx=10, pady=0)

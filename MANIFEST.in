@@ -11,7 +11,7 @@ include MANIFEST.in
 include requirements/*.txt
 
 # Include files in the package's root directory
-include qDNA/visualization/*.mplstyle
+include qDNA/*.mplstyle
 include qDNA/defaults.yaml
 
 # Include all .py files

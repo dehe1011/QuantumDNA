@@ -16,6 +16,7 @@ Shortcuts:
 import re
 from itertools import product
 
+from . import TB_MODELS_PROPS
 from qDNA.tools import DNA_BASES, TB_MODELS_PROPS
 
 __all__ = ["DNA_Seq", "create_upper_strands"]
@@ -78,6 +79,10 @@ class DNA_Seq:
         self.lower_strand = lower_strand
         self.methylated = methylated
         self.tb_model_name = tb_model_name
+        TB_MODELS = list(TB_MODELS_PROPS.keys())
+        assert (
+            self.tb_model_name in TB_MODELS
+        ), f"tb_model_name must be a predefined model {TB_MODELS}"
 
         # Get the properties of the tight-binding model
         self.tb_model_props = TB_MODELS_PROPS[self.tb_model_name]

@@ -55,25 +55,54 @@ class ExcitonFrame(ctk.CTkFrame):
         )
 
     def _calc_lifetime(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
         lifetime = calc_lifetime(**self.kwargs)
         if isinstance(lifetime, str):
-            print("---------------------------")
-            print(f"Exciton Lifetime: {lifetime}")
+            print(f"Exciton Lifetime: {lifetime}" "\n-------------------------------")
         else:
-            print("---------------------------")
-            print(f"Exciton Lifetime: {lifetime} fs")
+            print(
+                f"Exciton Lifetime: {lifetime} fs" "\n-------------------------------"
+            )
 
     def _calc_dipole(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
         dipole = calc_dipole(**self.kwargs)
-        print("---------------------------")
-        print(f"Charge Separation: {dipole} A")
+        print(f"Charge Separation: {dipole} A" "\n-------------------------------")
 
     def _calc_dipole_moment(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
         dipole_moment = calc_dipole_moment(**self.kwargs)
-        print("---------------------------")
-        print(f"Dipole Moment: {dipole_moment} D")
+        print(f"Dipole Moment: {dipole_moment} D" "\n-------------------------------")
 
     def _calc_exciton_transfer(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+        assert (
+            "exciton" in self.kwargs["particles"]
+        ), "Exciton must be selected in particles."
+
         avg_pop_upper_strand, avg_pop_lower_strand = calc_exciton_transfer(
             **self.kwargs
         )
@@ -81,9 +110,11 @@ class ExcitonFrame(ctk.CTkFrame):
             avg_pop_upper_strand["exciton"],
             avg_pop_lower_strand["exciton"],
         )
-        print("---------------------------")
-        print(f"Average Exciton Population (upper strand): {avg_pop_upper_strand}")
-        print(f"Average Exciton Population (lower strand): {avg_pop_lower_strand}")
+        print(
+            f"Average Exciton Population (upper strand): {avg_pop_upper_strand}"
+            + f"\nAverage Exciton Population (lower strand): {avg_pop_lower_strand}"
+            + "\n-------------------------------"
+        )
 
 
 # --------------------------------------------------

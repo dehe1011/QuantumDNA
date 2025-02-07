@@ -17,26 +17,23 @@ classifiers = [
 authors = [
     { name = "Dennis Herb", email = "dennis.herb@uni-ulm.de" },
 ]
-dynamic = ["version"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
-dependencies = [
-    "pandas",
-    "qutip",
-    "pyyaml",
-    "matplotlib",
-    "tqdm",
-    "customtkinter",
-    "openpyxl",
-]
+[tool.setuptools]
+packages = ["qDNA", "qDNA.gui"]
+
+[tool.setuptools.dynamic]
+version = {attr = "qDNA.__version__"}
+dependencies = {file = "requirements/requirements.txt"}
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = { file = "requirements/dev-requirements.txt" }
+docs = { file = "requirements/doc-requirements.txt" }
 
 [project.urls]
 documentation = "https://quantumdna.readthedocs.io/en/latest/"
 repository = "https://github.com/dehe1011/QuantumDNA"
 tutorials = "https://github.com/dehe1011/QuantumDNA-notbooks"
-
-# Optional dependencies for documentation
-[project.optional-dependencies]
-doc = ["sphinx>=3.0", "sphinx_rtd_theme", "sphinxcontrib-bibtex", "numpydoc"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

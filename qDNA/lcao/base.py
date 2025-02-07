@@ -212,6 +212,13 @@ class Base:
         self.atom_identifiers = [
             f"{atom}_{atom_idx}" for atom_idx, atom in enumerate(self.atoms)
         ]  # e.g. C_0, H_1, O_2
+        for atom_id in self.atom_identifiers:
+            assert atom_id[0] in [
+                "H",
+                "C",
+                "N",
+                "O",
+            ], "Your File contains atoms other than ['H', 'C', 'N', 'O']. Maybe you forgot to remove the sugar-phosphate backbone?"
         self.atom_coordinates = self._get_atom_coordinates()
         self.atom_distance_matrix = self._get_atom_distance_matrix()
         self.atom_bond_matrix = (

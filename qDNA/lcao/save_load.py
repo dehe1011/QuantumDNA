@@ -68,7 +68,7 @@ def find_xyz_files(directory):
     return xyz_files
 
 
-def load_xyz(filename, directory=os.path.join(DATA_DIR, "geometries")):
+def load_xyz(filename, directory=os.getcwd()):
     """
     Load atomic coordinates from an XYZ file.
 

@@ -113,6 +113,18 @@ class qDNA_app(ctk.CTk):
             "lower_strand": self.lower_strand,
             "tb_model_name": self.tb_model_name,
         }
+
+        if len(self.upper_strand) >= 8:
+            print(
+                "Info: This is a long sequence. The calculation may take some time."
+                + "\n-------------------------------"
+            )
+        if self.tb_model_name in ["FWM", "FLM", "FELM", "FC"]:
+            print(
+                "Info: Most predefined TB parametrizations (sources) are not available for this model."
+                + "\n-------------------------------"
+            )
+
         self.kwargs.update(self.init_kwargs)
 
         # initialize dna_seq, tb_model and tb_basis

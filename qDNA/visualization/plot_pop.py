@@ -53,6 +53,9 @@ def plot_pops_heatmap(me_solver, vmax_list=[1, 1, 1], heatmap_type="seaborn"):
         1, num_particles, figsize=(6.4 * num_particles, 4.8), sharey=False
     )
 
+    if len(me_solver.tb_ham.particles) == 1:
+        ax = [ax]
+
     pop_dict = me_solver.get_pop()
     cmaps = ["Blues", "Reds", "Greys"]  # grey scale for exciton
     cmaps = ["Blues", "Reds", "Greens"]  # green scale for exciton
