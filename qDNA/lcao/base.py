@@ -376,7 +376,7 @@ class Base:
         print("Results saved at" + filepath)
 
     def calc_dipole_moment(self, MO_1=None, MO_2=None, unit="Coulomb*Angstrom"):
-        """
+        r"""
         Calculate the dipole moment between two molecular orbitals: one from the HOMO, the other one from the LUMO.
         The function weigthens the overlap by the relative vector with respect to the center of mass.
 

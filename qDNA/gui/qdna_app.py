@@ -78,6 +78,15 @@ class qDNA_app(ctk.CTk):
         self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("disabled")
 
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
+
+    def on_exit(self):
+        """Properly closes the application"""
+        print("Closing application...")  # Optional debug message
+        self.after_cancel("all")
+        self.quit()  # Stops the mainloop
+        self.destroy()  # Destroys the Tk instance
+
     # ------------------------------------------
 
     def open_github(self):
