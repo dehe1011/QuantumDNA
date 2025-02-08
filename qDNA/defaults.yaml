@@ -2,12 +2,16 @@
 project_name: "QuantumDNA"
 verbose: False
 
+lcao_default:
+    parametrization: MSF
+
 ham_kwargs_default:
     source: 'Hawke2010'
     description: '2P'
     particles: ['electron','hole','exciton']
     unit: 'rad/ps'
-    interaction_param: 0. # in rad/ps
+    coulomb_param: 0. # in rad/ps
+    exchange_param: 0. # in rad/ps
     relaxation: True
     nn_cutoff: True
 

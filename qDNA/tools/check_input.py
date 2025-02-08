@@ -1,16 +1,15 @@
-"""
-This module provides functions to validate keyword arguments for various configurations
-related to Hamiltonian, dissipation parameters, and other miscellaneous parameters.
-"""
+"""This module provides functions to validate keyword arguments for various
+configurations related to Hamiltonian, dissipation parameters, and other miscellaneous
+parameters."""
 
-from . import CONFIG, DEFAULTS
+from . import CONFIG
 
 # --------------------------------------------------
 
 
 def check_ham_kwargs(**ham_kwargs):
-    """
-    Validates the keyword arguments for Hamiltonian configuration.
+    """Validates the keyword arguments for Hamiltonian configuration.
+
     Parameters
     ----------
     **ham_kwargs : dict
@@ -18,7 +17,8 @@ def check_ham_kwargs(**ham_kwargs):
         - 'source' (str): The source of the Hamiltonian.
         - 'description' (str): Description of the Hamiltonian.
         - 'unit' (str): Unit of measurement.
-        - 'interaction_param' (float or int): Interaction parameter.
+        - 'coulomb_param' (float or int): Interaction parameter.
+        - 'exchange_param' (float or int): Interaction parameter.
         - 'relaxation' (bool): Relaxation flag.
         - 'nn_cutoff' (bool): Nearest neighbor cutoff flag.
         - 'particles' (list of str): List of particles involved.
@@ -28,7 +28,8 @@ def check_ham_kwargs(**ham_kwargs):
         If any of the following conditions are not met:
         - None is not allowed as a value.
         - 'source', 'description', and 'unit' must be of type str.
-        - 'interaction_param' must be of type float or int.
+        - 'coulomb_param' must be of type float or int.
+        - 'exchange_param' must be of type float or int.
         - 'relaxation' and 'nn_cutoff' must be of type bool.
         - 'particles' must be a list of strings.
         - All elements of 'particles' must be in CONFIG["PARTICLES"].
@@ -46,7 +47,7 @@ def check_ham_kwargs(**ham_kwargs):
     string_keys = ["source", "description", "unit"]
     for key in string_keys:
         assert isinstance(kwargs.get(key), str), f"{key} must be of type str"
-    float_keys = ["interaction_param"]
+    float_keys = ["coulomb_param", "exchange_param"]
     for key in float_keys:
         assert isinstance(kwargs.get(key), (float, int)), f"{key} must be of type float"
     bool_keys = ["relaxation", "nn_cutoff"]
@@ -59,16 +60,16 @@ def check_ham_kwargs(**ham_kwargs):
 
     # check values
     assert all(
-        [particle in CONFIG["PARTICLES"] for particle in kwargs["particles"]]
+        particle in CONFIG["PARTICLES"] for particle in kwargs["particles"]
     ), f"all particles must be in {CONFIG['PARTICLES']}"
     if kwargs["description"] == "1P":
         assert kwargs["particles"] in [
             ["electron"],
             ["hole"],
         ], "in the one particle description the particles must be either ['electron'] or ['hole']"
-    assert (
-        kwargs["source"] in CONFIG["SOURCES"]
-    ), f"source must be in {CONFIG['SOURCES']}"
+    # assert (
+    #     kwargs["source"] in CONFIG["SOURCES"]
+    # ), f"source must be in {CONFIG['SOURCES']}"
     assert (
         kwargs["description"] in CONFIG["DESCRIPTIONS"]
     ), f"description must be in {CONFIG['DESCRIPTIONS']}"
@@ -79,8 +80,8 @@ def check_ham_kwargs(**ham_kwargs):
 
 
 def check_diss_kwargs(**diss_kwargs):
-    """
-    Validates the keyword arguments for dissipation parameters.
+    """Validates the keyword arguments for dissipation parameters.
+
     Parameters
     ----------
     **diss_kwargs : dict
@@ -136,16 +137,9 @@ def check_diss_kwargs(**diss_kwargs):
     bool_keys = ["loc_therm", "glob_therm", "uniform_relaxation"]
     for key in bool_keys:
         assert isinstance(kwargs.get(key), bool), f"{key} must be of type bool"
-    assert isinstance(kwargs["relax_rates"], dict), f"relax_rates must be of form dict"
+    assert isinstance(kwargs["relax_rates"], dict), "relax_rates must be of form dict"
 
     # check values
-    DNA_SITES = CONFIG["DNA_BASES"] + ["B"]
-    assert all(
-        [
-            key in DNA_SITES and isinstance(value, (int, float))
-            for key, value in kwargs["relax_rates"].items()
-        ]
-    )
     assert (
         kwargs["spectral_density"] in CONFIG["SPECTRAL_DENSITIES"]
     ), f"spectral_density must be in {CONFIG['SPECTRAL_DENSITIES']}"
@@ -161,8 +155,9 @@ def check_diss_kwargs(**diss_kwargs):
 
 
 def check_me_kwargs(**me_kwargs):
-    """
-    Validates the keyword arguments provided to ensure they meet the required criteria.
+    """Validates the keyword arguments provided to ensure they meet the required
+    criteria.
+
     Parameters
     ----------
     **me_kwargs : dict

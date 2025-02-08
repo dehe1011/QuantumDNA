@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import customtkinter as ctk
 
 from .ham_frame import HamFrame
@@ -60,9 +62,7 @@ class OptionsFrame(ctk.CTkFrame):
         self.second_confirm_button.grid(row=2, column=1, pady=10, padx=10)
 
     def change_state(self, state):
-        """
-        Changes the state of certain widgets (between 'normal' and 'disabled').
-        """
+        """Changes the state of certain widgets (between 'normal' and 'disabled')."""
         change_state_all_widgets(self.options_tab.ham_frame, state=state)
         change_state_all_widgets(self.options_tab.diss_frame, state=state)
         change_state_all_widgets(self.options_tab.dynamics_frame, state=state)

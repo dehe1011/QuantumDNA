@@ -1,5 +1,5 @@
-"""
-This module is taken from quantum_HEOM (github.com/jwa7/quantum_HEOM), J.W. Abbott, 2022, DOI: 10.5281/zenodo.7230160.
+"""This module is taken from quantum_HEOM (github.com/jwa7/quantum_HEOM), J.W. Abbott,
+2022, DOI: 10.5281/zenodo.7230160.
 
 It provides functions for calculating bath spectral densities and Lindblad rates.
 """
@@ -11,8 +11,7 @@ import scipy.constants as c
 
 
 def debye_spectral_density(omega, cutoff_freq, reorg_energy):
-    """
-    Calculates the Debye spectral density.
+    """Calculates the Debye spectral density.
 
     Parameters
     ----------
@@ -34,8 +33,7 @@ def debye_spectral_density(omega, cutoff_freq, reorg_energy):
 
 
 def ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent):
-    """
-    Calculates the Ohmic spectral density.
+    """Calculates the Ohmic spectral density.
 
     Parameters
     ----------
@@ -55,15 +53,16 @@ def ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent):
     """
     if omega <= 0:
         return 0
-    return (np.pi * reorg_energy * omega / cutoff_freq) * np.exp(-omega / cutoff_freq)
+    return (np.pi * reorg_energy * omega**exponent / cutoff_freq) * np.exp(
+        -omega / cutoff_freq
+    )
 
 
 # ----------------------------- Lindblad Rates -------------------------------------------
 
 
 def bose_einstein_distrib(omega, temperature):
-    """
-    Calculates the Bose-Einstein distribution.
+    """Calculates the Bose-Einstein distribution.
 
     Parameters
     ----------
@@ -77,8 +76,10 @@ def bose_einstein_distrib(omega, temperature):
     float
         Bose-Einstein distribution.
     """
-    if temperature != 0 and omega != 0:
-        return 1.0 / (np.exp(c.hbar * omega * 1e12 / (c.k * temperature)) - 1)
+    assert (
+        temperature != 0 and omega != 0
+    ), "Temperature and frequency must be non-zero."
+    return 1.0 / (np.exp(c.hbar * omega * 1e12 / (c.k * temperature)) - 1)
 
 
 def rate_constant_redfield(
@@ -90,8 +91,7 @@ def rate_constant_redfield(
     spectral_density,
     exponent=None,
 ):
-    """
-    Calculates the Redfield rate constant.
+    """Calculates the Redfield rate constant.
 
     Parameters
     ----------
@@ -120,9 +120,17 @@ def rate_constant_redfield(
             deph_rate = dephasing_rate(cutoff_freq, reorg_energy, temperature)
         return deph_rate
 
+    assert spectral_density in [
+        "debye",
+        "ohmic",
+    ], "Spectral density must be 'debye' or 'ohmic'."
+
+    spec_omega_ij, spec_omega_ji = 0, 0
+
     if spectral_density == "debye":
         spec_omega_ij = debye_spectral_density(omega, cutoff_freq, reorg_energy)
         spec_omega_ji = debye_spectral_density(-omega, cutoff_freq, reorg_energy)
+
     elif spectral_density == "ohmic":
         spec_omega_ij = ohmic_spectral_density(
             omega, cutoff_freq, reorg_energy, exponent
@@ -137,8 +145,8 @@ def rate_constant_redfield(
 
 
 def dephasing_rate(cutoff_freq, reorg_energy, temperature):
-    """
-    Calculates the dephasing rate in the limit of the Redfield rate equation as the frequency approaches zero.
+    """Calculates the dephasing rate in the limit of the Redfield rate equation as the
+    frequency approaches zero.
 
     Parameters
     ----------

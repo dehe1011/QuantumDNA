@@ -1,8 +1,27 @@
 Functions
 =========
 
+Calculate Tight-Binding Parameters
+----------------------------------
 
-Tight-binding basis
+.. autofunction:: qDNA.lcao.calc_orbital_energy
+.. autofunction:: qDNA.lcao.calc_orbital_overlap
+.. autofunction:: qDNA.lcao.load_xyz
+.. autofunction:: qDNA.lcao.convert_json_to_xyz
+.. autofunction:: qDNA.lcao.convert_pdb_to_xyz
+.. autofunction:: qDNA.lcao.calc_tb_energies_monomers
+.. autofunction:: qDNA.lcao.calc_tb_params_dimer
+.. autofunction:: qDNA.lcao.calc_tb_params
+
+Save and Load Tight-Binding Parameters
+--------------------------------------
+
+.. autofunction:: qDNA.hamiltonian.save_tb_params
+.. autofunction:: qDNA.hamiltonian.load_tb_params
+.. autofunction:: qDNA.hamiltonian.wrap_save_tb_params
+.. autofunction:: qDNA.hamiltonian.wrap_load_tb_params
+
+Tight-Binding Basis
 -------------------
 
 There are three relevant bases:
@@ -13,104 +32,96 @@ There are three relevant bases:
 
 The first two are refered to as `local` bases, the third as the `global` basis. The functions below define these bases and allow to change between them.
 
-.. automodule:: qDNA.model
-   :members: get_tb_basis, get_eh_basis, get_eh_distance, get_particle_eh_states, basis_change, local_to_global, global_to_local
-   :show-inheritance: False
+.. autofunction:: qDNA.model.get_tb_basis
+.. autofunction:: qDNA.model.get_eh_basis
+.. autofunction:: qDNA.model.get_eh_distance
+.. autofunction:: qDNA.model.get_particle_eh_states
+.. autofunction:: qDNA.model.basis_change
+.. autofunction:: qDNA.model.local_to_global
+.. autofunction:: qDNA.model.global_to_local
 
-Tight-binding configuration
+
+Tight-Binding Configuration
 ---------------------------
 
-.. automodule:: qDNA.model
-   :members: get_tb_config
-   :show-inheritance: False
-   :noindex:
-
-Tight-binding Hamiltonian
--------------------------
-
-.. automodule:: qDNA.hamiltonian
-   :members: set_matrix_element, tb_ham_1P, tb_ham_2P, add_groundstate, delete_groundstate, add_interaction
-   :show-inheritance: False
-   :noindex:
-
-Save and load tight-binding parameters
---------------------------------------
-
-.. automodule:: qDNA.hamiltonian
-   :members: save_tb_params, load_tb_params, wrap_save_tb_params, wrap_load_tb_params
-   :show-inheritance: False
-   :noindex:
-
-
-Reduced density matrix
-----------------------
-
-.. automodule:: qDNA.dynamics
-   :members: get_reduced_dm, get_reduced_dm_eigs
-   :show-inheritance: False
-
-Master equation solver
-----------------------
-
-.. automodule:: qDNA.dynamics
-   :members: get_me_solver
-   :show-inheritance: False
-   :noindex:
-
-
-Exciton Lifetime
-----------------
-
-.. automodule:: qDNA.evaluation
-   :members: calc_lifetime, calc_lifetime_dict
-   :show-inheritance: False
-
-Average charge separation
--------------------------
-
-.. automodule:: qDNA.evaluation
-   :members: calc_dipole, calc_dipole_wrapper, calc_dipole_dict
-   :show-inheritance: False
-   :noindex:
-
-Equilibrium states
-------------------
-
-.. automodule:: qDNA.evaluation
-   :members: get_therm_eq_state, get_deph_eq_state
-   :show-inheritance: False
-   :noindex:
+.. autofunction:: qDNA.model.get_tb_config
 
 
 DNA sequences
 -------------
 
-.. automodule:: qDNA
-   :members: create_upper_strands
-   :show-inheritance: False
+.. autofunction:: qDNA.create_upper_strands
+
+
+Tight-Binding Hamiltonian
+-------------------------
+
+.. autofunction:: qDNA.hamiltonian.set_matrix_element
+.. autofunction:: qDNA.hamiltonian.tb_ham_1P
+.. autofunction:: qDNA.hamiltonian.tb_ham_2P
+.. autofunction:: qDNA.hamiltonian.add_groundstate
+.. autofunction:: qDNA.hamiltonian.delete_groundstate
+.. autofunction:: qDNA.hamiltonian.add_interaction
+
+Lindblad rates
+--------------
+
+These functions is adapted from the quantum_HEOM GitHub repository :cite:`Abbott2020`.
+
+.. autofunction:: qDNA.environment.debye_spectral_density
+.. autofunction:: qDNA.environment.ohmic_spectral_density
+.. autofunction:: qDNA.environment.bose_einstein_distrib
+.. autofunction:: qDNA.environment.dephasing_rate
+
+Lindblad operators
+------------------
+
+.. autofunction:: qDNA.environment.get_relax_op
+.. autofunction:: qDNA.environment.get_glob_therm_op
+.. autofunction:: qDNA.environment.get_glob_therm_ops
+.. autofunction:: qDNA.environment.get_loc_therm_op
+.. autofunction:: qDNA.environment.get_loc_therm_ops
+.. autofunction:: qDNA.environment.get_loc_deph_ops
+.. autofunction:: qDNA.environment.get_glob_deph_ops
+.. autofunction:: qDNA.environment.get_loc_deph_p_ops
+.. autofunction:: qDNA.environment.get_glob_deph_p_ops
+
+
+Master Equation Solver
+----------------------
+
+.. autofunction:: qDNA.dynamics.get_me_solver
+
+
+Reduced Density Matrix
+----------------------
+
+.. autofunction:: qDNA.dynamics.get_reduced_dm
+.. autofunction:: qDNA.dynamics.get_reduced_dm_eigs
+
+
+Exciton Observables
+-------------------
+
+.. autofunction:: qDNA.evaluation.calc_lifetime
+.. autofunction:: qDNA.evaluation.calc_lifetime_dict
+
+
+.. autofunction:: qDNA.evaluation.calc_dipole
+.. autofunction:: qDNA.evaluation.calc_dipole_wrapper
+.. autofunction:: qDNA.evaluation.calc_dipole_dict
 
 
 Observables
 -----------
 
-.. automodule:: qDNA.environment
-   :members: get_tb_observable, get_eh_observable, get_pop_particle, get_coh_particle
-   :show-inheritance: False
+.. autofunction:: qDNA.environment.get_tb_observable
+.. autofunction:: qDNA.environment.get_eh_observable
+.. autofunction:: qDNA.environment.get_pop_particle
+.. autofunction:: qDNA.environment.get_coh_particle
 
-Lindblad rates
---------------
-
-This module is adapted from the quantum_HEOM GitHub repository :cite:`quantum_HEOM`.
-
-.. automodule:: qDNA.environment
-   :members: debye_spectral_density, ohmic_spectral_density, bose_einstein_distrib, dephasing_rate
-   :show-inheritance: False
-   :noindex:
-
-Lindblad operators
+Equilibrium states
 ------------------
 
-.. automodule:: qDNA.environment
-   :members: get_relax_op, get_glob_therm_op, get_glob_therm_ops, get_loc_therm_op, get_loc_therm_ops, get_loc_deph_ops, get_glob_deph_ops, get_loc_deph_p_ops, get_glob_deph_p_ops
-   :show-inheritance: False
-   :noindex:
+.. autofunction:: qDNA.evaluation.get_therm_eq_state
+.. autofunction:: qDNA.evaluation.get_deph_eq_state

@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import json
 import glob
 import os
@@ -81,7 +83,7 @@ class FastaWindow(ctk.CTkToplevel):
 
         self.dipole_var = ctk.BooleanVar(value=True)
         self.dipole_checkbox = ctk.CTkCheckBox(
-            self, text="Calculate Average Charge Separation", variable=self.dipole_var
+            self, text="Calculate Charge Separation", variable=self.dipole_var
         )
         self.dipole_checkbox.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
@@ -94,7 +96,7 @@ class FastaWindow(ctk.CTkToplevel):
         self.exciton_transfer_var = ctk.BooleanVar(value=True)
         self.exciton_transfer_checkbox = ctk.CTkCheckBox(
             self,
-            text="Calculate Average Exciton Population",
+            text="Calculate Exciton Population",
             variable=self.exciton_transfer_var,
         )
         self.exciton_transfer_checkbox.grid(
@@ -123,7 +125,7 @@ class FastaWindow(ctk.CTkToplevel):
 
     def open_fasta_file(self):
         fasta_file_path = filedialog.askopenfilename(
-            title="Select FASTA file", filetypes=[("Text files", "*.txt")]
+            title="Select FASTA file", filetypes=[("Text files", "*.fasta")]
         )
         if not fasta_file_path:
             messagebox.showwarning("Warning", "No FASTA file selected.")
@@ -158,7 +160,7 @@ class FastaWindow(ctk.CTkToplevel):
 
     def process_files(self):
         if not self.fasta_data:
-            messagebox.showwarning("Warning", "Please provide a FASTA .txt file")
+            messagebox.showwarning("Warning", "Please provide a FASTA .fasta file")
             return
 
         fasta_data = {
@@ -215,9 +217,9 @@ class FastaWindow(ctk.CTkToplevel):
         end_time = time.time()
         # end calculations
 
-        print("-------------------")
-        print(fasta_data)
-        print("-------------------")
+        # print("-------------------")
+        # print(fasta_data)
+        # print("-------------------")
         df_fasta = pd.DataFrame(fasta_data)
         self.kwargs["Computation Time (s)"] = end_time - start_time
         self.kwargs["Computation Time Lifetime (s)"] = end_time_lifetime - start_time
@@ -231,7 +233,7 @@ class FastaWindow(ctk.CTkToplevel):
         json_files = glob.glob(os.path.join(self.directory, "*.json"))
         for file in json_files:
             os.remove(file)
-            print(f"Deleted: {file}")
+            # print(f"Deleted: {file}")
 
     def parse_fasta_data(self):
         for line in self.fasta_data:

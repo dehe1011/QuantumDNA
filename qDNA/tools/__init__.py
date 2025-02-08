@@ -1,17 +1,17 @@
 from .save_load import *
 from .helpers import *
 
-CONFIGS = load_json("config", os.path.join(DATA_DIR, "raw"), load_metadata=False)
-CONFIG = {**DEFAULTS, **CONFIGS}
-TB_MODELS_PROPS = load_json("tb_models", os.path.join(DATA_DIR, "raw"))
+CONFIGS: dict = load_json("config", os.path.join(DATA_DIR, "raw"), load_metadata=False)
+CONFIG: dict = {**DEFAULTS, **CONFIGS}
+TB_MODELS_PROPS: dict = load_json("tb_models", os.path.join(DATA_DIR, "raw"))
 
-DNA_BASES = CONFIGS["DNA_BASES"]
-TB_MODELS = CONFIGS["TB_MODELS"]
-SOURCES = CONFIGS["SOURCES"]
-DESCRIPTIONS = CONFIGS["DESCRIPTIONS"]
-PARTICLES = CONFIGS["PARTICLES"]
-UNITS = CONFIGS["UNITS"]
-T_UNITS = CONFIGS["T_UNITS"]
-SPECTRAL_DENSITIES = CONFIGS["SPECTRAL_DENSITIES"]
+DNA_BASES: list = CONFIGS["DNA_BASES"]
+TB_MODELS: list = CONFIGS["TB_MODELS"]
+SOURCES: list = CONFIGS["SOURCES"]
+DESCRIPTIONS: list = CONFIGS["DESCRIPTIONS"]
+PARTICLES: list = CONFIGS["PARTICLES"]
+UNITS: list = CONFIGS["UNITS"]
+T_UNITS: list = CONFIGS["T_UNITS"]
+SPECTRAL_DENSITIES: list = CONFIGS["SPECTRAL_DENSITIES"]
 
 from .check_input import *

@@ -1,6 +1,5 @@
-"""
-This module provides functions to calculate the average exciton population for quantum DNA models.
-"""
+"""This module provides functions to calculate the average exciton population for
+quantum DNA models."""
 
 import multiprocessing
 from functools import partial
@@ -23,8 +22,7 @@ __all__ = [
 
 
 def calc_average_transfer(tb_sites, me_solver, average=True):
-    """
-    Calculates the average populations on the given TB sites in a given time period.
+    """Calculates the average populations on the given TB sites in a given time period.
 
     Parameters
     ----------
@@ -55,8 +53,7 @@ def calc_average_transfer(tb_sites, me_solver, average=True):
 
 
 def calc_backbone_transfer(upper_strand, tb_model_name, **kwargs):
-    """
-    Calculates the average population of the backbone sites in a given time period.
+    """Calculates the average population of the backbone sites in a given time period.
 
     Parameters
     ----------
@@ -89,8 +86,7 @@ def calc_backbone_transfer(upper_strand, tb_model_name, **kwargs):
 
 
 def calc_exciton_transfer(upper_strand, tb_model_name, average=True, **kwargs):
-    """
-    Calculates the average exciton population on the upper and lower strand.
+    """Calculates the average exciton population on the upper and lower strand.
 
     Parameters
     ----------
@@ -141,8 +137,7 @@ def calc_exciton_transfer(upper_strand, tb_model_name, average=True, **kwargs):
 def calc_backbone_transfer_wrapper(
     upper_strand, tb_model_name, lifetime_dict, **kwargs
 ):
-    """
-    Calculates the average backbone population on the upper and lower strand.
+    """Calculates the average backbone population on the upper and lower strand.
 
     Parameters
     ----------
@@ -150,6 +145,8 @@ def calc_backbone_transfer_wrapper(
         The upper strand of DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
+    lifetime_dict : dict
+        A dictionary containing the lifetimes for different DNA sequences.
     kwargs : dict
         Additional keyword arguments for the master equation solver.
 
@@ -165,8 +162,7 @@ def calc_backbone_transfer_wrapper(
 
 
 def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
-    """
-    Calculates the average exciton population on the upper and lower strand.
+    """Calculates the average exciton population on the upper and lower strand.
 
     Parameters
     ----------
@@ -174,6 +170,8 @@ def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **
         The upper strand of DNA sequence.
     tb_model_name : str
         The name of the tight-binding model.
+    lifetime_dict : dict
+        A dictionary containing the lifetimes for different DNA sequences.
     kwargs : dict
         Additional keyword arguments for the master equation solver.
 
@@ -189,8 +187,8 @@ def calc_exciton_transfer_wrapper(upper_strand, tb_model_name, lifetime_dict, **
 
 
 def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None):
-    """
-    Calculates the average exciton population for multiple upper strands using multiprocessing.
+    """Calculates the average exciton population for multiple upper strands using
+    multiprocessing.
 
     Parameters
     ----------
@@ -198,6 +196,8 @@ def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None)
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 
@@ -212,8 +212,8 @@ def calc_exciton_transfer_dict(tb_model_name, filename, directory, num_cpu=None)
             directory,
             load_metadata=True,
         )
-    except:
-        print("Could not load lifetime_dict")
+    except FileNotFoundError as e:
+        print(f"Could not load lifetime_dict: {e}")
 
     if not num_cpu:
         num_cpu = multiprocessing.cpu_count() - 1

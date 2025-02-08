@@ -1,6 +1,5 @@
-"""
-This module provides classes and functions to construct Lindblad dissipators for master equations,
-specifically for quantum DNA models.
+"""This module provides classes and functions to construct Lindblad dissipators for
+master equations, specifically for quantum DNA models.
 
 Shortcuts
 ---------
@@ -21,7 +20,7 @@ import copy
 import numpy as np
 import qutip as q
 
-from ..tools import DEFAULTS, UNITS, DNA_BASES, check_diss_kwargs
+from ..tools import DEFAULTS, UNITS, check_diss_kwargs
 from ..utils import get_conversion
 from ..hamiltonian import TB_Ham, add_groundstate
 
@@ -41,8 +40,8 @@ __all__ = ["Lindblad_Diss"]
 
 
 class Lindblad_Diss:
-    """
-    Provides the operators of the form :math:`\sqrt{\gamma} a` that are used in the Lindblad dissipator of the master equation.
+    r"""Provides the operators of the form :math:`\sqrt{\gamma} a` that are used in the
+    Lindblad dissipator of the master equation.
 
     Parameters
     ----------
@@ -101,7 +100,6 @@ class Lindblad_Diss:
         Ground state population operators.
     unit : str
         Unit of the operators.
-
     """
 
     def __init__(self, tb_ham, **diss_kwargs):
@@ -132,11 +130,14 @@ class Lindblad_Diss:
         # Relaxation
         self.uniform_relaxation = self.diss_kwargs.get("uniform_relaxation")
         if self.uniform_relaxation:
-            DNA_SITES = DNA_BASES + ["B"]
             relax_rate = self.diss_kwargs["relax_rate"]
-            self.relax_rates = dict(zip(DNA_SITES, [relax_rate] * len(DNA_SITES)))
+            tb_sites = tb_ham.tb_sites_flattened
+            self.relax_rates = dict(zip(tb_sites, [relax_rate] * len(tb_sites)))
         else:
             self.relax_rates = self.diss_kwargs.get("relax_rates")
+            assert set(self.relax_rates.keys()) == set(
+                tb_ham.tb_sites_flattened
+            ), "relax_rates must have the same keys as the tight-binding sites"
 
         # Relaxation operators
         self.relax_ops = self._get_relax_ops()
@@ -167,27 +168,21 @@ class Lindblad_Diss:
             print("Successfully initialized the Lindblad_Diss instance.")
 
     def __vars__(self):
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self):
-        """
-        Returns a string representation of the Lindblad_Diss instance.
-        """
+        """Returns a string representation of the Lindblad_Diss instance."""
         return f"Lindblad_Diss({self.tb_ham}, {self.diss_kwargs})"
 
     def __eq__(self, other):
-        """
-        Compares two Lindblad_Diss instances for equality.
-        """
+        """Compares two Lindblad_Diss instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # --------------------------------------------------------------------
 
     @property
-    def c_ops(self):
+    def c_ops(self):  # pylint: disable=missing-function-docstring
         return self._c_ops
 
     @c_ops.setter
@@ -201,7 +196,7 @@ class Lindblad_Diss:
             self.num_c_ops = len(self.c_ops)
 
     @property
-    def unit(self):
+    def unit(self):  # pylint: disable=missing-function-docstring
         return self._unit
 
     @unit.setter
@@ -221,8 +216,7 @@ class Lindblad_Diss:
     # -------------------------------------------------------------------
 
     def _get_relax_ops(self):
-        """
-        Generate relaxation operators based on relaxation rates and Hamiltonian.
+        """Generate relaxation operators based on relaxation rates and Hamiltonian.
 
         Returns
         -------
@@ -230,20 +224,26 @@ class Lindblad_Diss:
             A list of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
         """
 
-        return get_relax_ops(self.relax_rates, self.tb_ham)
+        if not self.tb_ham.relaxation:
+            return []
+
+        tb_basis = self.tb_ham.tb_basis
+        tb_basis_sites_dict = self.tb_ham.tb_basis_sites_dict
+
+        return get_relax_ops(tb_basis, tb_basis_sites_dict, self.relax_rates)
 
     def _get_deph_ops(self):
-        """
-        Generate dephasing operators based on the system's Hamiltonian description and dephasing rates.
-        This method computes local and global dephasing operators for both one-particle (1P) and
-        two-particle (2P) descriptions of the system. The dephasing operators are determined by the
-        eigensystem of the Hamiltonian and the specified local and global dephasing rates.
+        """Generate dephasing operators based on the system's Hamiltonian description
+        and dephasing rates. This method computes local and global dephasing operators
+        for both one-particle (1P) and two-particle (2P) descriptions of the system. The
+        dephasing operators are determined by the eigensystem of the Hamiltonian and the
+        specified local and global dephasing rates.
 
         Returns
         -------
         deph_p_ops : list
-            A list of dephasing operators, scaled by the square root of the corresponding dephasing rate. The length and content of the list depend on the Hamiltonian
-            description and the dephasing rates:
+            A list of dephasing operators, scaled by the square root of the corresponding dephasing rate.
+            The length and content of the list depend on the Hamiltonian description and the dephasing rates:
             - For local dephasing in a 2P description: 2 * num_sites operators.
             - For local dephasing in a 1P description: num_sites operators.
             - For global dephasing in a 2P description: num_sites^2 operators.
@@ -252,8 +252,8 @@ class Lindblad_Diss:
         Raises
         ------
         AssertionError
-            If the number of generated dephasing operators does not match the expected number based on
-            the Hamiltonian description and the number of sites.
+            If the number of generated dephasing operators does not match the expected number
+            based on the Hamiltonian description and the number of sites.
         """
 
         _, eigs = self.tb_ham.get_eigensystem()
@@ -296,9 +296,8 @@ class Lindblad_Diss:
         return deph_ops
 
     def _get_therm_ops(self):
-        """
-        Generate thermal operations based on the eigensystem of the Hamiltonian.
-        This method calculates the thermal operations using either local or global
+        """Generate thermal operations based on the eigensystem of the Hamiltonian. This
+        method calculates the thermal operations using either local or global
         thermalization processes, depending on the configuration of the instance.
 
         Returns
@@ -318,7 +317,8 @@ class Lindblad_Diss:
         """
 
         eigv, eigs = self.tb_ham.get_eigensystem()
-        # Important: all parameters must be in the same units as the Hamiltonian. If you want to give them in "rad/ps" you should uncomment the following line.
+        # Important: all parameters must be in the same units as the Hamiltonian.
+        # If you want to give them in "rad/ps" you should uncomment the following line.
         # eigv *= get_conversion(self.tb_ham.unit, "rad/ps")
         therm_ops = []
 
@@ -355,11 +355,10 @@ class Lindblad_Diss:
         return therm_ops
 
     def _get_e_ops(self):
-        """
-        Generates the expectation value operators (e_ops) for the Lindblad master equation.
-        This method constructs dictionaries of population and coherence operators for each particle
-        in the tight-binding Hamiltonian (tb_ham). It also includes ground state population operators
-        if relaxation is considered.
+        """Generates the expectation value operators (e_ops) for the Lindblad master
+        equation. This method constructs dictionaries of population and coherence
+        operators for each particle in the tight-binding Hamiltonian (tb_ham). It also
+        includes ground state population operators if relaxation is considered.
 
         Returns
         -------
@@ -375,9 +374,11 @@ class Lindblad_Diss:
             If the Hamiltonian description is not "2P". This method is only defined for the "2P" description.
         """
 
-        assert (
-            self.tb_ham.description == "2P"
-        ), "Only defined for 2P description. To treat the 1P case it is more efficient to return the whole density matrices and work with it."
+        assert self.tb_ham.description == "2P", (
+            "Only defined for 2P description. To treat the 1P case it is more efficient to "
+            "return the whole density matrices and work with it."
+        )
+
         pop_dict, coh_dict, groundstate_pop_dict = {}, {}, {}
 
         # Population and coherence operators

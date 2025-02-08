@@ -1,6 +1,19 @@
 Classes
 =======
 
+Linear Combination of Atomic Orbitals
+--------------------------------------
+
+.. currentmodule:: qDNA.lcao
+
+.. autoclass:: Base
+   :members:
+
+.. autoclass:: BasePair
+   :members:
+
+.. autoclass:: Dimer
+   :members:
 
 DNA Sequence
 ------------
@@ -9,16 +22,14 @@ DNA Sequence
 
 .. autoclass:: DNA_Seq
    :members:
-   :noindex:
 
-Tight-binding model
+Tight-binding Model
 -------------------
 
 .. currentmodule:: qDNA.model
 
 .. autoclass:: TB_Model
    :members:
-   :noindex:
 
 Tight-binding Hamiltonian
 -------------------------
@@ -27,16 +38,6 @@ Tight-binding Hamiltonian
 
 .. autoclass:: TB_Ham
    :members:
-   :noindex:
-
-Master equation solver
-----------------------
-
-.. currentmodule:: qDNA.dynamics
-
-.. autoclass:: ME_Solver
-    :members:
-    :noindex:
 
 Lindblad Dissipator
 -------------------
@@ -45,4 +46,11 @@ Lindblad Dissipator
 
 .. autoclass:: Lindblad_Diss
    :members:
-   :noindex:
+
+Master Equation Solver
+----------------------
+
+.. currentmodule:: qDNA.dynamics
+
+.. autoclass:: ME_Solver
+    :members:

@@ -1,4 +1,7 @@
+from itertools import product
+
 import numpy as np
+
 from ..model.tb_basis import get_eh_distance
 
 __all__ = [
@@ -20,8 +23,7 @@ def set_matrix_element(
     old_state,
     basis,
 ):
-    """
-    Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.
+    """Sets the matrix element for the Hamiltonian matrix ensuring hermiticity.
 
     Parameters
     ----------
@@ -62,8 +64,7 @@ def tb_ham_1P(
     tb_param_dict,
     tb_basis_sites_dict,
 ):
-    """
-    Constructs the particle tight-binding Hamiltonian matrix.
+    """Constructs the particle tight-binding Hamiltonian matrix.
 
     Parameters
     ----------
@@ -90,13 +91,18 @@ def tb_ham_1P(
     """
     matrix = np.zeros((tb_model.num_sites, tb_model.num_sites))
 
+    if tb_param_dict == {}:  # empty dictionary
+        return matrix
+
     for tb_str, new_state, old_state in tb_model.tb_config:
         if tb_str == "E":
             tb_str = f"E_{tb_basis_sites_dict[old_state]}"
         else:
             tb_str = f"{tb_str}_{tb_basis_sites_dict[old_state]}{tb_basis_sites_dict[new_state]}"
-        if tb_str[0] == "h" and tb_str not in tb_param_dict:
-            tb_str = f"{tb_str[0]}_{tb_basis_sites_dict[new_state]}{tb_basis_sites_dict[old_state]}"
+
+        # for interstrand hopping the direction is not imporant
+        if tb_str[0] in ["h", "r"] and tb_str not in tb_param_dict:
+            tb_str = f"{tb_str.split('_')[0]}_{tb_basis_sites_dict[new_state]}{tb_basis_sites_dict[old_state]}"
 
         if tb_str not in tb_param_dict:
             raise ValueError(
@@ -114,10 +120,10 @@ def tb_ham_2P(
     tb_model,
     tb_param_dict_electron,
     tb_param_dict_hole,
+    tb_param_dict_exciton,
     tb_basis_sites_dict,
 ):
-    """
-    Constructs the electron-hole tight-binding Hamiltonian matrix.
+    """Constructs the electron-hole tight-binding Hamiltonian matrix.
 
     Parameters
     ----------
@@ -127,6 +133,8 @@ def tb_ham_2P(
         Electron tight-binding parameters.
     tb_param_dict_hole : Dict[str, float]
         Hole tight-binding parameters.
+    tb_param_dict_exciton : Dict[str, float]
+        Exciton tight-binding parameters.
     tb_basis_sites_dict : Dict[str, str]
         Dictionary mapping the TB basis to the TB sites.
 
@@ -149,15 +157,26 @@ def tb_ham_2P(
     """
     matrix_electron = tb_ham_1P(tb_model, tb_param_dict_electron, tb_basis_sites_dict)
     matrix_hole = tb_ham_1P(tb_model, tb_param_dict_hole, tb_basis_sites_dict)
-    matrix = np.kron(np.eye(tb_model.num_sites), matrix_hole) + np.kron(
+    matrix_exciton = tb_ham_1P(tb_model, tb_param_dict_exciton, tb_basis_sites_dict)
+
+    dim = matrix_exciton.shape[0]
+    matrix = np.zeros((dim**2, dim**2))
+
+    # exciton matrix
+    if not np.allclose(matrix_exciton, np.zeros((dim, dim))):
+        for i, j in product(range(dim), repeat=2):
+            basis_matrix = np.zeros((dim, dim))
+            basis_matrix[i, j] = 1
+            matrix += matrix_exciton[i, j] * np.kron(basis_matrix, basis_matrix)
+
+    matrix += np.kron(np.eye(tb_model.num_sites), matrix_hole) + np.kron(
         matrix_electron, np.eye(tb_model.num_sites)
     )
     return matrix
 
 
 def add_groundstate(matrix):
-    """
-    Adds a dimension to the matrix to include the ground state.
+    """Adds a dimension to the matrix to include the ground state.
 
     Parameters
     ----------
@@ -184,8 +203,7 @@ def add_groundstate(matrix):
 
 
 def delete_groundstate(matrix):
-    """
-    Removes the ground state dimension from the matrix.
+    """Removes the ground state dimension from the matrix.
 
     Parameters
     ----------
@@ -211,10 +229,11 @@ def add_interaction(
     matrix,
     eh_basis,
     interaction_param,
+    interaction_type,
     nn_cutoff=False,
 ):
-    """
-    Adds interaction terms to the Hamiltonian based on the distance between electron and hole.
+    """Adds interaction terms to the Hamiltonian based on the distance between electron
+    and hole.
 
     Parameters
     ----------
@@ -224,6 +243,8 @@ def add_interaction(
         List of electron and hole positions as tuples of strings.
     interaction_param : float
         The interaction parameter.
+    interaction_type : str
+        The type of interaction. Either 'Coulomb' or 'Exchange'.
     nn_cutoff : bool, optional
         If True, only nearest neighbor interactions are considered.
 
@@ -232,23 +253,36 @@ def add_interaction(
     np.ndarray
         Hamiltonian matrix with interaction terms added.
 
-    Note
-    ----
-    This works only for a Hamiltonian without the additional basis element accounting for relaxation.
-    Therefore the interaction should always be added before the relaxation.
+    Notes
+    -----
+    .. note::
+
+        This works only for a Hamiltonian without the additional basis element accounting for relaxation.
+        Therefore the interaction should always be added before the relaxation.
 
     Examples
     --------
     >>> Hamiltonian = np.array([[0, 1], [1, 0]])
     >>> eh_basis = [("(0, 0)", "(1, 1)"), ("(1, 0)", "(0, 0)")]
-    >>> add_interaction(Hamiltonian, eh_basis, 1.0, True)
+    >>> add_interaction(Hamiltonian, eh_basis, 1.0, "Coulomb", True)
     array([[0.        , 1.17639077],
            [1.17639077, 0.        ]])
     """
 
     distance_list = get_eh_distance(eh_basis)
+    assert interaction_type in [
+        "Coulomb",
+        "Exchange",
+    ], "Interaction type not supported."
+
     # as used by Bittner
-    interaction_strength_list = interaction_param / (1 + 3.4 * distance_list)
+    interaction_strength_list = []
+    if interaction_type == "Coulomb":
+        interaction_strength_list = interaction_param / (1 + 3.4 / 1 * distance_list)
+    elif interaction_type == "Exchange":
+        interaction_strength_list = interaction_param * np.exp(
+            -3.4 / 0.5 * distance_list
+        )
 
     # nearest neighbor cutoff
     if nn_cutoff:

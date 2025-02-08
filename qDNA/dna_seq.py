@@ -1,5 +1,5 @@
-"""
-This module provides functionality for representing and manipulating DNA sequences with optional methylation and backbone properties.
+"""This module provides functionality for representing and manipulating DNA sequences
+with optional methylation and backbone properties.
 
 Shortcuts:
 ----------
@@ -16,6 +16,7 @@ Shortcuts:
 import re
 from itertools import product
 
+from . import TB_MODELS_PROPS
 from qDNA.tools import DNA_BASES, TB_MODELS_PROPS
 
 __all__ = ["DNA_Seq", "create_upper_strands"]
@@ -24,8 +25,8 @@ __all__ = ["DNA_Seq", "create_upper_strands"]
 
 
 class DNA_Seq:
-    """
-    A class to represent a DNA sequence and its properties based on a tight-binding model.
+    """A class to represent a DNA sequence and its properties based on a tight- binding
+    model.
 
     Parameters
     ----------
@@ -36,7 +37,7 @@ class DNA_Seq:
     methylated : bool, optional
         Indicates whether the DNA sequence is methylated (default is True).
     lower_strand : str, optional
-        The lower strand of the DNA sequence (default is None).
+        The lower strand of the DNA sequence (default is 'auto_complete').
 
     Attributes
     ----------
@@ -66,12 +67,22 @@ class DNA_Seq:
         The generated DNA sequence.
     """
 
-    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand=None):
+    def __init__(
+        self, upper_strand, tb_model_name, methylated=True, lower_strand="auto_complete"
+    ):
         # Initialize the DNA sequence
+        if isinstance(upper_strand, str):
+            upper_strand = list(upper_strand)
         self.upper_strand = upper_strand
+        if lower_strand != "auto_complete":
+            lower_strand = list(lower_strand)
         self.lower_strand = lower_strand
         self.methylated = methylated
         self.tb_model_name = tb_model_name
+        TB_MODELS = list(TB_MODELS_PROPS.keys())
+        assert (
+            self.tb_model_name in TB_MODELS
+        ), f"tb_model_name must be a predefined model {TB_MODELS}"
 
         # Get the properties of the tight-binding model
         self.tb_model_props = TB_MODELS_PROPS[self.tb_model_name]
@@ -94,29 +105,22 @@ class DNA_Seq:
         self.dna_seq = self._create_dna_seq()
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the DNA_Seq instance.
-        """
+        """Returns a string representation of the DNA_Seq instance."""
         return f"DNA_Seq({self.upper_strand}, {self.tb_model_name}, methylated={self.methylated})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two DNA_Seq instances for equality.
-        """
+        """Compares two DNA_Seq instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------------
 
     def _create_dna_seq(self):
-        """
-        Create the DNA sequence based on the object's attributes.
-        This method generates the DNA sequence considering whether it is double-stranded,
+        """Create the DNA sequence based on the object's attributes. This method
+        generates the DNA sequence considering whether it is double- stranded,
         methylated, and/or has a backbone. It uses the `upper_strand` attribute as the
         primary sequence and generates the `lower_strand` if the DNA is double-stranded.
 
@@ -133,17 +137,17 @@ class DNA_Seq:
 
         # Generate the lower strand if it is not provided and the model is double-stranded
         if self.double_stranded:
-            if not self.lower_strand:
-                self.lower_strand = "".join(
+            if self.lower_strand == "auto_complete":
+                self.lower_strand = [
                     self.complementary_base_dict[dna_base]
                     for dna_base in self.upper_strand
-                )
+                ]
                 if self.methylated:
                     self._add_methylation()
 
         # Generate the backbone strand if the model includes a backbone
         if self.backbone:
-            self.backbone_strand = "B" * len(self.upper_strand)
+            self.backbone_strand = ["B"] * len(self.upper_strand)
 
         # Return the DNA sequence based on the model properties
         if self.double_stranded and self.backbone:
@@ -160,25 +164,24 @@ class DNA_Seq:
         return (self.upper_strand,)
 
     def _add_methylation(self):
-        """
-        Adds methylation to the lower DNA strand according to the fragile X syndrome.
-        This method searches for occurrences of the sequence "FG" in the upper DNA strand.
-        For each occurrence, it modifies the corresponding position in the lower DNA strand
-        by changing the character following the match to "F".
+        """Adds methylation to the lower DNA strand according to the fragile X syndrome.
+
+        This method searches for occurrences of the sequence "FG" in the upper DNA
+        strand. For each occurrence, it modifies the corresponding position in the lower
+        DNA strand by changing the character following the match to "F".
         """
         # Find all occurrences of "cG" in the upper DNA strand
-        matches = [match.start() for match in re.finditer("FG", self.upper_strand)]
+        upper_strand_string = "".join(self.upper_strand)
+        matches = [match.start() for match in re.finditer("FG", upper_strand_string)]
 
         # Modify the lower DNA strand based on the matches
-        lower_strand_list = list(self.lower_strand)
         for match in matches:
-            lower_strand_list[match + 1] = "F"
-        self.lower_strand = "".join(lower_strand_list)
+            self.lower_strand[match + 1] = "F"
 
 
 def create_upper_strands(num_dna_bases, dna_bases):
-    """
-    Generate all possible upper DNA strands of a given length using specified DNA bases.
+    """Generate all possible upper DNA strands of a given length using specified DNA
+    bases.
 
     Parameters
     ----------
@@ -198,13 +201,15 @@ def create_upper_strands(num_dna_bases, dna_bases):
         If any element of `dna_bases` is not in the configured DNA bases.
     """
 
-    # Check that the DNA bases are valid
+    # Ensure that all provided DNA bases are valid
     assert all(
-        [dna_base in DNA_BASES for dna_base in dna_bases]
+        dna_base in DNA_BASES for dna_base in dna_bases
     ), f"Elements of dna_bases must be in {DNA_BASES}"
 
-    # Generate all possible upper DNA strands
-    return list(
+    # Generate all possible upper DNA strands of the specified length
+    upper_strands = [
         "".join(upper_strand)
         for upper_strand in product(dna_bases, repeat=num_dna_bases)
-    )
+    ]
+
+    return upper_strands

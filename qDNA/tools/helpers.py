@@ -1,21 +1,45 @@
-"""
-This module provides utility functions for timing function execution, sorting dictionaries,
-loading and sorting JSON data, and calculating correlation coefficients between datasets.
-"""
+"""This module provides utility functions for timing function execution, sorting
+dictionaries, loading and sorting JSON data, and calculating correlation coefficients
+between datasets."""
 
 import time
 from functools import wraps
+import shutil
+import os
 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 
+from .. import ROOT_DIR
 from .save_load import load_json
 
 # ------------------------------------------------
 
 
-def timeit(f):
+def install_style():
     """
-    A decorator that measures the execution time of a function.
+    Install the custom Matplotlib style for the QuantumDNA project.
+    This function copies the custom Matplotlib style file `qDNA-default.mplstyle`
+    from the project's directory to the Matplotlib configuration directory's
+    `stylelib` folder. If the `stylelib` folder does not exist, it will be created.
+    After copying the style file, the Matplotlib style library is reloaded to
+    apply the new style.
+    """
+
+    config_dir = mpl.get_configdir()
+    stylelib_dir = os.path.join(config_dir, "stylelib")
+    os.makedirs(stylelib_dir, exist_ok=True)
+    mplstyle_path = os.path.join(ROOT_DIR, "qDNA", "qDNA-default.mplstyle")
+    shutil.copy(mplstyle_path, stylelib_dir)
+    plt.style.reload_library()
+
+
+install_style()
+
+
+def timeit(f):
+    """A decorator that measures the execution time of a function.
 
     Parameters
     ----------
@@ -47,8 +71,7 @@ def timeit(f):
 
 
 def sorted_dict(dictionary, reverse=True):
-    """
-    Sorts the dictionary by its values.
+    """Sorts the dictionary by its values.
 
     Parameters
     ----------
@@ -66,8 +89,7 @@ def sorted_dict(dictionary, reverse=True):
 
 
 def get_dominant_dict(dominant_filename, directory):
-    """
-    Load and sort a JSON file into a dictionary.
+    """Load and sort a JSON file into a dictionary.
 
     Parameters
     ----------
@@ -86,8 +108,7 @@ def get_dominant_dict(dominant_filename, directory):
 
 
 def get_sorted_dict(dominant_filename, filename, directory):
-    """
-    Sorts a dictionary based on the order of keys in a dominant dictionary.
+    """Sorts a dictionary based on the order of keys in a dominant dictionary.
 
     Parameters
     ----------
@@ -112,14 +133,13 @@ def get_sorted_dict(dominant_filename, filename, directory):
     # Sort the dictionary based on the order of keys in the dominant dictionary
     sequence_ordering = list(dominant_dict.keys())
     lifetime_dict = load_json(filename, directory)
-    sorted_keys = sorted(lifetime_dict.keys(), key=lambda x: sequence_ordering.index(x))
+    sorted_keys = sorted(lifetime_dict.keys(), key=sequence_ordering.index)
     lifetime_dict = {key: lifetime_dict[key] for key in sorted_keys}
     return lifetime_dict
 
 
 def get_correlation(dominant_filename, filename, directory):
-    """
-    Calculate the correlation coefficient between two datasets.
+    """Calculate the correlation coefficient between two datasets.
 
     Parameters
     ----------

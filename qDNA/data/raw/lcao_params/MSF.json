@@ -1,0 +1,18 @@
+{
+    "chi_sssigma": -1.32,
+    "chi_spsigma": -1.42,
+    "chi_pppi": -0.73,
+    "chi_ppsigma": 2.22,
+    "E_Hs": -13.638,
+    "E_Cs": -13.18,
+    "E_Cp": -6.7,
+    "E_Ns": -14.51,
+    "E_Np": -9.55,
+    "E_Os": -15.03,
+    "E_Op": -11.52,
+    "b": 0.7,
+    "d0": 1.35,
+    "d0H": 1.0,
+    "cutoff_radius": 1.59,
+    "cutoff_radius_H": 2.651
+}

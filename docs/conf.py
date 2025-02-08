@@ -17,8 +17,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    # "nbsphinx",
-    # "pandoc",
+    "nbsphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
 ]

@@ -1,12 +1,14 @@
-"""
-This module provides utility functions to save and load tight-binding parameters as JSON files.
-By default, the parameters are stored in the "qDNA/data/raw/tb_params" directory.
-The module includes functions to handle metadata associated with the parameters, ensuring that the data is well-organized and easily retrievable.
+"""This module provides utility functions to save and load tight-binding parameters as
+JSON files.
+
+By default, the parameters are stored in the "qDNA/data/raw/tb_params" directory. The
+module includes functions to handle metadata associated with the parameters, ensuring
+that the data is well-organized and easily retrievable.
 """
 
 import os
 from .. import DATA_DIR
-from ..tools import load_json, save_json
+from ..tools import load_json, save_json, modify_json
 
 __all__ = [
     "save_tb_params",
@@ -23,19 +25,16 @@ def save_tb_params(
     metadata,
     directory,
 ):
-    """
-    Save tight-binding parameters to a file.
+    """Save tight-binding parameters to a file.
 
     Parameters
     ----------
-    tb_param_dict : dict
+    tb_params : dict
         Dictionary containing the tight-binding parameters.
-    info_dict : dict
+    metadata : dict
         Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
         Directory to save the file, by default `data/raw/tb_params`.
-    notes : str, optional
-        Additional notes to include in the info_dict, by default None.
 
     Examples
     --------
@@ -45,6 +44,7 @@ def save_tb_params(
     filename = "_".join(
         [metadata[key] for key in ["source", "particle", "tb_model_name"]]
     )
+    modify_json("config", os.path.join(DATA_DIR, "raw"), "SOURCES", metadata["source"])
     save_json(tb_params, metadata, filename, directory)
 
 
@@ -53,12 +53,11 @@ def load_tb_params(
     directory,
     load_metadata=False,
 ):
-    """
-    Load tight-binding parameters from a file.
+    """Load tight-binding parameters from a file.
 
     Parameters
     ----------
-    info_dict : dict
+    metadata : dict
         Dictionary with metadata, e.g., `source`, `particle`, and `tb_model_name`.
     directory : str, optional
         Directory to load the file from, by default `data/raw/tb_params`.
@@ -89,12 +88,11 @@ def wrap_save_tb_params(
     unit=None,
     notes=None,
 ):
-    """
-    Wrapper function for save_tb_params().
+    """Wrapper function for save_tb_params().
 
     Parameters
     ----------
-    tb_param_dict : dict
+    tb_params : dict
         Dictionary containing the tight-binding parameters.
     source : str
         Source of the parameters, e.g., `Hawke2010`.
@@ -129,8 +127,7 @@ def wrap_load_tb_params(
     tb_model_name,
     load_metadata=False,
 ):
-    """
-    Wrapper function for load_tb_params().
+    """Wrapper function for load_tb_params().
 
     Parameters
     ----------

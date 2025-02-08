@@ -1,74 +1,190 @@
-# Installation Guide
 
-**NOTE**: These set-up instructions have only been tested on Windows.
+# QuantumDNA Installation Guide
+
+Welcome to the installation guide for `QuantumDNA`. Follow the steps below to install the package, set up a virtual environment, and start using `qDNA` either through a Graphical User Interface or a Jupyter Notebook.
+
+---
+
+## Prerequisites
+
+Before proceeding, make sure the following prerequisites are met:
+
+1. **Python Installation**:
+   - Verify that Python is installed by running:
+
+     ```bash
+     python --version
+     ```
+
+   - If Python is not installed, download and install it from [python.org](https://www.python.org/downloads/).
+
+2. **Linux/macOS Users**:
+   - Ensure `pip` and `tkinter` are installed:
+
+     ```bash
+     python3 -m pip --version
+     python3 -m tkinter
+     ```
+
+   - If they are not installed, install them using your package manager:
+     - **Debian/Ubuntu**:
+
+       ```bash
+       sudo apt install python3-pip python3-tk
+       ```
+
+     - **Fedora**:
+
+       ```bash
+       sudo dnf install python3-pip python3-tkinter
+       ```
+
+3. **Windows Users**:
+   - Ensure Git is installed by running:
+
+     ```bash
+     git --version
+     ```
+
+   - If Git is not installed, download and install it from [Git for Windows](https://gitforwindows.org/).
 
 ## Installation via PyPI
 
-We recommend creating a new virtual environment and Jupyter notebook kernel to avoid conflicts with existing packages.
+The easiest way to install `qDNA` is through PyPI. For best results, we recommend creating a new virtual environment to avoid package conflicts.
 
-1. Open the Windows Powershell and navigate to your project folder. Create a new virtual environment
+### Steps
+
+1. **Create a New Virtual Environment**:
+
+    Open your terminal and navigate to your project folder. Run:
 
     ```bash
     python -m venv .venv
     ```
 
-2. Activate the virtual environment
+2. **Activate the Virtual Environment**:
+    - **Windows**:
 
-    ```bash
-    .venv/Scripts/activate.ps1
-    ```
+      ```bash
+      .venv\Scripts\activate
+      ```
 
-3. Install the qDNA package
+    - **macOS/Linux**:
+
+      ```bash
+      source .venv/bin/activate
+      ```
+
+3. **Install the `qDNA` Package**:
 
     ```bash
     pip install qDNA
     ```
 
-Optional: use `qDNA` inside a Jupyter notebook
+4. **Optional: Use `qDNA` Inside a Jupyter Notebook**:
+    Install Jupyter and launch the notebook:
 
-```bash
-pip install ipykernel
-jupyter notebook
-```
+    ```bash
+    pip install ipykernel notebook
+    jupyter notebook
+    ```
+
+---
 
 ## Installation via Cloning the GitHub Repository
 
-If you want to make changes to the source code you can clone the project's GitHub repository and install it in editable mode. On Windows you first have to install Git ([Download](https://gitforwindows.org/)).
+If you plan to contribute to the development or make changes to the source code, install `qDNA` in editable mode by cloning its GitHub repository.
 
-1. Clone the Github repository:
+### Steps
+
+1. **Clone the GitHub Repository**:
 
     ```bash
     git clone https://github.com/dehe1011/QuantumDNA.git
     ```
 
-2. Navigate to the directory of the cloned repository
+2. **Navigate to the Cloned Repository**:
 
     ```bash
     cd QuantumDNA
     ```
 
-3. Use the provided activation script to finish the installation. Optionally you can open the Graphical User Interface or a Jupyter Notebook.
+3. **Run the Activation Script**:
+    Use the provided activation script to complete the installation. Instructions vary by platform (see below).
 
-    ```bash
-    powershell -ExecutionPolicy Bypass -File scripts/activate.ps1
+---
+
+## Platform-Specific Instructions for Activation
+
+### **Windows**
+
+1. Navigate to the project directory:
+
+    ```powershell
+    Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
     ```
 
-If all tests passed, the package has been successfully installed and you can access all the implemented functionalities. Enjoy!
+2. Run the activation script:
 
-## Usage
+    ```powershell
+    powershell -ExecutionPolicy Bypass -File scripts\Activate.ps1
+    ```
 
-After installing the package, you can access the code via the Graphical User interface or in a Jupyter Notebook simply by running the activation script again.
+---
 
-```bash
-powershell -ExecutionPolicy Bypass -File scripts/activate.ps1
-```
+### **macOS**
+
+1. Navigate to the project directory:
+
+    ```bash
+    cd /Users/<YourUsername>/QuantumDNA
+    ```
+
+2. Run the activation script:
+
+    ```bash
+    source scripts/activate
+    ```
+
+---
+
+### **Linux**
+
+1. Navigate to the project directory:
+
+    ```bash
+    cd /home/<YourUsername>/QuantumDNA
+    ```
+
+2. Run the activation script:
+
+    ```bash
+    source scripts/activate
+    ```
+
+---
+
+## Post-Installation and Usage
+
+If all tests pass, the package has been successfully installed! You can now:
+
+- Launch the **Graphical User Interface** or
+- Start using `qDNA` inside a **Jupyter Notebook**.
+
+Run the activation script as mentioned in the platform-specific instructions to start the **Graphical User Interface** or a **Jupyter Notebook**. It is recommended to always run the activation script.
+
+---
 
 ## Uninstallation
 
-Uninstall the package by running
+To remove the package:
 
- ```bash
+```bash
 pip uninstall qDNA
- ```
+```
 
-If you cloned the GitHub repository do not forget to manually delete the `QuantumDNA` folder on your computer.
+If you cloned the GitHub repository, manually delete the `QuantumDNA` folder from your computer.
+
+---
+
+🎉 **Congratulations!** You’ve successfully installed and set up `QuantumDNA`. Enjoy exploring the physics of DNA with this powerful tool.

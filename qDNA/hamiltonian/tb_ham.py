@@ -1,7 +1,8 @@
-"""
-This module provides the implementation of a tight-binding Hamiltonian for DNA sequences.
-It includes the `TB_Ham` class, which represents the Hamiltonian and provides methods for its construction, manipulation, and analysis.
-The module also includes several utility functions for setting matrix elements, constructing Hamiltonian matrices for single and two-particle systems, and adding interaction terms.
+"""This module provides the implementation of a tight-binding Hamiltonian for DNA
+sequences. It includes the `TB_Ham` class, which represents the Hamiltonian and provides
+methods for its construction, manipulation, and analysis. The module also includes
+several utility functions for setting matrix elements, constructing Hamiltonian matrices
+for single and two-particle systems, and adding interaction terms.
 
 Shortcuts
 ---------
@@ -10,7 +11,6 @@ Shortcuts
 - ham: hamiltonian
 - param: parameter
 - dim: dimension
-
 """
 
 from itertools import chain
@@ -45,8 +45,7 @@ __all__ = ["TB_Ham"]
 
 
 class TB_Ham:
-    """
-    A class used to represent the tight-binding Hamiltonian for DNA sequences.
+    """A class used to represent the tight-binding Hamiltonian for DNA sequences.
 
     Parameters
     ----------
@@ -83,8 +82,10 @@ class TB_Ham:
         Tight-binding parameters for holes.
     relaxation : bool
         Flag indicating if relaxation is considered.
-    interaction_param : float
-        Interaction parameter for the Hamiltonian.
+    coulomb_param : float
+        Coulomb interaction parameter for the Hamiltonian.
+    exchange_param : float
+        Exchange interaction parameter for the Hamiltonian.
     eh_basis : list
         Electron-hole basis states.
     nn_cutoff : bool
@@ -98,8 +99,8 @@ class TB_Ham:
 
     Methods
     -------
-    get_param_dicts()
-        Retrieves the tight-binding parameters for electrons and holes.
+    get_param_dict(particle)
+        Retrieves the tight-binding parameters.
     get_eigensystem()
         Computes and returns the eigenvalues and eigenvectors of the Hamiltonian.
     get_matrix()
@@ -145,71 +146,93 @@ class TB_Ham:
         self._unit = self.ham_kwargs.get("unit")
 
         # tight-binding parameters
-        self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+        if self.description == "2P":
+            self.tb_params_electron = self.get_param_dict("electron")
+            self.tb_params_hole = self.get_param_dict("hole")
+            self.tb_params_exciton = self.get_param_dict("exciton")
+        else:
+            if "electron" in self.particles:
+                self.tb_params_electron = self.get_param_dict("electron")
+            if "hole" in self.particles:
+                self.tb_params_hole = self.get_param_dict("hole")
+            if "exciton" in self.particles:
+                self.tb_params_exciton = self.get_param_dict("exciton")
 
         self._relaxation = False
         if self.description == "2P":
-            self._interaction_param = self.ham_kwargs.get("interaction_param")
+            self._coulomb_param = self.ham_kwargs.get("coulomb_param")
+            self._exchange_param = self.ham_kwargs.get("exchange_param")
             self._relaxation = self.ham_kwargs.get("relaxation")
             self.eh_basis = get_eh_basis(self.tb_model.tb_dims)
             self._nn_cutoff = self.ham_kwargs.get("nn_cutoff")
+
         self.matrix = self.get_matrix()
         self.matrix_dim = self.matrix.shape[0]
-        self.backbone = True if self.tb_model.num_strands in (3, 4) else False
+        self.backbone = self.tb_model.num_strands in (3, 4)
 
         if self.verbose:
             print("Successfully initialized the TB_Ham instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the TB_Ham instance.
-        """
+        """Returns a string representation of the TB_Ham instance."""
         return f"TB_Ham({self.dna_seq}, {self.ham_kwargs})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two TB_Ham instances for equality.
-        """
+        """Compares two TB_Ham instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------------
 
     @property
-    def particles(self):
+    def particles(self):  # pylint: disable=missing-function-docstring
         return self._particles
 
     @particles.setter
     def particles(self, new_particles):
         assert isinstance(new_particles, list), "new_particles must be of type list"
         assert all(
-            [isinstance(new_particle, str) for new_particle in new_particles]
+            isinstance(new_particle, str) for new_particle in new_particles
         ), "elements of new_particles must be of type str"
         self._particles = new_particles
 
     @property
-    def interaction_param(self):
-        return self._interaction_param
+    def coulomb_param(self):  # pylint: disable=missing-function-docstring
+        return self._coulomb_param
 
-    @interaction_param.setter
-    def interaction_param(self, new_interaction_param):
+    @coulomb_param.setter
+    def coulomb_param(self, new_coulomb_param):
         assert isinstance(
-            new_interaction_param, float
-        ), "interaction_param must be of type float"
-        old_interaction_param = self._interaction_param
-        self._interaction_param = new_interaction_param
+            new_coulomb_param, float
+        ), "coulomb_param must be of type float"
+        old_coulomb_param = self._coulomb_param
+        self._coulomb_param = new_coulomb_param
 
         # update the matrix
-        if old_interaction_param != new_interaction_param:
+        if old_coulomb_param != new_coulomb_param:
             self.matrix = self.get_matrix()
 
     @property
-    def relaxation(self):
+    def exchange_param(self):  # pylint: disable=missing-function-docstring
+        return self._exchange_param
+
+    @exchange_param.setter
+    def exchange_param(self, new_exchange_param):
+        assert isinstance(
+            new_exchange_param, float
+        ), "exchange_param must be of type float"
+        old_exchange_param = self._exchange_param
+        self._coulomb_param = new_exchange_param
+
+        # update the matrix
+        if old_exchange_param != new_exchange_param:
+            self.matrix = self.get_matrix()
+
+    @property
+    def relaxation(self):  # pylint: disable=missing-function-docstring
         return self._relaxation
 
     @relaxation.setter
@@ -229,7 +252,7 @@ class TB_Ham:
             self.matrix_dim = self.matrix.shape[0]
 
     @property
-    def nn_cutoff(self):
+    def nn_cutoff(self):  # pylint: disable=missing-function-docstring
         return self._nn_cutoff
 
     @nn_cutoff.setter
@@ -242,7 +265,7 @@ class TB_Ham:
             self.matrix = self.get_matrix()
 
     @property
-    def unit(self):
+    def unit(self):  # pylint: disable=missing-function-docstring
         return self._unit
 
     @unit.setter
@@ -255,10 +278,20 @@ class TB_Ham:
         # update the matrix and tight-binding parameters
         if new_unit != old_unit:
             self.matrix *= get_conversion(old_unit, new_unit)
-            self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+            if self.description == "2P":
+                self.tb_params_electron = self.get_param_dict("electron")
+                self.tb_params_hole = self.get_param_dict("hole")
+                self.tb_params_exciton = self.get_param_dict("exciton")
+            else:
+                if "electron" in self.particles:
+                    self.tb_params_electron = self.get_param_dict("electron")
+                if "hole" in self.particles:
+                    self.tb_params_hole = self.get_param_dict("hole")
+                if "exciton" in self.particles:
+                    self.tb_params_exciton = self.get_param_dict("exciton")
 
     @property
-    def source(self):
+    def source(self):  # pylint: disable=missing-function-docstring
         return self._source
 
     @source.setter
@@ -270,63 +303,67 @@ class TB_Ham:
 
         # update the matrix and tight-binding parameters
         if new_source != old_source:
-            self.tb_params_electron, self.tb_params_hole = self.get_param_dicts()
+            if self.description == "2P":
+                self.tb_params_electron = self.get_param_dict("electron")
+                self.tb_params_hole = self.get_param_dict("hole")
+                self.tb_params_exciton = self.get_param_dict("exciton")
+            else:
+                if "electron" in self.particles:
+                    self.tb_params_electron = self.get_param_dict("electron")
+                if "hole" in self.particles:
+                    self.tb_params_hole = self.get_param_dict("hole")
+                if "exciton" in self.particles:
+                    self.tb_params_exciton = self.get_param_dict("exciton")
             self.matrix = self.get_matrix()
 
     # ---------------------------------------------------------------
 
-    def get_param_dicts(self):
-        """
-        Retrieves the tight-binding parameters for electrons and holes.
-        This method loads the tight-binding parameters for both electrons and holes
-        from the specified source and model name. If the unit of the loaded parameters
-        does not match the expected unit, it converts the parameters to the expected unit.
+    def get_param_dict(self, particle):
+        """Retrieves the tight-binding parameters for the selected particle. This method
+        loads the tight-binding parameters from the specified source and model name. If
+        the unit of the loaded parameters does not match the expected unit, it converts
+        the parameters to the expected unit.
+
+        Parameters
+        ----------
+        particle : str
+            The particle for which to retrieve the tight-binding parameters.
 
         Returns
         -------
         tuple
-            A tuple containing two dictionaries:
-              tb_params_electron : dict
-                The tight-binding parameters for electrons.
-              tb_params_hole : dict
-                The tight-binding parameters for holes.
+            tb_params : dict
+                The tight-binding parameters.
         """
 
         model_name = self.tb_model.tb_model_name
 
-        # load the tight-binding parameters for electrons
-        tb_params_electron, metadata = wrap_load_tb_params(
-            self.source, "electron", model_name, load_metadata=True
-        )
-        # load the tight-binding parameters for holes
-        tb_params_hole, metadata = wrap_load_tb_params(
-            self.source, "hole", model_name, load_metadata=True
-        )
-        # convert the parameters to the expected unit
-        if self.unit != metadata["unit"]:
-            tb_params_electron = get_conversion_dict(
-                tb_params_electron, metadata["unit"], self.unit
+        try:
+            # load the tight-binding parameters
+            tb_params, metadata = wrap_load_tb_params(
+                self.source, particle, model_name, load_metadata=True
             )
-            tb_params_hole = get_conversion_dict(
-                tb_params_hole, metadata["unit"], self.unit
-            )
-        return tb_params_electron, tb_params_hole
+
+            # convert the parameters to the expected unit
+            if self.unit != metadata["unit"]:
+                tb_params = get_conversion_dict(tb_params, metadata["unit"], self.unit)
+        except FileNotFoundError:
+            tb_params = {}
+
+        return tb_params
 
     def get_eigensystem(self):
-        """
-        Compute the eigenvalues and eigenvectors of the matrix.
-        This method computes the eigenvalues and eigenvectors of the matrix
-        associated with the instance. If the description is "2P" and relaxation
-        is enabled, the ground state is deleted from the matrix before computing
-        the eigensystem.
+        """Compute the eigenvalues and eigenvectors of the matrix. This method computes
+        the eigenvalues and eigenvectors of the matrix associated with the instance. If
+        the description is "2P" and relaxation is enabled, the ground state is deleted
+        from the matrix before computing the eigensystem.
 
         Returns
         -------
         tuple
-            A tuple containing:
-              eigenvalues : ndarray
+            eigenvalues : ndarray
                 The eigenvalues of the matrix.
-              eigenvectors : ndarray
+            eigenvectors : ndarray
                 The eigenvectors of the matrix.
         """
 
@@ -340,8 +377,8 @@ class TB_Ham:
         return np.linalg.eigh(matrix)
 
     def get_matrix(self):
-        """
-        Generate the tight-binding Hamiltonian matrix based on the system description.
+        """Generate the tight-binding Hamiltonian matrix based on the system
+        description.
 
         Returns
         -------
@@ -367,15 +404,26 @@ class TB_Ham:
                 self.tb_model,
                 self.tb_params_electron,
                 self.tb_params_hole,
+                self.tb_params_exciton,
                 self.tb_basis_sites_dict,
             )
 
             # add interaction terms
-            if self.interaction_param:
+            if self.coulomb_param:
                 matrix = add_interaction(
                     matrix,
                     self.eh_basis,
-                    self.interaction_param,
+                    self.coulomb_param,
+                    "Coulomb",
+                    nn_cutoff=self.nn_cutoff,
+                )
+
+            if self.exchange_param:
+                matrix = add_interaction(
+                    matrix,
+                    self.eh_basis,
+                    self.exchange_param,
+                    "Exchange",
                     nn_cutoff=self.nn_cutoff,
                 )
 
@@ -396,11 +444,17 @@ class TB_Ham:
                     self.tb_model, self.tb_params_hole, self.tb_basis_sites_dict
                 )
 
+            # generate the Hamiltonian matrix for the exciton
+            if self.particles == ["exciton"]:
+                matrix = tb_ham_1P(
+                    self.tb_model, self.tb_params_exciton, self.tb_basis_sites_dict
+                )
+
         return matrix
 
     def get_fourier(self, init_state, end_state, quantities):
-        """
-        Calculate the Fourier components of the transition between initial and end states.
+        """Calculate the Fourier components of the transition between initial and end
+        states.
 
         Parameters
         ----------
@@ -428,6 +482,9 @@ class TB_Ham:
         """
 
         eigv, eigs = self.get_eigensystem()
+
+        if quantities == "all":
+            quantities = ["amplitude", "frequency", "average_pop"]
 
         # check if the end state is in the tight-binding basis
         assert (
@@ -502,18 +559,24 @@ class TB_Ham:
                     )
         return amplitudes_dict, frequencies_dict, average_pop_dict
 
-    def get_amplitudes(self, init_state, end_state):
+    def get_amplitudes(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["amplitude"])[0]
 
-    def get_frequencies(self, init_state, end_state):
+    def get_frequencies(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["frequency"])[1]
 
-    def get_average_pop(self, init_state, end_state):
+    def get_average_pop(
+        self, init_state, end_state
+    ):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["average_pop"])[2]
 
     def get_backbone_pop(self, init_state):
-        """
-        Calculate the population of particles on the backbone sites of a Fishbone model.
+        """Calculate the population of particles on the backbone sites of a Fishbone
+        model.
 
         Parameters
         ----------

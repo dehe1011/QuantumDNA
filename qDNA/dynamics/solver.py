@@ -1,5 +1,4 @@
-"""
-Module for solving master equations using the ME_Solver class.
+"""Module for solving master equations using the ME_Solver class.
 
 Shortcuts
 ---------
@@ -30,8 +29,8 @@ __all__ = ["ME_Solver", "get_me_solver"]
 
 
 class ME_Solver:
-    """
-    A class used to solve master equations using the tight-binding Hamiltonian and Lindblad dissipator.
+    """A class used to solve master equations using the tight-binding Hamiltonian and
+    Lindblad dissipator.
 
     This class provides methods to initialize the solver, set up the Hamiltonian and Lindblad dissipator,
     and compute various properties such as populations, coherences, and ground state populations over time.
@@ -148,36 +147,32 @@ class ME_Solver:
         self.init_matrix = self.get_init_matrix()
 
         # set options for the solver
-        self.options = q.Options(method=self.me_kwargs.get("solver_method"))
+        self.options = {}
 
         # empty lists to store results
         self.reset()
+
+        self.qutip_version = q.__version__.split(".", maxsplit=1)[0]
 
         if self.verbose:
             print("Successfully initialized the ME_Solver instance.")
 
     def __vars__(self) -> dict:
-        """
-        Returns the instance variables as a dictionary.
-        """
+        """Returns the instance variables as a dictionary."""
         return vars(self)
 
     def __repr__(self) -> str:
-        """
-        Returns a string representation of the ME_Solver instance.
-        """
+        """Returns a string representation of the ME_Solver instance."""
         return f"ME_Solver({self.tb_ham}, {self.lindblad_diss}, {self.me_kwargs})"
 
     def __eq__(self, other) -> bool:
-        """
-        Compares two ME_Solver instances for equality.
-        """
+        """Compares two ME_Solver instances for equality."""
         return self.__repr__() == other.__repr__()
 
     # ------------------------------------------------------------------
 
     @property
-    def t_end(self):
+    def t_end(self):  # pylint: disable=missing-function-docstring
         return self._t_end
 
     @t_end.setter
@@ -191,7 +186,7 @@ class ME_Solver:
             self.reset()
 
     @property
-    def t_steps(self):
+    def t_steps(self):  # pylint: disable=missing-function-docstring
         return self._t_steps
 
     @t_steps.setter
@@ -207,15 +202,15 @@ class ME_Solver:
     # --------------------------------------------------------------------
 
     def reset(self):
-        """
-        Resets the solver's state by clearing results and initializing dictionaries for populations and coherences.
+        """Resets the solver's state by clearing results and initializing dictionaries
+        for populations and coherences.
 
         Notes
         -----
         .. note::
 
             - Clears the ``result`` list (for the full the all reduced density matrices).
-            - Initializes `groundstate_pop`, `pop`, and `coh` dictionaries.
+            - Initializes ``groundstate_pop``, ``pop``, and ``coh`` dictionaries.
         """
 
         self.result = []
@@ -226,12 +221,12 @@ class ME_Solver:
             vars(self)["result_" + particle] = []
 
     def get_init_matrix(self):
-        """
-        Generate the initial state matrix for the quantum system based on the Hamiltonian description.
-        The method supports two types of descriptions for the tight-binding Hamiltonian (tb_ham):
-        "2P" (two-particle) and "1P" (one-particle). Depending on the description and the
-        initialization parameters, the initial state matrix is constructed either as a delocalized
-        state over all exciton states or as a localized state on a single exciton state.
+        """Generate the initial state matrix for the quantum system based on the
+        Hamiltonian description. The method supports two types of descriptions for the
+        tight-binding Hamiltonian (tb_ham): "2P" (two- particle) and "1P" (one-
+        particle). Depending on the description and the initialization parameters, the
+        initial state matrix is constructed either as a delocalized state over all
+        exciton states or as a localized state on a single exciton state.
 
         Returns
         -------
@@ -243,6 +238,8 @@ class ME_Solver:
         ValueError
             If the Hamiltonian description is not recognized.
         """
+
+        init_state = None
 
         # 2P description
         if self.tb_ham.description == "2P":
@@ -271,14 +268,48 @@ class ME_Solver:
         elif self.tb_ham.description == "1P":
             init_state_idx = self.tb_ham.tb_basis.index(self.init_state)
             init_state = q.fock_dm(self.tb_ham.matrix_dim, init_state_idx)
+
+        assert init_state is not None, "Initial state is not defined."
         return init_state
 
-    def get_result(self):
+    def _run_mesolve(self, **kwargs):
         """
-        Calculate and return the result of the master equation solver.
-        This method checks if the result has already been calculated. If not, it
-        constructs the Hamiltonian matrix and solves the master equation using
-        QuTiP's `mesolve` function. The result is then stored and returned.
+        Run the mesolve function with the given arguments.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Keyword arguments to be passed to the mesolve function. The keys and values
+            depend on the version of qutip being used.
+
+        Returns
+        -------
+        list
+            List of states resulting from the mesolve function.
+        """
+
+        if self.qutip_version == "5":
+            kwargs["H"] = kwargs["H"].to(data_type="CSR")
+            kwargs["rho0"] = kwargs["rho0"].to(data_type="CSR")
+            kwargs["c_ops"] = [c_op.to(data_type="CSR") for c_op in kwargs["c_ops"]]
+            kwargs["e_ops"] = {
+                key: e_op.to(data_type="CSR") for key, e_op in kwargs["e_ops"].items()
+            }
+            kwargs["options"]["normalize_output"] = False
+            kwargs["options"]["progress_bar"] = False
+
+        if self.qutip_version == "4":
+            kwargs["options"] = None
+
+        if kwargs["e_ops"] == {}:
+            return q.mesolve(**kwargs).states
+        return q.mesolve(**kwargs)
+
+    def get_result(self):
+        """Calculate and return the result of the master equation solver. This method
+        checks if the result has already been calculated. If not, it constructs the
+        Hamiltonian matrix and solves the master equation using QuTiP's ``qutip.mesolve``
+        function. The result is then stored and returned.
 
         Returns
         -------
@@ -288,33 +319,30 @@ class ME_Solver:
         """
 
         # check if the result is already calculated
-        # TODO: upgrade to qutip 5.x solvers
         if not self.result:
             # observables
-            e_ops = []
-
-            # solve the master equation
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                progress_bar=None,
-                options=self.options,
-            ).states
+            e_ops = {}
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
 
             # store the result
-            self.result = result
+            self.result = self._run_mesolve(
+                **kwargs
+            )  # pylint: disable=attribute-defined-outside-init
         return self.result
 
     def get_result_particle(self, particle):
-        """
-        Retrieve the reduced density matrix for a specified particle.
-        This method checks if the result has already been calculated. If not, it
-        calculates the result. Then, it checks if the reduced density matrix for
-        the specified particle has been calculated. If not, it calculates the
-        reduced density matrix for the specified particle and stores it.
+        """Retrieve the reduced density matrix for a specified particle. This method
+        checks if the result has already been calculated. If not, it calculates the
+        result. Then, it checks if the reduced density matrix for the specified particle
+        has been calculated. If not, it calculates the reduced density matrix for the
+        specified particle and stores it.
 
         Parameters
         ----------
@@ -344,12 +372,10 @@ class ME_Solver:
         return vars(self)["result_" + particle]
 
     def get_pop(self):
-        """
-        Calculate and return the population of particles in the system.
-        This method computes the population of particles based on the Hamiltonian
-        description and the Lindblad dissipation operators. It uses the QuTiP
-        library to solve the master equation and obtain the expectation values
-        of the population operators.
+        """Calculate and return the population of particles in the system. This method
+        computes the population of particles based on the Hamiltonian description and
+        the Lindblad dissipation operators. It uses the QuTiP library to solve the
+        master equation and obtain the expectation values of the population operators.
 
         Returns
         -------
@@ -361,20 +387,20 @@ class ME_Solver:
         -----
         .. note::
 
-            - If the population (`self.pop`) is already computed, it returns the cached result.
+            - If the population ``self.pop`` is already computed, it returns the cached result.
             - The method supports two types of Hamiltonian descriptions: "2P" and "1P".
-            - For "2P" description, it uses the population operators from `self.lindblad_diss.pop_ops`.
-            - For "1P" description, it constructs the population operators based on the tight-binding basis (`self.tb_ham.tb_basis`).
-            - The master equation is solved using `qutip.mesolve` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
-
+            - For "2P" description, it uses the population operators from ``self.lindblad_diss.pop_ops``.
+            - For "1P" description, it constructs the population operators based on the tight-binding basis ``self.tb_ham.tb_basis``.
+            - The master equation is solved using ``qutip.mesolve`` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
         """
 
         # check if the population is already calculated
         if not self.pop:
             # observables for the population
+            e_ops = None
             if self.tb_ham.description == "2P":
                 e_ops = self.lindblad_diss.pop_ops
-            if self.tb_ham.description == "1P":
+            elif self.tb_ham.description == "1P":
                 keys = [
                     self.tb_ham.particles[0] + "_" + tb_site
                     for tb_site in self.tb_ham.tb_basis
@@ -384,28 +410,32 @@ class ME_Solver:
                     for i in range(self.tb_ham.matrix_dim)
                 ]
                 e_ops = dict(zip(keys, values))
+            assert e_ops is not None, "Population operators are not defined."
 
             # solve the master equation with observables
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the population values
             for particle in self.tb_ham.particles:
                 for tb_site in self.tb_ham.tb_basis:
-                    self.pop[particle + "_" + tb_site] = result.expect[
-                        particle + "_" + tb_site
-                    ]
+                    value = 0
+                    if self.qutip_version == "5":
+                        value = result.e_data[particle + "_" + tb_site]
+                    if self.qutip_version == "4":
+                        value = result.expect[particle + "_" + tb_site]
+                    self.pop[particle + "_" + tb_site] = value
         return self.pop
 
     def get_coh(self):
-        """
-        Calculate and return the coherence of the system.
+        """Calculate and return the coherence of the system.
         This method computes the coherence of the system based on the Hamiltonian
         description and the Lindblad dissipation operators. It supports two types
         of Hamiltonian descriptions: "2P" and "1P".
@@ -413,7 +443,7 @@ class ME_Solver:
         dissipation.
         For "1P" description, it constructs the coherence operators based on the
         tensor basis permutations.
-        The method then solves the master equation using the QuTiP `mesolve` function
+        The method then solves the master equation using the QuTiP ``qutip.mesolve`` function
         and calculates the coherence for each particle in the system.
 
         Returns
@@ -426,6 +456,7 @@ class ME_Solver:
         # check if the coherence is already calculated
         if not self.coh:
             # observables for the coherence
+            e_ops = None
             if self.tb_ham.description == "2P":
                 e_ops = self.lindblad_diss.coh_ops
             if self.tb_ham.description == "1P":
@@ -439,33 +470,41 @@ class ME_Solver:
                     for i, j in permutations(self.tb_ham.matrix_dim, 2)
                 ]
                 e_ops = dict(zip(keys, values))
+            assert e_ops is not None, "Coherence operators are not defined."
 
             # solve the master equation with observables
-            result = q.mesolve(
-                self.ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the coherence values
             for particle in self.tb_ham.particles:
                 self.coh[particle] = 0
                 for tb_site1, tb_site2 in permutations(self.tb_ham.tb_basis, 2):
-                    self.coh[particle] += abs(
-                        result.expect[particle + "_" + tb_site1 + "_" + tb_site2]
-                    )
+                    value = 0
+                    if self.qutip_version == "5":
+                        value = result.e_data[
+                            particle + "_" + tb_site1 + "_" + tb_site2
+                        ]
+                    if self.qutip_version == "4":
+                        value = result.expect[
+                            particle + "_" + tb_site1 + "_" + tb_site2
+                        ]
+                    self.coh[particle] += np.abs(value)
 
         return self.coh
 
     def get_groundstate_pop(self):
-        """
-        Calculate and return the ground state population.
-        This function computes the ground state population of a system described
-        by a two-particle (2P) Hamiltonian with relaxation. If the ground state
-        population has already been computed, it returns the cached result.
+        """Calculate and return the ground state population. This function computes the
+        ground state population of a system described by a two- particle (2P)
+        Hamiltonian with relaxation. If the ground state population has already been
+        computed, it returns the cached result.
 
         Returns
         -------
@@ -486,23 +525,28 @@ class ME_Solver:
 
         # check if the ground state population is already calculated
         if not self.groundstate_pop:
-            ham_matrix = q.Qobj(self.tb_ham.matrix)
 
             # observables for the ground state population
             e_ops = self.lindblad_diss.groundstate_pop_ops
 
             # solve the master equation with observables
-            result = q.mesolve(
-                ham_matrix,
-                self.init_matrix,
-                self.times,
-                self.lindblad_diss.c_ops,
-                e_ops,
-                options=self.options,
-            )
+            kwargs = {
+                "H": self.ham_matrix,
+                "rho0": self.init_matrix,
+                "tlist": self.times,
+                "c_ops": self.lindblad_diss.c_ops,
+                "e_ops": e_ops,
+                "options": self.options,
+            }
+            result = self._run_mesolve(**kwargs)
 
             # store the ground state population values
-            self.groundstate_pop["groundstate"] = result.expect["groundstate"]
+            value = 0
+            if self.qutip_version == "5":
+                value = result.e_data["groundstate"]
+            if self.qutip_version == "4":
+                value = result.expect["groundstate"]
+            self.groundstate_pop["groundstate"] = value
         return self.groundstate_pop
 
 
@@ -510,8 +554,7 @@ class ME_Solver:
 
 
 def get_me_solver(upper_strand, tb_model_name, **kwargs):
-    """
-    Creates an instance of ME_Solver.
+    """Creates an instance of ME_Solver.
 
     Parameters
     ----------
@@ -528,7 +571,10 @@ def get_me_solver(upper_strand, tb_model_name, **kwargs):
         An instance of ME_Solver.
     """
 
-    dna_seq = DNA_Seq(upper_strand, tb_model_name)
+    lower_strand = kwargs.get("lower_strand")
+    if lower_strand is None:
+        lower_strand = "auto_complete"
+    dna_seq = DNA_Seq(upper_strand, tb_model_name, lower_strand=lower_strand)
     tb_ham = TB_Ham(dna_seq, **kwargs)
     lindblad_diss = Lindblad_Diss(tb_ham, **kwargs)
     me_solver = ME_Solver(tb_ham, lindblad_diss, **kwargs)

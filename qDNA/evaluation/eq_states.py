@@ -1,12 +1,12 @@
-"""
-This module provides functions to compute equilibrium states for quantum DNA models.
-"""
+"""This module provides functions to compute equilibrium states for quantum DNA
+models."""
 
 import numpy as np
 import scipy.constants as c
 
 from ..utils import get_conversion
 from ..model import global_to_local, local_to_global
+from ..hamiltonian import delete_groundstate
 
 __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
@@ -14,14 +14,13 @@ __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
 
 def get_therm_eq_state(me_solver):
-    """
-    Calculate the thermal equilibrium state.
+    """Calculate the thermal equilibrium state.
 
     Parameters
     ----------
     me_solver : object
-        An instance of a master equation solver which contains the tight-binding Hamiltonian (`tb_ham`)
-        and the Lindblad dissipation parameters (`lindblad_diss`).
+        An instance of a master equation solver which contains the tight-binding Hamiltonian ``tb_ham``
+        and the Lindblad dissipation parameters ``lindblad_diss``.
 
     Returns
     -------
@@ -31,9 +30,12 @@ def get_therm_eq_state(me_solver):
 
     Notes
     -----
-    - The function first checks if the temperature is zero. If so, it returns the ground state.
-    - For non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the Hamiltonian,
-      normalizes them, and transforms the resulting diagonal matrix to the local basis.
+    .. note::
+
+        The function first checks if the temperature is zero. If so, it returns the ground state. For
+        non-zero temperatures, it calculates the equilibrium values for each eigenvalue of the
+        Hamiltonian, normalizes them, and transforms the resulting diagonal matrix to the local basis.
+
     """
 
     tb_ham = me_solver.tb_ham
@@ -61,8 +63,7 @@ def get_therm_eq_state(me_solver):
 
 
 def get_deph_eq_state(me_solver):
-    """
-    Calculate the dephasing equilibrium state.
+    """Calculate the dephasing equilibrium state.
 
     Parameters
     ----------
@@ -74,19 +75,28 @@ def get_deph_eq_state(me_solver):
     numpy.ndarray
         The dephasing equilibrium state as a density matrix.
     """
+    deph_eq_state = None
 
     # Local dephasing
     if me_solver.lindblad_diss.loc_deph_rate:
         # maximally mixed state
-        return np.eye(me_solver.tb_ham.matrix_dim) / me_solver.tb_ham.matrix_dim
+        dim = me_solver.tb_ham.matrix_dim
+        if me_solver.tb_ham.relaxation:
+            dim -= 1
+        deph_eq_state = np.eye(dim) / dim
 
     # Global dephasing
     if me_solver.lindblad_diss.glob_deph_rate:
-        loc_init_matrix = me_solver.init_matrix.full()
+        loc_init_matrix = me_solver.init_matrix.full().real
+        if me_solver.tb_ham.relaxation:
+            loc_init_matrix = delete_groundstate(loc_init_matrix)
         _, eigs = me_solver.tb_ham.get_eigensystem()
         glob_init_matrix = local_to_global(loc_init_matrix, eigs)
 
         # cancel all off-diagonal elements
         glob_init_matrix = np.diag(np.diag(glob_init_matrix))
         loc_init_matrix = global_to_local(glob_init_matrix, eigs)
-        return loc_init_matrix
+        deph_eq_state = loc_init_matrix
+
+    assert deph_eq_state is not None, "Dephasing equilibrium state not calculated."
+    return deph_eq_state

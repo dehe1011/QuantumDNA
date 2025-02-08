@@ -1,6 +1,5 @@
-"""
-This module provides functions to calculate the average charge separation (dipole moment) for quantum DNA models.
-"""
+"""This module provides functions to calculate the average charge separation (dipole
+moment) for quantum DNA models."""
 
 import multiprocessing
 from functools import partial
@@ -25,8 +24,7 @@ __all__ = [
 
 
 def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):
-    """
-    Calculates the average charge separation.
+    """Calculates the average charge separation.
 
     Parameters
     ----------
@@ -56,13 +54,12 @@ def calc_dipole(upper_strand, tb_model_name, average=True, **kwargs):
     distances = [distance_list @ dm.diag()[1:] for dm in me_solver.get_result()]
     if average:
         return np.mean(distances).real
-    else:
-        return distances
+
+    return distances
 
 
 def calc_dipole_moment(upper_strand, tb_model_name, **kwargs):
-    """
-    Calculates the dipole moment.
+    """Calculates the dipole moment.
 
     Parameters
     ----------
@@ -89,8 +86,7 @@ def calc_dipole_moment(upper_strand, tb_model_name, **kwargs):
 
 
 def calc_dipole_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
-    """
-    Calculates the average charge separation in the exciton lifetime.
+    """Calculates the average charge separation in the exciton lifetime.
 
     Parameters
     ----------
@@ -115,8 +111,8 @@ def calc_dipole_wrapper(upper_strand, tb_model_name, lifetime_dict, **kwargs):
 
 
 def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
-    """
-    Calculates the average charge separation for multiple upper strands using multiprocessing.
+    """Calculates the average charge separation for multiple upper strands using
+    multiprocessing.
 
     Parameters
     ----------
@@ -124,6 +120,8 @@ def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 
@@ -138,9 +136,8 @@ def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
             directory,
             load_metadata=True,
         )
-    except:
-        print("Could not load lifetime_dict")
-        return
+    except FileNotFoundError as e:
+        print(f"Could not load lifetime_dict: {e}")
 
     if not num_cpu:
         num_cpu = multiprocessing.cpu_count() - 1
@@ -171,8 +168,7 @@ def calc_dipole_dict(tb_model_name, filename, directory, num_cpu=None):
 
 
 def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
-    """
-    Calculates the dipole moment for multiple upper strands using multiprocessing.
+    """Calculates the dipole moment for multiple upper strands using multiprocessing.
 
     Parameters
     ----------
@@ -180,6 +176,8 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
         The name of the tight-binding model.
     filename : str
         The filename to load the lifetime dictionary from.
+    directory : str
+        The directory where the lifetime dictionary is located.
     num_cpu : int, optional
         The number of CPU cores to use. Defaults to the total number of CPUs minus one.
 
@@ -196,16 +194,16 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
         )
         upper_strands = list(dipole_dict.keys())
         dipole_list = list(dipole_dict.values())
-    except:
+    except FileNotFoundError as e:
+        print(f"Could not load dipole_dict: {e}")
         try:
             lifetime_dict, kwargs = load_json(
                 "lifetime_" + filename,
                 directory,
                 load_metadata=True,
             )
-        except:
-            print("Could not load lifetime_dict")
-            return
+        except FileNotFoundError as e1:
+            print(f"Could not load lifetime_dict: {e1}")
 
         if not num_cpu:
             num_cpu = multiprocessing.cpu_count() - 1
@@ -221,7 +219,6 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
                 tqdm(
                     pool.imap(partial_calc_dipole, upper_strands),
                     total=len(upper_strands),
-                    # file=sys.stdout,
                 )
             )
 
@@ -230,7 +227,7 @@ def calc_dipole_moment_dict(tb_model_name, filename, directory, num_cpu=None):
     save_json(
         dipole_dict,
         kwargs,
-        "dipole_" + filename,
+        "dipole_moment_" + filename,
         directory,
     )
     return dipole_moment_dict
