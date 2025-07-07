@@ -4,26 +4,25 @@ import webbrowser
 
 import customtkinter as ctk
 
-from .. import DNA_Seq
-from ..environment import Lindblad_Diss
-from ..dynamics import ME_Solver
-from ..hamiltonian import TB_Ham
-from ..model import TB_Model
-from ..tools import CONFIG
+from ..model import TBModel
+from ..hamiltonian import get_tb_sites
+from ..visualization import Visualization
+from ..evaluation import Evaluation
+from ..io import OPTIONS, DEFAULTS
 
 from .initial_frame import InitialFrame
-from .config_frame import ConfigFrame, HelpFrame
-from .pdb_window import PDBWindow
+from .advanced_frame import AdvancedFrame, HelpFrame
 from .options_frame import OptionsFrame
 from .plot_options_frame import PlotOptionsFrame
-from .plotting_window import PlottingWindow
 from .scrollable_console_frame import ScrollableConsoleFrame
+from .plotting_window import PlottingWindow
+from .pdb_window import PDBWindow
 from .fasta_window import FastaWindow
 
 # --------------------------------------------------
 
 
-class qDNA_app(ctk.CTk):
+class QDNApp(ctk.CTk):
     def __init__(self):
         """
         Notes:
@@ -37,9 +36,9 @@ class qDNA_app(ctk.CTk):
         # self.tk.call('tk', 'scaling', 1.0)
 
         self.title("QuantumDNA")
-        self.configs = CONFIG
-        self.kwargs = dict()
+        self.kwargs = DEFAULTS["tb_model_kwargs_default"]
         self.tb_basis = ["(0, 0)"]
+        self.options = {**OPTIONS, **DEFAULTS}
 
         # Configure the grid layout for the root window
         self.grid_columnconfigure(0, weight=1)  # Column 0 takes 1 part
@@ -50,27 +49,35 @@ class qDNA_app(ctk.CTk):
         self.grid_rowconfigure(1, weight=1)  # Row 1 takes 1 part
         self.grid_rowconfigure(2, weight=2)  # Row 2 takes 3 parts
 
-        # frames
+        # --------------------------------------------------------------
+
+        # left frames
         self.initial_frame = InitialFrame(self)
         self.initial_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.config_frame = ConfigFrame(self, **self.kwargs)
-        self.config_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.advanced_frame = AdvancedFrame(self)
+        self.advanced_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.help_frame = HelpFrame(self, **self.kwargs)
+        self.help_frame = HelpFrame(self)
         self.help_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.options_frame = OptionsFrame(self, self.configs, **self.kwargs)
+        # --------------------------------------------------------------
+
+        # middle frames
+        self.options_frame = OptionsFrame(self)
         self.options_frame.grid(
             row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
         )
 
+        # --------------------------------------------------------------
+
+        # right frames
         self.scrollable_console_frame = ScrollableConsoleFrame(self)
         self.scrollable_console_frame.grid(
             row=1, column=2, padx=10, pady=10, rowspan=2, sticky="nsew"
         )
 
-        self.plot_options_frame = PlotOptionsFrame(self, self.tb_basis, **self.kwargs)
+        self.plot_options_frame = PlotOptionsFrame(self)
         self.plot_options_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
         # the options_frame and plot_options_frame can not be manipulated when the window opens
@@ -78,16 +85,7 @@ class qDNA_app(ctk.CTk):
         self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("disabled")
 
-        self.protocol("WM_DELETE_WINDOW", self.on_exit)
-
-    def on_exit(self):
-        """Properly closes the application"""
-        print("Closing application...")  # Optional debug message
-        self.after_cancel("all")
-        self.quit()  # Stops the mainloop
-        self.destroy()  # Destroys the Tk instance
-
-    # ------------------------------------------
+    # ------------------------------------------------------------------
 
     def open_github(self):
         webbrowser.open("https://github.com/dehe1011/QuantumDNA")
@@ -99,66 +97,66 @@ class qDNA_app(ctk.CTk):
         webbrowser.open("https://github.com/dehe1011/QuantumDNA-notebooks")
 
     def open_pdb_window(self):
-        self.pdb_window = PDBWindow(self, self.configs)
+        self.pdb_window = PDBWindow(self)
 
     def open_fasta_window(self):
         self.fasta_window = FastaWindow(self)
 
-    # ------------------------------------------
+    # ------------------------------------------------------------------
 
     def get_init_kwargs(self):
         # get the values from the initial_frame
-        self.upper_strand = self.initial_frame.upper_strand_entry.get()
-        self.upper_strand = self.upper_strand.split("_")
-        self.lower_strand = self.initial_frame.lower_strand_entry.get()
-        if self.lower_strand == "auto complete":
-            self.lower_strand = "auto_complete"
+
+        self.upper_strand_input = self.initial_frame.upper_strand_entry.get()
+        self.upper_strand = self.upper_strand_input.split("/")
+        self.lower_strand_input = self.initial_frame.lower_strand_entry.get()
+        if self.lower_strand_input != "auto complete":
+            self.lower_strand = self.lower_strand_input.split("/")
         else:
-            self.lower_strand = self.lower_strand.split("_")
-
+            self.lower_strand = self.lower_strand_input
         self.tb_model_name = self.initial_frame.tb_model_combo.get()
-        self.init_kwargs = {
-            "upper_strand": self.upper_strand,
-            "lower_strand": self.lower_strand,
-            "tb_model_name": self.tb_model_name,
-        }
 
-        if len(self.upper_strand) >= 8:
+        self.kwargs["tb_model_name"] = self.tb_model_name
+        self.tb_model = TBModel(len(self.upper_strand), **self.kwargs)
+        self.tb_sites = get_tb_sites(
+            self.upper_strand,
+            lower_strand=self.lower_strand,
+            tb_model_name=self.tb_model_name,
+        )
+        self.tb_basis = self.tb_model.tb_basis
+
+        if len(self.upper_strand_input) >= 8:
             print(
                 "Info: This is a long sequence. The calculation may take some time."
                 + "\n-------------------------------"
             )
-        if self.tb_model_name in ["FWM", "FLM", "FELM", "FC"]:
+        if self.tb_model_name in ["FWM", "FLM", "FELM", "TC", "FC"]:
             print(
-                "Info: Most predefined TB parametrizations (sources) are not available for this model."
+                "Info: Many predefined TB parametrizations (sources) are not available for this model."
                 + "\n-------------------------------"
             )
 
-        self.kwargs.update(self.init_kwargs)
-
-        # initialize dna_seq, tb_model and tb_basis
-        self.dna_seq = DNA_Seq(
-            self.upper_strand, self.tb_model_name, lower_strand=self.lower_strand
-        )
-        self.tb_model = TB_Model(self.dna_seq.tb_model_name, self.dna_seq.tb_dims)
-        self.tb_basis = self.tb_model.tb_basis
+    # ------------------------------------------------------------------
 
     def get_options_kwargs(self):
         # get the values from the options_frame
-        self.ham_kwargs = self.options_frame.options_tab.ham_frame.get_ham_kwargs()
-        self.diss_kwargs = self.options_frame.options_tab.diss_frame.get_diss_kwargs()
-        self.me_kwargs = self.options_frame.options_tab.dynamics_frame.get_me_kwargs()
+        self.tb_ham_kwargs = (
+            self.options_frame.options_tab.tb_ham_frame.get_tb_ham_kwargs()
+        )
+        self.lind_diss_kwargs = (
+            self.options_frame.options_tab.lind_diss_frame.get_lind_diss_kwargs()
+        )
+        self.me_solver_kwargs = (
+            self.options_frame.options_tab.me_solver_frame.get_me_solver_kwargs()
+        )
         self.options_kwargs = dict(
-            **self.ham_kwargs, **self.diss_kwargs, **self.me_kwargs
+            **self.tb_ham_kwargs, **self.lind_diss_kwargs, **self.me_solver_kwargs
         )
         self.kwargs.update(self.options_kwargs)
 
-        # initialize tb_ham, lindblad_diss, me_solver
-        self.tb_ham = TB_Ham(self.dna_seq, **self.ham_kwargs)
-        self.lindblad_diss = Lindblad_Diss(self.tb_ham, **self.diss_kwargs)
-        self.me_solver = ME_Solver(self.tb_ham, self.lindblad_diss, **self.me_kwargs)
+    # ------------------------------------------------------------------
 
-    def get_plot_options_kwargs(self):
+    def get_plot_kwargs(self):
         # get the values from the plot_options_frame
         self.plot_option = {
             "plot_option": self.plot_options_frame.plot_options_tab.get()
@@ -169,67 +167,81 @@ class qDNA_app(ctk.CTk):
         self.coh_kwargs = (
             self.plot_options_frame.plot_options_tab.coh_frame.get_coh_kwargs()
         )
+        self.spectrum_kwargs = (
+            self.plot_options_frame.plot_options_tab.spectrum_frame.get_spectrum_kwargs()
+        )
         self.fourier_kwargs = (
             self.plot_options_frame.plot_options_tab.fourier_frame.get_fourier_kwargs()
         )
-        self.plot_options_kwargs = dict(
+        self.plot_kwargs = dict(
             **self.plot_option,
             **self.pop_kwargs,
             **self.coh_kwargs,
+            **self.spectrum_kwargs,
             **self.fourier_kwargs,
         )
-        self.kwargs.update(self.plot_options_kwargs)
 
-    # -----------------------------------------
+    # ------------------------------------------------------------------
 
     def press_first_confirm(self):
         """Event of the initial_frame."""
 
         self.get_init_kwargs()
+
         # update the options_frame
-        self.options_frame = OptionsFrame(self, self.configs, **self.kwargs)
-        self.options_frame.grid(
-            row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
-        )
+        # self.options_frame = OptionsFrame(self, self.tb_basis)
+        # self.options_frame.grid(
+        #     row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
+        # )
         # enable the options_frame
         self.enable_options_frame()
 
         # configure some widgets (since the TB basis is known)
-        self.options_frame.options_tab.dynamics_frame.me_init_e_state_combo.configure(
-            values=self.tb_model.tb_basis
+        self.options_frame.options_tab.me_solver_frame.init_e_state_combo.configure(
+            values=self.tb_basis
         )
-        self.options_frame.options_tab.dynamics_frame.me_init_h_state_combo.configure(
-            values=self.tb_model.tb_basis
+        self.options_frame.options_tab.me_solver_frame.init_h_state_combo.configure(
+            values=self.tb_basis
         )
         self.plot_options_frame.plot_options_tab.pop_frame.tb_site_combo.configure(
-            values=self.tb_model.tb_basis
+            values=self.tb_basis
         )
         self.plot_options_frame.plot_options_tab.fourier_frame.tb_site_combo.configure(
-            values=self.tb_model.tb_basis
+            values=self.tb_basis
         )
         self.plot_options_frame.plot_options_tab.fourier_frame.init_e_site_combo.configure(
-            values=self.tb_model.tb_basis
+            values=self.tb_basis
         )
         self.plot_options_frame.plot_options_tab.fourier_frame.init_h_site_combo.configure(
-            values=self.tb_model.tb_basis
+            values=self.tb_basis
         )
 
     def press_second_confirm(self):
         """Event of the options_frame."""
 
         self.get_options_kwargs()
+
+        self.eva = Evaluation(self.tb_sites, **self.kwargs)
+
+        if self.eva.description == "2P":
+            dim = self.eva.num_sites**2
+        else:
+            dim = self.eva.num_sites
+        self.plot_options_frame.plot_options_tab.spectrum_frame.idx_combo.configure(
+            values=[str(i) for i in range(dim)]
+        )
+
         # update the plot_options_frame
-        self.plot_options_frame = PlotOptionsFrame(self, self.tb_basis, **self.kwargs)
-        self.plot_options_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+        # self.plot_options_frame = PlotOptionsFrame(self, self.tb_basis)
+        # self.plot_options_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
         # enable the plot_options_frame
         self.enable_plotting_frame()
-
-        # TODO: configure some widgets using the kwargs
 
     def submit(self):
         """Event of the plot_options_frame."""
 
-        self.get_plot_options_kwargs()
+        self.get_plot_kwargs()
+        self.vis = Visualization(self.tb_sites, **self.kwargs)
         self.plotting_window = PlottingWindow(self)
 
     # ------------------------------------------------------------
@@ -248,3 +260,86 @@ class qDNA_app(ctk.CTk):
         self.initial_frame.change_state("disabled")
         self.options_frame.change_state("disabled")
         self.plot_options_frame.change_state("normal")
+
+    # ----------------------------------------------------------------------
+
+    def _calc_lifetime(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
+        lifetime = self.eva.calc_lifetime()
+        if isinstance(lifetime, str):
+            print(f"Exciton Lifetime: {lifetime}" "\n-------------------------------")
+        else:
+            print(
+                f"Exciton Lifetime: {lifetime} fs" "\n-------------------------------"
+            )
+
+    def _calc_charge_separation(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
+        charge_separation = self.eva.calc_charge_separation()
+        print(
+            f"Charge Separation: {charge_separation} A"
+            "\n-------------------------------"
+        )
+
+    def _calc_dipole_moment(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+
+        dipole_moment = self.eva.calc_dipole_moment()
+        print(f"Dipole Moment: {dipole_moment} D" "\n-------------------------------")
+
+    def _calc_exciton_transfer(self):
+        assert (
+            self.kwargs["description"] == "2P"
+        ), "2P description is required for the calculation."
+        assert (
+            self.kwargs["relaxation"] == True
+        ), "Groundstate is required for the calculation."
+        assert (
+            "exciton" in self.kwargs["particles"]
+        ), "Exciton must be selected in particles."
+
+        avg_pop_upper, avg_pop_lower = self.eva.calc_exciton_transfer().values()
+        avg_pop_upper, avg_pop_lower = (
+            avg_pop_upper["exciton"],
+            avg_pop_lower["exciton"],
+        )
+        print(
+            f"Average Exciton Population (upper strand): {avg_pop_upper}"
+            + f"\nAverage Exciton Population (lower strand): {avg_pop_lower}"
+            + "\n-------------------------------"
+        )
+
+    # ------------------------------------------------------------------
+
+
+# alias for legacy code compatibility
+class qDNA_app(QDNApp):
+    pass
+
+
+# ----------------------------------------------------------------------
+
+if __name__ == "__main__":
+    app = QDNApp()
+    app.geometry("1200x800")
+    app.resizable(True, True)
+    app.mainloop()
+
+# ----------------------------------------------------------------------

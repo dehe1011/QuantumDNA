@@ -2,10 +2,14 @@
 project_name: "QuantumDNA"
 verbose: False
 
-lcao_default:
-    parametrization: MSF
+lcao_kwargs_default:
+    param_id: 'MSF'
+    auto_clean: True
 
-ham_kwargs_default:
+tb_model_kwargs_default:
+    tb_model_name: 'ELM'
+
+tb_ham_kwargs_default:
     source: 'Hawke2010'
     description: '2P'
     particles: ['electron','hole','exciton']
@@ -15,7 +19,7 @@ ham_kwargs_default:
     relaxation: True
     nn_cutoff: True
 
-diss_kwargs_default:
+lind_diss_kwargs_default:
     loc_deph_rate: 0.
     glob_deph_rate: 0. # rad/fs
     uniform_relaxation: True
@@ -30,11 +34,11 @@ diss_kwargs_default:
     spectral_density: 'debye'
     exponent: 1.
 
-me_kwargs_default:
+me_solver_kwargs_default:
     t_steps: 500.
     t_end: 3. # ps
     t_unit: 'ps'
-    init_e_state: '(0, 0)'
-    init_h_state: '(0, 0)'
-    deloc_init_state: False
+    init_e_states: ['(0, 0)']
+    init_h_states: ['(0, 0)']
+    init_ex_states: ['(0, 0)']
     solver_method: 'adams'

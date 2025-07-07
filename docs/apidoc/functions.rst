@@ -4,22 +4,17 @@ Functions
 Calculate Tight-Binding Parameters
 ----------------------------------
 
+.. autofunction:: qDNA.lcao.calc_orbital_interaction
 .. autofunction:: qDNA.lcao.calc_orbital_energy
-.. autofunction:: qDNA.lcao.calc_orbital_overlap
-.. autofunction:: qDNA.lcao.load_xyz
-.. autofunction:: qDNA.lcao.convert_json_to_xyz
-.. autofunction:: qDNA.lcao.convert_pdb_to_xyz
-.. autofunction:: qDNA.lcao.calc_tb_energies_monomers
-.. autofunction:: qDNA.lcao.calc_tb_params_dimer
-.. autofunction:: qDNA.lcao.calc_tb_params
+.. autofunction:: qDNA.lcao.calc_H_intra
+.. autofunction:: qDNA.lcao.calc_H_inter
 
 Save and Load Tight-Binding Parameters
 --------------------------------------
 
-.. autofunction:: qDNA.hamiltonian.save_tb_params
-.. autofunction:: qDNA.hamiltonian.load_tb_params
-.. autofunction:: qDNA.hamiltonian.wrap_save_tb_params
-.. autofunction:: qDNA.hamiltonian.wrap_load_tb_params
+.. autofunction:: qDNA.io.save_tb_params
+.. autofunction:: qDNA.io.load_tb_params
+.. autofunction:: qDNA.io.delete_tb_params
 
 Tight-Binding Basis
 -------------------
@@ -44,13 +39,9 @@ The first two are refered to as `local` bases, the third as the `global` basis. 
 Tight-Binding Configuration
 ---------------------------
 
+.. autofunction:: qDNA.model.get_tb_couplings
+.. autofunction:: qDNA.model.get_tb_energies
 .. autofunction:: qDNA.model.get_tb_config
-
-
-DNA sequences
--------------
-
-.. autofunction:: qDNA.create_upper_strands
 
 
 Tight-Binding Hamiltonian
@@ -63,8 +54,7 @@ Tight-Binding Hamiltonian
 .. autofunction:: qDNA.hamiltonian.delete_groundstate
 .. autofunction:: qDNA.hamiltonian.add_interaction
 
-Lindblad rates
---------------
+Lindblad rates--------------
 
 These functions is adapted from the quantum_HEOM GitHub repository :cite:`Abbott2020`.
 
@@ -83,14 +73,6 @@ Lindblad operators
 .. autofunction:: qDNA.environment.get_loc_therm_ops
 .. autofunction:: qDNA.environment.get_loc_deph_ops
 .. autofunction:: qDNA.environment.get_glob_deph_ops
-.. autofunction:: qDNA.environment.get_loc_deph_p_ops
-.. autofunction:: qDNA.environment.get_glob_deph_p_ops
-
-
-Master Equation Solver
-----------------------
-
-.. autofunction:: qDNA.dynamics.get_me_solver
 
 
 Reduced Density Matrix
@@ -99,29 +81,47 @@ Reduced Density Matrix
 .. autofunction:: qDNA.dynamics.get_reduced_dm
 .. autofunction:: qDNA.dynamics.get_reduced_dm_eigs
 
-
-Exciton Observables
--------------------
-
-.. autofunction:: qDNA.evaluation.calc_lifetime
-.. autofunction:: qDNA.evaluation.calc_lifetime_dict
-
-
-.. autofunction:: qDNA.evaluation.calc_dipole
-.. autofunction:: qDNA.evaluation.calc_dipole_wrapper
-.. autofunction:: qDNA.evaluation.calc_dipole_dict
-
-
 Observables
 -----------
 
 .. autofunction:: qDNA.environment.get_tb_observable
 .. autofunction:: qDNA.environment.get_eh_observable
-.. autofunction:: qDNA.environment.get_pop_particle
-.. autofunction:: qDNA.environment.get_coh_particle
+.. autofunction:: qDNA.environment.get_pop_observable
+.. autofunction:: qDNA.environment.get_coh_observable
 
 Equilibrium states
 ------------------
 
 .. autofunction:: qDNA.evaluation.get_therm_eq_state
 .. autofunction:: qDNA.evaluation.get_deph_eq_state
+
+Unit Conversion
+---------------
+
+.. autofunction:: qDNA.utils.get_conversion
+.. autofunction:: qDNA.utils.get_all_conversions
+.. autofunction:: qDNA.utils.get_conversion_dict
+
+
+Hamiltonian Analysis
+--------------------
+
+.. autofunction:: qDNA.hamiltonian.calc_average_pop
+.. autofunction:: qDNA.hamiltonian.calc_amplitudes
+.. autofunction:: qDNA.hamiltonian.calc_frequencies
+.. autofunction:: qDNA.hamiltonian.get_pop_fourier
+.. autofunction:: qDNA.hamiltonian.calc_ipr_hamiltonian
+
+
+Density Matrix Analysis
+-----------------------
+
+.. autofunction:: qDNA.dynamics.calc_trace_distance
+.. autofunction:: qDNA.dynamics.calc_purity
+.. autofunction:: qDNA.dynamics.calc_coherence
+.. autofunction:: qDNA.dynamics.calc_ipr_dm
+
+Evaluation
+----------
+
+.. autofunction:: qDNA.evaluation.evaluate_pdb

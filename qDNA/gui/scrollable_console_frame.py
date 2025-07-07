@@ -3,18 +3,13 @@
 import sys
 import customtkinter as ctk
 from tkinter.scrolledtext import ScrolledText
-import re
 
-# ------------------------------------------------------------
-
-import sys
-import customtkinter as ctk
-from tkinter.scrolledtext import ScrolledText
+# ----------------------------------------------------------------------
 
 
 class RedirectText:
-    def __init__(self, text_widget):
-        self.output = text_widget
+    def __init__(self, console_output):
+        self.output = console_output
 
     def write(self, string):
         """Handles both stdout and stderr redirection."""
@@ -75,3 +70,6 @@ class ScrollableConsoleFrame(ctk.CTkFrame):
             sys.stderr.write(
                 "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
             )  # Full traceback
+
+
+# ----------------------------------------------------------------------

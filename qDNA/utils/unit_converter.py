@@ -1,27 +1,18 @@
-"""This module provides utility functions for unit conversion, particularly for
-converting physical quantities to different units of measurement.
-
-It includes functions to convert charge separation to dipole moments, convert between
-various units, generate all possible conversion factors, and convert all values in a
-dictionary from one unit to another.
-"""
-
 from itertools import permutations
 
 import numpy as np
 import scipy.constants as c
 
-from ..tools import UNITS
+from ..io import OPTIONS
 
 __all__ = [
-    "UNITS",
     "get_conversion",
     "get_all_conversions",
     "get_conversion_dict",
     "convert_to_debye",
 ]
 
-# ------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def convert_to_debye(charge_separation):
@@ -78,10 +69,11 @@ def get_conversion(start_unit, end_unit):
     }
 
     # Check if the units are defined
-    if start_unit not in UNITS:
-        raise ValueError(f"Unknown unit: {start_unit}. Defined units: {UNITS}")
-    if end_unit not in UNITS:
-        raise ValueError(f"Unknown unit: {end_unit}. Defined units: {UNITS}")
+    units = OPTIONS["units"]
+    if start_unit not in units:
+        raise ValueError(f"Unknown unit: {start_unit}. Defined units: {units}")
+    if end_unit not in units:
+        raise ValueError(f"Unknown unit: {end_unit}. Defined units: {units}")
 
     # Return the conversion factor
     return convert_to_Joule[start_unit] / convert_to_Joule[end_unit]
@@ -98,7 +90,7 @@ def get_all_conversions():
     """
 
     conversion_dict = {}
-    for start_unit, end_unit in permutations(UNITS, 2):
+    for start_unit, end_unit in permutations(OPTIONS["units"], 2):
         conversion = start_unit + "_to_" + end_unit
         conversion_val = get_conversion(start_unit, end_unit)
         conversion_dict[conversion] = conversion_val
@@ -126,3 +118,6 @@ def get_conversion_dict(param_dict, start_unit, end_unit):
     conversion_val = get_conversion(start_unit, end_unit)
     converted_dict = {key: value * conversion_val for key, value in param_dict.items()}
     return converted_dict
+
+
+# ----------------------------------------------------------------------

@@ -9,13 +9,14 @@ tight-binding site states.
 import numpy as np
 
 __all__ = [
+    "get_observable",
     "get_tb_observable",
     "get_eh_observable",
-    "get_pop_particle",
-    "get_coh_particle",
+    "get_pop_observable",
+    "get_coh_observable",
 ]
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_observable(basis, start_state, end_state):
@@ -120,7 +121,6 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
            [0., 0., 0., 0.]])
     """
     num_sites = len(tb_basis)
-    eh_observable = None
 
     # Create the electron observable
     if particle == "electron":
@@ -129,21 +129,25 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
         )
 
     # Create the hole observable
-    if particle == "hole":
+    elif particle == "hole":
         eh_observable = np.kron(
             np.eye(num_sites), get_observable(tb_basis, start_state, end_state)
         )
 
     # Create the exciton observable
-    if particle == "exciton":
+    elif particle == "exciton":
         eh_observable = np.kron(
             get_observable(tb_basis, start_state, end_state),
             get_observable(tb_basis, start_state, end_state),
         )
+    else:
+        raise ValueError(f"Unknown particle type: {particle}")
+
     return eh_observable
 
 
-def get_pop_particle(tb_basis, particle, state):
+# pylint: disable=inconsistent-return-statements
+def get_pop_observable(tb_basis, description, particle, state):
     """Creates the population observable for a specific particle and state.
 
     Parameters
@@ -169,10 +173,14 @@ def get_pop_particle(tb_basis, particle, state):
            [0., 0., 0., 0.]])
     """
 
-    return get_eh_observable(tb_basis, particle, state, state)
+    if description == "2P":
+        return get_eh_observable(tb_basis, particle, state, state)
+    if description == "1P":
+        return get_tb_observable(tb_basis, state, state)
 
 
-def get_coh_particle(tb_basis, particle, state1, state2):
+# pylint: disable=inconsistent-return-statements
+def get_coh_observable(tb_basis, description, particle, state1, state2):
     """Creates the coherence observable for a specific particle and pair of states.
 
     Parameters
@@ -200,4 +208,10 @@ def get_coh_particle(tb_basis, particle, state1, state2):
            [0., 0., 0., 0.]])
     """
 
-    return get_eh_observable(tb_basis, particle, state1, state2)
+    if description == "2P":
+        return get_eh_observable(tb_basis, particle, state1, state2)
+    if description == "1P":
+        return get_tb_observable(tb_basis, state1, state2)
+
+
+# ----------------------------------------------------------------------

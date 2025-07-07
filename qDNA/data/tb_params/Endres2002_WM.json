@@ -1,0 +1,31 @@
+{
+  "data": {
+    "electron": {
+      "E_A": -4.2,
+      "E_C": -4.6,
+      "E_G": -4.0,
+      "E_T": -4.6,
+      "t_A_A": 0.1054,
+      "t_A_G": 0.1124,
+      "t_G_A": 0.0472,
+      "t_G_G": 0.0525
+    },
+    "exciton": {},
+    "hole": {
+      "E_A": -7.95,
+      "E_C": -8.3,
+      "E_G": -7.75,
+      "E_T": -8.3,
+      "t_A_A": -0.0695,
+      "t_A_G": -0.071,
+      "t_G_A": -0.1871,
+      "t_G_G": -0.1409
+    }
+  },
+  "metadata": {
+    "notes": "DOI: 10.48550/arXiv.cond-mat/0201404. Calculated with SIESTA and DZP basis set.",
+    "source": "Endres2002",
+    "tb_model_name": "WM",
+    "unit": "eV"
+  }
+}

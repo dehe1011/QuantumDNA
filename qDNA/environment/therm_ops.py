@@ -6,7 +6,7 @@ from ..model import global_to_local
 from ..hamiltonian import add_groundstate
 from .therm_rates import rate_constant_redfield
 
-# ----------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_glob_therm_op(eigs, eigenstate_i, eigenstate_j, relaxation, matrix_dim):
@@ -39,17 +39,7 @@ def get_glob_therm_op(eigs, eigenstate_i, eigenstate_j, relaxation, matrix_dim):
     return q.Qobj(op)
 
 
-def get_glob_therm_ops(
-    eigv,
-    eigs,
-    relaxation,
-    deph_rate=7,
-    cutoff_freq=20,
-    reorg_energy=1,
-    temperature=300,
-    spectral_density="debye",
-    exponent=1,
-):
+def get_glob_therm_ops(eigv, eigs, relaxation, **kwargs):
     """Generate global thermalizing operators.
 
     Parameters
@@ -81,26 +71,20 @@ def get_glob_therm_ops(
 
     matrix_dim = eigs.shape[0]
     c_ops = []
-    for eigenstate_i, eigenstate_j in permutations(range(matrix_dim), 2):
+    for eigs_i, eigs_j in permutations(range(matrix_dim), 2):
         # Calculate Lindblad rate
-        omega_i, omega_j = eigv[eigenstate_i], eigv[eigenstate_j]
-        lind_rate = rate_constant_redfield(
-            (omega_i - omega_j),
-            deph_rate,
-            cutoff_freq,
-            reorg_energy,
-            temperature,
-            spectral_density,
-            exponent,
-        )
+        omega_i, omega_j = eigv[eigs_i], eigv[eigs_j]
+        omega = omega_i - omega_j
+        lind_rate = rate_constant_redfield(omega, **kwargs)
         # Calculate thermalizing operator
-        lind_op = get_glob_therm_op(
-            eigs, eigenstate_i, eigenstate_j, relaxation, matrix_dim
-        )
+        lind_op = get_glob_therm_op(eigs, eigs_i, eigs_j, relaxation, matrix_dim)
         # Append to the list
         c_ops.append(np.sqrt(lind_rate) * lind_op)
 
     return c_ops
+
+
+# ----------------------------------------------------------------------
 
 
 def get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim):
@@ -143,17 +127,7 @@ def get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim):
     return q.Qobj(op)
 
 
-def get_loc_therm_ops(
-    eigv,
-    eigs,
-    relaxation,
-    deph_rate=7,
-    cutoff_freq=20,
-    reorg_energy=1,
-    temperature=300,
-    spectral_density="debye",
-    exponent=1,
-):
+def get_loc_therm_ops(eigv, eigs, relaxation, **kwargs):
     """Generate local thermalizing operators.
 
     Parameters
@@ -182,6 +156,7 @@ def get_loc_therm_ops(
     list
         List of thermalizing operators.
     """
+
     matrix_dim = len(eigv)
     c_ops = []
 
@@ -191,18 +166,14 @@ def get_loc_therm_ops(
 
     for unique, site_m in product(unique, range(matrix_dim)):
         # Calculate Lindblad rate
-        lind_rate = rate_constant_redfield(
-            unique,
-            deph_rate,
-            cutoff_freq,
-            reorg_energy,
-            temperature,
-            spectral_density,
-            exponent,
-        )
+        omega = unique
+        lind_rate = rate_constant_redfield(omega, **kwargs)
         # Calculate local thermalizing operator
         lind_op = get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim)
         # Append to the list
         c_ops.append(np.sqrt(lind_rate) * lind_op)
 
     return c_ops
+
+
+# ----------------------------------------------------------------------

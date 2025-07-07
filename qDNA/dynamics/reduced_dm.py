@@ -8,7 +8,7 @@ from ..environment import get_eh_observable, get_tb_observable
 
 __all__ = ["get_reduced_dm", "get_reduced_dm_eigs"]
 
-# ------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_reduced_dm(dm, particle, tb_basis):
@@ -58,7 +58,7 @@ def get_reduced_dm(dm, particle, tb_basis):
     return reduced_dm
 
 
-def get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx):
+def get_reduced_dm_eigs(eigs, eigenstate_idx, tb_basis, particle):
     """Reduces the density matrix of a selected eigenstate of the Hamiltonian for a
     specific particle type.
 
@@ -77,6 +77,8 @@ def get_reduced_dm_eigs(tb_ham, particle, eigenstate_idx):
         The reduced density matrix.
     """
 
-    _, eigs = tb_ham.get_eigensystem()
     dm = np.outer(eigs[:, eigenstate_idx], eigs[:, eigenstate_idx].conj())
-    return get_reduced_dm(dm, particle, tb_ham.tb_basis)
+    return get_reduced_dm(dm, particle, tb_basis)
+
+
+# ----------------------------------------------------------------------

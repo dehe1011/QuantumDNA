@@ -1,7 +1,7 @@
 import numpy as np
 import qutip as q
 
-# ----------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_relax_op(tb_basis, tb_site):
@@ -52,3 +52,6 @@ def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
             relax_op = get_relax_op(tb_basis, tb_site)
             relax_ops.append(np.sqrt(relax_rate) * relax_op)
     return relax_ops
+
+
+# ----------------------------------------------------------------------

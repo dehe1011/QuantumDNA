@@ -12,5 +12,3 @@ list of QuantumDNA's public classes and functions.
 
    classes.rst
    functions.rst
-   utils.rst
-   plotting.rst

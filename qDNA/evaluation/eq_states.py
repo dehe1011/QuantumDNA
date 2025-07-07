@@ -38,20 +38,19 @@ def get_therm_eq_state(me_solver):
 
     """
 
-    tb_ham = me_solver.tb_ham
-    tb_ham.relaxation = False
-    eigv, eigs = tb_ham.get_eigensystem()
-    temperature = me_solver.lindblad_diss.temperature
+    me_solver.relaxation = False
+    eigv, eigs = me_solver.get_eigensystem()
+    temperature = me_solver.temperature
 
     # Ground state
     if temperature == 0:
-        return tb_ham.eigs[:, 0]
+        return me_solver.eigs[:, 0]
 
     # Thermal equilibrium state
     # Calculate the equilibrium values for each eigenvalue
-    eq_values = np.zeros(tb_ham.matrix_dim)
-    for i in range(tb_ham.matrix_dim):
-        energy = eigv[i] * get_conversion(tb_ham.unit, "J")
+    eq_values = np.zeros(me_solver.matrix_dim)
+    for i in range(me_solver.matrix_dim):
+        energy = eigv[i] * get_conversion(me_solver.unit, "J")
         eq_values[i] = np.exp(-energy / (c.k * temperature))
 
     # Normalize the equilibrium values, convert to a diagonal matrix and transform to the local basis
@@ -78,19 +77,19 @@ def get_deph_eq_state(me_solver):
     deph_eq_state = None
 
     # Local dephasing
-    if me_solver.lindblad_diss.loc_deph_rate:
+    if me_solver.loc_deph_rate:
         # maximally mixed state
-        dim = me_solver.tb_ham.matrix_dim
-        if me_solver.tb_ham.relaxation:
+        dim = me_solver.matrix_dim
+        if me_solver.relaxation:
             dim -= 1
         deph_eq_state = np.eye(dim) / dim
 
     # Global dephasing
-    if me_solver.lindblad_diss.glob_deph_rate:
+    if me_solver.glob_deph_rate:
         loc_init_matrix = me_solver.init_matrix.full().real
-        if me_solver.tb_ham.relaxation:
+        if me_solver.relaxation:
             loc_init_matrix = delete_groundstate(loc_init_matrix)
-        _, eigs = me_solver.tb_ham.get_eigensystem()
+        _, eigs = me_solver.get_eigensystem()
         glob_init_matrix = local_to_global(loc_init_matrix, eigs)
 
         # cancel all off-diagonal elements

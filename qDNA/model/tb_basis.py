@@ -1,21 +1,9 @@
-"""This module provides functions for working with tight-binding (tb) basis and
-electron-hole (eh) basis in quantum systems. It includes functions to generate symbolic
-representations of basis indices, convert between different representations, and perform
-basis changes.
-
-Shortcuts
----------
-- tb: tight-binding
-- dim: dimension
-- eh: electron-hole
-"""
-
 from itertools import product
 from ast import literal_eval
 
 import numpy as np
 
-# -------------------------------------------- Tight-binding basis --------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_tb_basis(tb_dims):
@@ -162,7 +150,7 @@ def tuple_to_int(tb_dims, tb_basis_tuple):
     return strand_num * num_sites_per_strand + site_in_strand_num
 
 
-# --------------------------------------- Electron-hole basis ----------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_eh_basis(tb_dims):
@@ -265,7 +253,7 @@ def get_particle_eh_states(particle, tb_basis_element, tb_basis):
     raise ValueError(f"Invalid particle type: {particle}")
 
 
-# -------------------------- Basis change from local to global basis (eigenbasis) ------------------
+# ----------------------------------------------------------------------
 
 
 def basis_change(matrix, states, liouville=False):
@@ -331,3 +319,6 @@ def local_to_global(matrix, eigs, liouville=False):
     """
 
     return basis_change(matrix, np.conj(eigs).T, liouville=liouville)
+
+
+# ----------------------------------------------------------------------

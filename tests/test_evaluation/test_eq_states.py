@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from qDNA.dynamics import get_me_solver
+from qDNA.dynamics import MeSolver
 from qDNA.evaluation import get_therm_eq_state, get_deph_eq_state
 
 
@@ -23,7 +23,7 @@ from qDNA.evaluation import get_therm_eq_state, get_deph_eq_state
     ],
 )
 def test_get_therm_eq_state(upper_strand, tb_model_name, expected):
-    me_solver = get_me_solver(upper_strand, tb_model_name)
+    me_solver = MeSolver([list(upper_strand)], tb_model_name=tb_model_name)
     assert np.allclose(get_therm_eq_state(me_solver), expected)
 
 
@@ -46,7 +46,9 @@ def test_get_therm_eq_state(upper_strand, tb_model_name, expected):
     ],
 )
 def test_get_deph_eq_state_loc(upper_strand, tb_model_name, loc_deph_rate, expected):
-    me_solver1 = get_me_solver(upper_strand, tb_model_name, loc_deph_rate=loc_deph_rate)
+    me_solver1 = MeSolver(
+        [list(upper_strand)], tb_model_name=tb_model_name, loc_deph_rate=loc_deph_rate
+    )
     assert np.allclose(get_deph_eq_state(me_solver1), expected)
 
 
@@ -89,9 +91,9 @@ def test_get_deph_eq_state_loc(upper_strand, tb_model_name, loc_deph_rate, expec
     ],
 )
 def test_get_deph_eq_state_glob(upper_strand, tb_model_name, glob_deph_rate, expected):
-    me_solver2 = get_me_solver(
-        upper_strand,
-        tb_model_name,
+    me_solver2 = MeSolver(
+        [list(upper_strand)],
+        tb_model_name=tb_model_name,
         glob_deph_rate=glob_deph_rate,
         loc_deph_rate=False,
         relaxation=False,

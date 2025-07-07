@@ -1,0 +1,50 @@
+{
+  "ELM": {
+    "backbone": false,
+    "diagonal_hopping": true,
+    "double_stranded": true,
+    "num_strands": 2
+  },
+  "FC": {
+    "backbone": true,
+    "diagonal_hopping": true,
+    "double_stranded": true,
+    "num_strands": 4
+  },
+  "FELM": {
+    "backbone": true,
+    "diagonal_hopping": true,
+    "double_stranded": true,
+    "num_strands": 4
+  },
+  "FLM": {
+    "backbone": true,
+    "diagonal_hopping": false,
+    "double_stranded": true,
+    "num_strands": 4
+  },
+  "FWM": {
+    "backbone": true,
+    "diagonal_hopping": false,
+    "double_stranded": false,
+    "num_strands": 3
+  },
+  "LM": {
+    "backbone": false,
+    "diagonal_hopping": false,
+    "double_stranded": true,
+    "num_strands": 2
+  },
+  "TC": {
+    "backbone": true,
+    "diagonal_hopping": false,
+    "double_stranded": false,
+    "num_strands": 3
+  },
+  "WM": {
+    "backbone": false,
+    "diagonal_hopping": false,
+    "double_stranded": false,
+    "num_strands": 1
+  }
+}

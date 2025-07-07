@@ -7,7 +7,7 @@ It provides functions for calculating bath spectral densities and Lindblad rates
 import numpy as np
 import scipy.constants as c
 
-# --------------------------- Bath Spectral Densities --------------------------------------
+# ----------------------------------------------------------------------
 
 
 def debye_spectral_density(omega, cutoff_freq, reorg_energy):
@@ -58,7 +58,7 @@ def ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent):
     )
 
 
-# ----------------------------- Lindblad Rates -------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def bose_einstein_distrib(omega, temperature):
@@ -163,3 +163,6 @@ def dephasing_rate(cutoff_freq, reorg_energy, temperature):
         Dephasing rate.
     """
     return (4 * reorg_energy * c.k * temperature) / (c.hbar * cutoff_freq * 1e12)
+
+
+# ----------------------------------------------------------------------
