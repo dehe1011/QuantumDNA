@@ -19,12 +19,49 @@ def save_xyz(xyz_content, filepath):
 
 
 def write_xyz(directory, base_id, elements, coordinates):
+    """
+    Write atomic elements and coordinates to an XYZ file.
+
+    Parameters
+    ----------
+    directory : str
+        The directory where the XYZ file will be saved.
+    base_id : str
+        The base name for the XYZ file.
+    elements : list of str
+        List of atomic element symbols.
+    coordinates : list of tuple
+        List of atomic coordinates as (x, y, z) tuples.
+
+    Returns
+    -------
+    None
+    """
+
     xyz_content = create_xyz(elements, coordinates, base_id)
     filepath = os.path.join(directory, f"{base_id}.xyz")
     save_xyz(xyz_content, filepath)
 
 
 def load_xyz(filepath):
+    """
+    Load atomic data from an XYZ file.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the XYZ file.
+
+    Returns
+    -------
+    identifier : str
+        The identifier or comment line from the XYZ file.
+    atoms : list of str
+        List of atomic symbols.
+    coordinates : list of tuple of float
+        List of atomic coordinates as (x, y, z) tuples.
+    """
+
     with open(filepath, "r", encoding="utf-8") as file:
         lines = file.readlines()
 

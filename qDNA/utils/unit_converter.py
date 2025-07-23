@@ -7,7 +7,6 @@ from ..io import OPTIONS
 
 __all__ = [
     "get_conversion",
-    "get_all_conversions",
     "get_conversion_dict",
     "convert_to_debye",
 ]
@@ -77,24 +76,6 @@ def get_conversion(start_unit, end_unit):
 
     # Return the conversion factor
     return convert_to_Joule[start_unit] / convert_to_Joule[end_unit]
-
-
-def get_all_conversions():
-    """Generates a dictionary with all possible conversions between units.
-
-    Returns
-    -------
-    Dict[str, float]
-        A dictionary where the keys are conversion descriptions
-        and the values are the conversion factors.
-    """
-
-    conversion_dict = {}
-    for start_unit, end_unit in permutations(OPTIONS["units"], 2):
-        conversion = start_unit + "_to_" + end_unit
-        conversion_val = get_conversion(start_unit, end_unit)
-        conversion_dict[conversion] = conversion_val
-    return conversion_dict
 
 
 def get_conversion_dict(param_dict, start_unit, end_unit):

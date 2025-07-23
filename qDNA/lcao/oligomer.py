@@ -22,6 +22,22 @@ from .monomer import Monomer
 
 
 def calc_dipolar_coupling(monomer1, monomer2):
+    """
+    Calculate the dipolar coupling between two monomers.
+
+    Parameters
+    ----------
+    monomer1 : object
+        An object representing the first monomer
+    monomer2 : object
+        An object representing the second monomer
+
+    Returns
+    -------
+    float
+        The dipolar coupling constant in units of eV.
+    """
+
     R1, R2 = monomer1.center_of_mass, monomer2.center_of_mass
     if np.allclose(R1, R2):
         return 0
@@ -39,6 +55,67 @@ def calc_dipolar_coupling(monomer1, monomer2):
 
 
 class Oligomer(TBModel):
+    """
+    Oligomer class for modeling tight-binding properties of DNA structures.
+    This class extends the TBModel class and provides functionality for processing
+    PDB files, and calculating tight-binding parameters such as couplings and energies
+    for DNA-like oligomers.
+
+    Attributes
+    ----------
+    filepath_pdb : str
+        Path to the input PDB file.
+    directory : str
+        Directory where XYZ files are stored.
+    kwargs : dict
+        Configuration parameters for the model.
+    filename_pdb : str
+        Base name of the PDB file without extension.
+    sites_bases : list
+        List of base site filenames.
+    sites_backbone : list
+        List of backbone site filenames.
+    sites : list
+        List of site groups based on the number of channels.
+    sites_id : numpy.ndarray
+        Array of site identifiers reshaped to match tight-binding dimensions.
+    filepaths : list
+        File paths to XYZ files for each site.
+    num_sites : int
+        Total number of sites in the oligomer.
+    monomers : numpy.ndarray
+        Array of Monomer objects representing individual sites.
+    couplings : list
+        Tight-binding coupling information.
+    energies : list
+        Tight-binding energy information.
+    tb_params : dict or None
+        Calculated tight-binding parameters, including hole, electron, and exciton
+        properties.
+
+    Methods
+    -------
+    calc_tb_couplings(monomer1, monomer2)
+        Calculate tight-binding couplings between two monomers.
+    calc_tb_energies(monomer)
+        Calculate tight-binding energies for a monomer.
+    calc_tb_params()
+        Compute and return tight-binding parameters for the oligomer.
+    save_tb_params(directory=None)
+        Save tight-binding parameters to a file.
+    plot_couplings(particle, add_colorbar=False, add_label=True, fig=None, ax=None, dpi=None, max_coupling=None)
+        Plot tight-binding couplings for a specified particle type.
+    clean()
+        Clean up temporary files and directories created during processing.
+
+    Notes
+    -----
+    .. note::
+        - The class assumes a specific structure for the input PDB file and generates XYZ files accordingly.
+        - Tight-binding parameters are calculated based on the provided LCAO model and configuration.
+
+    """
+
     def __init__(self, filepath_pdb, **kwargs):
 
         # check kwargs
@@ -47,11 +124,12 @@ class Oligomer(TBModel):
         check_lcao_kwargs(**self.kwargs)
 
         self.filepath_pdb = filepath_pdb
+        self.filename_pdb = os.path.splitext(os.path.basename(self.filepath_pdb))[0]
         self.directory = self.filepath_pdb.split(".")[0]
 
         # if self.directory exists delete it
         if os.path.exists(self.directory):
-            shutil.rmtree(self.directory)
+            self.clean()
 
         pdb_to_xyz(self.filepath_pdb, **self.kwargs)
         self.xyz_filenames = find_xyz(self.directory)
@@ -65,10 +143,8 @@ class Oligomer(TBModel):
         self.param_id = self.kwargs.get("param_id")
         self.lcao_param = load_lcao_param(self.param_id)
 
-        self.filename_pdb = os.path.splitext(os.path.basename(self.filepath_pdb))[0]
         self.sites_bases, self.sites_backbone = self._get_sites_all()
         self.sites, self.sites_id = self._get_sites()
-        self.sites_id = np.array(self.sites_id).reshape(self.tb_dims)
         self.filepaths = self._get_filepaths()
 
         self.num_sites = self.num_channels * self.num_sites_per_strand
@@ -85,16 +161,22 @@ class Oligomer(TBModel):
         if self.auto_clean:
             self.clean()
 
+    # ------------------------------------------------------------------
+
     def __repr__(self):
         return f"Oligomer({self.filename_pdb})"
 
     def _get_filepaths(self):
+        """Generate file paths for each site in the directory based on the sites matrix."""
+
         return [
             [os.path.join(self.directory, site + ".xyz") for site in row]
             for row in self.sites
         ]
 
     def _get_sites_all(self):
+        """Categorizes and returns filenames into base sites and backbone sites."""
+
         sites_bases, sites_backbone = [], []
         for filename in self.xyz_filenames:
             if "B" in filename:
@@ -105,6 +187,8 @@ class Oligomer(TBModel):
         return sites_bases, sites_backbone
 
     def _get_sites(self):
+        """Generate site configurations and site identifiers based on the number of channels."""
+
         n = len(self.sites_bases) // 2
 
         sites_all = np.array(
@@ -145,9 +229,12 @@ class Oligomer(TBModel):
             sites = [[site] for site in sites_all.flatten()]
             sites_id = [sites_all[k, i] for k in [0, 1, 2, 3] for i in range(n)]
 
+        sites_id = np.array(sites_id).reshape(self.tb_dims)
         return sites, sites_id
 
     def calc_tb_couplings(self, monomer1, monomer2):
+        """Calculate tight-binding couplings (HOMO, LUMO, and excitonic coupling) between two monomers."""
+
         H_inter = calc_H_inter(self.lcao_param, monomer1, monomer2)
 
         t_HOMO = monomer1.HOMO @ H_inter @ monomer2.HOMO
@@ -159,6 +246,7 @@ class Oligomer(TBModel):
         return round(monomer.E_HOMO, 3), round(monomer.E_LUMO, 3), 0
 
     def calc_tb_params(self):
+        """Calculates and returns the tight-binding parameters for the system."""
 
         if self.tb_params is not None:
             return self.tb_params
@@ -195,6 +283,8 @@ class Oligomer(TBModel):
         return self.tb_params
 
     def save_tb_params(self, directory=None):
+        """Save tight-binding parameters to a specified directory or default location."""
+
         tb_params = self.calc_tb_params()
         save_tb_params(
             tb_params,
@@ -214,8 +304,9 @@ class Oligomer(TBModel):
         dpi=None,
         max_coupling=None,
     ):
+        """Plots coupling interactions between sites for a given particle type."""
 
-        lw, fs, fs2, ms = 5, 11, 22, 22
+        lw, fs, ms = 5, 11, 22
         if fig is None:
             overhead_x = (ms - lw) / 72 - (self.num_sites_per_strand - 2) * lw / 72
             overhead_y = (ms - lw) / 72
@@ -316,6 +407,8 @@ class Oligomer(TBModel):
         return fig, ax
 
     def clean(self):
+        """Clean up temporary files and directories created during processing."""
+
         shutil.rmtree(self.directory)
 
 

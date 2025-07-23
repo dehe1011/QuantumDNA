@@ -4,6 +4,10 @@ from ..io import OPTIONS
 
 
 def check_lcao_kwargs(**lcao_kwargs):
+    """
+    Validate and check the keyword arguments for LCAO parameters.
+    """
+
     # check for None values
     assert not None in lcao_kwargs.values(), "None is not allowed as value"
 
@@ -28,7 +32,9 @@ def check_lcao_kwargs(**lcao_kwargs):
 
 
 def check_tb_model_kwargs(**tb_model_kwargs):
-    """Validates the keyword arguments for the TBModel class."""
+    """
+    Validates the keyword arguments for the TBModel class.
+    """
 
     # check for None values
     assert not None in tb_model_kwargs.values(), "None is not allowed as value"
@@ -54,7 +60,9 @@ def check_tb_model_kwargs(**tb_model_kwargs):
 
 
 def check_tb_ham_kwargs(**ham_kwargs):
-    """Validates the keyword arguments for the TBHam class."""
+    """
+    Validates the keyword arguments for the TBHam class.
+    """
 
     # check for None values
     assert not None in ham_kwargs.values(), "None is not allowed as value"
@@ -105,7 +113,7 @@ def check_tb_ham_kwargs(**ham_kwargs):
             ["electron"],
             ["hole"],
             ["exciton"],
-        ], f"For 1P description, `particles` must be ['electron'] or ['hole'], got {particles}"
+        ], f"For 1P description, `particles` must be ['electron'] or ['hole'] or ['exciton'], got {particles}"
 
     # Validate unit
     assert unit in unit_opts, f"Invalid unit: '{unit}'. Must be one of {unit_opts}"
@@ -118,7 +126,9 @@ def check_tb_ham_kwargs(**ham_kwargs):
 
 
 def check_lind_diss_kwargs(**diss_kwargs):
-    """Validates the keyword arguments for the LindDiss class."""
+    """
+    Validates the keyword arguments for the LindDiss class.
+    """
 
     # Check for None values
     assert None not in diss_kwargs.values(), "None is not allowed as a value"
@@ -178,7 +188,9 @@ def check_lind_diss_kwargs(**diss_kwargs):
 
 
 def check_me_solver_kwargs(**me_kwargs):
-    """Validates the keyword arguments for the MeSolver class."""
+    """
+    Validates the keyword arguments for the MeSolver class.
+    """
 
     # check for None values
     assert not None in me_kwargs.values(), "None is not allowed as value"
@@ -206,7 +218,9 @@ def check_me_solver_kwargs(**me_kwargs):
 
 
 def check_kwargs(**kwargs):
-    """Validates the keyword arguments."""
+    """
+    Validates the keyword arguments.
+    """
 
     check_tb_model_kwargs(**kwargs)
     check_tb_ham_kwargs(**kwargs)

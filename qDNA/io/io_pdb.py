@@ -6,10 +6,30 @@ from .io_xyz import write_xyz
 
 
 def load_pdb(filepath):
+    """
+    Load atomic data from a PDB file.
+    Parses the ATOM and HETATM records in a PDB file and extracts relevant
+    information such as atom type, residue, chain, residue ID, coordinates,
+    and element type.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the PDB file to be loaded.
+
+    Returns
+    -------
+    list of dict
+        A list of dictionaries, each containing atomic data with keys:
+        'atom', 'residue', 'chain', 'res_id', 'x', 'y', 'z', and 'element'.
+    """
+
     pdb_content = []
 
     with open(filepath, "r", encoding="utf-8") as file:
         for line in file:
+            # if line.startswith("TER"):
+            #     break
             if line.startswith("ATOM") or line.startswith("HETATM"):
                 pdb_data = {
                     "atom": line[12:16].strip(),
@@ -51,6 +71,23 @@ def modify_base_idx(base_idx, start_idx, n, **kwargs):
 
 
 def pdb_to_xyz(filepath, **kwargs):
+    """
+    Converts a PDB file to XYZ format and writes the output to separate files
+    for each base and backbone in the structure.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the input PDB file.
+
+    Notes
+    -----
+    .. note::
+        - The function creates a directory named after the input file (without extension) to store the output XYZ files.
+        - Each base and backbone is written to separate XYZ files.
+        - Base indices are adjusted for the lower strand if applicable.
+
+    """
 
     filename = os.path.splitext(os.path.basename(filepath))[0]
     directory = os.path.join(os.path.dirname(filepath), filename)
@@ -89,7 +126,6 @@ def pdb_to_xyz(filepath, **kwargs):
 
         if lower_strand:
             base_idx = modify_base_idx(base_idx, start_idx, n, **kwargs)
-        print(base_idx)
 
         base_id = entry["residue"]  # e.g. DC
         base_id = str(base_idx).zfill(2) + base_id[1]  # e.g. 01C

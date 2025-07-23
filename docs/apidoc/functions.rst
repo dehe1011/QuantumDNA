@@ -1,6 +1,26 @@
 Functions
 =========
 
+This section provides an overview of the available functions in the `qDNA` package.
+
+
+Load Default Parameters
+-----------------------
+
+.. autofunction:: qDNA.io.load_defaults
+.. autofunction:: qDNA.io.load_lcao_param
+.. autofunction:: qDNA.io.load_tb_model_props
+.. autofunction:: qDNA.io.load_options
+
+Load Molecular Structures
+-------------------------
+
+.. autofunction:: qDNA.io.load_pdb
+.. autofunction:: qDNA.io.pdb_to_xyz
+.. autofunction:: qDNA.io.write_xyz
+.. autofunction:: qDNA.io.load_xyz
+
+
 Calculate Tight-Binding Parameters
 ----------------------------------
 
@@ -54,7 +74,8 @@ Tight-Binding Hamiltonian
 .. autofunction:: qDNA.hamiltonian.delete_groundstate
 .. autofunction:: qDNA.hamiltonian.add_interaction
 
-Lindblad rates--------------
+Lindblad rates
+--------------
 
 These functions is adapted from the quantum_HEOM GitHub repository :cite:`Abbott2020`.
 
@@ -99,7 +120,6 @@ Unit Conversion
 ---------------
 
 .. autofunction:: qDNA.utils.get_conversion
-.. autofunction:: qDNA.utils.get_all_conversions
 .. autofunction:: qDNA.utils.get_conversion_dict
 
 

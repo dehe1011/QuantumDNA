@@ -11,21 +11,24 @@ from .observables import get_pop_observable
 def get_loc_deph_ops(tb_basis, description, dephasing_dict, relaxation):
     """Generate a list of local dephasing collapse operators.
 
+    This function creates local dephasing operators based on the provided tight-binding basis,
+    system description, dephasing rates, and relaxation flag.
+
     Parameters
     ----------
     tb_basis : list
-        Tight-binding basis.
+        List representing the tight-binding basis states.
     description : object
-        A descriptor object that provides information about the system's structure.
+        Descriptor object containing structural information about the system.
     dephasing_dict : dict
-        A dictionary where keys are particle identifiers and values are their corresponding dephasing rates.
+        Dictionary mapping particle identifiers to their respective dephasing rates.
     relaxation : bool
-        If True, the ground state is added to the operators.
+        If True, the ground state is included in the operators.
 
     Returns
     -------
     list
-       List of local dephasing operators.
+        A list of local dephasing operators as Qobj instances.
     """
 
     c_ops = []
@@ -42,22 +45,23 @@ def get_loc_deph_ops(tb_basis, description, dephasing_dict, relaxation):
 
 
 def get_glob_deph_ops(eigs, dephasing_rate, relaxation):
-    """Generate a list of global dephasing collapse operators. In total :math:`N^2` operators (where :math:`N` is
-    the number of eigenstates).
+    """Generate a list of global dephasing collapse operators.
+
+    This function creates :math:`N^2` operators, where :math:`N` is the number of eigenstates.
 
     Parameters
     ----------
     eigs : np.ndarray
-        Eigensystem.
+        Array representing the eigensystem of the Hamiltonian.
     dephasing_rate : float
-        Dephasing rate.
+        The rate of dephasing applied to the system.
     relaxation : bool
-        Flag for relaxation.
+        If True, the ground state is included in the operators.
 
     Returns
     -------
     list
-        List of global dephasing operators.
+        A list containing the global dephasing operators as Qobj instances.
     """
 
     num_eigenstates = eigs.shape[0]

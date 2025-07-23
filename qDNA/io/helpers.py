@@ -4,6 +4,10 @@ import os
 
 
 def get_non_overwriting_path(filepath):
+    """
+    Generate a unique file path by appending a counter if the given path already exists.
+    """
+
     base, ext = os.path.splitext(filepath)  # ext: .yaml, .json, .xyz, etc.
     counter = 1
     new_filepath = filepath

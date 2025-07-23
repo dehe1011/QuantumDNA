@@ -23,66 +23,28 @@ __all__ = ["LindDiss"]
 
 
 class LindDiss(TBHam):
-    r"""Provides the operators of the form :math:`\sqrt{\gamma} a` that are used in the
-    Lindblad dissipator of the master equation.
-
-    Parameters
-    ----------
-    tb_ham : TBHamType
-        The tight-binding Hamiltonian.
-    kwargs : dict
-        Additional keyword arguments for the dissipator.
+    """
+    LindDiss class for modeling Lindblad dissipation in quantum systems.
+    This class extends TBHam and provides functionality to define and manage
+    Lindblad operators, relaxation rates, dephasing, and thermalization parameters
+    for quantum systems described by tight-binding models.
 
     Attributes
     ----------
-    tb_ham : TBHamType
-        The tight-binding Hamiltonian.
-    num_sites : int
-        Number of sites in the tight-binding model.
-    loc_deph_rate : float
-        Local dephasing rate.
-    glob_deph_rate : float
-        Global dephasing rate.
-    uniform_relaxation : bool
-        Flag for uniform relaxation.
-    relax_rates : dict
-        Relaxation rates for each DNA base.
-    loc_therm : bool
-        Flag for local thermalization.
-    glob_therm : bool
-        Flag for global thermalization.
-    deph_rate : float
-        Dephasing rate.
-    cutoff_freq : float
-        Cutoff frequency.
-    reorg_energy : float
-        Reorganization energy.
-    temperature : float
-        Temperature in Kelvin.
-    spectral_density : str
-        Type of spectral density ('debye' or 'ohmic').
-    exponent : float
-        Exponent for the Ohmic spectral density.
-    relax_ops : list
-        List of relaxation operators.
-    deph_ops : list
-        List of dephasing operators.
-    therm_ops : list
-        List of thermalizing operators.
     c_ops : list
-        List of collapse operators.
+        List of Lindblad collapse operators used in the master equation.
+    relax_rates : dict
+        Dictionary of relaxation rates for each tight-binding site.
     num_c_ops : int
         Number of collapse operators.
     e_ops : tuple
-        Tuple containing population, coherence, and ground state population operators.
-    pop_ops : dict
-        Population operators.
-    coh_ops : dict
-        Coherence operators.
-    groundstate_pop_ops : dict
-        Ground state population operators.
-    unit : str
-        Unit of the operators.
+        Observables including population, coherence, and ground state population operators.
+
+    Parameters
+    ----------
+    tb_sites : list
+        List of tight-binding sites.
+
     """
 
     def __init__(self, tb_sites, **kwargs):
@@ -184,13 +146,6 @@ class LindDiss(TBHam):
     # ------------------------------------------------------------------
 
     def _get_relax_ops(self):
-        """Generate relaxation operators based on relaxation rates and Hamiltonian.
-
-        Returns
-        -------
-        list
-            A list of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
-        """
 
         if not self.relaxation:
             return []
@@ -199,28 +154,6 @@ class LindDiss(TBHam):
 
     # pylint: disable=inconsistent-return-statements
     def _get_deph_ops(self):
-        """Generate dephasing operators based on the system's Hamiltonian description
-        and dephasing rates. This method computes local and global dephasing operators
-        for both one-particle (1P) and two-particle (2P) descriptions of the system. The
-        dephasing operators are determined by the eigensystem of the Hamiltonian and the
-        specified local and global dephasing rates.
-
-        Returns
-        -------
-        deph_p_ops : list
-            A list of dephasing operators, scaled by the square root of the corresponding dephasing rate.
-            The length and content of the list depend on the Hamiltonian description and the dephasing rates:
-            - For local dephasing in a 2P description: 2 * num_sites operators.
-            - For local dephasing in a 1P description: num_sites operators.
-            - For global dephasing in a 2P description: num_sites^2 operators.
-            - For global dephasing in a 1P description: num_sites operators.
-
-        Raises
-        ------
-        AssertionError
-            If the number of generated dephasing operators does not match the expected number
-            based on the Hamiltonian description and the number of sites.
-        """
 
         if not (self.loc_deph_rate or self.glob_deph_rate):
             return []
@@ -247,25 +180,6 @@ class LindDiss(TBHam):
 
     # pylint: disable=inconsistent-return-statements
     def _get_therm_ops(self):
-        """Generate thermal operations based on the eigensystem of the Hamiltonian. This
-        method calculates the thermal operations using either local or global
-        thermalization processes, depending on the configuration of the instance.
-
-        Returns
-        -------
-        therm_ops : list
-            A list of thermal operations, scaled by the square root of the corresponding thermalization rate.
-
-        Notes
-        -----
-        - The method first retrieves the eigensystem of the Hamiltonian and converts
-          the eigenvalues to the desired units.
-        - If `loc_therm` is set to True, local thermal operations are calculated.
-        - If `glob_therm` is set to True, global thermal operations are calculated.
-        - The thermal operations are determined by various parameters such as
-          relaxation, dephasing rate, cutoff frequency, reorganization energy,
-          temperature, spectral density, and exponent.
-        """
 
         if not (self.loc_therm or self.glob_therm):
             return []
@@ -291,24 +205,6 @@ class LindDiss(TBHam):
             return get_glob_therm_ops(eigv, eigs, self.relaxation, **therm_kwargs)
 
     def _get_e_ops(self):
-        """Generates the expectation value operators (e_ops) for the Lindblad master
-        equation. This method constructs dictionaries of population and coherence
-        operators for each particle in the tight-binding Hamiltonian (tb_ham). It also
-        includes ground state population operators if relaxation is considered.
-
-        Returns
-        -------
-        tuple of dict
-            A tuple containing three dictionaries:
-            - pop_dict: Population operators for each particle and site.
-            - coh_dict: Coherence operators for each particle and pair of sites.
-            - groundstate_pop_dict: Ground state population operators (only if relaxation is considered).
-
-        Raises
-        ------
-        AssertionError
-            If the Hamiltonian description is not "2P". This method is only defined for the "2P" description.
-        """
 
         pop_dict, coh_dict, groundstate_pop_dict = {}, {}, {}
 

@@ -30,54 +30,57 @@ __all__ = ["MeSolver"]
 
 class MeSolver(LindDiss):
     """
-    MeSolver class for solving quantum master equations using QuTiP.
-
-    This class extends the LindDiss class and provides functionality for solving
-    quantum master equations with various configurations and parameters. It supports
-    both one-particle (1P) and two-particle (2P) Hamiltonian descriptions, and includes
-    methods for calculating populations, coherences, and ground state populations.
-
-    Parameters
-    ----------
-    tb_sites : list
-        List of tight-binding sites for the quantum system.
+    MeSolver class for solving master equations in quantum dynamics.
+    This class extends LindDiss and provides methods for simulating quantum systems
+    using master equations. It supports initialization of Hamiltonians, density matrices,
+    and various observables, as well as solving the equations for populations, coherences,
+    and ground state populations.
 
     Attributes
     ----------
     kwargs : dict
         Configuration parameters for the solver.
-    times : numpy.ndarray
+    times : ndarray
         Array of time points for the simulation.
     t_unit : str
-        Unit of time for the simulation.
+        Unit of time used in the simulation.
     ham_matrix : qutip.Qobj
-        Hamiltonian matrix of the quantum system.
+        Hamiltonian matrix of the system.
     init_states : list
-        Initial states of the quantum system.
+        Initial states of the system.
     init_matrix : qutip.Qobj
-        Initial density matrix of the quantum system.
+        Initial density matrix of the system.
     result : list or None
-        List of quantum states resulting from the master equation solver.
+        Results of the simulation.
     groundstate_pop : dict or None
-        Ground state population of the system.
+        Ground state population values.
     pop : dict or None
-        Population of particles in the system.
+        Population values for the system.
     coh : dict or None
-        Coherence of the system.
+        Coherence values for the system.
     options : dict
-        Options for the QuTiP solver.
+        Solver options.
     solver_kwargs : dict
-        Keyword arguments for the QuTiP solver.
+        Arguments for the solver.
     qutip_version : str
-        Version of the QuTiP library being used.
+        Version of QuTiP library used.
+    t_end : float
+    t_steps : int
 
-    Notes
-    -----
-    .. note::
-
-        - The class supports both QuTiP version 4 and version 5.
-        - The Hamiltonian description can be either "1P" (one-particle) or "2P" (two-particle).
-        - The solver uses QuTiP's `mesolve` function to solve the master equation.
+    Methods
+    -------
+    reset()
+        Resets the solver state and clears results.
+    get_result()
+        Solves the master equation and returns the state evolution.
+    get_result_particle(particle)
+        Returns the reduced density matrix for a specific particle.
+    get_pop()
+        Computes and returns population values.
+    get_coh()
+        Computes and returns coherence values.
+    get_groundstate_pop()
+        Computes and returns ground state population values.
     """
 
     def __init__(self, tb_sites, **kwargs):
@@ -148,11 +151,12 @@ class MeSolver(LindDiss):
     # ------------------------------------------------------------------
 
     @property
-    def t_end(self):  # pylint: disable=missing-function-docstring
+    def t_end(self):
+        """Returns the end time of the simulation."""
         return self._t_end
 
     @t_end.setter
-    def t_end(self, new_t_end):
+    def t_end(self, new_t_end):  # pylint: disable=missing-function-docstring
         old_t_end = self._t_end
         self._t_end = new_t_end
 
@@ -162,11 +166,12 @@ class MeSolver(LindDiss):
             self.reset()
 
     @property
-    def t_steps(self):  # pylint: disable=missing-function-docstring
+    def t_steps(self):
+        """Returns the number of time steps in the simulation."""
         return self._t_steps
 
     @t_steps.setter
-    def t_steps(self, new_t_steps):
+    def t_steps(self, new_t_steps):  # pylint: disable=missing-function-docstring
         old_t_steps = self._t_steps
         self._t_steps = new_t_steps
 
@@ -178,16 +183,6 @@ class MeSolver(LindDiss):
     # ------------------------------------------------------------------
 
     def reset(self):
-        """Resets the solver's state by clearing results and initializing dictionaries
-        for populations and coherences.
-
-        Notes
-        -----
-        .. note::
-
-            - Clears the ``result`` list (for the full the all reduced density matrices).
-            - Initializes ``groundstate_pop``, ``pop``, and ``coh`` dictionaries.
-        """
 
         self.result = None
         self.groundstate_pop = None
@@ -228,23 +223,6 @@ class MeSolver(LindDiss):
         return init_states
 
     def _get_init_matrix(self):
-        """Generate the initial state matrix for the quantum system based on the
-        Hamiltonian description. The method supports two types of descriptions for the
-        tight-binding Hamiltonian (tb_ham): "2P" (two- particle) and "1P" (one-
-        particle). Depending on the description and the initialization parameters, the
-        initial state matrix is constructed either as a delocalized state over all
-        exciton states or as a localized state on a single exciton state.
-
-        Returns
-        -------
-        qutip.Qobj
-            The initial state matrix of the quantum system as a Qobj instance from the QuTiP library.
-
-        Raises
-        ------
-        ValueError
-            If the Hamiltonian description is not recognized.
-        """
 
         init_matrix = 0
 
@@ -269,20 +247,6 @@ class MeSolver(LindDiss):
     # ------------------------------------------------------------------
 
     def _run_mesolve(self, **kwargs):
-        """
-        Run the mesolve function with the given arguments.
-
-        Parameters
-        ----------
-        **kwargs : dict
-            Keyword arguments to be passed to the mesolve function. The keys and values
-            depend on the version of qutip being used.
-
-        Returns
-        -------
-        list
-            List of states resulting from the mesolve function.
-        """
 
         if self.qutip_version == "5":
             kwargs["H"] = kwargs["H"].to(data_type="CSR")
@@ -302,17 +266,6 @@ class MeSolver(LindDiss):
         return q.mesolve(**kwargs)
 
     def get_result(self):
-        """Calculate and return the result of the master equation solver. This method
-        checks if the result has already been calculated. If not, it constructs the
-        Hamiltonian matrix and solves the master equation using QuTiP's ``qutip.mesolve``
-        function. The result is then stored and returned.
-
-        Returns
-        -------
-        list
-            A list of quantum states representing the solution of the master
-            equation at different time points.
-        """
 
         # check if the result is already calculated
         if self.result is not None:
@@ -328,22 +281,6 @@ class MeSolver(LindDiss):
         return self.result
 
     def get_result_particle(self, particle):
-        """Retrieve the reduced density matrix for a specified particle. This method
-        checks if the result has already been calculated. If not, it calculates the
-        result. Then, it checks if the reduced density matrix for the specified particle
-        has been calculated. If not, it calculates the reduced density matrix for the
-        specified particle and stores it.
-
-        Parameters
-        ----------
-        particle : str
-            The particle for which the reduced density matrix is to be retrieved.
-
-        Returns
-        -------
-        list
-            A list of reduced density matrices for the specified particle.
-        """
 
         if vars(self)["result_" + particle] is not None:
             return vars(self)["result_" + particle]
@@ -362,25 +299,6 @@ class MeSolver(LindDiss):
     # ------------------------------------------------------------------
 
     def get_pop(self):
-        """Calculate and return the population of particles in the system. This method
-        computes the population of particles based on the Hamiltonian description and
-        the Lindblad dissipation operators. It uses the QuTiP library to solve the
-        master equation and obtain the expectation values of the population operators.
-
-        Returns
-        -------
-        dict
-            A dictionary where the keys are particle-site combinations and the
-            values are the corresponding population expectation values.
-
-        Notes
-        -----
-        .. note::
-
-            - If the population ``self.pop`` is already computed, it returns the cached result.
-            - The method supports two types of Hamiltonian descriptions: "2P" and "1P".
-            - The master equation is solved using ``qutip.mesolve`` with the Hamiltonian matrix, initial state, time points, collapse operators, and population operators.
-        """
 
         if self.pop is not None:
             return self.pop
@@ -403,23 +321,6 @@ class MeSolver(LindDiss):
         return self.pop
 
     def get_coh(self):
-        """Calculate and return the coherence of the system.
-        This method computes the coherence of the system based on the Hamiltonian
-        description and the Lindblad dissipation operators. It supports two types
-        of Hamiltonian descriptions: "2P" and "1P".
-        For "2P" description, it uses the coherence operators from the Lindblad
-        dissipation.
-        For "1P" description, it constructs the coherence operators based on the
-        tensor basis permutations.
-        The method then solves the master equation using the QuTiP ``qutip.mesolve`` function
-        and calculates the coherence for each particle in the system.
-
-        Returns
-        -------
-        dict
-            A dictionary where the keys are particle identifiers and the values are
-            the computed coherence values.
-        """
 
         if self.coh is not None:
             return self.coh
@@ -445,24 +346,6 @@ class MeSolver(LindDiss):
         return self.coh
 
     def get_groundstate_pop(self):
-        """Calculate and return the ground state population. This function computes the
-        ground state population of a system described by a two- particle (2P)
-        Hamiltonian with relaxation. If the ground state population has already been
-        computed, it returns the cached result.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the ground state population with the key
-            "groundstate".
-
-        Raises
-        ------
-        AssertionError
-            If the Hamiltonian description is not "2P".
-        AssertionError
-            If relaxation is not enabled in the Hamiltonian.
-        """
 
         assert self.description == "2P", "only available for 2P description"
         assert self.relaxation, "only defined if relaxation is True"

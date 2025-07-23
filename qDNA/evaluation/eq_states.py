@@ -10,7 +10,7 @@ from ..hamiltonian import delete_groundstate
 
 __all__ = ["get_therm_eq_state", "get_deph_eq_state"]
 
-# ---------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_therm_eq_state(me_solver):
@@ -99,3 +99,6 @@ def get_deph_eq_state(me_solver):
 
     assert deph_eq_state is not None, "Dephasing equilibrium state not calculated."
     return deph_eq_state
+
+
+# ----------------------------------------------------------------------

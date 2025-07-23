@@ -18,8 +18,9 @@ About This Documentation
 ------------------------
 This documentation includes:
 
-- **API Reference**: Description on QuantumDNA's functions and classes.
-- **User Guide**: Tutorials and instructions for getting started and using QuantumDNA effectively.
+- **API Reference**: Description of QuantumDNA's functions and classes.
+- **User Guide**: Tutorial Jupyter notebooks for getting started and using QuantumDNA effectively.
+- **Graphical User Interface (GUI)**: Information on how to use the GUI for visualizing and analyzing DNA exciton and charge transfer.
 
 For additional resources and development information, visit the `QuantumDNA GitHub repository <https://github.com/dehe1011/QuantumDNA>`_. For hands-on learning, check out the `Tutorial Notebook GitHub repository <https://github.com/dehe1011/QuantumDNA-notebooks>`_, which contains examples and guided exercises.
 
@@ -30,6 +31,7 @@ For additional resources and development information, visit the `QuantumDNA GitH
    installation
    apidoc/apidoc
    guide/guide
+   gui/gui
    biblio
    copyright
 

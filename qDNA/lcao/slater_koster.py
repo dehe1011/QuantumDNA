@@ -110,6 +110,25 @@ def _get_overlap(lcao_param, vector, orbital_types):
 def calc_orbital_interaction(
     lcao_param, orbitals, orbitals_coordinates, connection_type
 ):
+    """
+    Calculate the interaction between two orbitals based on LCAO parameters.
+
+    Parameters
+    ----------
+    lcao_param : dict
+        Dictionary containing Linear Combination of Atomic Orbitals (LCAO) parameters.
+    orbitals : list of str
+        List of orbital identifiers in the format "atom_orbital".
+    orbitals_coordinates : ndarray
+        Array of shape (2, 3) representing the coordinates of the two orbitals.
+    connection_type : str
+        Type of connection between the orbitals (e.g., covalent, ionic).
+
+    Returns
+    -------
+    float
+        The calculated orbital interaction value. Returns 0 if the distance between orbitals is zero.
+    """
 
     orbital_atoms = [orbital.split("_")[0] for orbital in orbitals]
     orbital_types = [orbital.split("_")[1] for orbital in orbitals]
@@ -125,11 +144,45 @@ def calc_orbital_interaction(
 
 
 def calc_orbital_energy(lcao_param, orbital):
+    """
+    Calculate the energy of a specified orbital using LCAO parameters.
+
+    Parameters
+    ----------
+    lcao_param : dict
+        Dictionary containing LCAO parameters.
+        Expected keys are in the format "E_<atom><orbital_type>".
+    orbital : str
+        Orbital identifier in the format "<atom>_<orbital_type>".
+
+    Returns
+    -------
+    float
+        Energy of the specified orbital.
+    """
+
     orbital_atom, orbital_type = orbital.split("_")
     return lcao_param["E_" + orbital_atom + orbital_type[0]]
 
 
 def calc_H_intra(lcao_param, comp):
+    """
+    Calculate the intra-base Hamiltonian matrix for a given component.
+
+    Parameters
+    ----------
+    lcao_param : dict
+        Parameters for the Linear Combination of Atomic Orbitals (LCAO) model.
+    comp : object
+        Component containing orbital information.
+
+    Returns
+    -------
+    np.ndarray
+        Intra-base Hamiltonian matrix of shape (n, n), where `n` is the number
+        of orbitals in the component.
+    """
+
     n = comp.num_orbitals
     H_intra = np.zeros((n, n))
 
@@ -150,6 +203,24 @@ def calc_H_intra(lcao_param, comp):
 
 
 def calc_H_inter(lcao_param, comp1, comp2):
+    """
+    Calculate the interbase Hamiltonian matrix for two components.
+
+    Parameters
+    ----------
+    lcao_param : dict
+        Parameters for the Linear Combination of Atomic Orbitals (LCAO) method.
+    comp1 : object
+        First component containing orbital information and coordinates.
+    comp2 : object
+        Second component containing orbital information and coordinates.
+
+    Returns
+    -------
+    np.ndarray
+        A 2D array representing the interbase Hamiltonian matrix.
+    """
+
     n1, n2 = comp1.num_orbitals, comp2.num_orbitals
     H_inter = np.zeros((n1, n2), dtype=float)
 

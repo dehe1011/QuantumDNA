@@ -114,7 +114,17 @@ def rate_constant_redfield(
     -------
     float
         Redfield rate constant.
+
+    Notes
+    -----
+    .. note::
+
+        If the frequency is zero, the function returns the dephasing rate.
+        Otherwise, it calculates the rate constant based on the specified
+        spectral density and Bose-Einstein distribution.
+
     """
+
     if omega == 0:
         if deph_rate is None:
             deph_rate = dephasing_rate(cutoff_freq, reorg_energy, temperature)

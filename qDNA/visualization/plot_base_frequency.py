@@ -58,19 +58,21 @@ def plot_base_frequency(lifetime_dict, cutoff_num=10):
         base_freq_dict[base] = dna_base_counter(base, lifetime_dict)[cutoff_num:]
 
     # plotting
-    fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+    fig, ax = plt.subplots(1, 1, figsize=(6.8, 2.1))
     ax.plot(
         lifetimes,
         (base_freq_dict["G"] + base_freq_dict["C"]) * 100,
-        "o--",
-        markersize=4,
+        ls="--",
+        marker=".",
+        markersize=6,
         color=COLORS_DNA_BASES["G"],
     )
     ax.plot(
         lifetimes,
         (base_freq_dict["A"] + base_freq_dict["T"]) * 100,
-        "o--",
-        markersize=4,
+        ls="--",
+        marker=".",
+        markersize=6,
         color=COLORS_DNA_BASES["A"],
     )
 
@@ -79,9 +81,7 @@ def plot_base_frequency(lifetime_dict, cutoff_num=10):
     ax.set_xlabel("Exciton lifetime [ps]")
     ax.invert_xaxis()
     ax.legend(["G-C", "A-T"], loc="upper right")
-    ax.axhline(50, linestyle="--", color="black", alpha=0.8, lw=2.2)
-    plt.xticks()
-    plt.yticks()
+    ax.axhline(50, ls="--", color="black", alpha=0.7)
 
     return fig, ax
 

@@ -31,17 +31,8 @@
     "Simserides2024",
     "Kordas2025",
     "1BNA",
-    "1BNA_hole_ELM",
-    "1BNA_electron_ELM",
-    "1BNA_hole",
-    "1BNA_electron",
-    "1BNA1_ELM",
     "1BNA1",
-    "AAATGT",
-    "model_0",
-    "unmeth",
-    "meth",
-    "GAGCTGGG_PyMol2"
+    "1BNA2"
   ],
   "spectral_densities": [
     "debye",

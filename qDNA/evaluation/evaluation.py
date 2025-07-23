@@ -16,15 +16,36 @@ from ..utils import convert_to_debye
 
 class Evaluation(MeSolver):
     """
-    This class extends MeSolver and provides attributes to store exciton lifetime,
-    charge separation, and dipole moment, facilitating the study of DNA exciton behavior.
+    Evaluation class for analyzing exciton dynamics in quantum DNA models.
+
+    Attributes
+    ----------
+    lifetime : float or None
+        Estimated exciton lifetime in femtoseconds.
+    charge_separation : float or None
+        Average charge separation based on electron-hole distances.
+    dipole_moment : float or None
+        Dipole moment of the system in Debye units.
+
+    Methods
+    -------
+    calc_lifetime()
+        Calculate the exciton lifetime based on ground state population.
+    calc_charge_separation(average=True)
+        Compute the charge separation based on electron-hole distances.
+    calc_dipole_moment()
+        Calculate the dipole moment of the system.
+    calc_backbone_transfer()
+        Compute average transfer for backbone sites in Fishbone models.
+    calc_exciton_transfer()
+        Calculate exciton transfer for double-stranded, non-backbone models.
 
     Parameters
     ----------
-    tb_sites : array-like
-        Tight-binding sites representing the DNA model.
-    **kwargs : dict, optional
-        Additional parameters for the MeSolver base class.
+    tb_sites : list
+        List of tight-binding sites defining the system.
+    **kwargs : dict
+        Additional parameters for the MeSolver superclass.
     """
 
     def __init__(self, tb_sites, **kwargs):
@@ -167,7 +188,7 @@ class Evaluation(MeSolver):
             average_pop[particle] = avg_pop
         return average_pop
 
-    def calc_backbone_transfer(self):
+    def calc_backbone_transfer(self, average=True):
         """
         Calculates the average transfer for backbone sites in a Fishbone model.
 
@@ -192,9 +213,9 @@ class Evaluation(MeSolver):
             upper_backbone_sites.append(f"(0, {i})")
             lower_backbone_sites.append(f"({self.num_channels-1}, {i})")
         backbone_sites = upper_backbone_sites + lower_backbone_sites
-        return self._calc_average_transfer(backbone_sites)
+        return self._calc_average_transfer(backbone_sites, average=average)
 
-    def calc_exciton_transfer(self):
+    def calc_exciton_transfer(self, average=True):
         """
         Calculate exciton transfer for a double-stranded, non-backbone model.
         This method computes the average exciton transfer between the upper and
@@ -239,8 +260,8 @@ class Evaluation(MeSolver):
             upper_sites.append(f"(0, {i})")
             lower_sites.append(f"(1, {i})")
 
-        upper_strand_pop = self._calc_average_transfer(upper_sites)
-        lower_strand_pop = self._calc_average_transfer(lower_sites)
+        upper_strand_pop = self._calc_average_transfer(upper_sites, average=average)
+        lower_strand_pop = self._calc_average_transfer(lower_sites, average=average)
         return {
             "upper_strand_pop": upper_strand_pop,
             "lower_strand_pop": lower_strand_pop,
@@ -278,12 +299,6 @@ class EvaluationParallel:
     ----------
     evaluation_list : list
         A list of evaluation objects, each containing a sequence ID and associated data.
-    **kwargs : dict, optional
-        Additional configuration options:
-        - num_cpu : int, optional
-            Number of CPU cores to use for multiprocessing. Defaults to one less than the available CPUs.
-        - observables : list of str, optional
-            List of observables to calculate. Defaults to ["lifetime", "charge_separation", "dipole_moment"].
 
     Attributes
     ----------
@@ -301,6 +316,12 @@ class EvaluationParallel:
         Observables to calculate for each sequence.
     args : list of tuple
         Arguments prepared for multiprocessing, containing sequence index, observables, and evaluation list.
+
+    Methods
+    -------
+    calc_results(filepath=None, save=True)
+        Calculate results for the sequences using multiprocessing and optionally save them to a file.
+
     """
 
     def __init__(self, evaluation_list, **kwargs):

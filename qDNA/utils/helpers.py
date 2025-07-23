@@ -39,7 +39,7 @@ def get_dominant_dict(dominant_filename, directory):
     """
 
     filepath = os.path.join(directory, dominant_filename)
-    dominant_dict = sorted_dict(load_json(filepath))
+    dominant_dict = sorted_dict(load_json(filepath)["data"])
     return dominant_dict
 
 
@@ -69,7 +69,7 @@ def get_sorted_dict(dominant_filename, filename, directory):
     # Sort the dictionary based on the order of keys in the dominant dictionary
     sequence_ordering = list(dominant_dict.keys())
     filepath = os.path.join(directory, filename)
-    lifetime_dict = load_json(filepath)
+    lifetime_dict = load_json(filepath)["data"]
     sorted_keys = sorted(lifetime_dict.keys(), key=sequence_ordering.index)
     lifetime_dict = {key: lifetime_dict[key] for key in sorted_keys}
     return lifetime_dict

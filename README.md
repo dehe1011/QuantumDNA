@@ -39,13 +39,13 @@
 
 This Python package can be cited as:
 
-> *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
+> 1. Herb, D. et al. QuantumDNA: A python package for analyzing quantum charge dynamics in DNA and exploring its biological relevance. *Computer Physics Communications 313*, 109626 (2025). DOI: [10.1016/j.cpc.2025.109626](https://doi.org/10.1016/j.cpc.2025.109626)
 
 ## Introduction
 
-QuantumDNA is an open-source Python package for simulating charge transfer (CT) and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface (GUI)—perfect for researchers and students, even without extensive coding experience.
+QuantumDNA is an open-source Python package for simulating charge transfer (CT) and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets efficiently, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a graphical user interface (GUI)—making it accesible to researchers across disciplines, even without extensive coding experience.
 
-Whether you're a scientist, student, or just curious, QuantumDNA is here to help you explore the fascinating world of DNA charge transfer. Dive in and start exploring today!
+Whether you're a scientist, student, or just curious, QuantumDNA is here to help you explore the fascinating world of exiton and charge transfer in DNA. Dive in and start exploring!
 
 <p align="center">
     <img src="docs/figures/2_qDNA_structure.png" width="50%">
@@ -53,7 +53,6 @@ Whether you're a scientist, student, or just curious, QuantumDNA is here to help
 
 ### Key Features
 
-* Graphical User Interface (GUI): Intuitive and user-friendly interface, making the tool accessible to researchers and students with limited programming experience.
 * Parallelized Calculations: Optimized for performance, enabling the analysis of large DNA ensembles with efficient computational resource utilization.
 * Integration with Publicly Accessible Databases: Supports input geometries from widely used DNA structure databases.
 * Unified Framework: Provides a reproducible platform for simulating and comparing results from different scientific papers and methodologies.
@@ -86,17 +85,17 @@ To test QuantumDNA, you can run the following simple example where the exciton l
 from qDNA import calc_lifetime, calc_dipole
 
 # input
-upper_strand = 'GCG'
-tb_model_name = 'ELM'
-kwargs = dict(unit='rad/ps', relax_rate=3, source='Hawke2010')
+tb_sites = get_tb_sites('GCG')
+kwargs = dict(tb_model_name = 'ELM', unit='rad/ps', relax_rate=3, source='Hawke2010')
 
 # calculation
-lifetime = calc_lifetime(upper_strand, tb_model_name, **kwargs)
-dipole = calc_dipole(upper_strand, tb_model_name, **kwargs)
+eva = Evaluation(tb_sites, **kwargs)
+lifetime = eva.calc_lifetime()
+charge_separation = eva.calc_charge_separation()
 
 # output
 print(f"Exciton lifetime {lifetime} fs")
-print(f"Average charge separation {dipole} A")
+print(f"Average charge separation {charge_separation} A")
 ```
 
 ## Documentation
@@ -115,10 +114,8 @@ The `qDNA` package includes a graphical user interface (GUI) that provides an in
 
 ```python
 
-from qDNA.gui import qDNA_app
-
-app = qDNA_app()
-app.mainloop()
+from qDNA.gui import QDNApp
+QDNApp().mainloop()
 ```
 
 The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
@@ -158,7 +155,7 @@ Whether you're generating plots or calculating complex dynamics, the GUI provide
 
 ## Shortcuts
 
-To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. These abbreviations help keep the code concise while still being clear and understandable:
+To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. This list of abbreviations is intended to simplify usage for the users:
 
 * ```ham```: hamiltonian
 * ```dm```: density matrix

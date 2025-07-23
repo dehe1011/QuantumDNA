@@ -61,8 +61,12 @@ def tb_ham_1P(
 
     Parameters
     ----------
-    tb_model : TBModelType
-        The tight-binding model.
+    tb_dims : Tuple[int, int]
+        Dimensions of the tight-binding model grid.
+    tb_config : List[Tuple[str, str, str]]
+        Configuration of tight-binding connections.
+    tb_basis : List[str]
+        List of basis states.
     tb_param_dict : Dict[str, float]
         Dictionary of tight-binding parameters.
     tb_basis_sites_dict : Dict[str, str]
@@ -75,12 +79,17 @@ def tb_ham_1P(
 
     Examples
     --------
-    >>> tb_model = TB_Model("model_name", (2, 2))
-    >>> tb_param_dict = {"E_G": 1.0, "C_GC": 0.5}
+    >>> tb_dims = (2, 2)
+    >>> tb_config = [("C", "(0, 0)", "(1, 0)"), ("E", "(0, 0)", "(0, 0)")]
+    >>> tb_basis = ["(0, 0)", "(1, 0)", "(0, 1)", "(1, 1)"]
+    >>> tb_param_dict = {"E_G": 1.0, "C_G_C": 0.5}
     >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
-    >>> tb_ham_1P(tb_model, tb_param_dict, tb_basis_sites_dict)
-    array([[1. , 0.5],
-           [0.5, 1. ]])
+    >>> tb_ham_1P(tb_dims, tb_config, tb_basis, tb_param_dict, tb_basis_sites_dict)
+    array([[1. , 0.5, 0. , 0. ],
+           [0.5, 0. , 0. , 0. ],
+           [0. , 0. , 0. , 0. ],
+           [0. , 0. , 0. , 0. ]])
+
     """
 
     n = tb_dims[0] * tb_dims[1]
@@ -122,14 +131,14 @@ def tb_ham_2P(
 
     Parameters
     ----------
-    tb_model : TBModelType
-        The tight-binding model.
-    tb_param_dict_electron : Dict[str, float]
-        Electron tight-binding parameters.
-    tb_param_dict_hole : Dict[str, float]
-        Hole tight-binding parameters.
-    tb_param_dict_exciton : Dict[str, float]
-        Exciton tight-binding parameters.
+    tb_dims : Tuple[int, int]
+        Dimensions of the tight-binding model grid.
+    tb_config : List[Tuple[str, str, str]]
+        Configuration of tight-binding connections.
+    tb_basis : List[str]
+        List of basis states.
+    tb_params : Dict[str, Dict[str, float]]
+        Dictionary containing electron, hole, and optionally exciton tight-binding parameters.
     tb_basis_sites_dict : Dict[str, str]
         Dictionary mapping the TB basis to the TB sites.
 
@@ -138,18 +147,8 @@ def tb_ham_2P(
     np.ndarray
         The electron-hole tight-binding Hamiltonian matrix.
 
-    Examples
-    --------
-    >>> tb_model = TB_Model("model_name", (2, 2))
-    >>> tb_param_dict_electron = {"E_G": 1.0, "C_GC": 0.5}
-    >>> tb_param_dict_hole = {"E_G": 0.8, "C_GC": 0.4}
-    >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
-    >>> tb_ham_2P(tb_model, tb_param_dict_electron, tb_param_dict_hole, tb_basis_sites_dict)
-    array([[1.5, 0.5, 0.4, 0. ],
-           [0.5, 1. , 0. , 0. ],
-           [0.4, 0. , 1.3, 0.5],
-           [0. , 0. , 0.5, 0.8]])
     """
+
     matrix_electron = tb_ham_1P(
         tb_dims, tb_config, tb_basis, tb_params["electron"], tb_basis_sites_dict
     )
@@ -198,6 +197,7 @@ def add_groundstate(matrix):
     array([[0., 0., 0.],
            [0., 1., 2.],
            [0., 3., 4.]])
+
     """
 
     N = matrix.shape[0]

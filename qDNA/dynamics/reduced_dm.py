@@ -36,9 +36,10 @@ def get_reduced_dm(dm, particle, tb_basis):
     Examples
     --------
     >>> dm = np.eye(4)
-    >>> get_reduced_dm(dm, 'electron', ['(0, 0)', '(1, 0)'])
-    array([[2., 0.],
-           [0., 2.]])
+    >>> tb_basis = ['(0, 0)', '(1, 0)']
+    >>> get_reduced_dm(dm, 'electron', tb_basis)
+    array([[1.+0.j, 0.+0.j],
+           [0.+0.j, 1.+0.j]])
     """
 
     num_sites = len(tb_basis)
@@ -64,17 +65,19 @@ def get_reduced_dm_eigs(eigs, eigenstate_idx, tb_basis, particle):
 
     Parameters
     ----------
-    tb_ham : TBHamType
-        The Hamiltonian object containing the matrix and site basis.
+    eigs : np.ndarray
+        The eigenvectors of the Hamiltonian.
+    eigenstate_idx : int
+        The index of the eigenstate to reduce.
+    tb_basis : List[str]
+        The list of tight-binding site basis states.
     particle : str
         The type of particle ('electron' or 'hole').
-    eigenstate_idx : int
-        The index of the eigenstate.
 
     Returns
     -------
     np.ndarray
-        The reduced density matrix.
+        The reduced density matrix for the specified eigenstate and particle type.
     """
 
     dm = np.outer(eigs[:, eigenstate_idx], eigs[:, eigenstate_idx].conj())

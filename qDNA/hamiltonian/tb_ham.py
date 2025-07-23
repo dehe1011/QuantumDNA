@@ -20,50 +20,61 @@ from .tb_matrices import (
 
 class TBHam(TBModel):
     """
-    A class representing a tight-binding Hamiltonian. This class
-    inherits from :class:`.TBModel` and provides methods for constructing and manipulating the
-    Hamiltonian matrix, as well as calculating various properties such as eigenvalues,
-    eigenvectors, and Fourier components.
+    TBHam class for modeling tight-binding Hamiltonians.
+    This class extends the TBModel to represent tight-binding Hamiltonians for DNA structures.
+    It supports both single-particle (1P) and two-particle (2P) descriptions, includes an
+    option for the DNA relaxed state and can perform a Fourier analysis.
 
     Attributes
     ----------
-    tb_sites : numpy.ndarray
-        Array representing the tight-binding sites for the DNA sequence.
-    tb_sites_flattened : numpy.ndarray
+    tb_sites : np.ndarray
+        Array representing the tight-binding sites.
+    tb_sites_flattened : np.ndarray
         Flattened array of tight-binding sites.
     tb_basis_sites_dict : dict
-        Dictionary mapping tight-binding basis states to corresponding sites.
+        Mapping of tight-binding basis to sites.
     sequence_id : str
-        String representation of the DNA sequence.
+        DNA sequence identifier.
     description : str
-        System description ("1P" or "2P").
-    particles : list of str
-        List of particle types.
-    source : str
-        Source of the tight-binding parameters.
-    unit : str
-        Unit of the tight-binding parameters.
+        Description of the Hamiltonian ("1P" or "2P").
     tb_params : dict
-        Tight-binding parameters for the system.
-    matrix : numpy.ndarray or None
-        Hamiltonian matrix for the system.
+        Tight-binding parameters.
+    matrix : np.ndarray or None
+        Hamiltonian matrix.
     matrix_dim : int or None
         Dimension of the Hamiltonian matrix.
     relaxation : bool
-        Whether relaxation terms are included in the Hamiltonian matrix.
     coulomb_param : float or None
-        Coulomb interaction parameter.
     exchange_param : float or None
-        Exchange interaction parameter.
     nn_cutoff : float or None
-        Nearest-neighbor cutoff distance for interactions.
+    unit : str
+    source : str
+    particles : list
 
-    Notes
-    -----
-    .. note::
+    Methods
+    -------
+    get_tb_params()
+        Loads and converts tight-binding parameters.
+    get_matrix()
+        Computes the Hamiltonian matrix.
+    get_eigensystem()
+        Computes the eigenvalues and eigenvectors of the Hamiltonian matrix.
+    get_fourier(init_state, end_state, quantities)
+        Computes Fourier analysis for transitions between states.
+    get_amplitudes(init_state, end_state)
+        Computes transition amplitudes between states.
+    get_frequencies(init_state, end_state)
+        Computes transition frequencies between states.
+    get_average_pop(init_state, end_state)
+        Computes average population between states.
+    get_backbone_average_pop(init_state)
+        Computes average population for backbone sites.
 
-        - For "2P" description, the Hamiltonian matrix may include interaction and relaxation terms if specified.
-        - For "1P" description, the Hamiltonian matrix is generated for either electrons or holes based on the `particles` attribute.
+    Examples
+    --------
+    >>> tb_sites = [["A", "T", "C"], ["G", "C", "A"]]
+    >>> tb_ham = TBHam(tb_sites, description="1P", particles=["electron"], unit="eV")
+    >>> tb_ham.get_matrix()
 
     """
 
@@ -127,11 +138,12 @@ class TBHam(TBModel):
     # ------------------------------------------------------------------
 
     @property
-    def particles(self):  # pylint: disable=missing-function-docstring
+    def particles(self):
+        """Returns the particles in the Hamiltonian."""
         return self._particles
 
     @particles.setter
-    def particles(self, new_particles):
+    def particles(self, new_particles):  # pylint: disable=missing-function-docstring
         assert isinstance(new_particles, list), "new_particles must be of type list"
         assert all(
             isinstance(new_particle, str) for new_particle in new_particles
@@ -139,11 +151,16 @@ class TBHam(TBModel):
         self._particles = new_particles
 
     @property
-    def coulomb_param(self):  # pylint: disable=missing-function-docstring
+    def coulomb_param(self):
+        """Returns the Coulomb interaction parameter."""
         return self._coulomb_param
 
     @coulomb_param.setter
-    def coulomb_param(self, new_coulomb_param):
+    def coulomb_param(
+        self, new_coulomb_param
+    ):  # pylint: disable=missing-function-docstring
+        """Sets the Coulomb interaction parameter and updates the matrix if changed."""
+
         assert isinstance(
             new_coulomb_param, float
         ), "coulomb_param must be of type float"
@@ -156,11 +173,14 @@ class TBHam(TBModel):
                 self.matrix = self.get_matrix()
 
     @property
-    def exchange_param(self):  # pylint: disable=missing-function-docstring
+    def exchange_param(self):
+        """Returns the Exchange interaction parameter."""
         return self._exchange_param
 
     @exchange_param.setter
-    def exchange_param(self, new_exchange_param):
+    def exchange_param(
+        self, new_exchange_param
+    ):  # pylint: disable=missing-function-docstring
         assert isinstance(
             new_exchange_param, float
         ), "exchange_param must be of type float"
@@ -172,11 +192,12 @@ class TBHam(TBModel):
             self.matrix = self.get_matrix()
 
     @property
-    def relaxation(self):  # pylint: disable=missing-function-docstring
+    def relaxation(self):
+        """Returns whether the DNA relaxed state is included."""
         return self._relaxation
 
     @relaxation.setter
-    def relaxation(self, new_relaxation):
+    def relaxation(self, new_relaxation):  # pylint: disable=missing-function-docstring
         assert isinstance(new_relaxation, bool), "new_relaxation must be of type bool"
         old_relaxation = self._relaxation
         self._relaxation = new_relaxation
@@ -192,11 +213,14 @@ class TBHam(TBModel):
             self.matrix_dim = self.matrix.shape[0]
 
     @property
-    def nn_cutoff(self):  # pylint: disable=missing-function-docstring
+    def nn_cutoff(self):
+        """Returns the nearest neighbor cutoff for interactions."""
         return self._nn_cutoff
 
     @nn_cutoff.setter
-    def nn_cutoff(self, new_nearest_neighbor_cutoff):
+    def nn_cutoff(
+        self, new_nearest_neighbor_cutoff
+    ):  # pylint: disable=missing-function-docstring
         old_nn_cutoff = self._nn_cutoff
         self._nn_cutoff = new_nearest_neighbor_cutoff
 
@@ -205,11 +229,12 @@ class TBHam(TBModel):
             self.matrix = self.get_matrix()
 
     @property
-    def unit(self):  # pylint: disable=missing-function-docstring
+    def unit(self):
+        """Returns the unit of the Hamiltonian."""
         return self._unit
 
     @unit.setter
-    def unit(self, new_unit):
+    def unit(self, new_unit):  # pylint: disable=missing-function-docstring
         units = OPTIONS["units"]
         assert isinstance(new_unit, str), "new_unit must be of type str"
         assert new_unit in units, f"new_unit must be in {units}"
@@ -222,11 +247,12 @@ class TBHam(TBModel):
             self.tb_params = self.get_tb_params()
 
     @property
-    def source(self):  # pylint: disable=missing-function-docstring
+    def source(self):
+        """Returns the source of the tight-binding parameters."""
         return self._source
 
     @source.setter
-    def source(self, new_source):
+    def source(self, new_source):  # pylint: disable=missing-function-docstring
         sources = OPTIONS["sources"]
         assert isinstance(new_source, str), "new_source must be of type str"
         assert new_source in sources, f"new_source must be in {sources}"
@@ -241,23 +267,6 @@ class TBHam(TBModel):
     # ------------------------------------------------------------------
 
     def get_tb_params(self):
-        """Retrieves the tight-binding parameters for the selected particle. This method
-        loads the tight-binding parameters from the specified source and model name. If
-        the unit of the loaded parameters does not match the expected unit, it converts
-        the parameters to the expected unit.
-
-        Parameters
-        ----------
-        particle : str
-            The particle for which to retrieve the tight-binding parameters.
-
-        Returns
-        -------
-        tuple
-            tb_params : dict
-                The tight-binding parameters.
-        """
-
         tb_params, metadata = load_tb_params(
             self.source, self.tb_model_name, load_metadata=True
         )
@@ -270,25 +279,6 @@ class TBHam(TBModel):
         return tb_params
 
     def get_matrix(self):
-        """Generate the tight-binding Hamiltonian matrix.
-
-        Returns
-        -------
-        matrix : numpy.ndarray
-            The Hamiltonian matrix for the system.
-
-        Notes
-        -----
-        .. note::
-
-            - For a "2P" description, the Hamiltonian matrix is generated using `tb_ham_2P` and may include interaction and relaxation terms if specified.
-            - For a "1P" description, the Hamiltonian matrix is generated using `tb_ham_1P` for either electrons or holes based on the `particles` attribute.
-
-        Raises
-        ------
-        ValueError
-            If the `description` attribute is not "2P" or "1P".
-        """
 
         # Don't include this because the matrix cannot be overwritten
         # if self.matrix is not None:
@@ -341,19 +331,6 @@ class TBHam(TBModel):
         return self.matrix
 
     def get_eigensystem(self):
-        """Compute the eigenvalues and eigenvectors of the matrix. This method computes
-        the eigenvalues and eigenvectors of the matrix associated with the instance. If
-        the description is "2P" and relaxation is enabled, the ground state is deleted
-        from the matrix before computing the eigensystem.
-
-        Returns
-        -------
-        tuple
-            eigenvalues : ndarray
-                The eigenvalues of the matrix.
-            eigenvectors : ndarray
-                The eigenvectors of the matrix.
-        """
 
         # Compute the matrix if it has not been computed yet
         if self.matrix is None:
@@ -434,33 +411,6 @@ class TBHam(TBModel):
 
     # pylint: disable=inconsistent-return-statements
     def get_fourier(self, init_state, end_state, quantities):
-        """Calculate the Fourier components of the transition between initial and end
-        states.
-
-        Parameters
-        ----------
-        init_state : str
-            The initial state from which the transition starts.
-        end_state : str
-            The end state to which the transition occurs.
-        quantities : list of str
-            List of quantities to calculate. Possible values are "amplitude", "frequency", and "average_pop".
-
-        Returns
-        -------
-        amplitudes_dict : dict
-            Dictionary containing the amplitudes for each particle.
-        frequencies_dict : dict
-            Dictionary containing the frequencies for each particle.
-        average_pop_dict : dict
-            Dictionary containing the average population for each particle.
-
-        Raises
-        ------
-        AssertionError
-            If `end_state` is not in `self.tb_basis`.
-            If `init_state` is not in `self.eh_basis` or `self.tb_basis` depending on the description.
-        """
 
         if quantities == "all":
             quantities = ["amplitude", "frequency", "average_pop"]
@@ -490,25 +440,6 @@ class TBHam(TBModel):
         return self.get_fourier(init_state, end_state, ["average_pop"])[2]
 
     def get_backbone_average_pop(self, init_state):
-        """Calculate the population of particles on the backbone sites of a Fishbone
-        model.
-
-        Parameters
-        ----------
-        init_state : str
-            The initial state of the system.
-
-        Returns
-        -------
-        dict
-            A dictionary where keys are particle identifiers and values are the population
-            of each particle on the backbone sites.
-
-        Raises
-        ------
-        AssertionError
-            If the model is not a Fishbone model.
-        """
 
         assert (
             self.backbone

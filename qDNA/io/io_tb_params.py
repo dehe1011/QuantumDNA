@@ -15,6 +15,31 @@ def save_tb_params(
     notes=None,
     override=False,
 ):
+    """
+    Save tight-binding parameters to a JSON file and update metadata.
+
+    Parameters
+    ----------
+    tb_params : dict
+        Dictionary containing tight-binding parameters.
+    source : str
+        Identifier for the source of the parameters.
+    tb_model_name : str
+        Name of the tight-binding model.
+    directory : str, optional
+        Directory to save the JSON file. Defaults to a subdirectory in `DATA_DIR`.
+    unit : str, optional
+        Unit of the parameters. Defaults to "meV".
+    notes : str, optional
+        Additional notes about the parameters. Defaults to "No notes provided."
+    override : bool, optional
+        Whether to override the file if it already exists. Defaults to False.
+
+    Returns
+    -------
+    None
+
+    """
 
     if directory is None:
         directory = os.path.join(DATA_DIR, "tb_params")
@@ -40,6 +65,29 @@ def load_tb_params(
     directory=None,
     load_metadata=False,
 ):
+    """
+    Load tight-binding parameters from a JSON file.
+
+    Parameters
+    ----------
+    source : str
+        The source identifier for the parameters.
+    tb_model_name : str
+        The name of the tight-binding model.
+    directory : str, optional
+        The directory containing the parameter files. Defaults to a subdirectory
+        within `DATA_DIR` named "tb_params".
+    load_metadata : bool, optional
+        If True, returns both data and metadata. Defaults to False.
+
+    Returns
+    -------
+    dict or tuple
+        If `load_metadata` is False, returns the parameter data as a dictionary.
+        If `load_metadata` is True, returns a tuple containing the data dictionary
+        and metadata dictionary.
+
+    """
 
     if directory is None:
         directory = os.path.join(DATA_DIR, "tb_params")
@@ -56,7 +104,24 @@ def delete_tb_params(
     tb_model_name,
     directory=None,
 ):
-    """Deletes the tight-binding parameters file."""
+    """
+    Deletes a tight-binding parameter file.
+
+    Parameters
+    ----------
+    source : str
+        The source identifier for the parameter file.
+    tb_model_name : str
+        The name of the tight-binding model.
+    directory : str, optional
+        The directory containing the parameter files. Defaults to
+        a subdirectory 'tb_params' within DATA_DIR.
+
+    Returns
+    -------
+    bool
+        True if the file was successfully deleted, False otherwise.
+    """
 
     if directory is None:
         directory = os.path.join(DATA_DIR, "tb_params")

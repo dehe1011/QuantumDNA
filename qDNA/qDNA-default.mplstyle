@@ -7,7 +7,6 @@
 # Once saved, it becomes globally accessible and can be applied using
 # `import matplotlib.pyplot as plt; plt.style.use('qDNA-default')`.
 
-
 # LaTeX rendering
 # ---------------
 # Note: Latex must be installed locally
@@ -46,6 +45,8 @@ figure.constrained_layout.use: True
 # ------------------------
 axes.titlesize: large  # Font size for title
 axes.labelsize: medium  # Font size for axis labels
+axes.spines.top: False
+axes.spines.right: False
 legend.fontsize: small  # Font size for legend
 xtick.labelsize: small  # Font size for x-tick labels
 ytick.labelsize: small  # Font size for y-tick labels
@@ -59,11 +60,10 @@ lines.markersize: 8.0  # Default marker size
 
 # Grid and layout
 # ---------------
-axes.grid: True  # Always show grid
+axes.grid: False  # Always show grid
 grid.linestyle: --  # Grid line style
 # grid.color: lightgray
 grid.alpha: 0.7  # Grid transparency
-
 
 # Colors
 # ------

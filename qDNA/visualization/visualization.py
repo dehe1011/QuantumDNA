@@ -33,6 +33,43 @@ COLORS_DNA_BASES, COLORS_PARTICLES = _get_colors()
 
 
 class Visualization(Evaluation):
+    """
+    Visualization class for plotting and analyzing quantum DNA data.
+    This class extends the Evaluation class and provides various methods for visualizing
+    quantum DNA data, including heatmaps, population plots, coherence plots, eigenstate
+    distributions, Fourier analysis, and cumulative average population plots.
+
+    Attributes
+    ----------
+    tb_sites : list
+        List of tight-binding sites.
+    kwargs : dict
+        Additional keyword arguments passed to the Evaluation class.
+
+    Methods
+    -------
+    plot_heatmap(heatmap_type="seaborn", fig=None, ax=None, dpi=None, **plot_kwargs)
+        Plot heatmaps for particle populations using seaborn or matplotlib.
+    plot_pop(tb_site, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs)
+        Plot population dynamics for a specific tight-binding site.
+    plot_pops(fig=None, ax=None, dpi=None, **plot_kwargs)
+        Plot population dynamics for all tight-binding sites.
+    plot_pop_fourier(init_state, end_state, times, t_unit, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs)
+        Plot population dynamics using Fourier analysis.
+    plot_coh(fig=None, ax=None, dpi=None, **plot_kwargs)
+        Plot coherence dynamics for particles.
+    plot_test_fourier(tb_site, fig=None, ax=None, dpi=None, **plot_kwargs)
+        Test Fourier analysis by comparing population dynamics and Fourier results.
+    plot_eigv(energy_unit="eV", fig=None, ax=None, dpi=None, color=None)
+        Plot eigenvalues of the system.
+    plot_eigs(eigenstate_idx, fig=None, ax=None, dpi=None)
+        Plot eigenstate distributions for a given eigenstate index.
+    plot_fourier(init_state, end_state, x_axis, fig=None, ax=None, dpi=None)
+        Plot Fourier amplitudes and frequencies or periods.
+    plot_average_pop(J_list, J_unit="100meV", fig=None, ax=None, dpi=None, **plot_kwargs)
+        Plot cumulative average population for varying Coulomb parameters.
+    """
+
     def __init__(self, tb_sites, **kwargs):
 
         self.kwargs = kwargs
@@ -42,34 +79,14 @@ class Visualization(Evaluation):
     # ----------------------------------------------------------------------
 
     def plot_heatmap(
-        self, heatmap_type="seaborn", fig=None, ax=None, dpi=None, **plot_kwargs
+        self,
+        heatmap_type="seaborn",
+        fig=None,
+        ax=None,
+        dpi=None,
+        vmax_list=None,
+        **plot_kwargs,
     ):
-        """
-        Plots a heatmap of populations for each particle in the system.
-
-        Parameters
-        ----------
-        me_solver : object
-            An instance of a solver that contains the time evolution data and Hamiltonian information.
-        vmax_list : list of float, optional
-            A list of maximum values for the color scale of each particle's heatmap. Default is [1, 1, 1].
-        heatmap_type : str, optional
-            The type of heatmap to plot. Options are "seaborn" or "matplotlib". Default is "seaborn".
-
-        Returns
-        -------
-        fig : matplotlib.figure.Figure
-            The figure object containing the heatmaps.
-        ax : numpy.ndarray of matplotlib.axes._subplots.AxesSubplot
-            An array of axes objects for each particle's heatmap.
-
-        Notes
-        -----
-        .. note::
-
-            - The function uses seaborn or matplotlib to generate heatmaps.
-            - The color maps used are "Blues", "Reds", and "Greens" for different particles.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -115,9 +132,13 @@ class Visualization(Evaluation):
                         if key.startswith(particle)
                     ]
                 )
-                vmax = 1
-                if particle == "exciton":
-                    vmax = np.max(particle_pop)
+
+                if vmax_list is not None:
+                    vmax = vmax_list[i + j]
+                else:
+                    vmax = 1
+                    if particle == "exciton":
+                        vmax = np.max(particle_pop)
 
                 # seaborn heatmap (looks prettier in my opinion)
                 if heatmap_type == "seaborn":
@@ -164,22 +185,12 @@ class Visualization(Evaluation):
     def plot_pop(
         self, tb_site, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs
     ):
-        """Plots population of one base.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_site : str
-            The tight-binding site.
-        me_solver : ME_Solver
-            The master equation solver instance.
-        add_legend : bool, optional
-            Whether to add a legend, by default True.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
+            change_plot_kwargs = True
+        else:
+            change_plot_kwargs = False
 
         if fig is None:
             fig, ax = plt.subplots(dpi=dpi)
@@ -188,9 +199,9 @@ class Visualization(Evaluation):
 
         # plotting
         for particle in self.particles:
-
-            plot_kwargs["color"] = COLORS_PARTICLES[particle]
-            plot_kwargs["label"] = particle
+            if change_plot_kwargs:
+                plot_kwargs["color"] = COLORS_PARTICLES[particle]
+                plot_kwargs["label"] = particle
 
             ax.plot(
                 self.times,
@@ -226,18 +237,6 @@ class Visualization(Evaluation):
         return fig, ax
 
     def plot_pops(self, fig=None, ax=None, dpi=None, **plot_kwargs):
-        """Plots populations of all bases.
-
-        Parameters
-        ----------
-        me_solver : ME_Solver
-            The master equation solver instance.
-
-        Returns
-        -------
-        tuple
-            A tuple containing the figure and axes.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -298,23 +297,6 @@ class Visualization(Evaluation):
         add_legend=True,
         **plot_kwargs,
     ):
-        """Plots population using the Fourier decomposition.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        init_state : str
-            The initial state.
-        end_state : str
-            The end state.
-        times : list of float
-            The time points for plotting.
-        t_unit : str
-            The unit of time.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -354,17 +336,7 @@ class Visualization(Evaluation):
             ax.legend(self.particles)
         return fig, ax
 
-    def plot_coh(self, fig=None, ax=None, dpi=None, **plot_kwargs):
-        """Plots a measure of coherence as the sum of absolute values of the off- diagonal
-        elements.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        me_solver : ME_Solver
-            The master equation solver instance.
-        """
+    def plot_coh(self, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs):
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -390,24 +362,13 @@ class Visualization(Evaluation):
             )
 
         # plot settings
-        ax.set_ylabel("Coherence")
-        ax.set_xlabel("Time [" + self.t_unit + "]")
-        ax.legend()
+        if add_legend:
+            ax.set_ylabel("Coherence")
+            ax.set_xlabel("Time [" + self.t_unit + "]")
+            ax.legend()
         return fig, ax
 
     def plot_test_fourier(self, tb_site, fig=None, ax=None, dpi=None, **plot_kwargs):
-        """Plots a comparison of the result obtained by Fourier decomposition and the result
-        obtained solving the Schrödinger equation with the qutip mesolver.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_site : str
-            The tight-binding site.
-        me_solver : ME_Solver
-            The master equation solver instance.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -431,17 +392,6 @@ class Visualization(Evaluation):
     # ----------------------------------------------------------------------
 
     def plot_eigv(self, energy_unit="eV", fig=None, ax=None, dpi=None, color=None):
-        """Plots the eigenenergies.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        energy_unit : str, optional
-            The unit of energy to plot, by default '100meV'.
-        """
 
         if fig is None:
             fig, ax = plt.subplots(figsize=(3.4, 3.4), dpi=dpi)
@@ -467,17 +417,6 @@ class Visualization(Evaluation):
         return fig, ax
 
     def plot_eigs(self, eigenstate_idx, fig=None, ax=None, dpi=None):
-        """Plots the distribution of eigenstates over tight-binding sites.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        eigenstate_idx : int
-            The index of the eigenstate to plot.
-        """
 
         if fig is None:
             fig, ax = plt.subplots(dpi=dpi)
@@ -513,21 +452,6 @@ class Visualization(Evaluation):
         return fig, ax
 
     def plot_fourier(self, init_state, end_state, x_axis, fig=None, ax=None, dpi=None):
-        """Plots the Fourier transform of the transition amplitudes.
-
-        Parameters
-        ----------
-        ax : matplotlib.axes.Axes
-            The axes to plot on.
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        init_state : Any
-            The initial state.
-        end_state : Any
-            The end state.
-        x_axis : str
-            The x-axis type ('frequency' or 'period').
-        """
 
         if fig is None:
             fig, ax = plt.subplots(dpi=dpi)
@@ -587,21 +511,7 @@ class Visualization(Evaluation):
 
     # ----------------------------------------------------------------------
 
-    def get_cumulative_average_pop(self, J_list, J_unit):
-        """Computes the cumulative average population.
-
-        Parameters
-        ----------
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        J_list : list
-            List of interaction parameters.
-
-        Returns
-        -------
-        numpy.ndarray
-            Cumulative average population.
-        """
+    def _get_cumulative_average_pop(self, J_list, J_unit):
 
         # pop_list contains the average population for each particle, J, and tb_site
         pop_list = np.zeros((len(self.particles), len(J_list), self.num_sites))
@@ -633,19 +543,6 @@ class Visualization(Evaluation):
     def plot_average_pop(
         self, J_list, J_unit="100meV", fig=None, ax=None, dpi=None, **plot_kwargs
     ):
-        """Plots the average population for each interaction parameter.
-
-        Parameters
-        ----------
-        ax : list of matplotlib.axes.Axes
-            The axes to plot on.
-        tb_ham : TB_Ham
-            The tight-binding Hamiltonian.
-        J_list : list
-            List of interaction parameters.
-        J_unit : str
-            The unit of the interaction parameters.
-        """
 
         if plot_kwargs is None:
             plot_kwargs = {}
@@ -677,7 +574,7 @@ class Visualization(Evaluation):
         # ---
 
         dna_seq = self.tb_sites_flattened
-        cumulative_average_pop = self.get_cumulative_average_pop(J_list, J_unit)
+        cumulative_average_pop = self._get_cumulative_average_pop(J_list, J_unit)
 
         for i in range(x_num):
             for j in range(y_num):

@@ -11,7 +11,86 @@ from .component import Component
 
 
 class Monomer:
-    """Coordinates are given in A (not in nm)."""
+    """
+    Monomer class representing a molecular system composed of multiple components.
+    This class calculates various properties of the molecular system, including
+    the LCAO Hamiltonian, molecular orbitals (HOMO and LUMO), center of mass,
+    transition dipole moment, and orbital types.
+
+    Attributes
+    ----------
+    filepaths : list of str
+        List of file paths for the components of the monomer.
+    kwargs : dict
+        Keyword arguments for LCAO parameter configuration.
+    param_id : str
+        Identifier for the LCAO parameter set.
+    lcao_param : dict
+        Loaded LCAO parameters.
+    atom_masses : dict
+        Atomic masses for supported elements.
+    num_components : int
+        Number of components in the monomer.
+    components : list of Component
+        List of Component objects representing the monomer's parts.
+    xyz_id : list
+        List of XYZ identifiers for the components.
+    atoms : list
+        List of atoms in the monomer.
+    atoms_coordinates : list
+        List of atomic coordinates.
+    atoms_id : list
+        List of atom identifiers.
+    num_atoms : int
+        Total number of atoms in the monomer.
+    orbitals : list
+        List of orbitals in the monomer.
+    orbitals_coordinates : list
+        List of orbital coordinates.
+    num_orbitals : int
+        Total number of orbitals in the monomer.
+    num_electrons : int
+        Total number of electrons in the monomer.
+    H : ndarray
+        LCAO Hamiltonian matrix.
+    eigv : ndarray
+        Eigenvalues of the Hamiltonian matrix.
+    eigs : ndarray
+        Eigenvectors of the Hamiltonian matrix.
+    HOMO_idx : int
+        Index of the HOMO orbital.
+    E_HOMO : float
+        Energy of the HOMO orbital.
+    HOMO : ndarray
+        Molecular orbital corresponding to HOMO.
+    LUMO_idx : int
+        Index of the LUMO orbital.
+    E_LUMO : float
+        Energy of the LUMO orbital.
+    LUMO : ndarray
+        Molecular orbital corresponding to LUMO.
+    center_of_mass : ndarray
+        Center of mass of the monomer.
+    rel_orbitals_coordinates : ndarray
+        Orbital coordinates relative to the center of mass.
+    dipole_moment : ndarray
+        Transition dipole moment.
+
+    Methods
+    -------
+    calc_H()
+        Calculates the LCAO Hamiltonian matrix for the molecule.
+    build_block_matrix(D, U, L)
+        Constructs a block matrix from diagonal, upper, and lower matrices.
+    get_MO_type(MO)
+        Determines the type of molecular orbital (sigma, pi, or non-bonding).
+
+    Notes
+    -----
+    .. note::
+        The coordinates are given in Angstroms (Å), not in nanometers (nm).
+
+    """
 
     def __init__(self, filepaths, **kwargs):
 
@@ -114,7 +193,7 @@ class Monomer:
 
     # ----------------------------------------
 
-    def build_block_matrix(self, D, U, L):
+    def _build_block_matrix(self, D, U, L):
         n = len(D)
 
         full_matrix = []
@@ -152,7 +231,7 @@ class Monomer:
             H_intra = calc_H_intra(self.lcao_param, comp)
             D.append(H_intra)
 
-        return self.build_block_matrix(D, U, L)
+        return self._build_block_matrix(D, U, L)
 
     def get_MO_type(self, MO):
         """Returns the nature of the molecular orbitals: sigma, pi, n (non-bonding)."""

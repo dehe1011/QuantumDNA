@@ -11,7 +11,9 @@ from .helpers import get_non_overwriting_path
 
 
 def load_mpl_style(filepath=None):
-    """Copy the mplstyle file to matplotlib's stylelib directory and reload."""
+    """
+    Load and apply a custom Matplotlib style file to the style library.
+    """
 
     config_dir = mpl.get_configdir()
     stylelib_dir = os.path.join(config_dir, "stylelib")
@@ -23,17 +25,27 @@ def load_mpl_style(filepath=None):
 
 
 def save_figure(fig, filepath):
+    """
+    Save a matplotlib figure to the specified filepath without overwriting existing files.
+    """
+
     filepath = get_non_overwriting_path(filepath)
     fig.savefig(filepath, transparent=True, pad_inches=0)
 
 
 def load_color_palette(color_palette_id):
+    """
+    Load a color palette from a JSON file based on the given palette ID.
+    """
+
     filepath = os.path.join(DATA_DIR, "color_palettes", f"{color_palette_id}.json")
     return load_json(filepath)
 
 
 def plot_color_palette(color_palette):
-    """Plot a color palette from the data directory."""
+    """
+    Visualizes a color palette as a horizontal bar of colors.
+    """
 
     colors = color_palette
     n_colors = len(colors)

@@ -32,7 +32,7 @@ Below is a list of available tutorials. Click on each to access the detailed not
    PRE_2024 <tutorials/PRE_2024>
 
 Descriptions
-------------
+============
 
 **Tight Binding Parameters**
   Learn the Linear Combination of Atomic Orbitals (LCAO) approach using Slater–Koster two-center
