@@ -20,9 +20,6 @@ docs/_templates/
 __pycache__
 .pytest_cache/
 
-# created for pylint
-.pylintrc
-
 # created by coverage
 .coverage
 htmlcov/
