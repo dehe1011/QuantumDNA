@@ -27,7 +27,7 @@ jobs:
     - name: Run lint with pylint
       continue-on-error: true
       run: |
-        pylint --rcfile=.pylintrc $(git ls-files '*.py')
+        pylint --rcfile=.pylintrc $(git ls-files 'qDNA/*.py')
 
     - name: Run black
       continue-on-error: true

@@ -8,6 +8,7 @@ extension-pkg-whitelist=
 disable=
     C0114,  # missing-module-docstring
     C0116,  # missing-function-docstring
+    C0301,  # line-too-long
     R0903,  # too-few-public-methods
     R0801,  # duplicate-code
     W0511,  # fixme
