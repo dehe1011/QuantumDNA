@@ -30,7 +30,7 @@ htmlcov/
 # created by build (python -m build) or setuptools (python setup.py sdist bdist_wheel)
 dist/
 build/
-.egg-info/
+*.egg-info/
 
 # created by Jupyter Notebooks
 __pycache__
