@@ -98,9 +98,7 @@ class FastaWindow(ctk.CTkToplevel):
             text="Calculate Exciton Population",
             variable=self.exciton_transfer_var,
         )
-        self.exciton_transfer_checkbox.grid(
-            row=3, column=1, padx=10, pady=10, sticky="w"
-        )
+        self.exciton_transfer_checkbox.grid(row=3, column=1, padx=10, pady=10, sticky="w")
 
         # --------------------------------------------------------------
 
@@ -113,12 +111,8 @@ class FastaWindow(ctk.CTkToplevel):
         )
 
         # submit button
-        self.submit_button = ctk.CTkButton(
-            self, text="Submit", command=self.process_files
-        )
-        self.submit_button.grid(
-            row=5, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
-        )
+        self.submit_button = ctk.CTkButton(self, text="Submit", command=self.process_files)
+        self.submit_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
         # console frame
         self.scrollable_console_frame = ScrollableConsoleFrame(self)
@@ -183,10 +177,7 @@ class FastaWindow(ctk.CTkToplevel):
         for upper_strand in self.upper_strands:
             comp_time += comp_time_dict[self.tb_model_name][len(upper_strand) - 2]
         comp_time /= min(self.num_cpu, len(self.upper_strands))
-        print(
-            f"Estimated Computation Time {comp_time}"
-            + f"\nUsing {self.num_cpu} kernels"
-        )
+        print(f"Estimated Computation Time {comp_time}" + f"\nUsing {self.num_cpu} kernels")
 
     # ------------------------------------------------------------------
 
@@ -213,9 +204,7 @@ class FastaWindow(ctk.CTkToplevel):
             tb_sites = get_tb_sites(upper_strand, tb_model_name=self.tb_model_name)
             tb_sites_list.append(tb_sites)
 
-        evaluation_list = [
-            Evaluation(tb_sites, **self.kwargs) for tb_sites in tb_sites_list
-        ]
+        evaluation_list = [Evaluation(tb_sites, **self.kwargs) for tb_sites in tb_sites_list]
         parallel = EvaluationParallel(evaluation_list, observables=observables)
         results = parallel.calc_results(
             filepath=os.path.join(DATA_DIR, "gui", "result.json"), save=True

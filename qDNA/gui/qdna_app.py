@@ -65,9 +65,7 @@ class QDNApp(ctk.CTk):
 
         # middle frames
         self.options_frame = OptionsFrame(self)
-        self.options_frame.grid(
-            row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew"
-        )
+        self.options_frame.grid(row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nsew")
 
         # --------------------------------------------------------------
 
@@ -140,9 +138,7 @@ class QDNApp(ctk.CTk):
 
     def get_options_kwargs(self):
         # get the values from the options_frame
-        self.tb_ham_kwargs = (
-            self.options_frame.options_tab.tb_ham_frame.get_tb_ham_kwargs()
-        )
+        self.tb_ham_kwargs = self.options_frame.options_tab.tb_ham_frame.get_tb_ham_kwargs()
         self.lind_diss_kwargs = (
             self.options_frame.options_tab.lind_diss_frame.get_lind_diss_kwargs()
         )
@@ -158,15 +154,9 @@ class QDNApp(ctk.CTk):
 
     def get_plot_kwargs(self):
         # get the values from the plot_options_frame
-        self.plot_option = {
-            "plot_option": self.plot_options_frame.plot_options_tab.get()
-        }
-        self.pop_kwargs = (
-            self.plot_options_frame.plot_options_tab.pop_frame.get_pop_kwargs()
-        )
-        self.coh_kwargs = (
-            self.plot_options_frame.plot_options_tab.coh_frame.get_coh_kwargs()
-        )
+        self.plot_option = {"plot_option": self.plot_options_frame.plot_options_tab.get()}
+        self.pop_kwargs = self.plot_options_frame.plot_options_tab.pop_frame.get_pop_kwargs()
+        self.coh_kwargs = self.plot_options_frame.plot_options_tab.coh_frame.get_coh_kwargs()
         self.spectrum_kwargs = (
             self.plot_options_frame.plot_options_tab.spectrum_frame.get_spectrum_kwargs()
         )
@@ -264,56 +254,33 @@ class QDNApp(ctk.CTk):
     # ----------------------------------------------------------------------
 
     def _calc_lifetime(self):
-        assert (
-            self.kwargs["description"] == "2P"
-        ), "2P description is required for the calculation."
-        assert (
-            self.kwargs["relaxation"] == True
-        ), "Groundstate is required for the calculation."
+        assert self.kwargs["description"] == "2P", "2P description is required for the calculation."
+        assert self.kwargs["relaxation"] == True, "Groundstate is required for the calculation."
 
         lifetime = self.eva.calc_lifetime()
         if isinstance(lifetime, str):
             print(f"Exciton Lifetime: {lifetime}" "\n-------------------------------")
         else:
-            print(
-                f"Exciton Lifetime: {lifetime} fs" "\n-------------------------------"
-            )
+            print(f"Exciton Lifetime: {lifetime} fs" "\n-------------------------------")
 
     def _calc_charge_separation(self):
-        assert (
-            self.kwargs["description"] == "2P"
-        ), "2P description is required for the calculation."
-        assert (
-            self.kwargs["relaxation"] == True
-        ), "Groundstate is required for the calculation."
+        assert self.kwargs["description"] == "2P", "2P description is required for the calculation."
+        assert self.kwargs["relaxation"] == True, "Groundstate is required for the calculation."
 
         charge_separation = self.eva.calc_charge_separation()
-        print(
-            f"Charge Separation: {charge_separation} A"
-            "\n-------------------------------"
-        )
+        print(f"Charge Separation: {charge_separation} A" "\n-------------------------------")
 
     def _calc_dipole_moment(self):
-        assert (
-            self.kwargs["description"] == "2P"
-        ), "2P description is required for the calculation."
-        assert (
-            self.kwargs["relaxation"] == True
-        ), "Groundstate is required for the calculation."
+        assert self.kwargs["description"] == "2P", "2P description is required for the calculation."
+        assert self.kwargs["relaxation"] == True, "Groundstate is required for the calculation."
 
         dipole_moment = self.eva.calc_dipole_moment()
         print(f"Dipole Moment: {dipole_moment} D" "\n-------------------------------")
 
     def _calc_exciton_transfer(self):
-        assert (
-            self.kwargs["description"] == "2P"
-        ), "2P description is required for the calculation."
-        assert (
-            self.kwargs["relaxation"] == True
-        ), "Groundstate is required for the calculation."
-        assert (
-            "exciton" in self.kwargs["particles"]
-        ), "Exciton must be selected in particles."
+        assert self.kwargs["description"] == "2P", "2P description is required for the calculation."
+        assert self.kwargs["relaxation"] == True, "Groundstate is required for the calculation."
+        assert "exciton" in self.kwargs["particles"], "Exciton must be selected in particles."
 
         avg_pop_upper, avg_pop_lower = self.eva.calc_exciton_transfer().values()
         avg_pop_upper, avg_pop_lower = (

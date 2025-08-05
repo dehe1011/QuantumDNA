@@ -20,9 +20,7 @@ def convert_pdb_to_xyz(filepath_pdb):
 def calc_tb_params(directories, tb_model, double_stranded=True):
     HOMO_dict, LUMO_dict = {}, {}
     for directory in directories:
-        oligomer = Oligomer(
-            directory + ".pdb", tb_model_name=tb_model, auto_clean=False
-        )
+        oligomer = Oligomer(directory + ".pdb", tb_model_name=tb_model, auto_clean=False)
         tb_params = oligomer.calc_tb_params()
         HOMO_dict_new, LUMO_dict_new = tb_params["hole"], tb_params["electron"]
         HOMO_dict.update(HOMO_dict_new)
@@ -30,9 +28,7 @@ def calc_tb_params(directories, tb_model, double_stranded=True):
     return HOMO_dict, LUMO_dict
 
 
-def wrap_save_tb_params(
-    tb_params, source, particle, tb_model_name, unit=None, notes=None
-):
+def wrap_save_tb_params(tb_params, source, particle, tb_model_name, unit=None, notes=None):
     unit = "eV"
     tb_params = {particle: tb_params}
     directory = os.path.join(DATA_DIR, "tb_params")
@@ -54,9 +50,7 @@ def wrap_save_tb_params(
 
 
 class DNA_Seq:
-    def __init__(
-        self, upper_strand, tb_model_name, methylated=True, lower_strand="auto_complete"
-    ):
+    def __init__(self, upper_strand, tb_model_name, methylated=True, lower_strand="auto_complete"):
         if lower_strand == "auto_complete":
             lower_strand = "auto complete"
         self.tb_sites = get_tb_sites(

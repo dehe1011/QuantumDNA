@@ -56,9 +56,7 @@ class CohFrame(ctk.CTkFrame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
 
-        self.explain_label = ctk.CTkLabel(
-            self, text="Calculate the coherence of the DNA sequence."
-        )
+        self.explain_label = ctk.CTkLabel(self, text="Calculate the coherence of the DNA sequence.")
         self.explain_label.grid(row=0, column=0, padx=10, pady=10)
 
     def get_coh_kwargs(self):
@@ -87,16 +85,12 @@ class SpectrumFrame(ctk.CTkFrame):
 
         # eigenenergies checkbox
         self.eigv_var = ctk.BooleanVar(value=False)
-        self.eigv_check = ctk.CTkCheckBox(
-            self, text="Eigenenergies", variable=self.eigv_var
-        )
+        self.eigv_check = ctk.CTkCheckBox(self, text="Eigenenergies", variable=self.eigv_var)
         self.eigv_check.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
         # eigenstates checkbox
         self.eigs_var = ctk.BooleanVar(value=False)
-        self.eigs_check = ctk.CTkCheckBox(
-            self, text="Eigenstates", variable=self.eigs_var
-        )
+        self.eigs_check = ctk.CTkCheckBox(self, text="Eigenstates", variable=self.eigs_var)
         self.eigs_check.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
         # tb site label and combo box
@@ -208,25 +202,19 @@ class ExcitonFrame(ctk.CTkFrame):
             text="Calculate Exciton Lifetime",
             command=self.controller._calc_lifetime,
         )
-        self.lifetime_button.grid(
-            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
-        )
+        self.lifetime_button.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
         self.dipole_button = ctk.CTkButton(
             self,
             text="Calculate Charge Separation",
             command=self.controller._calc_charge_separation,
         )
-        self.dipole_button.grid(
-            row=1, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
-        )
+        self.dipole_button.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
         self.dipole_moment_button = ctk.CTkButton(
             self,
             text="Calculate Dipole Moment",
             command=self.controller._calc_dipole_moment,
         )
-        self.dipole_moment_button.grid(
-            row=2, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
-        )
+        self.dipole_moment_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
         self.exciton_transfer_button = ctk.CTkButton(
             self,
             text="Calculate Exciton Population",
@@ -278,17 +266,13 @@ class PlotOptionsFrame(ctk.CTkFrame):
         super().__init__(master)
         controller = master
 
-        self.label = ctk.CTkLabel(
-            self, text="Plotting", font=ctk.CTkFont(size=20, weight="bold")
-        )
+        self.label = ctk.CTkLabel(self, text="Plotting", font=ctk.CTkFont(size=20, weight="bold"))
         self.label.grid(row=0, column=0, columnspan=2, pady=10, padx=10)
 
         self.plot_options_tab = PlotOptionsTab(self, controller)
         self.plot_options_tab.grid(row=1, column=0, columnspan=2, pady=10, padx=10)
 
-        self.back_button = ctk.CTkButton(
-            self, text="Back", command=master.enable_options_frame
-        )
+        self.back_button = ctk.CTkButton(self, text="Back", command=master.enable_options_frame)
         self.back_button.grid(row=2, column=0, pady=10, padx=10)
 
         self.submit_button = ctk.CTkButton(self, text="Submit", command=master.submit)

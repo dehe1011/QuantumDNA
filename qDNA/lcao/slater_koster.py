@@ -107,9 +107,7 @@ def _get_overlap(lcao_param, vector, orbital_types):
     return overlap
 
 
-def calc_orbital_interaction(
-    lcao_param, orbitals, orbitals_coordinates, connection_type
-):
+def calc_orbital_interaction(lcao_param, orbitals, orbitals_coordinates, connection_type):
     """
     Calculate the interaction between two orbitals based on LCAO parameters.
 

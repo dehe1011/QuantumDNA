@@ -78,9 +78,7 @@ class Evaluation(MeSolver):
         start_time = time.time()
         gs_pop = self.get_groundstate_pop()["groundstate"]
         try:
-            _, index = next(
-                (val, i) for i, val in enumerate(gs_pop) if val >= 1 - 1 / np.e
-            )
+            _, index = next((val, i) for i, val in enumerate(gs_pop) if val >= 1 - 1 / np.e)
             self.lifetime = self.times[index]
             if self.t_unit == "ps":
                 self.lifetime *= 1000
@@ -136,9 +134,7 @@ class Evaluation(MeSolver):
 
         # Calculate the electron-hole distance
         distance_list = 3.4 * get_eh_distance(self.eh_basis)
-        self.charge_separation = [
-            distance_list @ dm.diag()[1:] for dm in self.get_result()
-        ]
+        self.charge_separation = [distance_list @ dm.diag()[1:] for dm in self.get_result()]
         if average:
             self.charge_separation = np.mean(self.charge_separation).real
         return self.charge_separation
@@ -203,9 +199,7 @@ class Evaluation(MeSolver):
             If the backbone attribute is not set, indicating the model is not a Fishbone model.
         """
 
-        assert (
-            self.backbone
-        ), "Backbone population can only be calculated for Fishbone models"
+        assert self.backbone, "Backbone population can only be calculated for Fishbone models"
         self._back_to_unitary()
 
         upper_backbone_sites, lower_backbone_sites = [], []
@@ -250,9 +244,7 @@ class Evaluation(MeSolver):
         assert (
             self.double_stranded
         ), "Exciton transfer can only be calculated for double-stranded models"
-        assert (
-            not self.backbone
-        ), "Exciton transfer can only be calculated for non-backbone models"
+        assert not self.backbone, "Exciton transfer can only be calculated for non-backbone models"
         self._back_to_unitary()
 
         upper_sites, lower_sites = [], []
@@ -334,10 +326,7 @@ class EvaluationParallel:
             "observables", ["lifetime", "charge_separation", "dipole_moment"]
         )
 
-        self.args = [
-            (i, self.observables, self.evaluation_list)
-            for i in range(self.num_sequences)
-        ]
+        self.args = [(i, self.observables, self.evaluation_list) for i in range(self.num_sequences)]
 
     def calc_results(self, filepath=None, save=True):
         """

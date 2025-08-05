@@ -75,9 +75,7 @@ class Component:
 
         self.atoms = atoms
         self.atoms_coordinates = np.array(coordinates)
-        self.atoms_id = [
-            f"{atom}_{atom_idx}" for atom_idx, atom in enumerate(self.atoms)
-        ]
+        self.atoms_id = [f"{atom}_{atom_idx}" for atom_idx, atom in enumerate(self.atoms)]
         self.num_atoms = len(self.atoms)
         self.num_electrons = sum(self.num_atom_electrons[atom] for atom in self.atoms)
 
@@ -115,9 +113,7 @@ class Component:
 
     def get_orbital_bond_matrix(self, cutoff=1.59):
         orbital_distance_matrix = self.get_orbital_distance_matrix()
-        orbital_bond_matrix = (orbital_distance_matrix > 0) & (
-            orbital_distance_matrix < cutoff
-        )
+        orbital_bond_matrix = (orbital_distance_matrix > 0) & (orbital_distance_matrix < cutoff)
         return orbital_bond_matrix.astype(int)
 
 

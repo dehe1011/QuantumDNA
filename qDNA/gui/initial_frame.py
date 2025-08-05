@@ -37,9 +37,7 @@ class InitialFrame(ctk.CTkFrame):
         # --------------------------------------------------------------
 
         # upper strand label
-        self.upper_strand_label = ctk.CTkLabel(
-            self, text="Upper DNA Strand \n(5'-3' direction):"
-        )
+        self.upper_strand_label = ctk.CTkLabel(self, text="Upper DNA Strand \n(5'-3' direction):")
         self.upper_strand_label.grid(row=2, column=0, pady=0, padx=10)
 
         # upper strand entry
@@ -50,9 +48,7 @@ class InitialFrame(ctk.CTkFrame):
         # --------------------------------------------------------------
 
         # lower strand label
-        self.lower_strand_label = ctk.CTkLabel(
-            self, text="Lower DNA Strand \n(3'-5' direction):"
-        )
+        self.lower_strand_label = ctk.CTkLabel(self, text="Lower DNA Strand \n(3'-5' direction):")
         self.lower_strand_label.grid(row=4, column=0, pady=0, padx=10)
 
         # lower strand entry

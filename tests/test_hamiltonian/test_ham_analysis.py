@@ -17,9 +17,7 @@ def test_calc_average_pop(eigs, state1, state2, expected):
     assert np.allclose(calc_average_pop(eigs, state1, state2), expected)
 
 
-@pytest.mark.parametrize(
-    "eigs, state1, state2, expected", [(eigs, 0, 0, np.array([0.5]))]
-)
+@pytest.mark.parametrize("eigs, state1, state2, expected", [(eigs, 0, 0, np.array([0.5]))])
 def test_calc_amplitudes(eigs, state1, state2, expected):
     assert np.allclose(calc_amplitudes(eigs, state1, state2), expected)
 

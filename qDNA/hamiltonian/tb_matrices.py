@@ -106,9 +106,7 @@ def tb_ham_1P(
 
         # for interstrand hopping the direction is not imporant
         if tb_str[0] in ["h", "r"] and tb_str not in tb_param_dict:
-            tb_str = (
-                f"{tb_str.split('_')[0]}_{tb_str.split('_')[2]}_{tb_str.split('_')[1]}"
-            )
+            tb_str = f"{tb_str.split('_')[0]}_{tb_str.split('_')[2]}_{tb_str.split('_')[1]}"
 
         if tb_str not in tb_param_dict:
             raise ValueError(
@@ -152,9 +150,7 @@ def tb_ham_2P(
     matrix_electron = tb_ham_1P(
         tb_dims, tb_config, tb_basis, tb_params["electron"], tb_basis_sites_dict
     )
-    matrix_hole = tb_ham_1P(
-        tb_dims, tb_config, tb_basis, tb_params["hole"], tb_basis_sites_dict
-    )
+    matrix_hole = tb_ham_1P(tb_dims, tb_config, tb_basis, tb_params["hole"], tb_basis_sites_dict)
 
     dim = matrix_hole.shape[0]
     matrix = np.zeros((dim**2, dim**2))
@@ -284,9 +280,7 @@ def add_interaction(
     if interaction_type == "Coulomb":
         interaction_strength_list = interaction_param / (1 + 3.4 / 1 * distance_list)
     elif interaction_type == "Exchange":
-        interaction_strength_list = interaction_param * np.exp(
-            -3.4 / 0.5 * distance_list
-        )
+        interaction_strength_list = interaction_param * np.exp(-3.4 / 0.5 * distance_list)
 
     # nearest neighbor cutoff
     if nn_cutoff:
@@ -294,9 +288,7 @@ def add_interaction(
             interaction_strength_list[i] = 0
 
     # add interaction terms on the diagonal for exciton states
-    for eh_basis_state_idx, interaction_strength in enumerate(
-        interaction_strength_list
-    ):
+    for eh_basis_state_idx, interaction_strength in enumerate(interaction_strength_list):
         eh_basis_state = eh_basis[eh_basis_state_idx]
         matrix = set_matrix_element(
             matrix, interaction_strength, eh_basis_state, eh_basis_state, eh_basis

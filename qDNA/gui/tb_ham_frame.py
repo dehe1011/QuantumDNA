@@ -38,9 +38,7 @@ class TBHamFrame(ctk.CTkFrame):
         # Description label and combo box
         self.description_label = ctk.CTkLabel(self, text="Description:")
         self.description_label.grid(row=2, column=0, padx=10, pady=10)
-        self.description_combo = ctk.CTkComboBox(
-            self, values=self.options["descriptions"]
-        )
+        self.description_combo = ctk.CTkComboBox(self, values=self.options["descriptions"])
         self.description_combo.set(self.defaults["description"])
         self.description_combo.grid(row=2, column=1, padx=10, pady=10)
 
@@ -117,9 +115,7 @@ class TBHamFrame(ctk.CTkFrame):
             "source": self.source_combo.get(),
             "description": self.description_combo.get(),
             "particles": [
-                particle
-                for particle, var in self.selected_particles.items()
-                if var.get()
+                particle for particle, var in self.selected_particles.items() if var.get()
             ],
             "unit": self.unit_combo.get(),
             "coulomb_param": float(self.coulomb_param_entry.get()),

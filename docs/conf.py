@@ -50,9 +50,7 @@ add_function_parentheses = False
 # Do not add full module names
 add_module_names = False
 
-numpydoc_show_inherited_class_members = (
-    False  # Show inherited class members in the documentation
-)
+numpydoc_show_inherited_class_members = False  # Show inherited class members in the documentation
 numpydoc_show_property_with_doc = (
     False  # Show properties with documentation in the class documentation
 )

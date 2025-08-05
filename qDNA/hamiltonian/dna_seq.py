@@ -58,9 +58,7 @@ def get_tb_sites(upper_strand, **kwargs):
             tb_sites = [B, *tb_sites, B]
 
     if tb_model.double_stranded and is_pdb:
-        assert (
-            lower_strand != "auto complete"
-        ), "Please provide a lower strand for PDB files."
+        assert lower_strand != "auto complete", "Please provide a lower strand for PDB files."
         tb_sites = [list(upper_strand), list(lower_strand)]
 
         if tb_model.backbone:

@@ -106,11 +106,7 @@ def get_loc_therm_op(eigv, eigs, unique, site_m, relaxation, matrix_dim):
         omega_i, omega_j = eigv[i], eigv[j]
         state_i, state_j = eigs[:, i], eigs[:, j]
         if omega_i - omega_j == unique:
-            op += (
-                state_j[site_m].conjugate()
-                * state_i[site_m]
-                * np.outer(state_j, state_i)
-            )
+            op += state_j[site_m].conjugate() * state_i[site_m] * np.outer(state_j, state_i)
     if relaxation:
         op = add_groundstate(op)
 

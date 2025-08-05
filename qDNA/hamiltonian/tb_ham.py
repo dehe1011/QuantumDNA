@@ -156,14 +156,10 @@ class TBHam(TBModel):
         return self._coulomb_param
 
     @coulomb_param.setter
-    def coulomb_param(
-        self, new_coulomb_param
-    ):  # pylint: disable=missing-function-docstring
+    def coulomb_param(self, new_coulomb_param):  # pylint: disable=missing-function-docstring
         """Sets the Coulomb interaction parameter and updates the matrix if changed."""
 
-        assert isinstance(
-            new_coulomb_param, float
-        ), "coulomb_param must be of type float"
+        assert isinstance(new_coulomb_param, float), "coulomb_param must be of type float"
         old_coulomb_param = self._coulomb_param
         self._coulomb_param = new_coulomb_param
 
@@ -178,12 +174,8 @@ class TBHam(TBModel):
         return self._exchange_param
 
     @exchange_param.setter
-    def exchange_param(
-        self, new_exchange_param
-    ):  # pylint: disable=missing-function-docstring
-        assert isinstance(
-            new_exchange_param, float
-        ), "exchange_param must be of type float"
+    def exchange_param(self, new_exchange_param):  # pylint: disable=missing-function-docstring
+        assert isinstance(new_exchange_param, float), "exchange_param must be of type float"
         old_exchange_param = self._exchange_param
         self._coulomb_param = new_exchange_param
 
@@ -218,9 +210,7 @@ class TBHam(TBModel):
         return self._nn_cutoff
 
     @nn_cutoff.setter
-    def nn_cutoff(
-        self, new_nearest_neighbor_cutoff
-    ):  # pylint: disable=missing-function-docstring
+    def nn_cutoff(self, new_nearest_neighbor_cutoff):  # pylint: disable=missing-function-docstring
         old_nn_cutoff = self._nn_cutoff
         self._nn_cutoff = new_nearest_neighbor_cutoff
 
@@ -267,9 +257,7 @@ class TBHam(TBModel):
     # ------------------------------------------------------------------
 
     def get_tb_params(self):
-        tb_params, metadata = load_tb_params(
-            self.source, self.tb_model_name, load_metadata=True
-        )
+        tb_params, metadata = load_tb_params(self.source, self.tb_model_name, load_metadata=True)
 
         # convert the parameters to the expected unit
         if self.unit != metadata["unit"]:
@@ -346,9 +334,7 @@ class TBHam(TBModel):
 
     def _get_fourier_1P(self, init_state, end_state, quantities):
 
-        assert (
-            init_state in self.tb_basis
-        ), f"Initial state {init_state} must be in tb_basis."
+        assert init_state in self.tb_basis, f"Initial state {init_state} must be in tb_basis."
 
         eigv, eigs = self.get_eigensystem()
         init_state_idx = self.tb_basis.index(init_state)
@@ -372,9 +358,7 @@ class TBHam(TBModel):
 
     def _get_fourier_2P(self, init_state, end_state, quantities):
 
-        assert (
-            init_state in self.eh_basis
-        ), f"initial state {init_state} must be in tb_basis."
+        assert init_state in self.eh_basis, f"initial state {init_state} must be in tb_basis."
 
         eigv, eigs = self.get_eigensystem()
         init_state_idx = self.eh_basis.index(init_state)
@@ -424,26 +408,18 @@ class TBHam(TBModel):
         if self.description == "2P":
             return self._get_fourier_2P(init_state, end_state, quantities)
 
-    def get_amplitudes(
-        self, init_state, end_state
-    ):  # pylint: disable=missing-function-docstring
+    def get_amplitudes(self, init_state, end_state):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["amplitude"])[0]
 
-    def get_frequencies(
-        self, init_state, end_state
-    ):  # pylint: disable=missing-function-docstring
+    def get_frequencies(self, init_state, end_state):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["frequency"])[1]
 
-    def get_average_pop(
-        self, init_state, end_state
-    ):  # pylint: disable=missing-function-docstring
+    def get_average_pop(self, init_state, end_state):  # pylint: disable=missing-function-docstring
         return self.get_fourier(init_state, end_state, ["average_pop"])[2]
 
     def get_backbone_average_pop(self, init_state):
 
-        assert (
-            self.backbone
-        ), "Backbone population can only be calculated for Fishbone models"
+        assert self.backbone, "Backbone population can only be calculated for Fishbone models"
 
         # collect all backbone sites
         upper_backbone_sites, lower_backbone_sites = [], []

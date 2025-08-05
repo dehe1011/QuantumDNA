@@ -133,9 +133,7 @@ def pdb_to_xyz(filepath, **kwargs):
 
         if base_id != old_base_id and old_base_id is not None:
             write_xyz(directory, old_base_id, elements, coordinates)
-            write_xyz(
-                directory, old_backbone_id, elements_backbone, coordinates_backbone
-            )
+            write_xyz(directory, old_backbone_id, elements_backbone, coordinates_backbone)
             elements, elements_backbone = [], []
             coordinates, coordinates_backbone = [], []
 

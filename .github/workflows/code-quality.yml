@@ -32,19 +32,3 @@ jobs:
     - name: Run black
       continue-on-error: true
       run: black --check .
-
-    # - name: Run tests with pytest
-    #   continue-on-error: true
-    #   run: python -m pytest
-
-    # - name: Run tests with coverage
-    #   continue-on-error: true
-    #   run: |
-    #     coverage run -m pytest
-    #     coverage report
-
-    # - name: Upload coverage to Coveralls
-    #   continue-on-error: true
-    #   env:
-    #     COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-    #   run: coveralls

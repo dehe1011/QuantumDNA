@@ -74,16 +74,12 @@ class LindDissFrame(ctk.CTkFrame):
 
         # local thermalization checkbox
         self.loc_therm_var = ctk.BooleanVar(value=self.defaults["loc_therm"])
-        self.loc_therm_check = ctk.CTkCheckBox(
-            self, text="Local", variable=self.loc_therm_var
-        )
+        self.loc_therm_check = ctk.CTkCheckBox(self, text="Local", variable=self.loc_therm_var)
         self.loc_therm_check.grid(row=6, column=0, padx=10, pady=10)
 
         # global thermalization checkbox
         self.glob_therm_var = ctk.BooleanVar(value=self.defaults["glob_therm"])
-        self.glob_therm_check = ctk.CTkCheckBox(
-            self, text="Global", variable=self.glob_therm_var
-        )
+        self.glob_therm_check = ctk.CTkCheckBox(self, text="Global", variable=self.glob_therm_var)
         self.glob_therm_check.grid(row=6, column=1, padx=10, pady=10)
 
         # --------------------------------------------------------------

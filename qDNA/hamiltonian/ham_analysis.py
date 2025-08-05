@@ -54,11 +54,7 @@ def calc_amplitudes(eigs, init_state, end_state):
     """
     matrix_dimension = eigs.shape[0]
     amplitudes = [
-        2
-        * eigs[end_state, i]
-        * eigs[init_state, i]
-        * eigs[end_state, j]
-        * eigs[init_state, j]
+        2 * eigs[end_state, i] * eigs[init_state, i] * eigs[end_state, j] * eigs[init_state, j]
         for i, j in product(range(matrix_dimension), repeat=2)
         if i < j
     ]
@@ -80,9 +76,7 @@ def calc_frequencies(eigv):
     """
     matrix_dimension = len(eigv)
     frequencies = [
-        abs(eigv[i] - eigv[j]).real
-        for i, j in product(range(matrix_dimension), repeat=2)
-        if i < j
+        abs(eigv[i] - eigv[j]).real for i, j in product(range(matrix_dimension), repeat=2) if i < j
     ]
     return np.array(frequencies)
 

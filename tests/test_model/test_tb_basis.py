@@ -12,9 +12,7 @@ from qDNA.model import (
 )
 
 
-@pytest.mark.parametrize(
-    "input, expected", [((2, 2), ["(0, 0)", "(0, 1)", "(1, 0)", "(1, 1)"])]
-)
+@pytest.mark.parametrize("input, expected", [((2, 2), ["(0, 0)", "(0, 1)", "(1, 0)", "(1, 1)"])])
 def test_get_tb_basis(input, expected):
     assert get_tb_basis(input) == expected
 

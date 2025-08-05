@@ -152,9 +152,7 @@ def check_lind_diss_kwargs(**diss_kwargs):
         assert isinstance(kwargs.get(key), str), f"{key} must be of type str"
 
     for key in float_keys:
-        assert isinstance(
-            kwargs.get(key), (float, int)
-        ), f"{key} must be of type float or int"
+        assert isinstance(kwargs.get(key), (float, int)), f"{key} must be of type float or int"
 
     for key in bool_keys:
         assert isinstance(kwargs.get(key), bool), f"{key} must be of type bool"
@@ -179,9 +177,7 @@ def check_lind_diss_kwargs(**diss_kwargs):
     assert not (
         loc_deph_rate != 0 and glob_deph_rate != 0
     ), "Dephasing must either be local or global, not both"
-    assert not (
-        loc_therm and glob_therm
-    ), "Thermalization must either be local or global, not both"
+    assert not (loc_therm and glob_therm), "Thermalization must either be local or global, not both"
 
 
 # ----------------------------------------------------------------------

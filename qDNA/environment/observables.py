@@ -124,15 +124,11 @@ def get_eh_observable(tb_basis, particle, start_state, end_state):
 
     # Create the electron observable
     if particle == "electron":
-        eh_observable = np.kron(
-            get_observable(tb_basis, start_state, end_state), np.eye(num_sites)
-        )
+        eh_observable = np.kron(get_observable(tb_basis, start_state, end_state), np.eye(num_sites))
 
     # Create the hole observable
     elif particle == "hole":
-        eh_observable = np.kron(
-            np.eye(num_sites), get_observable(tb_basis, start_state, end_state)
-        )
+        eh_observable = np.kron(np.eye(num_sites), get_observable(tb_basis, start_state, end_state))
 
     # Create the exciton observable
     elif particle == "exciton":

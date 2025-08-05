@@ -53,9 +53,7 @@ def ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent):
     """
     if omega <= 0:
         return 0
-    return (np.pi * reorg_energy * omega**exponent / cutoff_freq) * np.exp(
-        -omega / cutoff_freq
-    )
+    return (np.pi * reorg_energy * omega**exponent / cutoff_freq) * np.exp(-omega / cutoff_freq)
 
 
 # ----------------------------------------------------------------------
@@ -76,9 +74,7 @@ def bose_einstein_distrib(omega, temperature):
     float
         Bose-Einstein distribution.
     """
-    assert (
-        temperature != 0 and omega != 0
-    ), "Temperature and frequency must be non-zero."
+    assert temperature != 0 and omega != 0, "Temperature and frequency must be non-zero."
     return 1.0 / (np.exp(c.hbar * omega * 1e12 / (c.k * temperature)) - 1)
 
 
@@ -142,12 +138,8 @@ def rate_constant_redfield(
         spec_omega_ji = debye_spectral_density(-omega, cutoff_freq, reorg_energy)
 
     elif spectral_density == "ohmic":
-        spec_omega_ij = ohmic_spectral_density(
-            omega, cutoff_freq, reorg_energy, exponent
-        )
-        spec_omega_ji = ohmic_spectral_density(
-            -omega, cutoff_freq, reorg_energy, exponent
-        )
+        spec_omega_ij = ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent)
+        spec_omega_ji = ohmic_spectral_density(-omega, cutoff_freq, reorg_energy, exponent)
 
     n_omega_ij = bose_einstein_distrib(omega, temperature)
     n_omega_ji = bose_einstein_distrib(-omega, temperature)

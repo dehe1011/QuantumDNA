@@ -130,11 +130,7 @@ class Visualization(Evaluation):
             for j in range(y_num):
                 particle = self.particles[i + j]
                 particle_pop = np.array(
-                    [
-                        value
-                        for key, value in pop_dict.items()
-                        if key.startswith(particle)
-                    ]
+                    [value for key, value in pop_dict.items() if key.startswith(particle)]
                 )
 
                 if vmax_list is not None:
@@ -181,36 +177,24 @@ class Visualization(Evaluation):
                 ax[i, j].set_yticks([])
                 y_len, x_len = particle_pop.shape
                 xticks = np.linspace(0, x_len, 4)
-                ax[i, j].set_xticks(
-                    xticks, labels=[int(x) for x in np.linspace(0, self.t_end, 4)]
-                )
+                ax[i, j].set_xticks(xticks, labels=[int(x) for x in np.linspace(0, self.t_end, 4)])
                 yticks = np.arange(y_len) + 0.5
                 # ax[i, j].set_yticks(yticks, labels=self.tb_sites_flattened)
 
                 if number == 0:
-                    ax[i, j].set_yticks(
-                        yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"]
-                    )
+                    ax[i, j].set_yticks(yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"])
                 if number == 1:
-                    ax[i, j].set_yticks(
-                        yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"]
-                    )
+                    ax[i, j].set_yticks(yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"])
                 if number == 2:
-                    ax[i, j].set_yticks(
-                        yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"]
-                    )
+                    ax[i, j].set_yticks(yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"])
                 if number == 3:
-                    ax[i, j].set_yticks(
-                        yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"]
-                    )
+                    ax[i, j].set_yticks(yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"])
 
         # for j in range(y_num):
         #     ax[-1, j].set_xlabel("Time [" + self.t_unit + "]")
         return fig, ax
 
-    def plot_pop(
-        self, tb_site, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs
-    ):
+    def plot_pop(self, tb_site, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs):
 
         if plot_kwargs in [None, {}]:
             plot_kwargs = {}
@@ -303,9 +287,7 @@ class Visualization(Evaluation):
                     tb_site = f"({j}, {i})"
                 else:
                     tb_site = f"({i}, {j})"
-                _, ax[i, j] = self.plot_pop(
-                    tb_site, fig, ax[i, j], dpi, add_legend=False
-                )
+                _, ax[i, j] = self.plot_pop(tb_site, fig, ax[i, j], dpi, add_legend=False)
 
         ax[0, 0].legend(self.particles, loc="upper right")
 
@@ -490,9 +472,7 @@ class Visualization(Evaluation):
         markers = {"electron": "^", "hole": "v", "exciton": "*"}
         for particle in self.particles:
             conversion = get_conversion(self.unit, "rad/ps") / (2 * np.pi)
-            frequencies_dict[particle] = (
-                np.array(frequencies_dict[particle]) * conversion
-            )
+            frequencies_dict[particle] = np.array(frequencies_dict[particle]) * conversion
 
             amplitudes = amplitudes_dict[particle]
             frequencies = frequencies_dict[particle]
@@ -566,9 +546,7 @@ class Visualization(Evaluation):
         return np.array(cumulative_pop_list)
 
     # cumulative_average_pop = get_cumulative_average_pop(tb_ham, J_list)
-    def plot_average_pop(
-        self, J_list, J_unit="100meV", fig=None, ax=None, dpi=None, **plot_kwargs
-    ):
+    def plot_average_pop(self, J_list, J_unit="100meV", fig=None, ax=None, dpi=None, **plot_kwargs):
 
         if plot_kwargs is None:
             plot_kwargs = {}

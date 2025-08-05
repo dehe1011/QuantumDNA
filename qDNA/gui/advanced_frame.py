@@ -54,15 +54,11 @@ class HelpFrame(ctk.CTkFrame):
         super().__init__(master)
 
         # help label
-        self.help_label = ctk.CTkLabel(
-            self, text="Help", font=ctk.CTkFont(size=15, weight="bold")
-        )
+        self.help_label = ctk.CTkLabel(self, text="Help", font=ctk.CTkFont(size=15, weight="bold"))
         self.help_label.grid(row=0, column=0, pady=10, padx=10)
 
         # github link
-        self.open_github_button = ctk.CTkButton(
-            self, text="GitHub", command=master.open_github
-        )
+        self.open_github_button = ctk.CTkButton(self, text="GitHub", command=master.open_github)
         self.open_github_button.grid(row=1, column=0, pady=10, padx=10)
 
         # documentation link

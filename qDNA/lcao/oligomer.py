@@ -45,10 +45,7 @@ def calc_dipolar_coupling(monomer1, monomer2):
     prefactor = 1 / (4 * np.pi * c.epsilon_0) * 1 / np.linalg.norm(R1 - R2) ** 3
     return (
         prefactor
-        * (
-            mu1 @ mu2
-            - 3 / np.linalg.norm(R1 - R2) ** 2 * (mu1 @ (R2 - R1)) * (mu2 @ (R2 - R1))
-        )
+        * (mu1 @ mu2 - 3 / np.linalg.norm(R1 - R2) ** 2 * (mu1 @ (R2 - R1)) * (mu2 @ (R2 - R1)))
         * 1e10
         / c.e
     )
@@ -148,9 +145,7 @@ class Oligomer(TBModel):
         self.filepaths = self._get_filepaths()
 
         self.num_sites = self.num_channels * self.num_sites_per_strand
-        self.monomers = [
-            Monomer(filepaths, **self.kwargs) for filepaths in self.filepaths
-        ]
+        self.monomers = [Monomer(filepaths, **self.kwargs) for filepaths in self.filepaths]
         self.monomers = np.array(self.monomers).reshape(self.tb_dims)
 
         self.couplings = get_tb_couplings(self.tb_model_name, self.num_sites_per_strand)
@@ -169,10 +164,7 @@ class Oligomer(TBModel):
     def _get_filepaths(self):
         """Generate file paths for each site in the directory based on the sites matrix."""
 
-        return [
-            [os.path.join(self.directory, site + ".xyz") for site in row]
-            for row in self.sites
-        ]
+        return [[os.path.join(self.directory, site + ".xyz") for site in row] for row in self.sites]
 
     def _get_sites_all(self):
         """Categorizes and returns filenames into base sites and backbone sites."""
@@ -255,11 +247,7 @@ class Oligomer(TBModel):
         for coupling in self.couplings:
             key, monomer1_idx, monomer2_idx = coupling
             coupling_id = (
-                key
-                + "_"
-                + self.sites_id[monomer1_idx]
-                + "_"
-                + self.sites_id[monomer2_idx]
+                key + "_" + self.sites_id[monomer1_idx] + "_" + self.sites_id[monomer2_idx]
             )
 
             monomer1 = self.monomers[monomer1_idx]
@@ -337,9 +325,7 @@ class Oligomer(TBModel):
         labels = [site_id[2] for site_id in self.sites_id.flatten()]
 
         tb_basis = [str_to_tuple(element) for element in self.tb_basis]
-        positions = [
-            (element[1], self.num_strands - 1 - element[0]) for element in tb_basis
-        ]
+        positions = [(element[1], self.num_strands - 1 - element[0]) for element in tb_basis]
         # x_coords, y_coords = zip(*positions)
         # x_margin = 0.3
         # y_margin = 0.3
@@ -350,7 +336,9 @@ class Oligomer(TBModel):
         for tb_str, old_state, new_state in self.couplings:
             tb_str = f"{tb_str}_{self.sites_id[old_state]}_{self.sites_id[new_state]}"
             if tb_str[0] in ["h", "r"] and tb_str not in tb_params:
-                tb_str = f"{tb_str.split('_')[0]}_{self.sites_id[new_state]}_{self.sites_id[old_state]}"
+                tb_str = (
+                    f"{tb_str.split('_')[0]}_{self.sites_id[new_state]}_{self.sites_id[old_state]}"
+                )
             tb_val = 1e3 * abs(tb_params[tb_str])  # convert to meV
 
             old_idx = tuple_to_int(self.tb_dims, old_state)

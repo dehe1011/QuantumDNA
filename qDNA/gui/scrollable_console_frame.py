@@ -27,9 +27,7 @@ class ScrollableConsoleFrame(ctk.CTkFrame):
         super().__init__(master, **kwargs)
 
         # Create a ScrolledText widget for the console output
-        self.console_output = ScrolledText(
-            self, wrap="word", state="disabled", height=10, width=35
-        )
+        self.console_output = ScrolledText(self, wrap="word", state="disabled", height=10, width=35)
         self.console_output.grid(row=0, column=0, sticky="nsew", padx=(10, 0), pady=10)
 
         scrollbar = ctk.CTkScrollbar(self, command=self.console_output.yview)

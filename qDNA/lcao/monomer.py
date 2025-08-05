@@ -173,15 +173,9 @@ class Monomer:
 
         MO_1, MO_2 = self.HOMO, self.LUMO
 
-        dipole_x = (
-            -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 0] * np.abs(MO_2)
-        )
-        dipole_y = (
-            -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 1] * np.abs(MO_2)
-        )
-        dipole_z = (
-            -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 2] * np.abs(MO_2)
-        )
+        dipole_x = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 0] * np.abs(MO_2)
+        dipole_y = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 1] * np.abs(MO_2)
+        dipole_z = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 2] * np.abs(MO_2)
         dipole = np.array([np.sum(dipole_x), np.sum(dipole_y), np.sum(dipole_z)])
 
         if unit == "Coulomb*Angstrom":

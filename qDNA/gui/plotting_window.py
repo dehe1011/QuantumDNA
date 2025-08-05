@@ -64,9 +64,7 @@ class PlottingWindow(ctk.CTkToplevel):
         self.title("Plotting")
 
         self.plotting_frame = PlottingFrame(self)
-        self.plotting_frame.grid(
-            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew"
-        )
+        self.plotting_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
         self.plot_option = self.controller.plot_kwargs["plot_option"]
 
@@ -126,9 +124,7 @@ class PlottingWindow(ctk.CTkToplevel):
         init_state = self.controller.plot_kwargs["init_state"]
         end_state = self.controller.plot_kwargs["end_state"]
         x_axis = self.controller.plot_kwargs["x_axis"]
-        self.fig, self.ax = self.controller.vis.plot_fourier(
-            init_state, end_state, x_axis
-        )
+        self.fig, self.ax = self.controller.vis.plot_fourier(init_state, end_state, x_axis)
 
     # ------------------------------------------------------------------
 
@@ -168,9 +164,7 @@ class PlottingWindow2(ctk.CTkToplevel):
         self.controller = master
 
         self.plotting_frame = PlottingFrame(self)
-        self.plotting_frame.grid(
-            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew"
-        )
+        self.plotting_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
         self.plot_couplings()
         self.plotting(self.fig)

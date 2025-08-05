@@ -62,9 +62,7 @@ class PDBFrame(ctk.CTkFrame):
         self.save_button.grid(row=7, column=1, padx=10, pady=10)
 
         # plot label and particle combobox
-        self.plot_label = ctk.CTkLabel(
-            self, text="Plot TB parameters", font=ctk.CTkFont(size=15)
-        )
+        self.plot_label = ctk.CTkLabel(self, text="Plot TB parameters", font=ctk.CTkFont(size=15))
         self.plot_label.grid(row=8, column=0, columnspan=2, pady=10, padx=10)
 
         self.particle_combobox = ctk.CTkComboBox(
@@ -92,9 +90,7 @@ class PDBWindow(ctk.CTkToplevel):
 
         # add a instance of CustomFrame to the window
         self.custom_frame = PDBFrame(self)
-        self.custom_frame.grid(
-            row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew"
-        )
+        self.custom_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
     def open_pdb_file(self):
         pdb_file_path = filedialog.askopenfilename(

@@ -44,9 +44,7 @@ class OptionsFrame(ctk.CTkFrame):
         super().__init__(master)
 
         # options label
-        self.label = ctk.CTkLabel(
-            self, text="Options", font=ctk.CTkFont(size=20, weight="bold")
-        )
+        self.label = ctk.CTkLabel(self, text="Options", font=ctk.CTkFont(size=20, weight="bold"))
         self.label.grid(row=0, column=0, pady=10, padx=10, columnspan=2)
 
         # options tab
@@ -54,9 +52,7 @@ class OptionsFrame(ctk.CTkFrame):
         self.options_tab.grid(row=1, column=0, columnspan=2, pady=10, padx=10)
 
         # back button
-        self.back_button = ctk.CTkButton(
-            self, text="Back", command=master.enable_initial_frame
-        )
+        self.back_button = ctk.CTkButton(self, text="Back", command=master.enable_initial_frame)
         self.back_button.grid(row=2, column=0, pady=10, padx=10)
 
         # second confirm button
