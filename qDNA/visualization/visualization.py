@@ -85,6 +85,8 @@ class Visualization(Evaluation):
         ax=None,
         dpi=None,
         vmax_list=None,
+        cmaps=None,
+        number=None,
         **plot_kwargs,
     ):
 
@@ -114,13 +116,15 @@ class Visualization(Evaluation):
                     dpi=dpi,
                 )
 
+        ax = np.array(ax)
         ax = ax.reshape((x_num, y_num))
 
         # ---
 
         pop_dict = self.get_pop()
-        cmaps = {"electron": "Blues", "hole": "Reds", "exciton": "Greys"}
-        cmaps = {"electron": "Blues", "hole": "Reds", "exciton": "Greens"}
+        if cmaps is None:
+            cmaps = {"electron": "Blues", "hole": "Reds", "exciton": "Greys"}
+            cmaps = {"electron": "Blues", "hole": "Reds", "exciton": "Greens"}
 
         for i in range(x_num):
             for j in range(y_num):
@@ -152,7 +156,12 @@ class Visualization(Evaluation):
                         vmax=vmax,
                         **plot_kwargs,
                     )
-                    heatmap.figure.colorbar(heatmap.collections[0], ax=ax[i, j])
+                    if number in [1, 3]:
+                        heatmap.figure.colorbar(
+                            heatmap.collections[0],
+                            ax=ax[i, j],
+                            ticks=[0, vmax / 2, vmax],
+                        )
 
                 # matplotlib heatmap
                 if heatmap_type == "matplotlib":
@@ -165,28 +174,45 @@ class Visualization(Evaluation):
                     )
                     im.figure.colorbar(im, ax=ax[i])
 
-                ax[i, j].set_ylabel(particle.capitalize())
+                # ax[i, j].set_ylabel(particle.capitalize())
 
                 # ticks
                 ax[i, j].set_xticks([])
                 ax[i, j].set_yticks([])
                 y_len, x_len = particle_pop.shape
-                xticks = np.linspace(0, x_len, 7)
+                xticks = np.linspace(0, x_len, 4)
                 ax[i, j].set_xticks(
-                    xticks, labels=np.round(np.linspace(0, self.t_end, 7), 0)
+                    xticks, labels=[int(x) for x in np.linspace(0, self.t_end, 4)]
                 )
                 yticks = np.arange(y_len) + 0.5
-                ax[i, j].set_yticks(yticks, labels=self.tb_sites_flattened)
+                # ax[i, j].set_yticks(yticks, labels=self.tb_sites_flattened)
 
-        for j in range(y_num):
-            ax[-1, j].set_xlabel("Time [" + self.t_unit + "]")
+                if number == 0:
+                    ax[i, j].set_yticks(
+                        yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"]
+                    )
+                if number == 1:
+                    ax[i, j].set_yticks(
+                        yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"]
+                    )
+                if number == 2:
+                    ax[i, j].set_yticks(
+                        yticks, labels=["01C", "02G", "03G", "06G", "05C", "04C"]
+                    )
+                if number == 3:
+                    ax[i, j].set_yticks(
+                        yticks, labels=["01M", "02G", "03G", "06G", "05M", "04C"]
+                    )
+
+        # for j in range(y_num):
+        #     ax[-1, j].set_xlabel("Time [" + self.t_unit + "]")
         return fig, ax
 
     def plot_pop(
         self, tb_site, fig=None, ax=None, dpi=None, add_legend=True, **plot_kwargs
     ):
 
-        if plot_kwargs is None:
+        if plot_kwargs in [None, {}]:
             plot_kwargs = {}
             change_plot_kwargs = True
         else:

@@ -1,5 +1,3 @@
-from itertools import permutations
-
 import numpy as np
 import scipy.constants as c
 
@@ -84,7 +82,8 @@ def get_conversion_dict(param_dict, start_unit, end_unit):
     Parameters
     ----------
     param_dict : dict
-        Dictionary containing the parameters to be converted. Keys are parameter names and values are the parameter values.
+        Dictionary containing the parameters to be converted. Keys are parameter
+        names and values are the parameter values.
     start_unit : str
         The unit of the input values in `param_dict`.
     end_unit : str

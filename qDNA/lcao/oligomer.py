@@ -240,7 +240,7 @@ class Oligomer(TBModel):
         t_HOMO = monomer1.HOMO @ H_inter @ monomer2.HOMO
         t_LUMO = monomer1.LUMO @ H_inter @ monomer2.LUMO
         t_EXC = calc_dipolar_coupling(monomer1, monomer2)
-        return round(t_HOMO, 3), round(t_LUMO, 3), round(t_EXC, 3)
+        return round(t_HOMO, 5), round(t_LUMO, 5), round(t_EXC, 5)
 
     def calc_tb_energies(self, monomer):
         return round(monomer.E_HOMO, 3), round(monomer.E_LUMO, 3), 0

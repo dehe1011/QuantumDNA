@@ -32,7 +32,9 @@
     "Kordas2025",
     "1BNA",
     "1BNA1",
-    "1BNA2"
+    "1BNA2",
+    "unmeth",
+    "meth"
   ],
   "spectral_densities": [
     "debye",

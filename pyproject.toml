@@ -38,3 +38,8 @@ tutorials = "https://github.com/dehe1011/QuantumDNA-notbooks"
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+skip-string-normalization = true

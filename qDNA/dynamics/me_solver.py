@@ -102,7 +102,7 @@ class MeSolver(LindDiss):
         assert self.t_steps / self.t_end > 1 / 2, (
             f"t_end {self.t_end} cannot be sufficiently resolved by t_steps {self.t_steps}. "
             "Please increase the number of steps or reduce the timespan. "
-            "Alternative: change the unit of time from fs to ps (the mesolver does not know about the unit, but you do ;) )"
+            "Alternative: change the unit of time from fs to ps )"
         )
 
         # TODO: ensure Hamiltonian and LindDiss match t_unit

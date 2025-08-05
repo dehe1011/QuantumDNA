@@ -2,41 +2,34 @@
 
 .venv/
 .vscode/
-.pre-commit-config.yaml
 howto/
+
+notes.txt
 TODO.txt
 main.py
-qDNA/data/raw/geometries/
 
 # documentation
 docs/_build/
 docs/_static/
 docs/_templates/
 
-# created by coverage
-htmlcov/
+# created for pre-commit
+.pre-commit-config.yaml
 
 # created by pytest
 __pycache__
 .pytest_cache/
 
-# pylint
+# created for pylint
 .pylintrc
 
-# mypy
-.mypy_cache/
-
 # created by coverage
-*.egg-info/
 .coverage
+htmlcov/
 
-# created by setuptools (python setup.py sdist bdist_wheel)
+# created by build (python -m build) or setuptools (python setup.py sdist bdist_wheel)
 dist/
 build/
-.egg-info/
-
-# created by build (python -m build)
-dist/
 .egg-info/
 
 # created by Jupyter Notebooks

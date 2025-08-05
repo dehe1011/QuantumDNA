@@ -1,3 +1,4 @@
+# pylint: skip-file
 import os
 
 from .io import pdb_to_xyz, save_tb_params, DATA_DIR

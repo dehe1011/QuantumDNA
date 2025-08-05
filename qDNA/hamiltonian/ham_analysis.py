@@ -130,9 +130,9 @@ def calc_ipr_hamiltonian(eigs):
     -----
     .. note::
 
-        The IPR is a measure of the localization of an eigenstate. It is defined as the sum of the squared coefficients of the
-        eigenvector. The IPR ranges from 1 to N, where N is the dimension of the Hilbert space. The IPR values can be used to
-        distinguish between localized and delocalized eigenstates.
+        The IPR is a measure of the localization of an eigenstate. It is defined as the sum of the squared
+        coefficients of the eigenvector. The IPR ranges from 1 to N, where N is the dimension of the Hilbert
+        space. The IPR values can be used to distinguish between localized and delocalized eigenstates.
 
         .. math::
             \mathrm{IPR} = 1/\sum_{i=1}^{N} |c_i|^4.
