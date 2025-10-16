@@ -1,0 +1,31 @@
+{
+  "data": {
+    "E_A": -49,
+    "E_C": -45,
+    "E_G": -45,
+    "E_T": -49,
+    "t_AA": -0.29,
+    "t_AC": 0.32,
+    "t_AG": 0.03,
+    "t_AT": 0.005,
+    "t_CA": 0.17,
+    "t_CC": 0.2,
+    "t_CG": -0.08,
+    "t_CT": 0.03,
+    "t_GA": -0.01,
+    "t_GC": -0.1,
+    "t_GG": 0.2,
+    "t_GT": 0.32,
+    "t_TA": 0.02,
+    "t_TC": -0.01,
+    "t_TG": 0.17,
+    "t_TT": -0.29
+  },
+  "metadata": {
+    "notes": "energy unit: 100 meV",
+    "particle": "electron",
+    "source": "Simserides2014",
+    "tb_model_name": "WM",
+    "unit": "100meV"
+  }
+}

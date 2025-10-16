@@ -1,0 +1,73 @@
+# QuantumDNA Custom Matplotlib Stylefile
+# --------------------------------------
+
+# Improting qDNA saves this Matplotlib style file in the directory specified by
+# `import matplotlib as mpl; mpl.get_configdir()`
+# >>> 'C:\\Users\\<username>\\.matplotlib'
+# Once saved, it becomes globally accessible and can be applied using
+# `import matplotlib.pyplot as plt; plt.style.use('qDNA-default')`.
+
+
+# LaTeX rendering
+# ---------------
+# Note: Latex must be installed locally
+
+# text.usetex: True
+# text.latex.preamble: \usepackage{amsmath}\usepackage{siunitx}
+
+
+# Font settings
+# -------------
+# View all available fonts by running
+# `import matplotlib.font_manager as fm; sorted([f.name for f in fm.fontManager.ttflist])`
+# Use serif font Latex, e.g. Times New Roman for elsarticle (Elsevier) and revtex4-2 (APS)
+# DejaVu fonts are matplotlib default and therefore always available
+
+# font.family: serif
+# font.serif: DejaVu Serif, Times New Roman, cmr10
+# mathtext.fontset: dejavuserif
+font.family: sans-serif
+font.sans-serif: DejaVu Sans, Calibri, Arial
+mathtext.fontset: dejavusans
+font.size: 15
+
+
+# Figure size
+# -----------
+# revtex4-2 (APS) one-column: [8.64468/2.54, 8.64468/2.54 * 3/4]
+# elsarticle (Elsevier) one-column: [8.85553/2.54, 8.85553/2.54 * 3/4]
+figure.figsize: 6.4, 4.8  # Default ratio 4:3
+
+
+# Axes, labels, and legend
+# ------------------------
+axes.titlesize: large  # Font size for title
+axes.labelsize: medium  # Font size for axis labels
+legend.fontsize: small  # Font size for legend
+xtick.labelsize: small  # Font size for x-tick labels
+ytick.labelsize: small  # Font size for y-tick labels
+
+
+# Lines and markers
+# -----------------
+lines.linewidth: 2.0  # Default line width
+lines.markersize: 8.0  # Default marker size
+
+
+# Grid and layout
+# ---------------
+axes.grid: True  # Always show grid
+grid.linestyle: --  # Grid line style
+# grid.color: lightgray
+grid.alpha: 0.7  # Grid transparency
+figure.autolayout: True  # Automatically apply tight_layout
+
+
+# Colors
+# ------
+
+# Color cycle using the full seaborn deep palette
+axes.prop_cycle: cycler('color', ['4C72B0', '55A868', 'C44E52', '8172B2', 'CCB974', '64B5CD'])
+
+# Color cycle using the matplotlib default tab10 palette
+# axes.prop_cycle: cycler('color', ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'])

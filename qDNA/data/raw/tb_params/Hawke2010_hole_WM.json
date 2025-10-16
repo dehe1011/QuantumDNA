@@ -1,0 +1,31 @@
+{
+  "data": {
+    "E_A": -83,
+    "E_C": -80,
+    "E_G": -80,
+    "E_T": -83,
+    "t_AA": -0.08,
+    "t_AC": 0.02,
+    "t_AG": -0.05,
+    "t_AT": 0.2,
+    "t_CA": -0.04,
+    "t_CC": -0.62,
+    "t_CG": -0.44,
+    "t_CT": -0.05,
+    "t_GA": -0.79,
+    "t_GC": 0.01,
+    "t_GG": -0.62,
+    "t_GT": 0.02,
+    "t_TA": 0.47,
+    "t_TC": -0.79,
+    "t_TG": -0.04,
+    "t_TT": -0.08
+  },
+  "metadata": {
+    "notes": "energy unit: 100 meV",
+    "particle": "hole",
+    "source": "Hawke2010",
+    "tb_model_name": "WM",
+    "unit": "100meV"
+  }
+}

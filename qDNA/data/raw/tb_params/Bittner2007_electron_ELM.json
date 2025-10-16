@@ -1,0 +1,18 @@
+{
+  "data": {
+    "E_A": 0.259,
+    "E_T": -0.931,
+    "h_AT": 0.063,
+    "r+_TA": -0.016,
+    "r-_AT": -0.012,
+    "t_AA": 0.024,
+    "t_TT": -0.023
+  },
+  "metadata": {
+    "notes": "Important: roles of r+ and r- are interchanged! Parameters for electron and hole from Mehrez and Anantram by computing Coulomb integrals between HOMO and LUMO using DFT (B3LYP/6-31G). Exciton parameters are obtained from transition dipole-dipole couplings between bases.",
+    "particle": "electron",
+    "source": "Bittner2007",
+    "tb_model_name": "ELM",
+    "unit": "eV"
+  }
+}

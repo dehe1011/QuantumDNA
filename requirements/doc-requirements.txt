@@ -1,0 +1,9 @@
+ipykernel
+nbsphinx
+numpydoc
+sphinx>=3.0
+sphinx-codeautolink
+sphinx_rtd_theme
+sphinxcontrib-bibtex>=2.1
+sphinxcontrib-svg2pdfconverter
+# pypandoc

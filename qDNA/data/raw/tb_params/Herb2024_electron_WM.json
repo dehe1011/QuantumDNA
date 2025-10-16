@@ -1,0 +1,31 @@
+{
+  "data": {
+    "E_A": -8489.8,
+    "E_C": -8299.74,
+    "E_G": -8299.63,
+    "E_T": -8489.79,
+    "t_AA": -38.42,
+    "t_AC": 16.32,
+    "t_AG": 36.81,
+    "t_AT": 49.76,
+    "t_CA": -27.47,
+    "t_CC": -115.79,
+    "t_CG": 75.23,
+    "t_CT": -36.58,
+    "t_GA": 142.03,
+    "t_GC": -9.92,
+    "t_GG": -115.92,
+    "t_GT": -16.35,
+    "t_TA": -37.07,
+    "t_TC": 142.14,
+    "t_TG": -27.46,
+    "t_TT": 38.28
+  },
+  "metadata": {
+    "notes": "Geometries from Biovia",
+    "particle": "electron",
+    "source": "Herb2024",
+    "tb_model_name": "WM",
+    "unit": "meV"
+  }
+}

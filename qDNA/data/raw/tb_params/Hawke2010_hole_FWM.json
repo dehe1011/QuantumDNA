@@ -1,0 +1,41 @@
+{
+  "data": {
+    "E_A": -83,
+    "E_B": -90,
+    "E_C": -80,
+    "E_G": -80,
+    "E_T": -83,
+    "h_AB": 1,
+    "h_BA": 1,
+    "h_BC": 1,
+    "h_BG": 1,
+    "h_BT": 1,
+    "h_CB": 1,
+    "h_GB": 1,
+    "h_TB": 1,
+    "t_AA": -0.08,
+    "t_AC": 0.02,
+    "t_AG": -0.05,
+    "t_AT": 0.2,
+    "t_BB": 1,
+    "t_CA": -0.04,
+    "t_CC": -0.62,
+    "t_CG": -0.44,
+    "t_CT": -0.05,
+    "t_GA": -0.79,
+    "t_GC": 0.01,
+    "t_GG": -0.62,
+    "t_GT": 0.02,
+    "t_TA": 0.47,
+    "t_TC": -0.79,
+    "t_TG": -0.04,
+    "t_TT": -0.08
+  },
+  "metadata": {
+    "notes": "energy unit: 100 meV",
+    "particle": "hole",
+    "source": "Hawke2010",
+    "tb_model_name": "FWM",
+    "unit": "100meV"
+  }
+}

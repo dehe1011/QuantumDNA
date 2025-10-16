@@ -1,0 +1,19 @@
+{
+  "data": {
+    "E_A": -7.95,
+    "E_C": -8.3,
+    "E_G": -7.75,
+    "E_T": -8.3,
+    "t_AA": -0.0695,
+    "t_AG": -0.071,
+    "t_GA": -0.1871,
+    "t_GG": -0.1409
+  },
+  "metadata": {
+    "notes": "Calculated with SIESTA and DZP basis set",
+    "particle": "hole",
+    "source": "Endres2002",
+    "tb_model_name": "WM",
+    "unit": "eV"
+  }
+}
