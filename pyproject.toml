@@ -1,5 +1,5 @@
 [project]
-name = "qDNA_dehe1011"
+name = "qDNA"
 description = "QuantumDNA is an open-source Python package for simulating energy and charge transfer in DNA using quantum mechanical methods."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"

@@ -23,6 +23,6 @@ include qDNA/data/raw/figures_paper/*.pdf
 include qDNA/data/raw/figures_tutorials/*.png
 include qDNA/data/tb_params/*.json
 include qDNA/data/qDNA.log
-incluce qDNA/data/*.json
+recursive-include qDNA/data *.json
 
 include images/*.png
