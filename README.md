@@ -81,7 +81,7 @@ To test QuantumDNA, you can run the following simple example where the exciton l
 
 ```python
 
-from qDNA import calc_lifetime, calc_dipole
+from qDNA import get_tb_sites, Evaluation
 
 # input
 tb_sites = get_tb_sites('GCG')
