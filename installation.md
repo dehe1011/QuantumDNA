@@ -26,18 +26,7 @@ Before proceeding, make sure the following prerequisites are met:
      python3 -m tkinter
      ```
 
-   - If they are not installed, install them using your package manager:
-     - **Debian/Ubuntu**:
-
-       ```bash
-       sudo apt install python3-pip python3-tk
-       ```
-
-     - **Fedora**:
-
-       ```bash
-       sudo dnf install python3-pip python3-tkinter
-       ```
+   - If they are not installed, install them using your package manager.
 
 3. **Windows Users**:
    - Ensure Git is installed by running:
@@ -187,4 +176,4 @@ If you cloned the GitHub repository, manually delete the `QuantumDNA` folder fro
 
 ---
 
-🎉 **Congratulations!** You’ve successfully installed and set up `QuantumDNA`. Enjoy exploring the physics of DNA with this powerful tool.
+🎉 **Congratulations!** You’ve successfully installed and set up `QuantumDNA`.

@@ -1,23 +1,18 @@
 # pylint: skip-file
 
+import os
+
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from ..visualization import (
-    plot_pop,
-    plot_pops,
-    plot_coh,
-    plot_fourier,
-    plot_pops_heatmap,
-)
-from ..tools import save_figure
+from ..io import save_figure
 
 # -----------------------------------------------------------------------------------------------------
 
 
 class PlottingFrame(ctk.CTkFrame):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master):
         """
         Notes:
             This frame is located in the plotting_window. This means that the plotting_window is its master.
@@ -29,7 +24,7 @@ class PlottingFrame(ctk.CTkFrame):
         """
 
         # initialization of the ctk.CTkFrame class
-        super().__init__(master, **kwargs)
+        super().__init__(master)
 
         # widgets
         self.filename_label = ctk.CTkLabel(self, text="Filename:")
@@ -55,7 +50,7 @@ class PlottingFrame(ctk.CTkFrame):
 
 
 class PlottingWindow(ctk.CTkToplevel):
-    def __init__(self, master, **kwargs):
+    def __init__(self, master):
         """
         Notes:
             This window is a toplevel window of the main window. This means that the main window is its master.
@@ -64,21 +59,19 @@ class PlottingWindow(ctk.CTkToplevel):
         """
 
         # initialization of the ctk.CTkToplevel class
-        super().__init__(master, **kwargs)
+        super().__init__(master)
+        self.controller = master
         self.title("Plotting")
 
-        self.plotting_frame = PlottingFrame(master=self)
+        self.plotting_frame = PlottingFrame(self)
         self.plotting_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
 
-        self.plot_options_kwargs = master.plot_options_kwargs
-        self.plot_option = self.plot_options_kwargs["plot_option"]
-        self.me_solver = master.me_solver
-        self.tb_ham = master.tb_ham
+        self.plot_option = self.controller.plot_kwargs["plot_option"]
 
         if self.plot_option == "Population":
-            self.init_tb_site = self.plot_options_kwargs["init_tb_site"]
+            self.init_tb_site = self.controller.plot_kwargs["init_tb_site"]
             if self.init_tb_site == "Heatmap":
-                self.plot_pops_heatmap()
+                self.plot_heatmap()
             elif self.init_tb_site == "All DNA Bases":
                 self.plot_pops()
             else:
@@ -87,44 +80,59 @@ class PlottingWindow(ctk.CTkToplevel):
         if self.plot_option == "Coherence":
             self.plot_coh()
 
+        if self.plot_option == "Spectrum":
+            if self.controller.plot_kwargs["eigv_var"]:
+                self.plot_eigv()
+            if self.controller.plot_kwargs["eigs_var"]:
+                self.eigenstate_idx = int(self.controller.plot_kwargs["eigenstate_idx"])
+                self.plot_eigs()
+
         if self.plot_option == "Fourier":
             self.plot_fourier()
-            if master.plot_options_frame.plot_options_tab.fourier_frame.average_pop_var.get():
+            if self.controller.plot_kwargs["average_pop_var"]:
                 self.average_pop()
         self.plotting(self.fig)
 
     def average_pop(self):
-        average_pop = self.tb_ham.get_average_pop(
-            self.plot_options_kwargs["init_state"],
-            self.plot_options_kwargs["end_state"],
+        average_pop = self.controller.vis.get_average_pop(
+            self.controller.plot_kwargs["init_state"],
+            self.controller.plot_kwargs["end_state"],
         )
         print(f"Average population: {average_pop}")
 
+    # ------------------------------------------------------------------
+
+    def plot_eigv(self):
+        self.fig, self.ax = self.controller.vis.plot_eigv()
+
+    def plot_eigs(self):
+        self.fig, self.ax = self.controller.vis.plot_eigs(self.eigenstate_idx)
+
     def plot_pop(self):
-        self.fig, self.ax = plt.subplots()
-        plot_pop(self.ax, self.init_tb_site, self.me_solver)
+        self.fig, self.ax = self.controller.vis.plot_pop(self.init_tb_site)
 
     def plot_pops(self):
-        self.fig, self.axes = plot_pops(self.me_solver)
+        self.fig, self.ax = self.controller.vis.plot_pops()
 
-    def plot_pops_heatmap(self):
-        self.fig, self.ax = plot_pops_heatmap(self.me_solver)
+    def plot_heatmap(self):
+        self.fig, self.ax = self.controller.vis.plot_heatmap(direction="horizontal")
 
     def plot_coh(self):
-        self.fig, self.ax = plt.subplots()
-        self.ax = plot_coh(self.ax, self.me_solver)
+        self.fig, self.ax = self.controller.vis.plot_coh()
 
     def plot_fourier(self):
-        self.fig, self.ax = plt.subplots()
-        init_state = self.plot_options_kwargs["init_state"]
-        end_state = self.plot_options_kwargs["end_state"]
-        x_axis = self.plot_options_kwargs["x_axis"]
-        self.ax = plot_fourier(self.ax, self.tb_ham, init_state, end_state, x_axis)
+        init_state = self.controller.plot_kwargs["init_state"]
+        end_state = self.controller.plot_kwargs["end_state"]
+        x_axis = self.controller.plot_kwargs["x_axis"]
+        self.fig, self.ax = self.controller.vis.plot_fourier(init_state, end_state, x_axis)
+
+    # ------------------------------------------------------------------
 
     def save(self):
-        self.filename = self.plotting_frame.filename_entry.get()
-        self.directory = self.plotting_frame.directory_entry.get()
-        save_figure(self.fig, self.filename, self.directory, extension="pdf")
+        filename = self.plotting_frame.filename_entry.get()
+        directory = self.plotting_frame.directory_entry.get()
+        filepath = os.path.join(directory, filename)
+        save_figure(self.fig, filepath)
         self.destroy()
 
     def cancel(self):
@@ -136,3 +144,58 @@ class PlottingWindow(ctk.CTkToplevel):
         canvas = FigureCanvasTkAgg(fig, master=self.plotting_frame.subframe)
         canvas.draw()
         canvas.get_tk_widget().pack()
+
+
+# ----------------------------------------------------------------------
+
+
+class PlottingWindow2(ctk.CTkToplevel):
+    def __init__(self, master):
+        """
+        Notes:
+            This window is a toplevel window of the main window. This means that the main window is its master.
+            This window itself is the master for plotting_frame.
+            The frame uses the command plot_options_kwargs, me_solver and tb_ham from the master
+        """
+
+        # initialization of the ctk.CTkToplevel class
+        super().__init__(master)
+        self.title("Plotting")
+        self.controller = master
+
+        self.plotting_frame = PlottingFrame(self)
+        self.plotting_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+        self.plot_couplings()
+        self.plotting(self.fig)
+
+    # ------------------------------------------------------------------
+
+    def plot_couplings(self):
+        self.fig, self.ax = self.controller.oligomer.plot_couplings(
+            self.controller.particle,
+            add_colorbar=False,
+            dpi=120,
+        )
+
+    # ------------------------------------------------------------------
+
+    def save(self):
+        filename = self.plotting_frame.filename_entry.get()
+        directory = self.plotting_frame.directory_entry.get()
+        filepath = os.path.join(directory, filename)
+        save_figure(self.fig, filepath)
+        self.destroy()
+
+    def cancel(self):
+        self.destroy()
+
+    def plotting(self, fig):
+        for widget in self.plotting_frame.subframe.winfo_children():
+            widget.destroy()
+        canvas = FigureCanvasTkAgg(fig, master=self.plotting_frame.subframe)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+
+
+# ----------------------------------------------------------------------

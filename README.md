@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="docs/figures/0_qDNA_logo.png" width="600">
+    <img src="images/0_qDNA_logo.png" width="600" alt="QuantumDNA Logo">
 </p>
 
 <p align="center">
@@ -35,34 +35,32 @@
 
 # Welcome to QuantumDNA
 
-**Author: [Dennis Herb](https://github.com/dehe1011)**
+This python package can be cited as:
 
-This Python package can be cited as:
-
-> *QuantumDNA (github.com/dehe1011/QuantumDNA)*, D. Herb, 2024, DOI: [10.5281/zenodo.12734027](https://doi.org/10.5281/zenodo.12734027)
+> Herb, D. et al. QuantumDNA: A python package for analyzing quantum charge dynamics in DNA and exploring its biological relevance. *Computer Physics Communications 313*, 109626 (2025). DOI: [10.1016/j.cpc.2025.109626](https://doi.org/10.1016/j.cpc.2025.109626)
 
 ## Introduction
 
-QuantumDNA is an open-source Python package for simulating charge transfer (CT) and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface (GUI)—perfect for researchers and students, even without extensive coding experience.
+The study of DNA charge dynamics is a highly interdisciplinary field and plays an important role in processes such as DNA damage detection, protein-DNA interactions, and DNA-based nanotechnology. However, despite significant progress in each of these areas, knowledge often remains inaccessible to researchers in other scientific communities. To bridge this gap, we have developed QuantumDNA: an open-source python package for simulating DNA charge transfer and excited state dynamics using quantum physical methods.
 
-Whether you're a scientist, student, or just curious, QuantumDNA is here to help you explore the fascinating world of DNA charge transfer. Dive in and start exploring today!
+QuantumDNA uses a linear combination of atomic orbitals (LCAO) approach combined with tight-binding models and open quantum systems techniques. This way one can quickly scan large numbers DNA sequences, enabling statistical studies of genetic and epigenetic phenomena.
+
+Whether you're a scientist, student, or just curious, QuantumDNA: dive in and start exploring!
 
 <p align="center">
-    <img src="docs/figures/2_qDNA_structure.png" width="50%">
+    <img src="images/2_qDNA_structure.png" width="50%" alt="Image package structure">
 </p>
 
-### Key Features
+### Features
 
-* Graphical User Interface (GUI): Intuitive and user-friendly interface, making the tool accessible to researchers and students with limited programming experience.
-* Parallelized Calculations: Optimized for performance, enabling the analysis of large DNA ensembles with efficient computational resource utilization.
-* Integration with Publicly Accessible Databases: Supports input geometries from widely used DNA structure databases.
-* Unified Framework: Provides a reproducible platform for simulating and comparing results from different scientific papers and methodologies.
-* Open-Source: Fully open-source and extensible, allowing users to modify and adapt the code to suit their specific research needs.
-* Cross-Disciplinary Usability: Designed for researchers across physics, chemistry, biology, and medicine to explore DNA charge dynamics collaboratively.
+* Coarse-graining approach: linear combination of atomic orbitals (LCAO) and tight-binding models to efficiently simulate DNA charge dynamics.
+* Parallelized Calculations: Enabling the analysis of large numbers of DNA seqeunces.
+* Integration with publicly accessible databases: Users can input geometries from DNA structure databases as PDB files.
+* GUI: Designed for researchers across physics, chemistry, biology, and medicine.
 
 ## What's new
 
-* Added a graphical user interface (GUI) to the package which is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package by Tom Schimansky.
+* Added a graphical user interface (GUI) to the package which is based on the [customtkinter](https://customtkinter.tomschimansky.com/) package.
 * Added a Tutorial Jupyter Notebooks available on another [GitHub repopsitory](https://github.com/dehe1011/QuantumDNA-notebooks).
 
 ## Getting started
@@ -75,28 +73,28 @@ For a quick installation, you can install the `qDNA` package via pip:
 pip install qDNA
 ```
 
-To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions and alternative methods, please refer to the [Installation Guide](installation.md).
+To ensure compatibility and avoid conflicts with other packages, we recommend using a virtual environment. For detailed installation instructions, please refer to the [Installation Guide](installation.md).
 
 ### Example Program
 
-To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example, you might find that in general more uniform sequences show higher values. Do you know the reason for this observation?
+To test QuantumDNA, you can run the following simple example where the exciton lifetime and the average charge separation of a double-stranded GCG DNA sequence are calculated. You can try different sequences, tight-binding models, and keyword arguments to investigate how these factors affect the exciton lifetime and average charge separation. For example, you might find that in general more uniform sequences show higher values.
 
 ```python
 
 from qDNA import calc_lifetime, calc_dipole
 
 # input
-upper_strand = 'GCG'
-tb_model_name = 'ELM'
-kwargs = dict(unit='rad/ps', relax_rate=3, source='Hawke2010')
+tb_sites = get_tb_sites('GCG')
+kwargs = dict(tb_model_name = 'ELM', unit='rad/ps', relax_rate=3, source='Hawke2010')
 
 # calculation
-lifetime = calc_lifetime(upper_strand, tb_model_name, **kwargs)
-dipole = calc_dipole(upper_strand, tb_model_name, **kwargs)
+eva = Evaluation(tb_sites, **kwargs)
+lifetime = eva.calc_lifetime()
+charge_separation = eva.calc_charge_separation()
 
 # output
 print(f"Exciton lifetime {lifetime} fs")
-print(f"Average charge separation {dipole} A")
+print(f"Average charge separation {charge_separation} A")
 ```
 
 ## Documentation
@@ -111,54 +109,51 @@ The documentation webpage for the latest release is available for reading on [Re
 
 ## Graphical User Interface
 
-The `qDNA` package includes a graphical user interface (GUI) that provides an intuitive and user-friendly way to interact with the package's functionalities. You can access the GUI with the following code:
+The `qDNA` package includes a GUI that provides an intuitive and user-friendly way to interact with the package's functionalities. You can access the GUI with the following code:
 
 ```python
 
-from qDNA.gui import qDNA_app
+from qDNA.gui import QDNApp
 
-app = qDNA_app()
-app.mainloop()
+QDNApp().run()
 ```
 
 The GUI allows you to easily explore and utilize the capabilities of the `qDNA` package. Below are some examples demonstrating its use:
 
-* **1BNA structure:** Perform simulations with geometries from publically availbale databases (here: PDB geometry of the 1BNA sequence from [RCSB.org](https://www.rcsb.org)).
+* **Usage example:** Perform simulations with geometries from publically availbale databases (here: PDB geometry of the 1BNA sequence from [RCSB.org](https://www.rcsb.org)).
 
 <p align="center">
-    <img src="docs/figures/5_GUI.png" alt="Graphical User Interface (GUI).">
+    <img src="images/5_GUI.png" alt="GUI Screenshot.">
 </p>
-<blockquote><em> Quantum-Physical Simulations with Real Geometries via the GUI
+<blockquote><em> Simulations with Real Geometries via the GUI
 
-**(a)** A Protein Data Bank (PDB) file containing the DNA geometry was obtained from [RCSB.org](https://www.rcsb.org) (identifier: `1BNA`) and modified using `Biovia Discovery Studio` by removing the sugar-phosphate backbone. The subsequence selected for simulation is highlighted in blue.
+**(a)** A Protein Data Bank (PDB) file containing the DNA geometry was obtained from [RCSB.org](https://www.rcsb.org) (identifier: `1BNA`) and modified using `Biovia Discovery Studio`. The subsequence selected for simulation is highlighted in blue.
 
-**(b)** The GUI’s PDB Input Window allows users to upload the modified PDB file, specify an identifier, and select a Tight-Binding (TB) model. Clicking the "Save" button computes TB parameters tailored to the DNA geometry.
+**(b)** The PDB Input Window allows users to upload the modified PDB file, specify an identifier, and select a Tight-Binding (TB) model. Clicking the "Save" button computes TB parameters.
 
 **(c)** To simulate the highlighted sequence from (a), set the upper strand to `02G_03C_04G` and the lower strand to `23C_22G_21C`. Ensure the identifier (e.g., `1BNA`) is selected as the source. Exciton calculations can be performed using the Evaluation tab, with results displayed in the console at the bottom right (highlighted in green).
 
 **(d)** The plotting window provides a heatmap visualization of time-evolved populations for the DNA sequence highlighted in (a). All simulation steps can also be performed programmatically without the GUI, such as using Jupyter Notebooks.</em></blockquote>
 
 <ul>
-    <li><strong>Plot Generation:</strong> Create plots effortlessly by submitting your parameters through the GUI.</li>
+    <li><strong>Plot Generation:</strong> Plot obtained after pressing the submit button on the menu.</li>
 </ul>
 
 <p align="center">
-    <img src="docs/figures/1BNA_2.png" width="60%" alt="Plot obtained after pressing the submit button on the menu.">
+    <img src="images/1BNA_2.png" width="60%" alt="GUI Screenshot">
 </p>
 
 <ul>
-    <li><strong>Calculation Display:</strong> Perform calculations, such as exciton lifetime and average charge separation, and view the results directly within the interface.</li>
+    <li><strong>Calculation Display:</strong> Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.</li>
 </ul>
 
 <p align="center">
-    <img src="docs/figures/1BNA_3.png" width="80%" alt="Screenshot of the menu of the user interface with calculations of the exciton lifetime, average charge separation and dipole moment displayed in the frame on the bottom right.">
+    <img src="images/1BNA_3.png" width="80%" alt="GUI Screenshot.">
 </p>
-
-Whether you're generating plots or calculating complex dynamics, the GUI provides a convenient and efficient way to achieve your goals.
 
 ## Shortcuts
 
-To enhance the readability and maintainability of the code, we have standardized a set of frequently used shortcuts. These abbreviations help keep the code concise while still being clear and understandable:
+To enhance the readability of the code, we have frequently used the following shortcuts:
 
 * ```ham```: hamiltonian
 * ```dm```: density matrix

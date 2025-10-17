@@ -5,4 +5,4 @@ from .relax_ops import *
 from .therm_ops import *
 from .deph_ops import *
 
-from .lindblad import *
+from .lind_diss import *

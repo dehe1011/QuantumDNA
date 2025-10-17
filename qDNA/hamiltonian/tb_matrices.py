@@ -2,18 +2,9 @@ from itertools import product
 
 import numpy as np
 
-from ..model.tb_basis import get_eh_distance
+from ..model import get_eh_distance
 
-__all__ = [
-    "set_matrix_element",
-    "tb_ham_1P",
-    "tb_ham_2P",
-    "add_groundstate",
-    "delete_groundstate",
-    "add_interaction",
-]
-
-# ------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def set_matrix_element(
@@ -60,7 +51,9 @@ def set_matrix_element(
 
 
 def tb_ham_1P(
-    tb_model,
+    tb_dims,
+    tb_config,
+    tb_basis,
     tb_param_dict,
     tb_basis_sites_dict,
 ):
@@ -68,8 +61,12 @@ def tb_ham_1P(
 
     Parameters
     ----------
-    tb_model : TBModelType
-        The tight-binding model.
+    tb_dims : Tuple[int, int]
+        Dimensions of the tight-binding model grid.
+    tb_config : List[Tuple[str, str, str]]
+        Configuration of tight-binding connections.
+    tb_basis : List[str]
+        List of basis states.
     tb_param_dict : Dict[str, float]
         Dictionary of tight-binding parameters.
     tb_basis_sites_dict : Dict[str, str]
@@ -82,27 +79,34 @@ def tb_ham_1P(
 
     Examples
     --------
-    >>> tb_model = TB_Model("model_name", (2, 2))
-    >>> tb_param_dict = {"E_G": 1.0, "C_GC": 0.5}
+    >>> tb_dims = (2, 2)
+    >>> tb_config = [("C", "(0, 0)", "(1, 0)"), ("E", "(0, 0)", "(0, 0)")]
+    >>> tb_basis = ["(0, 0)", "(1, 0)", "(0, 1)", "(1, 1)"]
+    >>> tb_param_dict = {"E_G": 1.0, "C_G_C": 0.5}
     >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
-    >>> tb_ham_1P(tb_model, tb_param_dict, tb_basis_sites_dict)
-    array([[1. , 0.5],
-           [0.5, 1. ]])
-    """
-    matrix = np.zeros((tb_model.num_sites, tb_model.num_sites))
+    >>> tb_ham_1P(tb_dims, tb_config, tb_basis, tb_param_dict, tb_basis_sites_dict)
+    array([[1. , 0.5, 0. , 0. ],
+           [0.5, 0. , 0. , 0. ],
+           [0. , 0. , 0. , 0. ],
+           [0. , 0. , 0. , 0. ]])
 
+    """
+
+    n = tb_dims[0] * tb_dims[1]
+    matrix = np.zeros((n, n))
     if tb_param_dict == {}:  # empty dictionary
         return matrix
 
-    for tb_str, new_state, old_state in tb_model.tb_config:
+    for tb_str, old_state, new_state in tb_config:
+        old_state, new_state = str(old_state), str(new_state)
         if tb_str == "E":
             tb_str = f"E_{tb_basis_sites_dict[old_state]}"
         else:
-            tb_str = f"{tb_str}_{tb_basis_sites_dict[old_state]}{tb_basis_sites_dict[new_state]}"
+            tb_str = f"{tb_str}_{tb_basis_sites_dict[old_state]}_{tb_basis_sites_dict[new_state]}"
 
         # for interstrand hopping the direction is not imporant
         if tb_str[0] in ["h", "r"] and tb_str not in tb_param_dict:
-            tb_str = f"{tb_str.split('_')[0]}_{tb_basis_sites_dict[new_state]}{tb_basis_sites_dict[old_state]}"
+            tb_str = f"{tb_str.split('_')[0]}_{tb_str.split('_')[2]}_{tb_str.split('_')[1]}"
 
         if tb_str not in tb_param_dict:
             raise ValueError(
@@ -110,29 +114,29 @@ def tb_ham_1P(
             )
 
         tb_val = tb_param_dict[tb_str]
-        matrix = set_matrix_element(matrix, tb_val, new_state, old_state, tb_model.tb_basis)
+        matrix = set_matrix_element(matrix, tb_val, new_state, old_state, tb_basis)
     return matrix
 
 
 def tb_ham_2P(
-    tb_model,
-    tb_param_dict_electron,
-    tb_param_dict_hole,
-    tb_param_dict_exciton,
+    tb_dims,
+    tb_config,
+    tb_basis,
+    tb_params,
     tb_basis_sites_dict,
 ):
     """Constructs the electron-hole tight-binding Hamiltonian matrix.
 
     Parameters
     ----------
-    tb_model : TBModelType
-        The tight-binding model.
-    tb_param_dict_electron : Dict[str, float]
-        Electron tight-binding parameters.
-    tb_param_dict_hole : Dict[str, float]
-        Hole tight-binding parameters.
-    tb_param_dict_exciton : Dict[str, float]
-        Exciton tight-binding parameters.
+    tb_dims : Tuple[int, int]
+        Dimensions of the tight-binding model grid.
+    tb_config : List[Tuple[str, str, str]]
+        Configuration of tight-binding connections.
+    tb_basis : List[str]
+        List of basis states.
+    tb_params : Dict[str, Dict[str, float]]
+        Dictionary containing electron, hole, and optionally exciton tight-binding parameters.
     tb_basis_sites_dict : Dict[str, str]
         Dictionary mapping the TB basis to the TB sites.
 
@@ -141,35 +145,32 @@ def tb_ham_2P(
     np.ndarray
         The electron-hole tight-binding Hamiltonian matrix.
 
-    Examples
-    --------
-    >>> tb_model = TB_Model("model_name", (2, 2))
-    >>> tb_param_dict_electron = {"E_G": 1.0, "C_GC": 0.5}
-    >>> tb_param_dict_hole = {"E_G": 0.8, "C_GC": 0.4}
-    >>> tb_basis_sites_dict = {"(0, 0)": "G", "(1, 0)": "C"}
-    >>> tb_ham_2P(tb_model, tb_param_dict_electron, tb_param_dict_hole, tb_basis_sites_dict)
-    array([[1.5, 0.5, 0.4, 0. ],
-           [0.5, 1. , 0. , 0. ],
-           [0.4, 0. , 1.3, 0.5],
-           [0. , 0. , 0.5, 0.8]])
     """
-    matrix_electron = tb_ham_1P(tb_model, tb_param_dict_electron, tb_basis_sites_dict)
-    matrix_hole = tb_ham_1P(tb_model, tb_param_dict_hole, tb_basis_sites_dict)
-    matrix_exciton = tb_ham_1P(tb_model, tb_param_dict_exciton, tb_basis_sites_dict)
 
-    dim = matrix_exciton.shape[0]
+    matrix_electron = tb_ham_1P(
+        tb_dims, tb_config, tb_basis, tb_params["electron"], tb_basis_sites_dict
+    )
+    matrix_hole = tb_ham_1P(tb_dims, tb_config, tb_basis, tb_params["hole"], tb_basis_sites_dict)
+
+    dim = matrix_hole.shape[0]
     matrix = np.zeros((dim**2, dim**2))
 
-    # exciton matrix
-    if not np.allclose(matrix_exciton, np.zeros((dim, dim))):
-        for i, j in product(range(dim), repeat=2):
-            basis_matrix = np.zeros((dim, dim))
-            basis_matrix[i, j] = 1
-            matrix += matrix_exciton[i, j] * np.kron(basis_matrix, basis_matrix)
+    # exciton matrix only if tb_params["exciton"] exists.
+    if "exciton" in tb_params:
+        matrix_exciton = tb_ham_1P(
+            tb_dims, tb_config, tb_basis, tb_params["exciton"], tb_basis_sites_dict
+        )
 
-    matrix += np.kron(np.eye(tb_model.num_sites), matrix_hole) + np.kron(
-        matrix_electron, np.eye(tb_model.num_sites)
-    )
+        # exciton matrix
+        if not np.allclose(matrix_exciton, np.zeros((dim, dim))):
+            for i, j in product(range(dim), repeat=2):
+                basis_matrix = np.zeros((dim, dim))
+                basis_matrix[i, j] = 1
+                matrix += matrix_exciton[i, j] * np.kron(basis_matrix, basis_matrix)
+
+    num_sites = tb_dims[0] * tb_dims[1]
+    matrix += np.kron(np.eye(num_sites), matrix_hole)
+    matrix += np.kron(matrix_electron, np.eye(num_sites))
     return matrix
 
 
@@ -192,6 +193,7 @@ def add_groundstate(matrix):
     array([[0., 0., 0.],
            [0., 1., 2.],
            [0., 3., 4.]])
+
     """
 
     N = matrix.shape[0]
@@ -292,3 +294,6 @@ def add_interaction(
             matrix, interaction_strength, eh_basis_state, eh_basis_state, eh_basis
         )
     return matrix
+
+
+# ----------------------------------------------------------------------

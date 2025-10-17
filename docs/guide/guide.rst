@@ -4,16 +4,15 @@
 Jupyter Notebook Tutorials
 **************************
 
-Welcome to the **QuantumDNA Jupyter Notebook Tutorials**! These tutorials and demonstrations are designed to help users explore and
-understand the functionalities of the `QuantumDNA` package through practical examples.
+These tutorials and demonstrations are designed to help users explore and understand the functionalities of the `QuantumDNA` package through practical examples.
 
 For a detailed description of the classes and functions used in these tutorials, visit the :ref:`API documentation <apidoc>`.
 
 Overview
 ========
 
-The Jupyter notebooks in the `tutorials` folder provide step-by-step demonstrations of various features and functionalities of the `QuantumDNA` package.
-Each tutorial focuses on a specific aspect, helping you get started with quantum physical description of DNA and applications of quantum biology.
+The Jupyter notebooks in the `tutorials` folder provide demonstrations of various features and functionalities of the `QuantumDNA` package.
+Each tutorial focuses on a specific aspect, helping you get started.
 
 Tutorials
 =========
@@ -32,11 +31,10 @@ Below is a list of available tutorials. Click on each to access the detailed not
    PRE_2024 <tutorials/PRE_2024>
 
 Descriptions
-------------
+============
 
 **Tight Binding Parameters**
-  Learn the Linear Combination of Atomic Orbitals (LCAO) approach using Slater–Koster two-center
-  integrals and Harrison-type expressions. Ideal for tight-binding model parameterization.
+  Learn the Linear Combination of Atomic Orbitals (LCAO) approach using Slater–Koster integrals and Harrison-type expressions.
 
 **Tight_Binding_Method**
   Explore predefined and custom tight-binding models. Includes calculating time-averaged exciton
@@ -48,7 +46,7 @@ Descriptions
   and thermalization models inspired by Quantum Biology.
 
 **Visualization**
-  Use `QuantumDNA`'s built-in plotting routines for effective result visualization. Learn to create custom
+  Learn how to use built-in plotting routines for visualization. Learn to create custom
   visualizations tailored to your data.
 
 **Evaluation**
@@ -58,7 +56,7 @@ Descriptions
 **Reproduce Papers**
   Reproduce the plots from the papers :cite:`Giese1999`, :cite:`Giese2001`, :cite:`Bittner2006`,
   :cite:`Bittner2007`, :cite:`Simserides2014` and :cite:`Mantela2023` using the `QuantumDNA` package. This tutorial
-  demonstrates the package's capabilities in generating results that have already been published elsewhere.
+  demonstrates how to obtain results that have already been published elsewhere.
 
 **PRE2024**
   Reproduces all the figures presented in the reference paper :cite:`Herb2024`.
@@ -68,10 +66,10 @@ Descriptions
 Getting Started
 ===============
 
-These tutorials provide hands-on examples designed to guide you through using the `QuantumDNA` package effectively. To get started:
+These tutorials provide examples to guide you through using the `QuantumDNA` package. To get started:
 
-1. Navigate to the `tutorials` folder and open the desired `.ipynb` file in Jupyter Notebook or JupyterLab.
-2. Follow the instructions provided in the notebook to run the cells and explore the package's features interactively.
+1. Navigate to the `tutorials` folder and open the desired `.ipynb` file as Jupyter notebook.
+2. Follow the instructions provided in the notebook to run the cells.
 3. Refer to the :ref:`API documentation <apidoc>` for deeper insights into the functions and classes used in the tutorials.
 
 
@@ -79,8 +77,8 @@ Tips for Using the Tutorials
 ----------------------------
 
 - **Run in a Jupyter Environment**: Ensure you have Jupyter Notebook or JupyterLab installed to execute the tutorials interactively.
-- **Dependencies**: Before starting, confirm that all dependencies for `QuantumDNA` are installed. Check the `requirements.txt` file in the repository for details.
+- **Dependencies**: Before starting, confirm that all dependencies for `QuantumDNA` are installed. Check the `requirements/requirements.txt` file in the repository for details.
 - **Explore Further**: Modify and experiment with the code to deepen your understanding of the concepts.
 
 
-We hope these tutorials help you leverage the full potential of the `QuantumDNA` package for your quantum biology research!
+We hope these tutorials will help you!

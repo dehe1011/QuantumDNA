@@ -1,0 +1,37 @@
+{
+  "data": {
+    "electron": {
+      "E_A": 0.259,
+      "E_T": -0.931,
+      "h_A_T": 0.063,
+      "r+_T_A": -0.016,
+      "r-_A_T": -0.012,
+      "t_A_A": 0.024,
+      "t_T_T": -0.023
+    },
+    "exciton": {
+      "E_A": 0.0,
+      "E_T": 0.0,
+      "h_A_T": -0.099,
+      "r+_T_A": -0.006,
+      "r-_A_T": -0.013,
+      "t_A_A": 0.0698,
+      "t_T_T": 0.143
+    },
+    "hole": {
+      "E_A": -5.45,
+      "E_T": -6.298,
+      "h_A_T": 0.002,
+      "r+_T_A": 0.05,
+      "r-_A_T": -0.007,
+      "t_A_A": -0.098,
+      "t_T_T": 0.021
+    }
+  },
+  "metadata": {
+    "notes": "DOI: 10.1016/j.jphotochem.2006.12.007. Roles of r+ and r- are interchanged! Parameters for electron and hole from Mehrez and Anantram by computing Coulomb integrals between HOMO and LUMO using DFT (B3LYP/6-31G).",
+    "source": "Bittner2007",
+    "tb_model_name": "ELM",
+    "unit": "eV"
+  }
+}

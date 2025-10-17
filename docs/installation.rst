@@ -31,18 +31,6 @@ Before proceeding, make sure the following prerequisites are met:
 
    - If they are not installed, install them using your package manager:
 
-     - **Debian/Ubuntu**:
-
-       .. code-block:: bash
-
-          sudo apt install python3-pip python3-tk
-
-     - **Fedora**:
-
-       .. code-block:: bash
-
-          sudo dnf install python3-pip python3-tkinter
-
 3. **Windows Users**:
 
    - Ensure Git is installed by running:
@@ -57,7 +45,7 @@ Before proceeding, make sure the following prerequisites are met:
 Installation via PyPI
 =====================
 
-The easiest way to install `qDNA` is through PyPI. For best results, we recommend creating a new virtual environment to avoid package conflicts.
+The easiest way to install `qDNA` is through PyPI. We recommend creating a new virtual environment to avoid package conflicts.
 
 Steps
 -----
@@ -197,4 +185,4 @@ To remove the package:
 If you cloned the GitHub repository, manually delete the `QuantumDNA` folder from your computer.
 
 
-**Congratulations!** You've successfully installed and set up `QuantumDNA`. Enjoy exploring the physics of DNA with this powerful tool.
+**Congratulations!** You've successfully installed and set up `QuantumDNA`.

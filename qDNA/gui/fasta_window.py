@@ -1,26 +1,20 @@
 # pylint: skip-file
 
 import json
-import glob
 import os
 import multiprocessing
-import time
 from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 import pandas as pd
 
 from .. import DATA_DIR
-from ..tools import load_json
-from ..evaluation import (
-    calc_dipole_dict,
-    calc_dipole_moment_dict,
-    calc_exciton_transfer_dict,
-    calc_lifetime_dict,
-)
+from ..hamiltonian import get_tb_sites
+from ..io import load_json, load_tb_model_props
+from ..evaluation import Evaluation, EvaluationParallel
 from .scrollable_console_frame import ScrollableConsoleFrame
 
-# --------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def format_time(seconds):
@@ -37,24 +31,24 @@ def format_time(seconds):
         return f"{seconds}s"
 
 
+# ----------------------------------------------------------------------
+
+
 class FastaWindow(ctk.CTkToplevel):
     def __init__(self, master):
         super().__init__(master)
 
         self.title("Fasta Input")
-        self.setup_ui()
 
-        self.upper_strands = []
-        self.identifiers = []
-
-        self.fasta_data = []
-        self.kwargs = {}
-        self.tb_model_name = "ELM"
-        self.filename = "delete"
+        self.upper_strands = None
+        self.identifiers = None
+        self.fasta_data = None
+        self.kwargs = {"relax_rate": 3.0}
         self.num_cpu = multiprocessing.cpu_count() - 1
-        self.directory = os.path.join(DATA_DIR, "gui")
+        self.tb_model_name = "ELM"
 
-    def setup_ui(self):
+        # --------------------------------------------------------------
+
         self.logo_label = ctk.CTkLabel(
             self, text="QuantumDNA", font=ctk.CTkFont(size=20, weight="bold")
         )
@@ -71,7 +65,9 @@ class FastaWindow(ctk.CTkToplevel):
         )
         self.upload_kwargs_button.grid(row=2, column=0, padx=10, pady=10, sticky="w")
 
-        # Calculation options
+        # --------------------------------------------------------------
+
+        # lifetime checkbox
         self.lifetime_var = ctk.BooleanVar(value=True)
         self.lifetime_checkbox = ctk.CTkCheckBox(
             self,
@@ -81,18 +77,21 @@ class FastaWindow(ctk.CTkToplevel):
         )
         self.lifetime_checkbox.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
+        # charge separation checkbox
         self.dipole_var = ctk.BooleanVar(value=True)
         self.dipole_checkbox = ctk.CTkCheckBox(
             self, text="Calculate Charge Separation", variable=self.dipole_var
         )
         self.dipole_checkbox.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
+        # dipole moment checkbox
         self.dipole_moment_var = ctk.BooleanVar(value=True)
         self.dipole_moment_checkbox = ctk.CTkCheckBox(
             self, text="Calculate Dipole Moment", variable=self.dipole_moment_var
         )
         self.dipole_moment_checkbox.grid(row=2, column=1, padx=10, pady=10, sticky="w")
 
+        # exciton transfer checkbox
         self.exciton_transfer_var = ctk.BooleanVar(value=True)
         self.exciton_transfer_checkbox = ctk.CTkCheckBox(
             self,
@@ -101,6 +100,9 @@ class FastaWindow(ctk.CTkToplevel):
         )
         self.exciton_transfer_checkbox.grid(row=3, column=1, padx=10, pady=10, sticky="w")
 
+        # --------------------------------------------------------------
+
+        # estimating computation time button
         self.estimate_comp_time_button = ctk.CTkButton(
             self, text="Estimate Computation Time", command=self.estimate_comp_time
         )
@@ -108,14 +110,17 @@ class FastaWindow(ctk.CTkToplevel):
             row=4, column=0, columnspan=2, padx=10, pady=10, sticky="ew"
         )
 
-        # Submit button
+        # submit button
         self.submit_button = ctk.CTkButton(self, text="Submit", command=self.process_files)
         self.submit_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
+        # console frame
         self.scrollable_console_frame = ScrollableConsoleFrame(self)
         self.scrollable_console_frame.grid(
             row=6, column=0, columnspan=2, padx=10, pady=10, sticky="nsew"
         )
+
+    # ------------------------------------------------------------------
 
     def open_fasta_file(self):
         fasta_file_path = filedialog.askopenfilename(
@@ -125,6 +130,10 @@ class FastaWindow(ctk.CTkToplevel):
             messagebox.showwarning("Warning", "No FASTA file selected.")
             return
 
+        self.upper_strands = []
+        self.identifiers = []
+        self.fasta_data = []
+
         try:
             with open(fasta_file_path, "r") as file:
                 self.fasta_data = file.readlines()
@@ -133,7 +142,14 @@ class FastaWindow(ctk.CTkToplevel):
                 raise ValueError("FASTA file is empty.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to open FASTA file: {e}")
-            self.fasta_data = []
+
+    def parse_fasta_data(self):
+        for line in self.fasta_data:
+            line = line.strip()
+            if line.startswith(">"):
+                self.identifiers.append(line)
+            else:
+                self.upper_strands.append(line)
 
     def open_kwargs_file(self):
         kwargs_file_path = filedialog.askopenfilename(
@@ -143,6 +159,8 @@ class FastaWindow(ctk.CTkToplevel):
             messagebox.showwarning("Warning", "No Options file selected.")
             return
 
+        self.kwargs = {}
+
         try:
             with open(kwargs_file_path, "r") as json_file:
                 self.kwargs = json.load(json_file)
@@ -150,88 +168,67 @@ class FastaWindow(ctk.CTkToplevel):
                 raise ValueError("Options file is empty.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to open Options file: {e}")
-            self.kwargs = {}
+
+    # ------------------------------------------------------------------
+
+    def estimate_comp_time(self):
+        comp_time_dict = load_json(os.path.join(DATA_DIR, "raw", "comp_time.json"))
+        comp_time = 0
+        for upper_strand in self.upper_strands:
+            comp_time += comp_time_dict[self.tb_model_name][len(upper_strand) - 2]
+        comp_time /= min(self.num_cpu, len(self.upper_strands))
+        print(f"Estimated Computation Time {comp_time}" + f"\nUsing {self.num_cpu} kernels")
+
+    # ------------------------------------------------------------------
 
     def process_files(self):
         if not self.fasta_data:
             messagebox.showwarning("Warning", "Please provide a FASTA .fasta file")
             return
 
-        fasta_data = {
-            "Identifier": self.identifiers,
-            "Sequence (5'-3')": self.upper_strands,
-        }
-
-        try:
-            self.tb_model_name = self.kwargs["tb_model_name"]
-            del self.kwargs["tb_model_name"]
-        except:
-            pass
-
-        # start calculations
-        start_time = time.time()
-
-        # Lifetime calculation
+        # observables
+        observables = []
         if self.lifetime_var.get():
-            lifetime_dict = calc_lifetime_dict(
-                self.upper_strands,
-                self.tb_model_name,
-                self.filename,
-                self.directory,
-                **self.kwargs,
-            )
-            fasta_data["Exciton Lifetime (fs)"] = list(lifetime_dict.values())
-        end_time_lifetime = time.time()
-
-        # Charge separation calculation
+            observables.append("lifetime")
         if self.dipole_var.get():
-            dipole_dict = calc_dipole_dict(self.tb_model_name, self.filename, self.directory)
-            fasta_data["Charge Separation (A)"] = list(dipole_dict.values())
-
-        # Dipole moment calculation
+            observables.append("charge_separation")
         if self.dipole_moment_var.get():
-            dipole_moment_dict = calc_dipole_moment_dict(
-                self.tb_model_name, self.filename, self.directory
-            )
-            fasta_data["Dipole Moment (D)"] = list(dipole_moment_dict.values())
-
-        # Exciton transfer calculation
+            observables.append("dipole_moment")
         if self.exciton_transfer_var.get():
-            exciton_transfer_dict = calc_exciton_transfer_dict(
-                self.tb_model_name, self.filename, self.directory
-            )
-            fasta_data["Exciton Transfer (upper strand)"] = [
-                val[0]["exciton"] for val in exciton_transfer_dict.values()
-            ]
-            fasta_data["Exciton Transfer (lower strand)"] = [
-                val[1]["exciton"] for val in exciton_transfer_dict.values()
-            ]
-        end_time = time.time()
-        # end calculations
+            observables.append("exciton_transfer")
 
-        # print("-------------------")
-        # print(fasta_data)
-        # print("-------------------")
-        df_fasta = pd.DataFrame(fasta_data)
-        self.kwargs["Computation Time (s)"] = end_time - start_time
-        self.kwargs["Computation Time Lifetime (s)"] = end_time_lifetime - start_time
-        metadata_df = pd.DataFrame(list(self.kwargs.items()), columns=["Parameter", "Value"])
-        # save as excel file
-        self.save_to_excel(df_fasta, metadata_df)
+        # create sequence list
+        self.tb_model_name = self.kwargs.get("tb_model_name", "ELM")
+        tb_sites_list = []
+        for upper_strand in self.upper_strands:
+            tb_sites = get_tb_sites(upper_strand, tb_model_name=self.tb_model_name)
+            tb_sites_list.append(tb_sites)
 
-        # delete files created during calculations
-        json_files = glob.glob(os.path.join(self.directory, "*.json"))
-        for file in json_files:
-            os.remove(file)
-            # print(f"Deleted: {file}")
+        evaluation_list = [Evaluation(tb_sites, **self.kwargs) for tb_sites in tb_sites_list]
+        parallel = EvaluationParallel(evaluation_list, observables=observables)
+        results = parallel.calc_results(
+            filepath=os.path.join(DATA_DIR, "gui", "result.json"), save=True
+        )
 
-    def parse_fasta_data(self):
-        for line in self.fasta_data:
-            line = line.strip()
-            if line.startswith(">"):
-                self.identifiers.append(line)
-            else:
-                self.upper_strands.append(line)
+        # fasta_data["Exciton Lifetime (fs)"] = list(lifetime_dict.values())
+        # fasta_data["Charge Separation (A)"] = list(dipole_dict.values())
+        # fasta_data["Dipole Moment (D)"] = list(dipole_moment_dict.values())
+        # fasta_data["Exciton Transfer (upper strand)"] = [
+        # val[0]["exciton"] for val in exciton_transfer_dict.values()
+        # ]
+        # fasta_data["Exciton Transfer (lower strand)"] = [
+        # val[1]["exciton"] for val in exciton_transfer_dict.values()
+        # ]
+        # # data
+        # df_fasta = pd.DataFrame(fasta_data)
+
+        # # metadata
+        # self.kwargs["Computation Time (s)"] = end_time - start_time
+        # metadata_df = pd.DataFrame(
+        #     list(self.kwargs.items()), columns=["Parameter", "Value"]
+        # )
+
+        # self.save_to_excel(df_fasta, metadata_df)
 
     def save_to_excel(self, df_fasta, metadata_df):
         save_path = filedialog.asksaveasfilename(
@@ -250,14 +247,5 @@ class FastaWindow(ctk.CTkToplevel):
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save file: {e}")
 
-    def estimate_comp_time(self):
-        comp_time_dict = load_json("comp_time", os.path.join(DATA_DIR, "raw"))
-        comp_time = 0
-        for upper_strand in self.upper_strands:
-            comp_time += comp_time_dict[self.tb_model_name][len(upper_strand) - 2]
-        comp_time /= min(self.num_cpu, len(self.upper_strands))
-        print(
-            "Estimated Computation Time "
-            + format_time(comp_time)
-            + f"\nUsing {self.num_cpu} kernels"
-        )
+
+# ----------------------------------------------------------------------

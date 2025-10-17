@@ -3,112 +3,65 @@ import qutip as q
 
 from ..model import global_to_local
 from ..hamiltonian import add_groundstate
-from .observables import get_pop_particle
+from .observables import get_pop_observable
 
-# ----------------------------------------------
+# ----------------------------------------------------------------------
 
 
-def get_loc_deph_ops(tb_basis, dephasing_rate, relaxation):
-    """Local dephasing operators. In total :math:`2N` operators (where :math:`N` is the
-    number of tight-binding sites).
+def get_loc_deph_ops(tb_basis, description, dephasing_dict, relaxation):
+    """Generate a list of local dephasing collapse operators.
+
+    This function creates local dephasing operators based on the provided tight-binding basis,
+    system description, dephasing rates, and relaxation flag.
 
     Parameters
     ----------
     tb_basis : list
-        List of tight-binding site basis states.
-    dephasing_rate : float
-        Dephasing rate.
+        List representing the tight-binding basis states.
+    description : object
+        Descriptor object containing structural information about the system.
+    dephasing_dict : dict
+        Dictionary mapping particle identifiers to their respective dephasing rates.
     relaxation : bool
-        Flag for relaxation.
+        If True, the ground state is included in the operators.
 
     Returns
     -------
     list
-        List of local dephasing operators.
+        A list of local dephasing operators as Qobj instances.
     """
 
     c_ops = []
     for tb_site in tb_basis:
-        op_electron = get_pop_particle(tb_basis, "electron", tb_site)
-        op_hole = get_pop_particle(tb_basis, "hole", tb_site)
-        if relaxation:
-            op_electron = add_groundstate(op_electron)
-            op_hole = add_groundstate(op_hole)
-        c_ops.append(np.sqrt(dephasing_rate) * q.Qobj(op_electron))
-        c_ops.append(np.sqrt(dephasing_rate) * q.Qobj(op_hole))
+        for particle, dephasing_rate in dephasing_dict.items():
+            op = get_pop_observable(tb_basis, description, particle, tb_site)
+            if relaxation:
+                op = add_groundstate(op)
+            c_ops.append(np.sqrt(dephasing_rate) * q.Qobj(op))
     return c_ops
+
+
+# ----------------------------------------------------------------------
 
 
 def get_glob_deph_ops(eigs, dephasing_rate, relaxation):
-    """Global dephasing operators. In total :math:`N^2` operators (where :math:`N` is
-    the number of eigenstates).
+    """Generate a list of global dephasing collapse operators.
+
+    This function creates :math:`N^2` operators, where :math:`N` is the number of eigenstates.
 
     Parameters
     ----------
     eigs : np.ndarray
-        Eigensystem.
+        Array representing the eigensystem of the Hamiltonian.
     dephasing_rate : float
-        Dephasing rate.
+        The rate of dephasing applied to the system.
     relaxation : bool
-        Flag for relaxation.
+        If True, the ground state is included in the operators.
 
     Returns
     -------
     list
-        List of global dephasing operators.
-    """
-    num_eigenstates = eigs.shape[0]
-    c_ops = []
-    for i in range(num_eigenstates):
-        matrix = np.zeros((num_eigenstates, num_eigenstates))
-        matrix[i, i] = 1
-        op = global_to_local(matrix, eigs)
-        if relaxation:
-            op = add_groundstate(op)
-        c_ops.append(np.sqrt(dephasing_rate) * q.Qobj(op))
-    return c_ops
-
-
-def get_loc_deph_p_ops(tb_basis, dephasing_rate):
-    """Local dephasing operators for particle description. In total :math:`N` operators
-    (where :math:`N` is the number of tight-binding sites).
-
-    Parameters
-    ----------
-    tb_basis : list
-        List of tight-binding site basis states.
-    dephasing_rate : float
-        Dephasing rate.
-
-    Returns
-    -------
-    list
-        List of local dephasing operators for particle description.
-    """
-
-    num_sites = len(tb_basis)
-    c_ops = []
-    for i in range(num_sites):
-        op = np.sqrt(dephasing_rate) * q.fock_dm(num_sites, i)
-        c_ops.append(op)
-    return c_ops
-
-
-def get_glob_deph_p_ops(eigs, dephasing_rate):
-    """Global dephasing operators for particle description. In total :math:`N` operators
-    (where :math:`N` is the number of eigenstates).
-
-    Parameters
-    ----------
-    eigs : np.ndarray
-        Eigensystem.
-    dephasing_rate : float
-        Dephasing rate.
-
-    Returns
-    -------
-    list
-        List of global dephasing operators for particle description.
+        A list containing the global dephasing operators as Qobj instances.
     """
 
     num_eigenstates = eigs.shape[0]
@@ -116,5 +69,10 @@ def get_glob_deph_p_ops(eigs, dephasing_rate):
     for i in range(num_eigenstates):
         local_op = q.fock_dm(num_eigenstates, i).full()
         global_op = global_to_local(local_op, eigs)
+        if relaxation:
+            global_op = add_groundstate(global_op)
         c_ops.append(np.sqrt(dephasing_rate) * q.Qobj(global_op))
     return c_ops
+
+
+# ----------------------------------------------------------------------

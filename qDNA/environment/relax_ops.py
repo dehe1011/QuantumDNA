@@ -1,12 +1,13 @@
 import numpy as np
 import qutip as q
 
-# ----------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def get_relax_op(tb_basis, tb_site):
-    """Annihilation operator of an exciton on a given tight-binding site. Relaxation of
-    the DNA to its ground state.
+    """
+    Annihilation operator of an exciton on a given tight-binding site. Represents the
+    relaxation of the DNA system to its ground state.
 
     Parameters
     ----------
@@ -18,7 +19,7 @@ def get_relax_op(tb_basis, tb_site):
     Returns
     -------
     qutip.Qobj
-        Relaxation operator.
+        Relaxation operator as a Qobj instance.
     """
 
     tb_site_idx = tb_basis.index(tb_site)
@@ -31,6 +32,7 @@ def get_relax_op(tb_basis, tb_site):
 def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
     """
     Generate relaxation operators for a given tight-binding basis.
+
     Parameters
     ----------
     tb_basis : list
@@ -39,9 +41,10 @@ def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
         Dictionary mapping tight-binding basis states to site indices.
     relax_rates : dict
         Dictionary mapping site indices to relaxation rates.
+
     Returns
     -------
-    relax_ops : list
+    list of qutip.Qobj
         List of relaxation operators, each scaled by the square root of the corresponding relaxation rate.
     """
 
@@ -52,3 +55,6 @@ def get_relax_ops(tb_basis, tb_basis_sites_dict, relax_rates):
             relax_op = get_relax_op(tb_basis, tb_site)
             relax_ops.append(np.sqrt(relax_rate) * relax_op)
     return relax_ops
+
+
+# ----------------------------------------------------------------------

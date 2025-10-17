@@ -7,7 +7,7 @@ It provides functions for calculating bath spectral densities and Lindblad rates
 import numpy as np
 import scipy.constants as c
 
-# --------------------------- Bath Spectral Densities --------------------------------------
+# ----------------------------------------------------------------------
 
 
 def debye_spectral_density(omega, cutoff_freq, reorg_energy):
@@ -56,7 +56,7 @@ def ohmic_spectral_density(omega, cutoff_freq, reorg_energy, exponent):
     return (np.pi * reorg_energy * omega**exponent / cutoff_freq) * np.exp(-omega / cutoff_freq)
 
 
-# ----------------------------- Lindblad Rates -------------------------------------------
+# ----------------------------------------------------------------------
 
 
 def bose_einstein_distrib(omega, temperature):
@@ -110,7 +110,17 @@ def rate_constant_redfield(
     -------
     float
         Redfield rate constant.
+
+    Notes
+    -----
+    .. note::
+
+        If the frequency is zero, the function returns the dephasing rate.
+        Otherwise, it calculates the rate constant based on the specified
+        spectral density and Bose-Einstein distribution.
+
     """
+
     if omega == 0:
         if deph_rate is None:
             deph_rate = dephasing_rate(cutoff_freq, reorg_energy, temperature)
@@ -155,3 +165,6 @@ def dephasing_rate(cutoff_freq, reorg_energy, temperature):
         Dephasing rate.
     """
     return (4 * reorg_energy * c.k * temperature) / (c.hbar * cutoff_freq * 1e12)
+
+
+# ----------------------------------------------------------------------
