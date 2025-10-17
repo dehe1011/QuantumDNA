@@ -1,0 +1,67 @@
+{
+  "descriptions": [
+    "1P",
+    "2P"
+  ],
+  "dna_bases": [
+    "A",
+    "T",
+    "G",
+    "C",
+    "F"
+  ],
+  "param_ids": [
+    "MSF",
+    "HKS",
+    "MMTS",
+    "SN",
+    "SN_all"
+  ],
+  "particles": [
+    "electron",
+    "hole",
+    "exciton"
+  ],
+  "sources": [
+    "Endres2002",
+    "Bittner2007",
+    "Hawke2010",
+    "Simserides2014",
+    "Mantela2021",
+    "Simserides2024",
+    "Kordas2025",
+    "1BNA",
+    "unmeth",
+    "meth"
+  ],
+  "spectral_densities": [
+    "debye",
+    "ohmic"
+  ],
+  "t_units": [
+    "fs",
+    "ps"
+  ],
+  "tb_models": [
+    "WM",
+    "LM",
+    "ELM",
+    "FWM",
+    "TC",
+    "FLM",
+    "FELM",
+    "FC"
+  ],
+  "units": [
+    "meV",
+    "eV",
+    "100meV",
+    "rad/ps",
+    "rad/fs",
+    "1/cm",
+    "K",
+    "J",
+    "1/fs",
+    "1/ps"
+  ]
+}

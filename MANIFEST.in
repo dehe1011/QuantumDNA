@@ -1,0 +1,26 @@
+# Include the README, LICENSE, and other documentation files
+include README.md
+include installation.md
+include LICENSE.txt
+include CITATION.bib
+
+# Include the MANIFEST file itself
+include MANIFEST.in
+
+# Include requirement files
+include requirements/*.txt
+
+# Include files in the package's root directory
+include qDNA/*.mplstyle
+include qDNA/defaults.yaml
+recursive-include qDNA *.py
+
+# Include specific data files
+include qDNA/data/color_palettes/*.json
+include qDNA/data/lcao_params/*.json
+include qDNA/data/raw/data_paper/*.json
+include qDNA/data/raw/figures_paper/*.pdf
+include qDNA/data/raw/figures_tutorials/*.png
+include qDNA/data/tb_params/*.json
+include qDNA/data/qDNA.log
+incluce qDNA/data/*.json

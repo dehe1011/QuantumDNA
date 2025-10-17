@@ -1,0 +1,36 @@
+# check which files are ignored: git status --ignored
+
+.venv/
+.venv_test/
+.vscode/
+howto/
+development/
+
+notes.txt
+TODO.txt
+main.py
+
+# documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# created for pre-commit
+.pre-commit-config.yaml
+
+# created by pytest
+__pycache__
+.pytest_cache/
+
+# created by coverage
+.coverage
+htmlcov/
+
+# created by build (python -m build) or setuptools (python setup.py sdist bdist_wheel)
+dist/
+build/
+*.egg-info/
+
+# created by Jupyter Notebooks
+__pycache__
+.ipynb_checkpoints

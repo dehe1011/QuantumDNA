@@ -1,0 +1,188 @@
+
+******************
+Installation Guide
+******************
+
+Welcome to the installation guide for `QuantumDNA`. Follow the steps below to install the package, set up a virtual environment, and start using `qDNA` either through a Graphical User Interface or a Jupyter Notebook.
+
+Prerequisites
+=============
+
+Before proceeding, make sure the following prerequisites are met:
+
+1. **Python Installation**:
+
+   - Verify that Python is installed by running:
+
+     .. code-block:: bash
+
+        python --version
+
+   - If Python is not installed, download and install it from `python.org <https://www.python.org/downloads/>`_.
+
+2. **Linux/macOS Users**:
+
+   - Ensure `pip` and `tkinter` are installed:
+
+     .. code-block:: bash
+
+        python3 -m pip --version
+        python3 -m tkinter
+
+   - If they are not installed, install them using your package manager:
+
+3. **Windows Users**:
+
+   - Ensure Git is installed by running:
+
+     .. code-block:: bash
+
+        git --version
+
+   - If Git is not installed, download and install it from `Git for Windows <https://gitforwindows.org/>`_.
+
+
+Installation via PyPI
+=====================
+
+The easiest way to install `qDNA` is through PyPI. We recommend creating a new virtual environment to avoid package conflicts.
+
+Steps
+-----
+
+1. **Create a New Virtual Environment**:
+
+   Open your terminal and navigate to your project folder. Run:
+
+   .. code-block:: bash
+
+      python -m venv .venv
+
+2. **Activate the Virtual Environment**:
+
+   - **Windows**:
+
+     .. code-block:: bash
+
+        .venv\Scripts\activate
+
+   - **macOS/Linux**:
+
+     .. code-block:: bash
+
+        source .venv/bin/activate
+
+3. **Install the `qDNA` Package**:
+
+   .. code-block:: bash
+
+      pip install qDNA
+
+4. **Optional: Use `qDNA` Inside a Jupyter Notebook**:
+
+   Install Jupyter and launch the notebook:
+
+   .. code-block:: bash
+
+      pip install ipykernel notebook
+      jupyter notebook
+
+
+Installation via Cloning the GitHub Repository
+==============================================
+
+If you plan to contribute to the development or make changes to the source code, install `qDNA` in editable mode by cloning its GitHub repository.
+
+Steps
+-----
+
+1. **Clone the GitHub Repository**:
+
+   .. code-block:: bash
+
+      git clone https://github.com/dehe1011/QuantumDNA.git
+
+2. **Navigate to the Cloned Repository**:
+
+   .. code-block:: bash
+
+      cd QuantumDNA
+
+3. **Run the Activation Script**:
+
+   Use the provided activation script to complete the installation. Instructions vary by platform (see below).
+
+
+Platform-Specific Instructions for Activation
+=============================================
+
+**Windows**
+-----------
+
+1. Navigate to the project directory:
+
+   .. code-block:: powershell
+
+      Set-Location -Path "C:\Users\<YourUsername>\QuantumDNA"
+
+2. Run the activation script:
+
+   .. code-block:: powershell
+
+      powershell -ExecutionPolicy Bypass -File scripts\Activate.ps1
+
+**macOS**
+---------
+
+1. Navigate to the project directory:
+
+   .. code-block:: bash
+
+      cd /Users/<YourUsername>/QuantumDNA
+
+2. Run the activation script:
+
+   .. code-block:: bash
+
+      source scripts/activate
+
+**Linux**
+---------
+
+1. Navigate to the project directory:
+
+   .. code-block:: bash
+
+      cd /home/<YourUsername>/QuantumDNA
+
+2. Run the activation script:
+
+   .. code-block:: bash
+
+      source scripts/activate
+
+
+Post-Installation and Usage
+===========================
+
+If all tests pass, the package has been successfully installed! You can now:
+
+- Launch the **Graphical User Interface** or
+- Start using `qDNA` inside a **Jupyter Notebook**.
+
+Run the activation script as mentioned in the platform-specific instructions to start the **Graphical User Interface** or a **Jupyter Notebook**. It is recommended to always run the activation script.
+
+
+Uninstallation
+==============
+
+To remove the package:
+
+.. code-block:: bash
+
+   pip uninstall qDNA
+
+If you cloned the GitHub repository, manually delete the `QuantumDNA` folder from your computer.
+
+
+**Congratulations!** You've successfully installed and set up `QuantumDNA`.

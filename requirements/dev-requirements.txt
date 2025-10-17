@@ -1,0 +1,12 @@
+black
+build
+coverage
+coveralls
+docformatter
+mypy
+pre-commit
+pylint
+pytest
+setuptools
+twine
+wheel
