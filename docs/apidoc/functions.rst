@@ -1,7 +1,7 @@
 Functions
 =========
 
-This section provides an overview of the available functions in the `qDNA` package.
+This section provides an overview of the available functions in the `QuantumDNA` package.
 
 
 Load Default Parameters

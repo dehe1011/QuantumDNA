@@ -1,4 +1,4 @@
-.. figure:: figures/0_qDNA_logo.png
+.. figure:: ../images/0_qDNA_logo.png
    :align: center
    :width: 6in
 
@@ -8,7 +8,7 @@ Welcome to QuantumDNA's Documentation!
 
 QuantumDNA is an open-source Python package for simulating charge transfer and excited states in DNA. These processes are key to understanding how DNA maintains genetic stability, how mutations occur, and even how we can use DNA in nanotechnology. QuantumDNA combines powerful quantum physics models like Linear Combination of Atomic Orbitals (LCAO) and tight-binding (TB) with quantum master equations to handle environmental effects. This makes it possible to analyze large DNA datasets quickly and accurately, uncovering insights into genetic and epigenetic phenomena. QuantumDNA comes with a clean and simple graphical user interface—perfect for researchers and students, even without extensive coding experience.
 
-.. figure:: figures/2_qDNA_structure.png
+.. figure:: ../images/2_qDNA_structure.png
    :align: center
    :width: 4in
 
