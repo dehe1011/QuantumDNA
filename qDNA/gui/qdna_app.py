@@ -1,6 +1,7 @@
 # pylint: skip-file
 
 import webbrowser
+import re
 
 import customtkinter as ctk
 
@@ -109,10 +110,10 @@ class QDNApp(ctk.CTk):
         # get the values from the initial_frame
 
         self.upper_strand_input = self.initial_frame.upper_strand_entry.get()
-        self.upper_strand = self.upper_strand_input.split("/")
+        self.upper_strand = re.split(r"[/_\\]+", self.upper_strand_input)
         self.lower_strand_input = self.initial_frame.lower_strand_entry.get()
         if self.lower_strand_input != "auto complete":
-            self.lower_strand = self.lower_strand_input.split("/")
+            self.lower_strand = re.split(r"[/_\\]+", self.lower_strand_input)
         else:
             self.lower_strand = self.lower_strand_input
         self.tb_model_name = self.initial_frame.tb_model_combo.get()
