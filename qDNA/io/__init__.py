@@ -8,3 +8,5 @@ from .io_mpl import *
 from .io_tb_params import *
 
 from .defaults import *
+
+load_mpl_style()

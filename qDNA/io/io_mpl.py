@@ -62,6 +62,4 @@ def plot_color_palette(color_palette):
     return fig, ax
 
 
-load_mpl_style()
-
 # ----------------------------------------------------------------------

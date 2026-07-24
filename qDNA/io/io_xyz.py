@@ -4,22 +4,6 @@ from .helpers import get_non_overwriting_path
 # ----------------------------------------------------------------------
 
 
-def create_xyz(elements, coordinates, base_id, info=None):
-    num_atoms = len(elements)
-    xyz_content = f"{num_atoms}\n{base_id}\n"
-    for element, (x, y, z) in zip(elements, coordinates):
-        xyz_content += f"{element} {x:.4f} {y:.4f} {z:.4f}\n"
-    if info is not None:
-        xyz_content += f"# {info}\n"
-    return xyz_content
-
-
-def save_xyz(xyz_content, filepath):
-    filepath = get_non_overwriting_path(filepath)
-    with open(filepath, "w", encoding="utf-8") as file:
-        file.write(xyz_content)
-
-
 def write_xyz(directory, base_id, elements, coordinates, info=None):
     """
     Write atomic elements and coordinates to an XYZ file.
@@ -40,9 +24,19 @@ def write_xyz(directory, base_id, elements, coordinates, info=None):
     None
     """
 
-    xyz_content = create_xyz(elements, coordinates, base_id, info=info)
+    # create XYZ content
+    num_atoms = len(elements)
+    xyz_content = f"{num_atoms}\n{base_id}\n"
+    for element, (x, y, z) in zip(elements, coordinates):
+        xyz_content += f"{element} {x:.4f} {y:.4f} {z:.4f}\n"
+    if info is not None:
+        xyz_content += f"# {info}\n"
+
+    # save XYZ file
     filepath = os.path.join(directory, f"{base_id}.xyz")
-    save_xyz(xyz_content, filepath)
+    filepath = get_non_overwriting_path(filepath)
+    with open(filepath, "w", encoding="utf-8") as file:
+        file.write(xyz_content)
 
 
 def load_xyz(filepath):
@@ -84,6 +78,20 @@ def load_xyz(filepath):
 
 
 def find_xyz(directory):
+    """
+    Find all XYZ files in a directory.
+
+    Parameters
+    ----------
+    directory : str
+        Path to the directory to search for XYZ files.
+
+    Returns
+    -------
+    list of str
+        List of filenames without extensions for all XYZ files found in the directory.
+    """
+
     files = os.listdir(directory)
     return [os.path.splitext(file)[0] for file in files if file.endswith(".xyz")]
 
