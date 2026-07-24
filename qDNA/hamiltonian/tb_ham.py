@@ -107,6 +107,7 @@ class TBHam(TBModel):
         self._unit = self.kwargs.get("unit")
 
         # tight-binding parameters
+        self.tb_params_directory = self.kwargs.get("tb_params_directory")
         self.tb_params = self.get_tb_params()
 
         self._relaxation = False
@@ -257,7 +258,9 @@ class TBHam(TBModel):
     # ------------------------------------------------------------------
 
     def get_tb_params(self):
-        tb_params, metadata = load_tb_params(self.source, self.tb_model_name, load_metadata=True)
+        tb_params, metadata = load_tb_params(
+            self.source, self.tb_model_name, load_metadata=True, directory=self.tb_params_directory
+        )
 
         # convert the parameters to the expected unit
         if self.unit != metadata["unit"]:
@@ -333,16 +336,16 @@ class TBHam(TBModel):
         return np.linalg.eigh(matrix)
 
     def _get_fourier_1P(self, init_state, end_state, quantities):
+        """Calculates the Fourier analysis for a 1P Hamiltonian."""
 
         assert init_state in self.tb_basis, f"Initial state {init_state} must be in tb_basis."
 
         eigv, eigs = self.get_eigensystem()
         init_state_idx = self.tb_basis.index(init_state)
-        end_state_idx = self.tb_basis.index(end_state)
+        amplitudes_dict, frequencies_dict, average_pop_dict = {}, {}, {}
 
         particle = self.particles[0]
-
-        amplitudes_dict, frequencies_dict, average_pop_dict = {}, {}, {}
+        end_state_idx = self.tb_basis.index(end_state)
         if "amplitude" in quantities:
             val = calc_amplitudes(eigs, init_state_idx, end_state_idx)
             amplitudes_dict[particle] = val
@@ -354,19 +357,19 @@ class TBHam(TBModel):
         if "average_pop" in quantities:
             val = calc_average_pop(eigs, init_state_idx, end_state_idx)
             average_pop_dict[particle] = val
+
         return amplitudes_dict, frequencies_dict, average_pop_dict
 
     def _get_fourier_2P(self, init_state, end_state, quantities):
+        """Calculates the Fourier analysis for a 2P Hamiltonian."""
 
         assert init_state in self.eh_basis, f"initial state {init_state} must be in tb_basis."
 
         eigv, eigs = self.get_eigensystem()
         init_state_idx = self.eh_basis.index(init_state)
-
         amplitudes_dict, frequencies_dict, average_pop_dict = {}, {}, {}
 
         for particle in self.particles:
-
             # Determine the end state indices for each particle
             eh_states = get_particle_eh_states(particle, end_state, self.tb_basis)
             end_states_idx = []
@@ -374,7 +377,6 @@ class TBHam(TBModel):
                 end_states_idx.append(self.eh_basis.index(eh_state))
 
             if "amplitude" in quantities:
-
                 amplitudes = []
                 for end_state_idx in end_states_idx:
                     val = calc_amplitudes(eigs, init_state_idx, end_state_idx)
@@ -391,6 +393,7 @@ class TBHam(TBModel):
                     val = calc_average_pop(eigs, init_state_idx, end_state_idx)
                     average_pop.append(val)
                 average_pop_dict[particle] = np.sum(average_pop)
+
         return amplitudes_dict, frequencies_dict, average_pop_dict
 
     # pylint: disable=inconsistent-return-statements
@@ -430,12 +433,19 @@ class TBHam(TBModel):
 
         # calculate the backbone population
         backbone_pop = dict(zip(self.particles, [0] * len(self.particles)))
-
         for tb_site in backbone_sites:
             val = self.get_average_pop(init_state, tb_site)
             for particle in self.particles:
                 backbone_pop[particle] += val[particle]
         return backbone_pop
+
+    def calc_IPR(self, init_state):
+        IPR_dict = {}
+        avg_pop_dicts = [self.get_average_pop(init_state, end_state) for end_state in self.tb_basis]
+        for particle in self.particles:
+            IPR_val = 1 / sum([avg_pop_dict[particle] ** 2 for avg_pop_dict in avg_pop_dicts])
+            IPR_dict[particle] = IPR_val
+        return IPR_dict
 
 
 # ----------------------------------------------------------------------

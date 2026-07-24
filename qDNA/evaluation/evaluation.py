@@ -78,7 +78,7 @@ class Evaluation(MeSolver):
         start_time = time.time()
         gs_pop = self.get_groundstate_pop()["groundstate"]
         try:
-            _, index = next((val, i) for i, val in enumerate(gs_pop) if val >= 1 - 1 / np.e)
+            _, index = next((val, i) for i, val in enumerate(gs_pop) if val.real >= 1 - 1 / np.e)
             self.lifetime = self.times[index]
             if self.t_unit == "ps":
                 self.lifetime *= 1000

@@ -36,40 +36,47 @@ def get_tb_sites(upper_strand, **kwargs):
 
     """
 
-    lower_strand = kwargs.get("lower_strand", "auto complete")
     tb_model = TBModel(len(upper_strand), **kwargs)
+    is_double_stranded = tb_model.double_stranded
     is_pdb = len(upper_strand[0]) == 3
+    lower_strand = kwargs.get("lower_strand", "auto complete")
+    backbone = tb_model.backbone
+
     complementary_dict = {"A": "T", "T": "A", "G": "C", "C": "G"}
 
-    if tb_model.double_stranded and not is_pdb:
+    # double stranded and not PDB input
+    if is_double_stranded and not is_pdb:
         if lower_strand == "auto complete":
             lower_strand = [complementary_dict[key] for key in upper_strand]
         tb_sites = [list(upper_strand), list(lower_strand)]
 
-        if tb_model.backbone:
+        if backbone:
             B = ["B"] * len(upper_strand)
             tb_sites = [B, *tb_sites, B]
 
-    if not tb_model.double_stranded and not is_pdb:
+    # single stranded and not PDB input
+    if not is_double_stranded and not is_pdb:
         tb_sites = [list(upper_strand)]
 
-        if tb_model.backbone:
+        if backbone:
             B = ["B"] * len(upper_strand)
             tb_sites = [B, *tb_sites, B]
 
-    if tb_model.double_stranded and is_pdb:
+    # double stranded and PDB input
+    if is_double_stranded and is_pdb:
         assert lower_strand != "auto complete", "Please provide a lower strand for PDB files."
         tb_sites = [list(upper_strand), list(lower_strand)]
 
-        if tb_model.backbone:
+        if backbone:
             B_upper = [f"{e[:2]}B" for e in upper_strand]
             B_lower = [f"{e[:2]}B" for e in lower_strand]
             tb_sites = [B_upper, *tb_sites, B_lower]
 
-    if not tb_model.double_stranded and is_pdb:
+    # single stranded and PDB input
+    if not is_double_stranded and is_pdb:
         tb_sites = [list(upper_strand)]
 
-        if tb_model.backbone:
+        if backbone:
             n = len(upper_strand)
             B_upper = [f"{e[:2]}B" for e in upper_strand]
             B_lower = [f"{2*n+1-int(e[:2])}".zfill(2) + "B" for e in upper_strand]

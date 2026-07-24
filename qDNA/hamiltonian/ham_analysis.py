@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import product, combinations
 
 import numpy as np
 
@@ -31,6 +31,7 @@ def calc_average_pop(eigs, init_state, end_state):
     float
         The static population of the end state.
     """
+
     average_pop = np.sum(eigs[end_state, :] ** 2 * eigs[init_state, :] ** 2)
     return average_pop
 
@@ -52,11 +53,11 @@ def calc_amplitudes(eigs, init_state, end_state):
     np.ndarray
         A list of amplitudes for transitions.
     """
+
     matrix_dimension = eigs.shape[0]
     amplitudes = [
         2 * eigs[end_state, i] * eigs[init_state, i] * eigs[end_state, j] * eigs[init_state, j]
-        for i, j in product(range(matrix_dimension), repeat=2)
-        if i < j
+        for i, j in combinations(range(matrix_dimension), 2)
     ]
     return np.real(np.array(amplitudes))
 
@@ -74,10 +75,9 @@ def calc_frequencies(eigv):
     np.ndarray
         A list of frequencies.
     """
+
     matrix_dimension = len(eigv)
-    frequencies = [
-        abs(eigv[i] - eigv[j]).real for i, j in product(range(matrix_dimension), repeat=2) if i < j
-    ]
+    frequencies = [abs(eigv[i] - eigv[j]).real for i, j in combinations(range(matrix_dimension), 2)]
     return np.array(frequencies)
 
 
@@ -100,6 +100,7 @@ def get_pop_fourier(t, average_pop, amplitudes, frequencies):
     float
         The population at time t.
     """
+
     population = average_pop
     for amplitude, frequency in zip(amplitudes, frequencies):
         population += amplitude * np.cos(frequency * t)
