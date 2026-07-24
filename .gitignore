@@ -5,6 +5,12 @@
 .vscode/
 howto/
 development/
+Paul/
+
+qDNA/data/tb_params/MD/
+qDNA/data/tb_params/piers1/
+qDNA/data/tb_params/piers2/
+qDNA/data/tb_params/other/
 
 notes.txt
 TODO.txt

@@ -54,7 +54,7 @@ ytick.labelsize: small  # Font size for y-tick labels
 
 # Lines and markers
 # -----------------
-lines.linewidth: 2.0  # Default line width
+lines.linewidth: 1.2  # Default line width
 lines.markersize: 8.0  # Default marker size
 
 
