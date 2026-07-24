@@ -1,9 +1,6 @@
-import copy
 import numpy as np
 import scipy.constants as c
 
-from ..utils import check_lcao_kwargs
-from ..io import load_lcao_param, DEFAULTS
 from .slater_koster import calc_H_intra, calc_H_inter
 from .component import Component
 
@@ -13,32 +10,30 @@ from .component import Component
 class Monomer:
     """
     Monomer class representing a molecular system composed of multiple components.
-    This class calculates various properties of the molecular system, including
-    the LCAO Hamiltonian, molecular orbitals (HOMO and LUMO), center of mass,
-    transition dipole moment, and orbital types.
+
+    This class calculates properties of the monomer, including the LCAO Hamiltonian,
+    molecular orbitals (HOMO and LUMO), center of mass, transition dipole moment, and
+    orbital types.
+
+    Parameters
+    ----------
+    filepaths : list of str
+        List of filepaths for the components of the monomer.
 
     Attributes
     ----------
+    lcao_param : dict
+        s LCAO parametrization.
     filepaths : list of str
         List of file paths for the components of the monomer.
-    kwargs : dict
-        Keyword arguments for LCAO parameter configuration.
-    param_id : str
-        Identifier for the LCAO parameter set.
-    lcao_param : dict
-        Loaded LCAO parameters.
-    atom_masses : dict
-        Atomic masses for supported elements.
-    num_components : int
-        Number of components in the monomer.
     components : list of Component
         List of Component objects representing the monomer's parts.
-    xyz_id : list
-        List of XYZ identifiers for the components.
+    num_components : int
+        Number of components in the monomer.
     atoms : list
         List of atoms in the monomer.
     atoms_coordinates : list
-        List of atomic coordinates.
+        List of atomic coordinates in Angstroms.
     atoms_id : list
         List of atom identifiers.
     num_atoms : int
@@ -46,11 +41,11 @@ class Monomer:
     orbitals : list
         List of orbitals in the monomer.
     orbitals_coordinates : list
-        List of orbital coordinates.
+        List of orbital coordinates in Angstroms.
     num_orbitals : int
         Total number of orbitals in the monomer.
     num_electrons : int
-        Total number of electrons in the monomer.
+        Total number of valence electrons in the monomer.
     H : ndarray
         LCAO Hamiltonian matrix.
     eigv : ndarray
@@ -62,71 +57,54 @@ class Monomer:
     E_HOMO : float
         Energy of the HOMO orbital.
     HOMO : ndarray
-        Molecular orbital corresponding to HOMO.
+        Molecular orbital coefficients corresponding to HOMO.
     LUMO_idx : int
         Index of the LUMO orbital.
     E_LUMO : float
         Energy of the LUMO orbital.
     LUMO : ndarray
-        Molecular orbital corresponding to LUMO.
+        Molecular orbital coefficients corresponding to LUMO.
     center_of_mass : ndarray
-        Center of mass of the monomer.
+        Center of mass of the monomer in Angstroms.
     rel_orbitals_coordinates : ndarray
-        Orbital coordinates relative to the center of mass.
+        Orbital coordinates relative to the center of mass in Angstroms.
     dipole_moment : ndarray
-        Transition dipole moment.
-
-    Methods
-    -------
-    calc_H()
-        Calculates the LCAO Hamiltonian matrix for the molecule.
-    build_block_matrix(D, U, L)
-        Constructs a block matrix from diagonal, upper, and lower matrices.
-    get_MO_type(MO)
-        Determines the type of molecular orbital (sigma, pi, or non-bonding).
+        Transition dipole moment between HOMO and LUMO.
 
     Notes
     -----
-    .. note::
-        The coordinates are given in Angstroms (Å), not in nanometers (nm).
+    All coordinates are given in Angstroms (Å), not nanometers (nm).
 
     """
 
-    def __init__(self, filepaths, **kwargs):
+    def __init__(self, filepaths, lcao_param):
 
-        # check kwargs
-        self.kwargs = copy.copy(DEFAULTS["lcao_kwargs_default"])
-        self.kwargs.update(kwargs)
-        check_lcao_kwargs(**self.kwargs)
+        self.lcao_param = lcao_param
 
+        # init components
         self.filepaths = filepaths
-
-        self.param_id = self.kwargs.get("param_id")
-        self.lcao_param = load_lcao_param(self.param_id)
-
-        self.atom_masses = {"H": 1, "C": 6, "N": 7, "O": 8, "P": 15, "X": 0}
-
+        self.components = [Component(filepath) for filepath in filepaths]
         self.num_components = len(filepaths)
-        self.components = [Component(filepath, **self.kwargs) for filepath in filepaths]
 
-        # Initialize attributes for the monomer
-        self.xyz_id = []
-        self.atoms, self.atoms_coordinates = [], []
-        self.atoms_id = []
-        self.num_atoms = 0
-        self.orbitals, self.orbitals_coordinates = [], []
-        self.num_orbitals = 0
-        self.num_electrons = 0
-        for comp in self.components:
-            self.xyz_id.append(comp.xyz_id)
-            self.atoms.extend(comp.atoms)
-            self.atoms_coordinates.extend(comp.atoms_coordinates)
-            self.atoms_id.extend(comp.atoms_id)
-            self.num_atoms += comp.num_atoms
-            self.orbitals.extend(comp.orbitals)
-            self.orbitals_coordinates.extend(comp.orbitals_coordinates)
-            self.num_orbitals += comp.num_orbitals
-            self.num_electrons += comp.num_electrons
+        # monomer atoms
+        self.atoms = [atom for comp in self.components for atom in comp.atoms]
+        self.atoms_coordinates = [
+            coord for comp in self.components for coord in comp.atoms_coordinates
+        ]
+        self.atoms_id = [aid for comp in self.components for aid in comp.atoms_id]
+        self.num_atoms = sum(comp.num_atoms for comp in self.components)
+
+        # monomer orbitals
+        self.orbitals = [orbital for comp in self.components for orbital in comp.orbitals]
+        self.orbitals_coordinates = [
+            coord for comp in self.components for coord in comp.orbitals_coordinates
+        ]
+        self.num_orbitals = sum(comp.num_orbitals for comp in self.components)
+
+        # valence electrons
+        self.num_electrons = sum(comp.num_electrons for comp in self.components)
+
+        # --------------------------------------------------------------
 
         # Calculate LCAO Hamiltonian
         self.H = self.calc_H()
@@ -148,34 +126,46 @@ class Monomer:
     def __repr__(self):
         return f"Monomer({self.filepaths})"
 
-    def _get_rel_orbitals_coordinates(self):
-        rel_orbitals_coordinates = []
-        for orbital_coordinates in self.orbitals_coordinates:
-            rel_orbitals_coordinates.append(orbital_coordinates - self.center_of_mass)
-        return np.array(rel_orbitals_coordinates)
-
     def _calc_center_of_mass(self):
+        """Calculate the monomer's center of mass."""
+
+        atom_masses = {"H": 1, "C": 6, "N": 7, "O": 8, "P": 15, "X": 0}
         center_of_mass = np.zeros(3)
         molecule_mass = 0
 
         for atom_idx in range(self.num_atoms):
             atom = self.atoms[atom_idx]
             atom_coordinates = self.atoms_coordinates[atom_idx]
-            atom_mass = self.atom_masses[atom]
+            atom_mass = atom_masses[atom]
             center_of_mass += atom_coordinates * atom_mass
             molecule_mass += atom_mass
 
         center_of_mass /= molecule_mass
         return center_of_mass
 
+    def _get_rel_orbitals_coordinates(self):
+        """Calculate orbital coordinates relative to the monomer's center of mass."""
+
+        rel_orbitals_coordinates = []
+        for orbital_coordinates in self.orbitals_coordinates:
+            rel_orbitals_coordinates.append(orbital_coordinates - self.center_of_mass)
+        return np.array(rel_orbitals_coordinates)
+
     # pylint: disable=inconsistent-return-statements
     def _calc_dipole_moment(self, unit="Coulomb*Angstrom"):
+        """Calculate the monomer's transition dipole moment between HOMO and LUMO given
+        the orbital coordinates relative to the monomer's center of mass."""
 
         MO_1, MO_2 = self.HOMO, self.LUMO
 
-        dipole_x = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 0] * np.abs(MO_2)
-        dipole_y = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 1] * np.abs(MO_2)
-        dipole_z = -c.e * np.abs(MO_1) * self.rel_orbitals_coordinates[:, 2] * np.abs(MO_2)
+        x = self.rel_orbitals_coordinates[:, 0]
+        y = self.rel_orbitals_coordinates[:, 1]
+        z = self.rel_orbitals_coordinates[:, 2]
+
+        dipole_x = -c.e * np.abs(MO_1) * x * np.abs(MO_2)
+        dipole_y = -c.e * np.abs(MO_1) * y * np.abs(MO_2)
+        dipole_z = -c.e * np.abs(MO_1) * z * np.abs(MO_2)
+
         dipole = np.array([np.sum(dipole_x), np.sum(dipole_y), np.sum(dipole_z)])
 
         if unit == "Coulomb*Angstrom":
@@ -188,10 +178,11 @@ class Monomer:
     # ----------------------------------------
 
     def _build_block_matrix(self, D, U, L):
+        """Build a block matrix from diagonal blocks (D), upper diagonal (U), lower diagonal (L)."""
+
         n = len(D)
 
-        full_matrix = []
-
+        block_matrix = []
         for i in range(n):
             row = []
             for j in range(n):
@@ -204,15 +195,15 @@ class Monomer:
                 else:
                     shape = (D[i].shape[0], D[j].shape[1])
                     row.append(np.zeros(shape, dtype=D[0].dtype))
-            full_matrix.append(row)
+            block_matrix.append(row)
 
-        return np.block(full_matrix)
+        return np.block(block_matrix)
 
     def calc_H(self):
         """Calculates the LCAO Hamiltonian matrix for the molecule."""
 
-        D, U, L = [], [], []
-
+        # inter component Hamiltonian
+        U, L = [], []
         for k in range(self.num_components - 1):
             comp1 = self.components[k]
             comp2 = self.components[k + 1]
@@ -221,6 +212,8 @@ class Monomer:
             U.append(H_inter)
             L.append(H_inter.conj().T)
 
+        # intra component Hamiltonian
+        D = []
         for k, comp in enumerate(self.components):
             H_intra = calc_H_intra(self.lcao_param, comp)
             D.append(H_intra)
@@ -228,32 +221,31 @@ class Monomer:
         return self._build_block_matrix(D, U, L)
 
     def get_MO_type(self, MO):
-        """Returns the nature of the molecular orbitals: sigma, pi, n (non-bonding)."""
+        """Calculate the type of the molecular orbital: sigma, pi, n (non-bonding) together
+        with the molecular orbital occupations."""
 
+        # molecular orbital population
         MO_occupation = MO.conj() * MO
 
+        # sigma orbital population
         s = ["C_s", "C_px", "C_py", "N_s", "O_s", "O_px", "O_py", "H_s"]
         s_mask = np.array([int(orbital in s) for orbital in self.orbitals])
+        s_pop = sum(s_mask * MO_occupation)
+
+        # pi orbital population
         pi = ["C_pz", "N_pz", "O_pz"]
         pi_mask = np.array([int(orbital in pi) for orbital in self.orbitals])
+        pi_pop = sum(pi_mask * MO_occupation)
+
+        # n (non-bonding) orbital population
         n = ["N_s", "N_px", "N_py"]
         n_mask = np.array([int(orbital in n) for orbital in self.orbitals])
-
-        s_pop = sum(s_mask * MO_occupation)
-        pi_pop = sum(pi_mask * MO_occupation)
         n_pop = sum(n_mask * MO_occupation)
 
-        MO_type = None
-        if s_pop >= max(pi_pop, n_pop):
-            MO_type = "sigma"
-
-        if pi_pop >= max(s_pop, n_pop):
-            MO_type = "pi"
-
-        if n_pop >= max(s_pop, pi_pop):
-            MO_type = "n"
-
+        # molecular orbital type and occupation
         MO_type_occupation = [s_pop, pi_pop, n_pop]
+        MO_type = ["sigma", "pi", "n"][np.argmax(MO_type_occupation)]
+
         return MO_type, MO_type_occupation
 
     # ------------------------------------------------------------------

@@ -3,7 +3,6 @@ import shutil
 import copy
 
 import numpy as np
-import scipy.constants as c
 import matplotlib.pyplot as plt
 
 from ..utils import check_lcao_kwargs
@@ -16,47 +15,19 @@ from ..model import (
     tuple_to_int,
 )
 from .slater_koster import calc_H_inter
+from .dipolar import calc_dipolar_coupling
 from .monomer import Monomer
 
 # ----------------------------------------------------------------------
 
 
-def calc_dipolar_coupling(monomer1, monomer2):
-    """
-    Calculate the dipolar coupling between two monomers.
-
-    Parameters
-    ----------
-    monomer1 : object
-        An object representing the first monomer
-    monomer2 : object
-        An object representing the second monomer
-
-    Returns
-    -------
-    float
-        The dipolar coupling constant in units of eV.
-    """
-
-    R1, R2 = monomer1.center_of_mass, monomer2.center_of_mass
-    if np.allclose(R1, R2):
-        return 0
-    mu1, mu2 = monomer1.dipole_moment, monomer2.dipole_moment
-    prefactor = 1 / (4 * np.pi * c.epsilon_0) * 1 / np.linalg.norm(R1 - R2) ** 3
-    return (
-        prefactor
-        * (mu1 @ mu2 - 3 / np.linalg.norm(R1 - R2) ** 2 * (mu1 @ (R2 - R1)) * (mu2 @ (R2 - R1)))
-        * 1e10
-        / c.e
-    )
-
-
 class Oligomer(TBModel):
     """
-    Oligomer class for modeling tight-binding properties of DNA structures.
-    This class extends the TBModel class and provides functionality for processing
-    PDB files, and calculating tight-binding parameters such as couplings and energies
-    for DNA-like oligomers.
+    Oligomer class for calculating TB parameters of DNA oligomers.
+    This class extends the TBModel class and provides functionality to calculate
+    tight-binding parameters from PDB files. It processes the PDB file to generate
+    XYZ files (components) and groups the components into monomers aranged in a geometry
+    determined by the required TB model.
 
     Attributes
     ----------
@@ -118,42 +89,35 @@ class Oligomer(TBModel):
         # check kwargs
         self.kwargs = copy.copy(DEFAULTS["lcao_kwargs_default"])
         self.kwargs.update(kwargs)
-        check_lcao_kwargs(**self.kwargs)
+        # check_lcao_kwargs(**self.kwargs) # TODO
 
+        # load LCAO parameters
+        self.lcao_param = load_lcao_param(self.kwargs.get("param_id"))  # self.param_id # TODO
+
+        # prepare xyz files
         self.filepath_pdb = filepath_pdb
         self.filename_pdb = os.path.splitext(os.path.basename(self.filepath_pdb))[0]
         self.directory = self.filepath_pdb.split(".")[0]
-
-        # if self.directory exists delete it
         if os.path.exists(self.directory):
             self.clean()
-
         pdb_to_xyz(self.filepath_pdb, **self.kwargs)
-        self.xyz_filenames = find_xyz(self.directory)
+        self.filenames_xyz = find_xyz(self.directory)
 
-        num_sites_per_strand = len(self.xyz_filenames) // 4
+        # init TB model
+        num_sites_per_strand = len(self.filenames_xyz) // 4
         super().__init__(num_sites_per_strand, **self.kwargs)
-
-        # arguments
-        self.backbone = self.tb_model_props["backbone"]
-        self.auto_clean = self.kwargs.get("auto_clean")
-        self.param_id = self.kwargs.get("param_id")
-        self.lcao_param = load_lcao_param(self.param_id)
-
-        self.sites_bases, self.sites_backbone = self._get_sites_all()
-        self.sites, self.sites_id = self._get_sites()
-        self.filepaths = self._get_filepaths()
-
-        self.num_sites = self.num_channels * self.num_sites_per_strand
-        self.monomers = [Monomer(filepaths, **self.kwargs) for filepaths in self.filepaths]
-        self.monomers = np.array(self.monomers).reshape(self.tb_dims)
-
         self.couplings = get_tb_couplings(self.tb_model_name, self.num_sites_per_strand)
         self.energies = get_tb_energies(self.num_channels, self.num_sites_per_strand)
 
+        # init monomers
+        self.sites_all = self._get_sites_all()
+        self.sites = self._get_sites()
+        self.sites_id = self._get_sites_id()
+        self.monomers = self._get_monomers()
+
         self.tb_params = None
 
-        if self.auto_clean:
+        if self.kwargs.get("auto_clean"):
             self.clean()
 
     # ------------------------------------------------------------------
@@ -161,71 +125,175 @@ class Oligomer(TBModel):
     def __repr__(self):
         return f"Oligomer({self.filename_pdb})"
 
-    def _get_filepaths(self):
-        """Generate file paths for each site in the directory based on the sites matrix."""
-
-        return [[os.path.join(self.directory, site + ".xyz") for site in row] for row in self.sites]
-
     def _get_sites_all(self):
-        """Categorizes and returns filenames into base sites and backbone sites."""
+        """Orders XYZ filenames (components) in four channels."""
 
         sites_bases, sites_backbone = [], []
-        for filename in self.xyz_filenames:
+        for filename in self.filenames_xyz:
             if "B" in filename:
                 sites_backbone.append(filename)
             else:
                 sites_bases.append(filename)
 
-        return sites_bases, sites_backbone
-
-    def _get_sites(self):
-        """Generate site configurations and site identifiers based on the number of channels."""
-
-        n = len(self.sites_bases) // 2
-
+        n = self.num_sites_per_strand
         sites_all = np.array(
             [
-                self.sites_backbone[:n],
-                self.sites_bases[:n],
-                self.sites_bases[n:][::-1],
-                self.sites_backbone[n:][::-1],
+                sites_backbone[:n],
+                sites_bases[:n],
+                sites_bases[n:][::-1],
+                sites_backbone[n:][::-1],
             ],
-            dtype=object,
         )
-        sites, sites_id = [], []
+
+        return sites_all
+
+    def _get_sites(self):
+        """Adapts to the TB model, i.e., groups the monomers accordingly."""
+
+        sites = []
+        n = self.num_sites_per_strand
+        backbone = self.tb_model_props["backbone"]
+
         if self.num_channels == 1:
-            if self.backbone:
-                sites = [sites_all[:, i] for i in range(n)]
+            if backbone:
+                sites = [self.sites_all[0:4, i].tolist() for i in range(n)]
             else:
-                sites = [sites_all[1:3, i] for i in range(n)]
-            sites_id = [sites_all[k, i] for k in [1] for i in range(n)]
+                sites = [self.sites_all[1:3, i].tolist() for i in range(n)]
 
         if self.num_channels == 2:
-            if self.backbone:
-                sites_upper = [sites_all[:2, i] for i in range(n)]
-                sites_lower = [sites_all[2:, i] for i in range(n)]
+            if backbone:
+                sites_upper = [self.sites_all[0:2, i].tolist() for i in range(n)]
+                sites_lower = [self.sites_all[2:4, i].tolist() for i in range(n)]
             else:
-                sites_upper = [[sites_all[1, i]] for i in range(n)]
-                sites_lower = [[sites_all[2, i]] for i in range(n)]
+                sites_upper = [self.sites_all[1:2, i].tolist() for i in range(n)]
+                sites_lower = [self.sites_all[2:3, i].tolist() for i in range(n)]
             sites = sites_upper + sites_lower
-            sites_id = [sites_all[k, i] for k in [1, 2] for i in range(n)]
 
         if self.num_channels == 3:
-            sites_upper = [sites_all[:1, i] for i in range(n)]
-            sites_middle = [sites_all[1:3, i] for i in range(n)]
-            sites_lower = [sites_all[3:, i] for i in range(n)]
+            sites_upper = [self.sites_all[0:1, i].tolist() for i in range(n)]
+            sites_middle = [self.sites_all[1:3, i].tolist() for i in range(n)]
+            sites_lower = [self.sites_all[3:4, i].tolist() for i in range(n)]
             sites = sites_upper + sites_middle + sites_lower
-            sites_id = [sites_all[k, i] for k in [0, 1, 3] for i in range(n)]
 
         if self.num_channels == 4:
-            sites = [[site] for site in sites_all.flatten()]
-            sites_id = [sites_all[k, i] for k in [0, 1, 2, 3] for i in range(n)]
+            sites = [self.sites_all[0:4, i].tolist() for i in range(n)]
 
+        return sites
+
+    def _get_sites_id(self):
+        """Generates identifiers for the monomers."""
+
+        sites_id = [str(site[0]) for site in self.sites]
         sites_id = np.array(sites_id).reshape(self.tb_dims)
-        return sites, sites_id
+        return sites_id
+
+    def _get_monomers(self):
+        """Generates a list of monomers in shape of the TB model."""
+
+        filepaths = [
+            [os.path.join(self.directory, site + ".xyz") for site in row] for row in self.sites
+        ]
+        monomers = [Monomer(filepaths, self.lcao_param) for filepaths in filepaths]
+        return np.array(monomers).reshape(self.tb_dims)
+
+    # ------------------------------------------------------------------
+
+    def calc_H(self):
+        """
+        Calculates the LCAO Hamiltonian matrix for the oligomer in the basis of the
+        atmomic orbitals.
+        """
+
+        n = self.num_sites_per_strand
+        dims = []
+
+        # A contains the block matrices
+        A = np.zeros((self.num_sites, self.num_sites), dtype=object)
+
+        # add inter monomer blocks
+        for coupling in self.couplings:
+            _, monomer1_idx, monomer2_idx = coupling
+            monomer1 = self.monomers[monomer1_idx]
+            monomer2 = self.monomers[monomer2_idx]
+            i = monomer1_idx[0] * n + monomer1_idx[1]
+            j = monomer2_idx[0] * n + monomer2_idx[1]
+            H_inter = calc_H_inter(self.lcao_param, monomer1, monomer2)
+            A[i, j] = H_inter
+            A[j, i] = H_inter.conj().T
+
+        # add intra monomer blocks
+        for energy in self.energies:
+            _, monomer_idx, _ = energy
+            monomer = self.monomers[monomer_idx]
+            i = monomer_idx[0] * n + monomer_idx[1]
+            A[i, i] = monomer.H
+            dims.append(monomer.num_orbitals)
+
+        # add zero matrices for non-coupled monomers
+        for i in range(self.num_sites):
+            for j in range(self.num_sites):
+                if isinstance(A[i, j], int):
+                    A[i, j] = np.zeros((dims[i], dims[j]))
+        H = np.block(A.tolist())
+        return H, dims
+
+    def calc_tb_params2(self):
+        """
+        Alternative method to calculate tight-binding parameters by first calculating
+        the full Hamiltonian matrix in the basis of the atomic orbitals.
+        This method can be used as consistency check.
+        """
+
+        H, dims = self.calc_H()
+        cum_dims = np.cumsum([0] + dims)
+
+        n = self.num_sites_per_strand
+        HOMO_dict, LUMO_dict = {}, {}
+
+        # TB couplings
+        for coupling in self.couplings:
+            key, monomer1_idx, monomer2_idx = coupling
+            coupling_id = (
+                key + "_" + self.sites_id[monomer1_idx] + "_" + self.sites_id[monomer2_idx]
+            )
+
+            HOMO_1 = self.monomers[monomer1_idx].HOMO
+            HOMO_2 = self.monomers[monomer2_idx].HOMO
+            LUMO_1 = self.monomers[monomer1_idx].LUMO
+            LUMO_2 = self.monomers[monomer2_idx].LUMO
+            i = monomer1_idx[0] * n + monomer1_idx[1]
+            j = monomer2_idx[0] * n + monomer2_idx[1]
+
+            t_HOMO = (
+                HOMO_1 @ H[cum_dims[i] : cum_dims[i + 1], cum_dims[j] : cum_dims[j + 1]] @ HOMO_2
+            )
+            t_LUMO = (
+                LUMO_1 @ H[cum_dims[i] : cum_dims[i + 1], cum_dims[j] : cum_dims[j + 1]] @ LUMO_2
+            )
+            HOMO_dict[coupling_id] = t_HOMO
+            LUMO_dict[coupling_id] = t_LUMO
+
+        # TB energies
+        for energy in self.energies:
+            key, monomer_idx, _ = energy
+            coupling_id = key + "_" + self.sites_id[monomer_idx]
+
+            HOMO = self.monomers[monomer_idx].HOMO
+            LUMO = self.monomers[monomer_idx].LUMO
+            i = monomer_idx[0] * n + monomer_idx[1]
+
+            E_HOMO = HOMO @ H[cum_dims[i] : cum_dims[i + 1], cum_dims[i] : cum_dims[i + 1]] @ HOMO
+            E_LUMO = LUMO @ H[cum_dims[i] : cum_dims[i + 1], cum_dims[i] : cum_dims[i + 1]] @ LUMO
+            HOMO_dict[coupling_id] = E_HOMO
+            LUMO_dict[coupling_id] = E_LUMO
+
+        tb_params = {"hole": HOMO_dict, "electron": LUMO_dict}
+        return tb_params
+
+    # ------------------------------------------------------------------
 
     def calc_tb_couplings(self, monomer1, monomer2):
-        """Calculate tight-binding couplings (HOMO, LUMO, and excitonic coupling) between two monomers."""
+        """Calculate TB coupling between two monomers."""
 
         H_inter = calc_H_inter(self.lcao_param, monomer1, monomer2)
 
@@ -235,15 +303,18 @@ class Oligomer(TBModel):
         return round(t_HOMO, 5), round(t_LUMO, 5), round(t_EXC, 5)
 
     def calc_tb_energies(self, monomer):
+        """Calculate TB energy of a monomer."""
         return round(monomer.E_HOMO, 3), round(monomer.E_LUMO, 3), 0
 
     def calc_tb_params(self):
-        """Calculates and returns the tight-binding parameters for the system."""
+        """Calculates the tight-binding parameters for the system."""
 
         if self.tb_params is not None:
             return self.tb_params
 
         HOMO_dict, LUMO_dict, EXC_dict = {}, {}, {}
+
+        # TB couplings
         for coupling in self.couplings:
             key, monomer1_idx, monomer2_idx = coupling
             coupling_id = (
@@ -257,6 +328,7 @@ class Oligomer(TBModel):
             LUMO_dict[coupling_id] = t_LUMO
             EXC_dict[coupling_id] = t_EXC
 
+        # TB energies
         for energy in self.energies:
             key, monomer_idx, _ = energy
             coupling_id = key + "_" + self.sites_id[monomer_idx]
@@ -270,17 +342,22 @@ class Oligomer(TBModel):
         self.tb_params = {"hole": HOMO_dict, "electron": LUMO_dict, "exciton": EXC_dict}
         return self.tb_params
 
-    def save_tb_params(self, directory=None):
+    def save_tb_params(self, directory=None, filename=None):
         """Save tight-binding parameters to a specified directory or default location."""
+
+        if filename is None:
+            filename = self.filename_pdb
 
         tb_params = self.calc_tb_params()
         save_tb_params(
             tb_params,
-            self.filename_pdb,
+            filename,
             self.tb_model_name,
             directory=directory,
             unit="eV",
         )
+
+    # ------------------------------------------------------------------
 
     def plot_couplings(
         self,

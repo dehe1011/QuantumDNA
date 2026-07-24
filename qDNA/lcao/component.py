@@ -1,9 +1,7 @@
-import copy
 from itertools import combinations
 import numpy as np
 
-from ..utils import check_lcao_kwargs
-from ..io import load_xyz, load_lcao_param, DEFAULTS
+from ..io import load_xyz
 
 # ----------------------------------------------------------------------
 
@@ -14,18 +12,10 @@ class Component:
 
     Attributes
     ----------
-    param_id : str
-        Identifier for the LCAO parameters.
-    lcao_param : dict
-        Loaded LCAO parameters.
-    num_atom_orbitals : dict
-        Number of orbitals for each atom type.
-    num_atom_electrons : dict
-        Number of electrons for each atom type.
     filepath : str
         Path to the XYZ file.
-    xyz_id : str
-        Identifier for the XYZ file.
+    kwargs : dict
+        Keyword arguments for LCAO configuration.
     atoms : list of str
         List of atom types in the molecule.
     atoms_coordinates : ndarray
@@ -34,55 +24,60 @@ class Component:
         Unique identifiers for each atom.
     num_atoms : int
         Total number of atoms in the molecule.
-    num_electrons : int
-        Total number of electrons in the molecule.
     orbitals : list of str
         List of orbital identifiers.
     orbitals_coordinates : ndarray
         Array of orbital coordinates.
     num_orbitals : int
         Total number of orbitals in the molecule.
+    num_electrons : int
+        Total number of valence electrons in the molecule.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the XYZ file containing atomic coordinates.
 
     Methods
     -------
     get_orbital_distance_matrix()
-        Calculates the distance matrix between orbitals.
+        Calculate the distance matrix between orbitals.
     get_orbital_bond_matrix(cutoff=1.59)
-        Generates a bond matrix based on orbital distances and a cutoff value.
+        Generate a bond matrix based on orbital distances and a cutoff value.
 
     Notes
     -----
     .. note::
-        The coordinates are given in Angstroms (Å), not in nanometers (nm).
+        Coordinates are in Angstroms (Å), not nanometers (nm).
 
     """
 
-    def __init__(self, filepath, **kwargs):
+    def __init__(self, filepath):
 
-        # check kwargs
-        self.kwargs = copy.copy(DEFAULTS["lcao_kwargs_default"])
-        self.kwargs.update(kwargs)
-        check_lcao_kwargs(**self.kwargs)
-
-        self.param_id = self.kwargs.get("param_id")
-        self.lcao_param = load_lcao_param(self.param_id)
-
-        self.num_atom_orbitals = {"H": 1, "C": 4, "N": 4, "O": 4, "P": 4, "X": 0}
-        self.num_atom_electrons = {"H": 1, "C": 4, "N": 5, "O": 6, "P": 5, "X": 0}
-
+        # load component (XYZ file)
         self.filepath = filepath
-        self.xyz_id, atoms, coordinates = load_xyz(self.filepath)
+        _, atoms, coordinates = load_xyz(self.filepath)
 
+        # component atoms
         self.atoms = atoms
         self.atoms_coordinates = np.array(coordinates)
         self.atoms_id = [f"{atom}_{atom_idx}" for atom_idx, atom in enumerate(self.atoms)]
         self.num_atoms = len(self.atoms)
-        self.num_electrons = sum(self.num_atom_electrons[atom] for atom in self.atoms)
 
+        # component orbitals
         self.orbitals, self.orbitals_coordinates = self._get_orbitals()
         self.num_orbitals = len(self.orbitals)
 
+        # valence electrons
+        num_atom_electrons = {"H": 1, "C": 4, "N": 5, "O": 6, "P": 5, "X": 0}
+        self.num_electrons = sum(num_atom_electrons[atom] for atom in self.atoms)
+
+    def __repr__(self):
+        return f"Component({self.filepath})"
+
     def _get_orbitals(self):
+        """Generate orbital identifiers and coordinates based on the atoms in the component."""
+
         orbitals = []
         orbitals_coordinates = []
 
@@ -103,6 +98,8 @@ class Component:
         return orbitals, orbitals_coordinates
 
     def get_orbital_distance_matrix(self):
+        """Calculate the distance matrix between atomic orbitals."""
+
         orbital_distance_matrix = np.zeros((self.num_orbitals, self.num_orbitals))
         for i, j in combinations(range(self.num_orbitals), r=2):
             vector = self.orbitals_coordinates[i] - self.orbitals_coordinates[j]
@@ -112,6 +109,9 @@ class Component:
         return orbital_distance_matrix
 
     def get_orbital_bond_matrix(self, cutoff=1.59):
+        """Generate a bond matrix based between atomic orbitals. Two atomic orbitals are
+        bonded whenever their distance is bigger then zero but smaller than a cutoff value."""
+
         orbital_distance_matrix = self.get_orbital_distance_matrix()
         orbital_bond_matrix = (orbital_distance_matrix > 0) & (orbital_distance_matrix < cutoff)
         return orbital_bond_matrix.astype(int)
