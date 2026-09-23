@@ -71,6 +71,15 @@ class Monomer:
     dipole_moment : ndarray
         Transition dipole moment between HOMO and LUMO.
 
+    Methods
+    -------
+    calc_H()
+        Calculates the LCAO Hamiltonian matrix for the molecule.
+    build_block_matrix(D, U, L)
+        Constructs a block matrix from diagonal, upper, and lower matrices.
+    get_MO_type(MO)
+        Determines the type of molecular orbital (sigma, pi, or non-bonding).
+
     Notes
     -----
     All coordinates are given in Angstroms (Å), not nanometers (nm).
