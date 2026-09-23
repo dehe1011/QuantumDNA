@@ -7,7 +7,8 @@ howto/
 development/
 Paul/
 
-qDNA/data/tb_params/MD/
+qDNA/data/tb_params/MD_traj/
+qDNA/data/tb_params/MD_cluster/
 qDNA/data/tb_params/piers1/
 qDNA/data/tb_params/piers2/
 qDNA/data/tb_params/other/

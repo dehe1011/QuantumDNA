@@ -30,7 +30,7 @@ def load_pdb(filepath):
         for line in file:
             # if line.startswith("TER"):
             #     break
-            if line.startswith("ATOM") or line.startswith("HETATM"):  # careful with HETATM
+            if line.startswith("ATOM"):  # or line.startswith("HETATM"):  # careful with HETATM
                 pdb_data = {
                     "atom": line[12:16].strip(),
                     "residue": line[17:20].strip(),
@@ -162,7 +162,7 @@ def pdb_to_xyz(filepath, **kwargs):
         if first_entry:
             start_idx = base_idx
         if kwargs.get('no_chain_id', False):
-            chain_changes = base_idx == 1 and old_base_idx == 27  # applies for some Rosa sequences
+            chain_changes = base_idx == 4 and old_base_idx == 24  # applies for some Rosa sequences
         else:
             chain_changes = chain_id != old_chain_id  #  # changed!!
         if chain_changes and not first_entry:

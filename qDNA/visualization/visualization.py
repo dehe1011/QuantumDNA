@@ -109,7 +109,7 @@ class Visualization(Evaluation):
                 fig, ax = plt.subplots(
                     x_num,
                     y_num,
-                    figsize=(3.4 * y_num, 2.1 * x_num),
+                    figsize=(3.4 * y_num, 2.6 * x_num),
                     sharex=True,
                     sharey=True,
                     dpi=dpi,
@@ -165,9 +165,13 @@ class Visualization(Evaluation):
                         vmax=vmax,
                         **plot_kwargs,
                     )
-                    im.figure.colorbar(im, ax=ax[i])
+                    im.figure.colorbar(im, ax=ax[i, j])
 
-                ax[i, j].set_ylabel(particle.capitalize())
+                ax[i, j].spines['top'].set_visible(True)
+                ax[i, j].spines['right'].set_visible(True)
+                ax[i, j].spines['bottom'].set_visible(True)
+                ax[i, j].spines['left'].set_visible(True)
+                ax[i, j].set_title(particle.capitalize() + r" $P_{\lambda\lambda'}(t)$")
 
                 # ticks
                 ax[i, j].set_xticks([])
@@ -179,7 +183,7 @@ class Visualization(Evaluation):
                 ax[i, j].set_yticks(yticks, labels=self.tb_sites_flattened)
 
         for j in range(y_num):
-            ax[-1, j].set_xlabel("Time [" + self.t_unit + "]")
+            ax[-1, j].set_xlabel("t [" + self.t_unit + "]")
         return fig, ax
 
     def plot_heatmap2(
